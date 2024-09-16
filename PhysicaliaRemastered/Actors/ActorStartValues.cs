@@ -1,32 +1,32 @@
 using System.Xml;
 using Microsoft.Xna.Framework;
 
-namespace PhysicaliaRemastered.Actors
-{
-    /// <summary>
-    /// Struct for defining the start values for a Enemy.
-    /// </summary>
-    public struct ActorStartValues
-    {
-        public Vector2 Position;
-        public Vector2 Velocity;
-        public Vector2 Acceleration;
+namespace PhysicaliaRemastered.Actors;
 
-        public ActorStartValues(Vector2 position, Vector2 velocity, Vector2 acceleration)
-        {
+/// <summary>
+/// Struct for defining the start values for a Enemy.
+/// </summary>
+public struct ActorStartValues
+{
+    public Vector2 Position;
+    public Vector2 Velocity;
+    public Vector2 Acceleration;
+
+    public ActorStartValues(Vector2 position, Vector2 velocity, Vector2 acceleration)
+    {
             this.Position = position;
             this.Velocity = velocity;
             this.Acceleration = acceleration;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="reader"></param>
-        /// <param name="endElement">Local name of the last element to read.</param>
-        /// <returns></returns>
-        public static ActorStartValues FromXml(XmlReader reader, string endElement)
-        {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <param name="endElement">Local name of the last element to read.</param>
+    /// <returns></returns>
+    public static ActorStartValues FromXml(XmlReader reader, string endElement)
+    {
             ActorStartValues startValues = new ActorStartValues();
 
             while (reader.Read())
@@ -51,17 +51,16 @@ namespace PhysicaliaRemastered.Actors
             return startValues;
         }
 
-        public static ActorStartValues FromXml(XmlReader reader)
-        {
+    public static ActorStartValues FromXml(XmlReader reader)
+    {
             return ActorStartValues.FromXml(reader, "ActorStartValues");
         }
 
-        private static Vector2 ReadVector2(XmlReader reader)
-        {
+    private static Vector2 ReadVector2(XmlReader reader)
+    {
             float x = float.Parse(reader.GetAttribute("x"));
             float y = float.Parse(reader.GetAttribute("y"));
 
             return new Vector2(x, y);
         }
-    }
 }

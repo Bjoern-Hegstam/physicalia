@@ -1,121 +1,120 @@
 using System;
 using Microsoft.Xna.Framework;
-using Physicalia;
 
-namespace PhysicaliaRemastered.Actors.Enemies
+namespace PhysicaliaRemastered.Actors.Enemies;
+
+/// <summary>
+/// Describes the intelligence level of an Enemy.
+/// </summary>
+public enum AILevel
 {
-    /// <summary>
-    /// Describes the intelligence level of an Enemy.
-    /// </summary>
-    public enum AILevel
+    Dumb,
+    Smart,
+    Savant
+}
+
+/// <summary>
+/// Descrines the behavior of an Enemy.
+/// </summary>
+public enum EnemyBehavior
+{
+    Idle,
+    Seek,
+    Attack,
+    Follow
+}
+
+public class Enemy : Actor
+{
+    #region Fields
+
+    private static int enemyCount = 0;
+    private int uniqueID;
+
+    private int typeID;
+
+    private int damageValue;
+    private bool enabled;
+    private bool visible;
+
+    // AI
+    private float attackRange;
+    private Rectangle patrolArea;
+    private AILevel intelligence;
+    private EnemyBehavior behavior;
+
+    // Post-death
+    private float blinkDelay = 1F;
+    private int blinkCount = 4;
+    private float blinkInterval = 0.15F;
+    private float blinkTime = 0;
+
+    #endregion
+
+    #region Properties
+
+    public int UniqueID
     {
-        Dumb,
-        Smart,
-        Savant
+        get { return this.uniqueID; }
     }
 
-    /// <summary>
-    /// Descrines the behavior of an Enemy.
-    /// </summary>
-    public enum EnemyBehavior
+    public int TypeID
     {
-        Idle,
-        Seek,
-        Attack,
-        Follow
+        get { return this.typeID; }
     }
 
-    public class Enemy : Actor
+    public bool IsActive
     {
-        #region Fields
-
-        private static int enemyCount = 0;
-        private int uniqueID;
-
-        private int typeID;
-
-        private int damageValue;
-        private bool enabled;
-        private bool visible;
-
-        // AI
-        private float attackRange;
-        private Rectangle patrolArea;
-        private AILevel intelligence;
-        private EnemyBehavior behavior;
-
-        // Post-death
-        private float blinkDelay = 1F;
-        private int blinkCount = 4;
-        private float blinkInterval = 0.15F;
-        private float blinkTime = 0;
-
-        #endregion
-
-        #region Properties
-
-        public int UniqueID
+        get { return this.enabled || this.visible; }
+        set
         {
-            get { return this.uniqueID; }
-        }
-
-        public int TypeID
-        {
-            get { return this.typeID; }
-        }
-
-        public bool IsActive
-        {
-            get { return this.enabled || this.visible; }
-            set
-            {
                 this.enabled = this.visible = value;
 
                 if (value)
                     this.CurrentAnimationType = this.CurrentAnimationType;
             }
-        }
+    }
 
-        public bool Enabled
-        {
-            get { return this.enabled; }
-            set { this.enabled = value; }
-        }
+    public bool Enabled
+    {
+        get { return this.enabled; }
+        set { this.enabled = value; }
+    }
 
-        public bool Visible
-        {
-            get { return this.visible; }
-            set { this.visible = value; }
-        }
+    public bool Visible
+    {
+        get { return this.visible; }
+        set { this.visible = value; }
+    }
 
-        public int Damage
-        {
-            get { return this.damageValue; }
-            set { this.damageValue = value; }
-        }
+    public int Damage
+    {
+        get { return this.damageValue; }
+        set { this.damageValue = value; }
+    }
 
-        public float AttackRange
-        {
-            get { return this.attackRange; }
-            set { this.attackRange = value; }
-        }
+    public float AttackRange
+    {
+        get { return this.attackRange; }
+        set { this.attackRange = value; }
+    }
 
-        public Rectangle PatrolArea
-        {
-            get { return this.patrolArea; }
-            set { this.patrolArea = value; }
-        }
+    public Rectangle PatrolArea
+    {
+        get { return this.patrolArea; }
+        set { this.patrolArea = value; }
+    }
 
-        public AILevel Intelligence
-        {
-            get { return this.intelligence; }
-            set { this.intelligence = value; }
-        }
+    public AILevel Intelligence
+    {
+        get { return this.intelligence; }
+        set { this.intelligence = value; }
+    }
 
-        #endregion
+    #endregion
 
-        public Enemy(ActorStartValues startValues)
-        {
+    public Enemy(ActorStartValues startValues)
+    {
             // Provide the enemy with a "unique" id
             this.uniqueID = Enemy.enemyCount++;
 
@@ -124,19 +123,19 @@ namespace PhysicaliaRemastered.Actors.Enemies
             this.SetDefaults();
         }
 
-        public override void UpdateAnimation()
-        {
+    public override void UpdateAnimation()
+    {
             base.UpdateAnimation();
         }
 
-        /// <summary>
-        /// Updates the Enemy. The Player reference is used for determining the
-        /// behavior of the Enemy.
-        /// </summary>
-        /// <param name="gameTime"></param>
-        /// <param name="player"></param>
-        public virtual void Update(GameTime gameTime, Player player)
-        {
+    /// <summary>
+    /// Updates the Enemy. The Player reference is used for determining the
+    /// behavior of the Enemy.
+    /// </summary>
+    /// <param name="gameTime"></param>
+    /// <param name="player"></param>
+    public virtual void Update(GameTime gameTime, Player player)
+    {
             if (this.Health > 0)
             {
                 base.Update(gameTime);
@@ -178,36 +177,36 @@ namespace PhysicaliaRemastered.Actors.Enemies
             }
         }
 
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, Vector2 offsetPosition)
-        {
+    public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, Vector2 offsetPosition)
+    {
             if (this.visible)
                 base.Draw(spriteBatch, offsetPosition);
         }
 
-        #region Patrol control
+    #region Patrol control
 
-        /// <summary>
-        /// Checks whether the Actor's collision box is contained within the patrol area.
-        /// </summary>
-        /// <param name="actor">The Actor who's collision box should be to checked.</param>
-        /// <param name="area">Area to use.</param>
-        /// <returns>True if the Actor's collision box is completly contained
-        /// within the patrol area; false otherwise.</returns>
-        public static bool WithinArea(Actor actor, Rectangle area)
-        {
+    /// <summary>
+    /// Checks whether the Actor's collision box is contained within the patrol area.
+    /// </summary>
+    /// <param name="actor">The Actor who's collision box should be to checked.</param>
+    /// <param name="area">Area to use.</param>
+    /// <returns>True if the Actor's collision box is completly contained
+    /// within the patrol area; false otherwise.</returns>
+    public static bool WithinArea(Actor actor, Rectangle area)
+    {
             return Enemy.WithinArea(actor, area, actor.Position);
         }
 
-        /// <summary>
-        /// Checks whether the Actor's collision box is contained within the patrol area.
-        /// </summary>
-        /// <param name="actor">The Actor who's collision box should be checked.</param>
-        /// <param name="area">Area to use.</param>
-        /// <param name="position">Position to use insted of the Actor's own position.</param>
-        /// <returns>True if the Actor's collision box is completly contained
-        /// within the patrol area; false otherwise.</returns>
-        public static bool WithinArea(Actor actor, Rectangle area, Vector2 position)
-        {
+    /// <summary>
+    /// Checks whether the Actor's collision box is contained within the patrol area.
+    /// </summary>
+    /// <param name="actor">The Actor who's collision box should be checked.</param>
+    /// <param name="area">Area to use.</param>
+    /// <param name="position">Position to use insted of the Actor's own position.</param>
+    /// <returns>True if the Actor's collision box is completly contained
+    /// within the patrol area; false otherwise.</returns>
+    public static bool WithinArea(Actor actor, Rectangle area, Vector2 position)
+    {
             Rectangle collBox = actor.CollisionBox;
             collBox.X += (int)(actor.Position.X - actor.Origin.X);
             collBox.Y += (int)(actor.Position.Y - actor.Origin.Y);
@@ -215,12 +214,12 @@ namespace PhysicaliaRemastered.Actors.Enemies
             return area.Contains(collBox);
         }
 
-        /// <summary>
-        /// Makes the current Enemy move towards the assigned patrol area. If the
-        /// Enemy is already within the patrol area nothing will happen.
-        /// </summary>
-        private void MoveToArea()
-        {
+    /// <summary>
+    /// Makes the current Enemy move towards the assigned patrol area. If the
+    /// Enemy is already within the patrol area nothing will happen.
+    /// </summary>
+    private void MoveToArea()
+    {
             // Make the enemy move in the correct direction in X
             if ((this.Position.X < this.patrolArea.X + this.patrolArea.Width / 2 && this.Velocity.X < 0) ||
                 (this.Position.X > this.patrolArea.X + this.patrolArea.Width / 2 && this.Velocity.X > 0))
@@ -231,38 +230,38 @@ namespace PhysicaliaRemastered.Actors.Enemies
             }
         }
 
-        #endregion
+    #endregion
 
-        #region Other
+    #region Other
 
-        /// <summary>
-        /// Sets all fields to their default values. Values stored in Enemy.StartValues
-        /// are also set. Override this method to set values specific to the
-        /// enemy type.
-        /// </summary>
-        public virtual void SetDefaults()
-        {
+    /// <summary>
+    /// Sets all fields to their default values. Values stored in Enemy.StartValues
+    /// are also set. Override this method to set values specific to the
+    /// enemy type.
+    /// </summary>
+    public virtual void SetDefaults()
+    {
             this.ApplyStartValues();
         }
 
-        /// <summary>
-        /// Creates a shallow copy of the Enemy instance.
-        /// </summary>
-        /// <returns></returns>
-        public virtual Enemy Copy(ActorStartValues startValues)
-        {
+    /// <summary>
+    /// Creates a shallow copy of the Enemy instance.
+    /// </summary>
+    /// <returns></returns>
+    public virtual Enemy Copy(ActorStartValues startValues)
+    {
             Enemy enemy = new Enemy(startValues);
             this.Copy(enemy);
 
             return enemy;
         }
 
-        /// <summary>
-        /// Copies the value if the current instance to the passed in enemy.
-        /// </summary>
-        /// <param name="enemy"></param>
-        public virtual void Copy(Enemy enemy)
-        {
+    /// <summary>
+    /// Copies the value if the current instance to the passed in enemy.
+    /// </summary>
+    /// <param name="enemy"></param>
+    public virtual void Copy(Enemy enemy)
+    {
             enemy.attackRange = this.attackRange;
             enemy.behavior = this.behavior;
             enemy.CanCollide = this.CanCollide;
@@ -281,17 +280,17 @@ namespace PhysicaliaRemastered.Actors.Enemies
             enemy.CurrentAnimationType = this.CurrentAnimationType;
         }
 
-        #endregion
+    #endregion
 
-        #region ICollisionObject
+    #region ICollisionObject
 
-        public override ObjectType Type
-        {
-            get { return ObjectType.Enemy; }
-        }
+    public override ObjectType Type
+    {
+        get { return ObjectType.Enemy; }
+    }
 
-        public override void TakeDamage(float damageLevel)
-        {
+    public override void TakeDamage(float damageLevel)
+    {
             this.Health -= damageLevel;
 
             if (this.Health <= 0)
@@ -302,8 +301,8 @@ namespace PhysicaliaRemastered.Actors.Enemies
             }
         }
 
-        public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
-        {
+    public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
+    {
             //base.OnCollision(collidedObject, collisionSides, position, velocity);
 
             if (collidedObject.Type == ObjectType.Tile)
@@ -325,6 +324,5 @@ namespace PhysicaliaRemastered.Actors.Enemies
                 collidedObject.TakeDamage(this.damageValue);
         }
 
-        #endregion
-    }
+    #endregion
 }

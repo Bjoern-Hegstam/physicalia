@@ -2,53 +2,53 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Input;
 
-namespace PhysicaliaRemastered.Screens
+namespace PhysicaliaRemastered.Screens;
+
+public class MenuScreen : XNALibrary.Graphics.Screen
 {
-    public class MenuScreen : XNALibrary.Graphics.Screen
+    #region Constants
+
+    // Distance of the menu items from the right edge
+    private const float MENU_ITEM_RIGHT_PADDING = 25F;
+    private const float MENU_ITEM_BOTTOM_PADDING = 70F;
+    private const float MENU_ITEM_SPACING = 5F;
+
+    private readonly Color MENU_SELECTED_COLOR = Color.SlateGray;
+    private readonly Color MENU_COLOR = Color.White;
+
+    #endregion
+
+    #region Fields
+
+    private ISettings settings;
+
+    private string[] menuItems;
+    private int menuIndex;
+
+    private SpriteFont menuFont;
+
+    private Texture2D titleTexture;
+    private Texture2D backLevelTexture;
+
+    private GameManager gameManager;
+
+    #endregion
+
+    public ISettings Settings
     {
-        #region Constants
+        set { this.settings = value; }
+    }
 
-        // Distance of the menu items from the right edge
-        private const float MENU_ITEM_RIGHT_PADDING = 25F;
-        private const float MENU_ITEM_BOTTOM_PADDING = 70F;
-        private const float MENU_ITEM_SPACING = 5F;
+    public GameManager GameManager
+    {
+        set { this.gameManager = value; }
+    }
 
-        private readonly Color MENU_SELECTED_COLOR = Color.SlateGray;
-        private readonly Color MENU_COLOR = Color.White;
+    public MenuScreen(Game game, XNALibrary.Graphics.ScreenManager screenManager)
+        : base(game, screenManager) { }
 
-        #endregion
-
-        #region Fields
-
-        private ISettings settings;
-
-        private string[] menuItems;
-        private int menuIndex;
-
-        private SpriteFont menuFont;
-
-        private Texture2D titleTexture;
-        private Texture2D backLevelTexture;
-
-        private GameManager gameManager;
-
-        #endregion
-
-        public ISettings Settings
-        {
-            set { this.settings = value; }
-        }
-
-        public GameManager GameManager
-        {
-            set { this.gameManager = value; }
-        }
-
-        public MenuScreen(Game game, XNALibrary.Graphics.ScreenManager screenManager)
-            : base(game, screenManager) { }
-
-        public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
-        {
+    public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
+    {
             this.titleTexture = contentManager.Load<Texture2D>(@"Images\ScreenGraphics\screen_MenuTitle");
             this.backLevelTexture = contentManager.Load<Texture2D>(@"Images\ScreenGraphics\screen_MenuBackLevel");
 
@@ -61,8 +61,8 @@ namespace PhysicaliaRemastered.Screens
             this.menuFont = contentManager.Load<SpriteFont>(@"Fonts\MainMenuFont");
         }
 
-        protected override void OnHandleInput()
-        {
+    protected override void OnHandleInput()
+    {
             if (this.settings.InputMap.IsPressed(InputAction.MenuDown))
             {
                 this.menuIndex++;
@@ -109,8 +109,8 @@ namespace PhysicaliaRemastered.Screens
             }
         }
 
-        protected override void OnDrawAfter(SpriteBatch spriteBatch)
-        {
+    protected override void OnDrawAfter(SpriteBatch spriteBatch)
+    {
             // Draw backgrounds
             spriteBatch.Draw(this.backLevelTexture, Vector2.Zero, Color.White);
             spriteBatch.Draw(this.titleTexture, Vector2.Zero, Color.White);
@@ -138,5 +138,4 @@ namespace PhysicaliaRemastered.Screens
                 textPos.Y -= MENU_ITEM_SPACING;
             }
         }
-    }
 }

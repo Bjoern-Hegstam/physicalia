@@ -1,60 +1,59 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Physicalia;
 using PhysicaliaRemastered.Actors.Enemies;
 using PhysicaliaRemastered.Weapons.NewWeapons;
 
-namespace PhysicaliaRemastered.Actors.EnemyManagement
+namespace PhysicaliaRemastered.Actors.EnemyManagement;
+
+/// <summary>
+/// Class for managing over a collection of Enemies.
+/// </summary>
+public class EnemyManager
 {
+    #region Constants
+
+    private int DEFAULT_ACTIVATION_DISTANCE = 20;
+
+    #endregion
+
+    #region Fields
+
+    private IEnemyBank enemyBank;
+    private List<Enemy> activatedEnemies;
+    private List<Enemy> inactiveEnemies;
+
+    private int activationDistance;
+
+    #endregion
+
+    #region Properties
+
     /// <summary>
-    /// Class for managing over a collection of Enemies.
+    /// Gets or sets the distance from the screen at which an enemy is activated.
     /// </summary>
-    public class EnemyManager
+    public int ActivationDistance
     {
-        #region Constants
+        get { return this.activationDistance; }
+        set { this.activationDistance = value; }
+    }
 
-        private int DEFAULT_ACTIVATION_DISTANCE = 20;
+    public Enemy[] ActivatedEnemies
+    {
+        get { return this.activatedEnemies.ToArray(); }
+    }
 
-        #endregion
+    #endregion
 
-        #region Fields
+    #region Constructors
 
-        private IEnemyBank enemyBank;
-        private List<Enemy> activatedEnemies;
-        private List<Enemy> inactiveEnemies;
-
-        private int activationDistance;
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the distance from the screen at which an enemy is activated.
-        /// </summary>
-        public int ActivationDistance
-        {
-            get { return this.activationDistance; }
-            set { this.activationDistance = value; }
-        }
-
-        public Enemy[] ActivatedEnemies
-        {
-            get { return this.activatedEnemies.ToArray(); }
-        }
-
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Creates a new EnemyManager.
-        /// </summary>
-        /// <param name="enemyBank">Class implementing IEnemyBank, that contains the
-        /// definitions for the enemies to use.</param>
-        public EnemyManager(IEnemyBank enemyBank)
-        {
+    /// <summary>
+    /// Creates a new EnemyManager.
+    /// </summary>
+    /// <param name="enemyBank">Class implementing IEnemyBank, that contains the
+    /// definitions for the enemies to use.</param>
+    public EnemyManager(IEnemyBank enemyBank)
+    {
             this.enemyBank = enemyBank;
 
             this.activatedEnemies = new List<Enemy>();
@@ -63,19 +62,19 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             this.activationDistance = DEFAULT_ACTIVATION_DISTANCE;
         }
 
-        #endregion
+    #endregion
 
-        #region Private methods
+    #region Private methods
 
-        /// <summary>
-        /// Checks whether the passed in Enemy is either on screen or within the
-        /// set activation distance from it.
-        /// </summary>
-        /// <param name="enemy">Enemy to check.</param>
-        /// <param name="screenRect">Rectangle with the size and position of the screen.</param>
-        /// <returns></returns>
-        private bool EnemyOnScreen(Enemy enemy, Rectangle screenRect)
-        {
+    /// <summary>
+    /// Checks whether the passed in Enemy is either on screen or within the
+    /// set activation distance from it.
+    /// </summary>
+    /// <param name="enemy">Enemy to check.</param>
+    /// <param name="screenRect">Rectangle with the size and position of the screen.</param>
+    /// <returns></returns>
+    private bool EnemyOnScreen(Enemy enemy, Rectangle screenRect)
+    {
             // Get the position of the enemies collision box
             Rectangle enemyBox = enemy.CollisionBox;
             Vector2 enemyPos = enemy.Position - enemy.Origin;
@@ -88,12 +87,12 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             return screenRect.Intersects(enemyBox);
         }
 
-        #endregion
+    #endregion
 
-        #region Public methods
+    #region Public methods
 
-        public void ActivateVisible(Rectangle screenRect)
-        {
+    public void ActivateVisible(Rectangle screenRect)
+    {
             // Activate Enemies near the screen
             for (int i = this.inactiveEnemies.Count - 1; i >= 0; i--)
             {
@@ -108,15 +107,15 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        /// <summary>
-        /// Updates the EnemyManager.
-        /// </summary>
-        /// <param name="gameTime"></param>
-        /// <param name="player"></param>
-        /// <param name="screenRect">Rectangle with the current position and
-        /// size of the screen.</param>
-        public void Update(GameTime gameTime, Player player, Rectangle screenRect)
-        {
+    /// <summary>
+    /// Updates the EnemyManager.
+    /// </summary>
+    /// <param name="gameTime"></param>
+    /// <param name="player"></param>
+    /// <param name="screenRect">Rectangle with the current position and
+    /// size of the screen.</param>
+    public void Update(GameTime gameTime, Player player, Rectangle screenRect)
+    {
             // Activate Enemies near the screen
             this.ActivateVisible(screenRect);
 
@@ -126,12 +125,12 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
                     enemy.Update(gameTime, player);
         }
 
-        /// <summary>
-        /// Checks for collisions between the active enemies and the player.
-        /// </summary>
-        /// <param name="player">Player to check for collisions with.</param>
-        public void CheckCollisions(Player player)
-        {
+    /// <summary>
+    /// Checks for collisions between the active enemies and the player.
+    /// </summary>
+    /// <param name="player">Player to check for collisions with.</param>
+    public void CheckCollisions(Player player)
+    {
             // Only do checks if the player can collide and take damage
             if (!player.CanCollide || !player.CanTakeDamage)
                 return;
@@ -189,12 +188,12 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        /// <summary>
-        /// Resets the manager to its original state. All enemies managed over are
-        /// also set to the start values.
-        /// </summary>
-        public void Reset()
-        {
+    /// <summary>
+    /// Resets the manager to its original state. All enemies managed over are
+    /// also set to the start values.
+    /// </summary>
+    public void Reset()
+    {
             // Set the default on all activated enemies
             foreach (Enemy enemy in this.activatedEnemies)
                 enemy.SetDefaults();
@@ -209,64 +208,64 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        /// <summary>
-        /// Enqueues an enemy of the given type and assigns it the supplied start values.
-        /// </summary>
-        /// <param name="typeID">ID of the type of enemy to add.</param>
-        /// <param name="startValues">Start values for the new enemy.</param>
-        public void EnqueueEnemy(int typeID, ActorStartValues startValues)
-        {
+    /// <summary>
+    /// Enqueues an enemy of the given type and assigns it the supplied start values.
+    /// </summary>
+    /// <param name="typeID">ID of the type of enemy to add.</param>
+    /// <param name="startValues">Start values for the new enemy.</param>
+    public void EnqueueEnemy(int typeID, ActorStartValues startValues)
+    {
             Enemy enemy = this.enemyBank.CreateEnemy(typeID, startValues);
 
             this.EnqueueEnemy(enemy);
         }
 
-        public void EnqueueEnemy(int typeID, ActorStartValues startValues, Rectangle patrolArea)
-        {
+    public void EnqueueEnemy(int typeID, ActorStartValues startValues, Rectangle patrolArea)
+    {
             Enemy enemy = this.enemyBank.CreateEnemy(typeID, startValues);
             enemy.PatrolArea = patrolArea;
 
             this.EnqueueEnemy(enemy);
         }
         
-        /// <summary>
-        /// Enqueues the passed in Enemy.
-        /// </summary>
-        /// <param name="enemy">Enemy to enqueue.</param>
-        public void EnqueueEnemy(Enemy enemy)
-        {
+    /// <summary>
+    /// Enqueues the passed in Enemy.
+    /// </summary>
+    /// <param name="enemy">Enemy to enqueue.</param>
+    public void EnqueueEnemy(Enemy enemy)
+    {
             this.inactiveEnemies.Add(enemy);
         }
 
-        /// <summary>
-        /// Updates the animations of all active Enemies
-        /// </summary>
-        public void UpdateAnimations()
-        {
+    /// <summary>
+    /// Updates the animations of all active Enemies
+    /// </summary>
+    public void UpdateAnimations()
+    {
             foreach (Enemy enemy in this.activatedEnemies)
                 if (enemy.IsActive)
                     enemy.UpdateAnimation();
         }
 
-        /// <summary>
-        /// Draws the active enemies using the supplied SpriteBatch.
-        /// </summary>
-        /// <param name="spriteBatch">SpriteBatch to draw with.</param>
-        /// <param name="offsetPosition">Position of the top-left corner of the screen.</param>
-        public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
-        {
+    /// <summary>
+    /// Draws the active enemies using the supplied SpriteBatch.
+    /// </summary>
+    /// <param name="spriteBatch">SpriteBatch to draw with.</param>
+    /// <param name="offsetPosition">Position of the top-left corner of the screen.</param>
+    public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    {
             foreach (Enemy enemy in this.activatedEnemies)
             {
                 enemy.Draw(spriteBatch, offsetPosition);
             }
         }
 
-        #endregion
+    #endregion
 
-        #region Session management
+    #region Session management
 
-        public void SaveSession(GameSession session)
-        {
+    public void SaveSession(GameSession session)
+    {
             foreach (Enemy enemy in this.activatedEnemies)
             {
                 EnemySave enemySave = new EnemySave(enemy.Position, enemy.Velocity, enemy.Health, enemy.IsActive);
@@ -274,8 +273,8 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        public void LoadSession(GameSession session)
-        {
+    public void LoadSession(GameSession session)
+    {
             for (int i = this.inactiveEnemies.Count - 1; i >= 0; i--)
             {
                 if (session.SavedEnemies.ContainsKey(this.inactiveEnemies[i].UniqueID))
@@ -303,6 +302,5 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        #endregion
-    }
+    #endregion
 }

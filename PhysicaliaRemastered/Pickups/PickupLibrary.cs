@@ -2,62 +2,62 @@ using System.Collections.Generic;
 using System.Xml;
 using PhysicaliaRemastered.Pickups.Modifiers;
 
-namespace PhysicaliaRemastered.Pickups
+namespace PhysicaliaRemastered.Pickups;
+
+public interface IPickupLibrary
 {
-    public interface IPickupLibrary
+    void AddPickup(int key, Pickup modifier);
+    void RemovePickup(int key);
+    Pickup GetPickup(int key);
+
+    void LoadXml(string path, SpriteLibrary spriteLibrary);
+    void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary);
+}
+
+public class PickupLibrary : IPickupLibrary
+{
+    #region Fields
+
+    private Dictionary<int, Pickup> modifierLib;
+
+    #endregion
+
+    #region Constructors
+
+    public PickupLibrary()
     {
-        void AddPickup(int key, Pickup modifier);
-        void RemovePickup(int key);
-        Pickup GetPickup(int key);
-
-        void LoadXml(string path, SpriteLibrary spriteLibrary);
-        void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary);
-    }
-
-    public class PickupLibrary : IPickupLibrary
-    {
-        #region Fields
-
-        private Dictionary<int, Pickup> modifierLib;
-
-        #endregion
-
-        #region Constructors
-
-        public PickupLibrary()
-        {
             this.modifierLib = new Dictionary<int, Pickup>();
         }
 
-        #endregion
+    #endregion
 
-        #region Library access
+    #region Library access
 
-        public void AddPickup(int key, Pickup modifier)
-        {
+    public void AddPickup(int key, Pickup modifier)
+    {
             this.modifierLib[key] = modifier;
         }
 
-        public void RemovePickup(int key)
-        {
+    public void RemovePickup(int key)
+    {
             if (this.modifierLib.ContainsKey(key))
                 this.modifierLib.Remove(key);
         }
 
-        public Pickup GetPickup(int key)
-        {
+    public Pickup GetPickup(int key)
+    {
             if (this.modifierLib.ContainsKey(key))
                 return this.modifierLib[key].Copy();
 
             return null;
         }
 
-        #endregion
+    #endregion
 
-        #region Xml loading
+    #region Xml loading
 
-        public void LoadXml(string path, SpriteLibrary spriteLibrary)
-        {
+    public void LoadXml(string path, SpriteLibrary spriteLibrary)
+    {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
             readerSettings.IgnoreWhitespace = true;
@@ -69,8 +69,8 @@ namespace PhysicaliaRemastered.Pickups
             }
         }
 
-        public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary)
-        {
+    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary)
+    {
             while (reader.Read())
             {
                 if (reader.NodeType == XmlNodeType.Element &&
@@ -103,6 +103,5 @@ namespace PhysicaliaRemastered.Pickups
             }
         }
 
-        #endregion
-    }
+    #endregion
 }

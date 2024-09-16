@@ -1,52 +1,51 @@
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
-using Physicalia;
 using PhysicaliaRemastered.Actors.Enemies;
 
-namespace PhysicaliaRemastered.Actors.EnemyManagement
+namespace PhysicaliaRemastered.Actors.EnemyManagement;
+
+public class EnemyBank : IEnemyBank
 {
-    public class EnemyBank : IEnemyBank
+    #region Fields
+
+    /// <summary>
+    /// Dictionary mapping the Id's of the enemy types to the base enemies.
+    /// The animation keys kept by the enemies are those going to the
+    /// base animations.
+    /// </summary>
+    private Dictionary<int, Enemy> enemyBank;
+
+    private IAnimationManager animationManager;
+
+    #endregion
+
+    #region Properties
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Creates a new EnemyBank instance and adds that instance as a service
+    /// to the games service collection.
+    /// </summary>
+    /// <param name="device">GraphicsDevice used when loading textures.</param>
+    /// <param name="animationManager">The AnimationManager used by the EnemyBank
+    /// when creating animations for new enemies.</param>
+    public EnemyBank(IAnimationManager animationManager)
     {
-        #region Fields
-
-        /// <summary>
-        /// Dictionary mapping the Id's of the enemy types to the base enemies.
-        /// The animation keys kept by the enemies are those going to the
-        /// base animations.
-        /// </summary>
-        private Dictionary<int, Enemy> enemyBank;
-
-        private IAnimationManager animationManager;
-
-        #endregion
-
-        #region Properties
-
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Creates a new EnemyBank instance and adds that instance as a service
-        /// to the games service collection.
-        /// </summary>
-        /// <param name="device">GraphicsDevice used when loading textures.</param>
-        /// <param name="animationManager">The AnimationManager used by the EnemyBank
-        /// when creating animations for new enemies.</param>
-        public EnemyBank(IAnimationManager animationManager)
-        {
             this.animationManager = animationManager;
 
             this.enemyBank = new Dictionary<int, Enemy>();
         }
 
-        #endregion
+    #endregion
 
-        #region Public methods
+    #region Public methods
 
-        public void LoadXml(string path)
-        {
+    public void LoadXml(string path)
+    {
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
             readerSettings.IgnoreWhitespace = true;
@@ -58,13 +57,13 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        /// <summary>
-        /// Loads in the Enemy definitions from the passed in XmlReader and stores
-        /// them with the id specified in the xml-file, as the key.
-        /// </summary>
-        /// <param name="reader"></param>
-        public void LoadXml(XmlReader reader)
-        {
+    /// <summary>
+    /// Loads in the Enemy definitions from the passed in XmlReader and stores
+    /// them with the id specified in the xml-file, as the key.
+    /// </summary>
+    /// <param name="reader"></param>
+    public void LoadXml(XmlReader reader)
+    {
             while (reader.Read())
             {
                 if (reader.NodeType == XmlNodeType.Element &&
@@ -87,24 +86,24 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        /// <summary>
-        /// Adds the enemy to the bank of base enemies.
-        /// </summary>
-        /// <param name="typeID">ID of the enemies type.</param>
-        /// <param name="enemy">The enemy to add.</param>
-        public void AddBaseEnemy(int typeID, Enemy enemy)
-        {
+    /// <summary>
+    /// Adds the enemy to the bank of base enemies.
+    /// </summary>
+    /// <param name="typeID">ID of the enemies type.</param>
+    /// <param name="enemy">The enemy to add.</param>
+    public void AddBaseEnemy(int typeID, Enemy enemy)
+    {
             this.enemyBank.Add(typeID, enemy);
         }
 
-        /// <summary>
-        /// Creates a new Enemy based on the passed in type id.
-        /// </summary>
-        /// <param name="typeID">Id of the type of Enemy to create.</param>
-        /// /// <param name="startValues">Start values to give the Enemy.</param>
-        /// <returns>The created enemy or null if no type using the id has been stored.</returns>
-        public Enemy CreateEnemy(int typeID, ActorStartValues startValues)
-        {
+    /// <summary>
+    /// Creates a new Enemy based on the passed in type id.
+    /// </summary>
+    /// <param name="typeID">Id of the type of Enemy to create.</param>
+    /// /// <param name="startValues">Start values to give the Enemy.</param>
+    /// <returns>The created enemy or null if no type using the id has been stored.</returns>
+    public Enemy CreateEnemy(int typeID, ActorStartValues startValues)
+    {
             // Make sure the type has been defined
             if (!this.enemyBank.ContainsKey(typeID))
                 return null;
@@ -120,27 +119,27 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             return enemy;
         }
 
-        /// <summary>
-        /// Sets the values of the passed in enemy as specified by the base
-        /// enemy of the same type.
-        /// </summary>
-        /// <param name="enemy">Enemy to the set the values on.</param>
-        public void SetupEnemy(Enemy enemy)
-        {
+    /// <summary>
+    /// Sets the values of the passed in enemy as specified by the base
+    /// enemy of the same type.
+    /// </summary>
+    /// <param name="enemy">Enemy to the set the values on.</param>
+    public void SetupEnemy(Enemy enemy)
+    {
             if (this.enemyBank.ContainsKey(enemy.TypeID))
                 this.enemyBank[enemy.TypeID].Copy(enemy);
         }
 
-        #endregion
+    #endregion
 
-        #region Private methods
+    #region Private methods
 
-        /// <summary>
-        /// Sets up the passed in Enemy according to the xml data.
-        /// </summary>
-        /// <param name="reader"></param>
-        private void SetupEnemy(XmlReader reader, Enemy enemy)
-        {
+    /// <summary>
+    /// Sets up the passed in Enemy according to the xml data.
+    /// </summary>
+    /// <param name="reader"></param>
+    private void SetupEnemy(XmlReader reader, Enemy enemy)
+    {
             while (reader.Read())
             {
                 if (reader.NodeType == XmlNodeType.Element &&
@@ -173,16 +172,16 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        /// <summary>
-        /// Loads the base animations for a type and stores them in the AnimationManagers
-        /// bank of animations. The keys to the stored animations are saved in
-        /// the passed in Enemy's collection of animationkeys, mapping them to
-        /// the correct action.
-        /// </summary>
-        /// <param name="reader">XmlReader to read from.</param>
-        /// <param name="enemy">Enemy to give the keys to.</param>
-        private void LoadAnimations(XmlReader reader, Enemy enemy)
-        {
+    /// <summary>
+    /// Loads the base animations for a type and stores them in the AnimationManagers
+    /// bank of animations. The keys to the stored animations are saved in
+    /// the passed in Enemy's collection of animationkeys, mapping them to
+    /// the correct action.
+    /// </summary>
+    /// <param name="reader">XmlReader to read from.</param>
+    /// <param name="enemy">Enemy to give the keys to.</param>
+    private void LoadAnimations(XmlReader reader, Enemy enemy)
+    {
             while (reader.Read())
             {
                 if (reader.NodeType == XmlNodeType.Element &&
@@ -206,8 +205,8 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        private Rectangle ReadRectangle(XmlReader reader)
-        {
+    private Rectangle ReadRectangle(XmlReader reader)
+    {
             int x = int.Parse(reader.GetAttribute("x"));
             int y = int.Parse(reader.GetAttribute("y"));
             int width = int.Parse(reader.GetAttribute("width"));
@@ -216,13 +215,13 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             return new Rectangle(x, y, width, height);
         }
 
-        /// <summary>
-        /// Creates an Enemy which class name is that of the passed in string.
-        /// </summary>
-        /// <param name="typeName">Name of the enemy class.</param>
-        /// <returns>The created Enemy or null if no type mathed the string.</returns>
-        private Enemy CreateBaseEnemy(string typeName)
-        {
+    /// <summary>
+    /// Creates an Enemy which class name is that of the passed in string.
+    /// </summary>
+    /// <param name="typeName">Name of the enemy class.</param>
+    /// <returns>The created Enemy or null if no type mathed the string.</returns>
+    private Enemy CreateBaseEnemy(string typeName)
+    {
             // Create the correct enemy based on the type name
             switch (typeName)
             {
@@ -235,16 +234,16 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             return null;
         }
 
-        /// <summary>
-        /// Sets the animation keys for the passed in Enemy as specified
-        /// by the base Enemy mapped to the typeID key.
-        /// </summary>
-        /// <param name="typeID">Key to the base Enemy from which to create the
-        /// playback animations</param>
-        /// <param name="enemy">The Enemy to set the animationkeys on.</param>
-        /// <returns></returns>
-        private void SetPlaybackKeys(int typeID, Enemy enemy)
-        {
+    /// <summary>
+    /// Sets the animation keys for the passed in Enemy as specified
+    /// by the base Enemy mapped to the typeID key.
+    /// </summary>
+    /// <param name="typeID">Key to the base Enemy from which to create the
+    /// playback animations</param>
+    /// <param name="enemy">The Enemy to set the animationkeys on.</param>
+    /// <returns></returns>
+    private void SetPlaybackKeys(int typeID, Enemy enemy)
+    {
             // Get the types animation keys
             Dictionary<int, Animation> bankAnimations = this.enemyBank[typeID].Animations;
 
@@ -264,6 +263,5 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement
             }
         }
 
-        #endregion
-    }
+    #endregion
 }

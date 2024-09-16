@@ -6,51 +6,51 @@ using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Weapons;
 using Weapon = PhysicaliaRemastered.Weapons.NewWeapons.Weapon;
 
-namespace PhysicaliaRemastered.Actors
+namespace PhysicaliaRemastered.Actors;
+
+public class Player : Actor
 {
-    public class Player : Actor
+    #region Movement fields
+
+    public const float DEFAULT_JUMP_MAGNITUDE = -300F;
+    public const float DEFAULT_WALK_SPEED = 100F;
+    public const float DEFAULT_FALL_MOVEMENT_SPEED = 80F;
+
+    public const float DEFAULT_INVINCIBLE_TIME = 1F;
+    public const float DEFAULT_FLICKER_INTERVAL = 0.1F;
+
+    private float jumpMagnitude;
+    private float walkSpeed;
+    private float fallMovementSpeed;
+
+    // Life management
+    private float invincibleTime;
+    private float flickerInterval;
+    private bool visible;
+
+    public float JumpMagnitude
     {
-        #region Movement fields
+        get { return this.jumpMagnitude; }
+        set { this.jumpMagnitude = value; }
+    }
 
-        public const float DEFAULT_JUMP_MAGNITUDE = -300F;
-        public const float DEFAULT_WALK_SPEED = 100F;
-        public const float DEFAULT_FALL_MOVEMENT_SPEED = 80F;
+    public float WalkSpeed
+    {
+        get { return this.walkSpeed; }
+        set { this.walkSpeed = value; }
+    }
 
-        public const float DEFAULT_INVINCIBLE_TIME = 1F;
-        public const float DEFAULT_FLICKER_INTERVAL = 0.1F;
+    public float FallMovementSpeed
+    {
+        get { return this.fallMovementSpeed; }
+        set { this.fallMovementSpeed = value; }
+    }
 
-        private float jumpMagnitude;
-        private float walkSpeed;
-        private float fallMovementSpeed;
-
-        // Life management
-        private float invincibleTime;
-        private float flickerInterval;
-        private bool visible;
-
-        public float JumpMagnitude
+    public bool Flickering
+    {
+        get { return this.invincibleTime > 0; }
+        set
         {
-            get { return this.jumpMagnitude; }
-            set { this.jumpMagnitude = value; }
-        }
-
-        public float WalkSpeed
-        {
-            get { return this.walkSpeed; }
-            set { this.walkSpeed = value; }
-        }
-
-        public float FallMovementSpeed
-        {
-            get { return this.fallMovementSpeed; }
-            set { this.fallMovementSpeed = value; }
-        }
-
-        public bool Flickering
-        {
-            get { return this.invincibleTime > 0; }
-            set
-            {
                 if (value)
                 {
                     this.invincibleTime = DEFAULT_INVINCIBLE_TIME;
@@ -61,50 +61,50 @@ namespace PhysicaliaRemastered.Actors
                     this.visible = true;
                 }
             }
-        }
+    }
 
-        #endregion
+    #endregion
 
-        public override float Health
+    public override float Health
+    {
+        get { return base.Health; }
+        set
         {
-            get { return base.Health; }
-            set
-            {
                 base.Health = Math.Max(Math.Min(settings.PlayerStartHealth, value), 0);
             }
-        }
+    }
 
-        #region General Management
+    #region General Management
 
-        private ISettings settings;
+    private ISettings settings;
 
-        public ISettings Settings
+    public ISettings Settings
+    {
+        get { return this.settings; }
+    }
+
+    #endregion
+
+    #region Weapons
+
+    private Dictionary<int, Weapon> weapons;
+    private int currentWeapon;
+
+    public Weapon CurrentWeapon
+    {
+        get
         {
-            get { return this.settings; }
-        }
-
-        #endregion
-
-        #region Weapons
-
-        private Dictionary<int, Weapon> weapons;
-        private int currentWeapon;
-
-        public Weapon CurrentWeapon
-        {
-            get
-            {
                 if (this.weapons.ContainsKey(this.currentWeapon))
                     return this.weapons[this.currentWeapon];
 
                 return null;
             }
-        }
+    }
 
-        #endregion
+    #endregion
 
-        public Player(ISettings settings)
-        {
+    public Player(ISettings settings)
+    {
             this.settings = settings;
 
             this.jumpMagnitude = DEFAULT_JUMP_MAGNITUDE;
@@ -117,11 +117,11 @@ namespace PhysicaliaRemastered.Actors
             this.weapons = new Dictionary<int, Weapon>();
         }
 
-        /// <summary>
-        /// Allows the Player to handle input.
-        /// </summary>
-        public void HandleInput()
-        {
+    /// <summary>
+    /// Allows the Player to handle input.
+    /// </summary>
+    public void HandleInput()
+    {
             Vector2 velocity = this.Velocity;
             velocity.X = 0;
 
@@ -235,23 +235,23 @@ namespace PhysicaliaRemastered.Actors
                 this.weapons[this.currentWeapon].Stop();
         }
 
-        #region Weapon control
+    #region Weapon control
 
-        /// <summary>
-        /// Clears the player's weapons.
-        /// </summary>
-        public void ClearWeapons()
-        {
+    /// <summary>
+    /// Clears the player's weapons.
+    /// </summary>
+    public void ClearWeapons()
+    {
             this.weapons.Clear();
         }
 
-        /// <summary>
-        /// Adds a weapon to the player's arsenal. If the player already has a weapon
-        /// with the same ID, then only the ammo of the new weapon is kept.
-        /// </summary>
-        /// <param name="weapon">Weapon to add.</param>
-        public void AddWeapon(Weapon weapon)
-        {
+    /// <summary>
+    /// Adds a weapon to the player's arsenal. If the player already has a weapon
+    /// with the same ID, then only the ammo of the new weapon is kept.
+    /// </summary>
+    /// <param name="weapon">Weapon to add.</param>
+    public void AddWeapon(Weapon weapon)
+    {
             // First weapon
             if (this.weapons.Count == 0)
                 this.currentWeapon = weapon.WeaponID;
@@ -270,13 +270,13 @@ namespace PhysicaliaRemastered.Actors
             }
         }
 
-        /// <summary>
-        /// Removes the weapon with the specified id from the player's
-        /// collection of weapons.
-        /// </summary>
-        /// <param name="weaponID">Id of the weapon to remove.</param>
-        public void RemoveWeapon(int weaponID, int ammoCount)
-        {
+    /// <summary>
+    /// Removes the weapon with the specified id from the player's
+    /// collection of weapons.
+    /// </summary>
+    /// <param name="weaponID">Id of the weapon to remove.</param>
+    public void RemoveWeapon(int weaponID, int ammoCount)
+    {
             // If the weapon has a stored ammo count of 0 it was added
             // during the last level and should be removed. Also
             // weapons with infinite ammo should only be picked up once
@@ -299,8 +299,8 @@ namespace PhysicaliaRemastered.Actors
 
         }
 
-        public override void Update(GameTime gameTime)
-        {
+    public override void Update(GameTime gameTime)
+    {
             base.Update(gameTime);
 
             // Update invincibility flicker
@@ -327,22 +327,22 @@ namespace PhysicaliaRemastered.Actors
                 this.weapons[this.currentWeapon].Update(gameTime);
         }
 
-        public void StoreWeaponAmmoCount()
-        {
+    public void StoreWeaponAmmoCount()
+    {
             foreach (Weapon weapon in this.weapons.Values)
                 weapon.StoreAmmoCount();
         }
 
-        public void ApplyStoredWeaponAmmoCount()
-        {
+    public void ApplyStoredWeaponAmmoCount()
+    {
             foreach (Weapon weapon in this.weapons.Values)
                 weapon.ApplyStoredAmmoCount();
         }
 
-        #endregion
+    #endregion
 
-        public void Kill()
-        {
+    public void Kill()
+    {
             if (!this.visible)
                 this.visible = true;
 
@@ -355,15 +355,15 @@ namespace PhysicaliaRemastered.Actors
                 this.weapons[this.currentWeapon].Stop();
         }
 
-        #region ICollisionObject members
+    #region ICollisionObject members
 
-        public override ObjectType Type
-        {
-            get { return ObjectType.Player; }
-        }
+    public override ObjectType Type
+    {
+        get { return ObjectType.Player; }
+    }
 
-        public override void TakeDamage(float damageLevel)
-        {
+    public override void TakeDamage(float damageLevel)
+    {
             // Invincible?
             if (this.invincibleTime > 0)
                 return;
@@ -380,8 +380,8 @@ namespace PhysicaliaRemastered.Actors
                 this.invincibleTime = DEFAULT_INVINCIBLE_TIME;
         }
 
-        public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
-        {
+    public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
+    {
             if (collidedObject.Type == ObjectType.Tile)
             {
                 this.Position = position;
@@ -392,10 +392,10 @@ namespace PhysicaliaRemastered.Actors
             }
         }
 
-        #endregion
+    #endregion
 
-        public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
-        {
+    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    {
             if (!this.visible)
                 return;
 
@@ -410,10 +410,10 @@ namespace PhysicaliaRemastered.Actors
                 this.weapons[this.currentWeapon].Draw(spriteBatch, offsetPosition, this.SpriteFlip);
         }
 
-        #region Session management
+    #region Session management
 
-        public void NewSession()
-        {
+    public void NewSession()
+    {
             this.weapons.Clear();
 
             this.invincibleTime = 0;
@@ -421,8 +421,8 @@ namespace PhysicaliaRemastered.Actors
             this.visible = true;
         }
 
-        public void LoadSession(GameSession session, WeaponBank weaponBank)
-        {
+    public void LoadSession(GameSession session, WeaponBank weaponBank)
+    {
             this.CurrentAnimationType = 0;
 
             this.invincibleTime = 0;
@@ -461,8 +461,8 @@ namespace PhysicaliaRemastered.Actors
             }
         }
 
-        public void SaveSession(GameSession session)
-        {
+    public void SaveSession(GameSession session)
+    {
             ActorStartValues playerValues = new ActorStartValues();
             playerValues.Position = this.Position;
             playerValues.Velocity = this.Velocity;
@@ -478,6 +478,5 @@ namespace PhysicaliaRemastered.Actors
                 session.WeaponSaves.Add(weaponID, new WeaponSave(this.weapons[weaponID].AmmoCount, this.weapons[weaponID].AmmoMemory));
         }
 
-        #endregion
-    }
+    #endregion
 }

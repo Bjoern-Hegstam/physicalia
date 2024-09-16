@@ -3,63 +3,63 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Input;
 
-namespace PhysicaliaRemastered.Screens
+namespace PhysicaliaRemastered.Screens;
+
+public class GameScreen : XNALibrary.Graphics.Screen
 {
-    public class GameScreen : XNALibrary.Graphics.Screen
+    public enum PauseMenuOption
     {
-        public enum PauseMenuOption
-        {
-            Resume,
-            Reset,
-            Load,
-            Save,
-            Menu
-        }
+        Resume,
+        Reset,
+        Load,
+        Save,
+        Menu
+    }
 
-        #region Constants
+    #region Constants
 
-        private const float PAUSE_MENU_Y = 165F;
-        private const float PAUSE_MENU_X = 250F;
-        private const float PAUSE_MENU_MARGIN = 5F;
+    private const float PAUSE_MENU_Y = 165F;
+    private const float PAUSE_MENU_X = 250F;
+    private const float PAUSE_MENU_MARGIN = 5F;
 
-        #endregion
+    #endregion
 
-        #region Fields
+    #region Fields
 
-        private GameManager gameManager;
-        private ISettings settings;
+    private GameManager gameManager;
+    private ISettings settings;
 
-        // Pause menu fields
-        private Texture2D pauseOverlayTexture;
-        private Rectangle pauseOverlayArea;
+    // Pause menu fields
+    private Texture2D pauseOverlayTexture;
+    private Rectangle pauseOverlayArea;
 
-        private int pauseMenuIndex = 0;
+    private int pauseMenuIndex = 0;
 
-        private PauseMenuOption[] pauseMenuOptions = (PauseMenuOption[])Enum.GetValues(typeof(PauseMenuOption));
+    private PauseMenuOption[] pauseMenuOptions = (PauseMenuOption[])Enum.GetValues(typeof(PauseMenuOption));
 
-        #endregion
+    #endregion
 
-        public ISettings Settings
-        {
-            get { return this.gameManager.Settings; }
-        }
+    public ISettings Settings
+    {
+        get { return this.gameManager.Settings; }
+    }
 
-        public GameManager GameManager
-        {
-            get { return this.gameManager; }
-        }
+    public GameManager GameManager
+    {
+        get { return this.gameManager; }
+    }
 
-        public GameScreen(Game game, ScreenManager manager)
-            : base(game, manager)
-        {
+    public GameScreen(Game game, ScreenManager manager)
+        : base(game, manager)
+    {
             this.gameManager = new GameManager(this.Game);
             this.settings = this.gameManager.Settings;
         }
 
-        #region Initilization and content loading
+    #region Initilization and content loading
 
-        public override void Initialize()
-        {
+    public override void Initialize()
+    {
             base.Initialize();
 
             // Create Pause overlay texture
@@ -71,16 +71,16 @@ namespace PhysicaliaRemastered.Screens
             this.pauseOverlayArea.Height = this.Game.GraphicsDevice.Viewport.Height;
         }
 
-        public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
-        {
+    public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
+    {
             this.gameManager.LoadXml(@"Content\GameData\Game.xml");
             this.gameManager.LoadContent(contentManager);
         }
 
-        #endregion
+    #endregion
 
-        protected override void OnUpdate(GameTime gameTime)
-        {
+    protected override void OnUpdate(GameTime gameTime)
+    {
             if (this.gameManager.State == GameState.Paused)
                 this.HandlePauseMenu();
 
@@ -88,8 +88,8 @@ namespace PhysicaliaRemastered.Screens
             this.gameManager.Update(gameTime);
         }
 
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
-        {
+    public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+    {
             spriteBatch.Begin();
 
             this.gameManager.Draw(spriteBatch);
@@ -100,8 +100,8 @@ namespace PhysicaliaRemastered.Screens
             spriteBatch.End();
         }
 
-        private void HandlePauseMenu()
-        {
+    private void HandlePauseMenu()
+    {
             // Read input for moving between meny options
             // Because of the way the options are drawn the index goes in the
             // reverse direction of what the player presses
@@ -170,8 +170,8 @@ namespace PhysicaliaRemastered.Screens
             }
         }
 
-        private void DrawPauseMenu(SpriteBatch spriteBatch)
-        {
+    private void DrawPauseMenu(SpriteBatch spriteBatch)
+    {
             // Pause menu is drawn in the center of the screen
 
             // Draw texture overlay over world to fade it out a bit
@@ -199,5 +199,4 @@ namespace PhysicaliaRemastered.Screens
                 optionIndex++;
             }
         }
-    }
 }

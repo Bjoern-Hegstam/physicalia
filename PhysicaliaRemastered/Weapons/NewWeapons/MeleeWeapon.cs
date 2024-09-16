@@ -2,22 +2,22 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace PhysicaliaRemastered.Weapons.NewWeapons
+namespace PhysicaliaRemastered.Weapons.NewWeapons;
+
+public class MeleeWeapon : Weapon
 {
-    public class MeleeWeapon : Weapon
+    #region Fields
+
+    private Vector2 warmupVibration;
+    private Vector2 fireVibration;
+
+    #endregion
+
+    #region Constructor
+
+    public MeleeWeapon(int weaponID, IParticleEngine particleEngine)
+        : base(weaponID, particleEngine)
     {
-        #region Fields
-
-        private Vector2 warmupVibration;
-        private Vector2 fireVibration;
-
-        #endregion
-
-        #region Constructor
-
-        public MeleeWeapon(int weaponID, IParticleEngine particleEngine)
-            : base(weaponID, particleEngine)
-        {
             this.warmupVibration = this.fireVibration = Vector2.Zero;
 
             this.InfiniteAmmo = true;
@@ -27,37 +27,37 @@ namespace PhysicaliaRemastered.Weapons.NewWeapons
             this.StoreAmmoCount();
         }
 
-        #endregion
+    #endregion
 
-        #region Weapon members
+    #region Weapon members
 
-        public override void Start()
-        {
+    public override void Start()
+    {
             // TODO: The vibration settings should be moved to xml and perhaps also up to the base class
             GamePad.SetVibration(PlayerIndex.One, this.warmupVibration.X, this.warmupVibration.Y);
 
             base.Start();
         }
 
-        public override void Stop()
-        {
+    public override void Stop()
+    {
             GamePad.SetVibration(PlayerIndex.One, 0F, 0F);
 
             base.Stop();
         }
 
-        protected override void OnStartFire()
-        {
+    protected override void OnStartFire()
+    {
             GamePad.SetVibration(PlayerIndex.One, this.fireVibration.X, this.fireVibration.Y);
         }
 
-        protected override void FireWeapon()
-        {
+    protected override void FireWeapon()
+    {
             
         }
 
-        public override void LoadXml(XmlReader reader)
-        {
+    public override void LoadXml(XmlReader reader)
+    {
             while (reader.Read())
             {
                 if (reader.NodeType == System.Xml.XmlNodeType.Element &&
@@ -84,6 +84,5 @@ namespace PhysicaliaRemastered.Weapons.NewWeapons
             }
         }
 
-        #endregion
-    }
+    #endregion
 }

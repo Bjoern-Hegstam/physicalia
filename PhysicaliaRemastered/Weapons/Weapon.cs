@@ -4,176 +4,176 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors;
 
-namespace PhysicaliaRemastered.Weapons
+namespace PhysicaliaRemastered.Weapons;
+
+public class Weapon
 {
-    public class Weapon
+    #region Fields and Properties
+
+    // Major objects
+    private Player player;
+    private IParticleEngine particleEngine;
+    private IAnimationManager animationManager;
+
+    public Player Player
     {
-        #region Fields and Properties
+        get { return this.player; }
+        set { this.player = value; }
+    }
 
-        // Major objects
-        private Player player;
-        private IParticleEngine particleEngine;
-        private IAnimationManager animationManager;
+    // Graphics
+    private Animation weaponAnim;
+    private int weaponID;
+    private Sprite weaponSprite;
+    private Vector2 playerOffset;
+    private Vector2 muzzlePosition;
+    private float maxDeviation;
 
-        public Player Player
-        {
-            get { return this.player; }
-            set { this.player = value; }
-        }
+    /// <summary>
+    /// Gets or sets the player's position relative to the weapon. The offset
+    /// represents the position of the player's top-left corner on the weapon
+    /// sprite.
+    /// </summary>
+    public Vector2 PlayerOffset
+    {
+        get { return this.playerOffset; }
+        set { this.playerOffset = value; }
+    }
 
-        // Graphics
-        private Animation weaponAnim;
-        private int weaponID;
-        private Sprite weaponSprite;
-        private Vector2 playerOffset;
-        private Vector2 muzzlePosition;
-        private float maxDeviation;
+    public Sprite WeaponSprite
+    {
+        get { return this.weaponSprite; }
+        set { this.weaponSprite = value; }
+    }
 
-        /// <summary>
-        /// Gets or sets the player's position relative to the weapon. The offset
-        /// represents the position of the player's top-left corner on the weapon
-        /// sprite.
-        /// </summary>
-        public Vector2 PlayerOffset
-        {
-            get { return this.playerOffset; }
-            set { this.playerOffset = value; }
-        }
+    /// <summary>
+    /// Gets the ID of this weapon type.
+    /// </summary>
+    public int TypeID
+    {
+        get { return this.weaponID; }
+        set { this.weaponID = value; }
+    }
 
-        public Sprite WeaponSprite
-        {
-            get { return this.weaponSprite; }
-            set { this.weaponSprite = value; }
-        }
+    public Vector2 MuzzlePosition
+    {
+        get { return this.muzzlePosition; }
+        set { this.muzzlePosition = value; }
+    }
 
-        /// <summary>
-        /// Gets the ID of this weapon type.
-        /// </summary>
-        public int TypeID
-        {
-            get { return this.weaponID; }
-            set { this.weaponID = value; }
-        }
+    public float MaxDeviation
+    {
+        get { return this.maxDeviation; }
+        set { this.maxDeviation = value; }
+    }
 
-        public Vector2 MuzzlePosition
-        {
-            get { return this.muzzlePosition; }
-            set { this.muzzlePosition = value; }
-        }
+    // Weapon control
+    private bool weaponFired;
 
-        public float MaxDeviation
-        {
-            get { return this.maxDeviation; }
-            set { this.maxDeviation = value; }
-        }
+    private int projectileID;
+    private float fireRate; // Shots/s
+    private float spread;
+    private int projectilesPerShot;
+    private bool firing;
+    private int ammoCount;
+    private int maxAmmo;
+    private bool infiniteAmmo;
+    protected float timeTillShot;
 
-        // Weapon control
-        private bool weaponFired;
+    private int ammoMemory;
 
-        private int projectileID;
-        private float fireRate; // Shots/s
-        private float spread;
-        private int projectilesPerShot;
-        private bool firing;
-        private int ammoCount;
-        private int maxAmmo;
-        private bool infiniteAmmo;
-        protected float timeTillShot;
+    /// <summary>
+    /// Gets or sets the id of the particle type that represent a shot
+    /// from the weapon.
+    /// </summary>
+    public int ProjectileID
+    {
+        get { return this.projectileID; }
+        set { this.projectileID = value; }
+    }
 
-        private int ammoMemory;
+    /// <summary>
+    /// Gets or sets the number of shots fired per second.
+    /// </summary>
+    public float FireRate
+    {
+        get { return this.fireRate; }
+        set { this.fireRate = value; }
+    }
 
-        /// <summary>
-        /// Gets or sets the id of the particle type that represent a shot
-        /// from the weapon.
-        /// </summary>
-        public int ProjectileID
-        {
-            get { return this.projectileID; }
-            set { this.projectileID = value; }
-        }
+    public float Spread
+    {
+        get { return this.spread; }
+        set { this.spread = value; }
+    }
 
-        /// <summary>
-        /// Gets or sets the number of shots fired per second.
-        /// </summary>
-        public float FireRate
-        {
-            get { return this.fireRate; }
-            set { this.fireRate = value; }
-        }
+    public int ProjectilesPerShot
+    {
+        get { return this.projectilesPerShot; }
+        set { this.projectilesPerShot = value; }
+    }
 
-        public float Spread
-        {
-            get { return this.spread; }
-            set { this.spread = value; }
-        }
+    public bool IsFiring
+    {
+        get { return this.firing; }
+    }
 
-        public int ProjectilesPerShot
-        {
-            get { return this.projectilesPerShot; }
-            set { this.projectilesPerShot = value; }
-        }
+    public bool WeaponFired
+    {
+        get { return this.weaponFired; }
+    }
 
-        public bool IsFiring
-        {
-            get { return this.firing; }
-        }
+    public int AmmoCount
+    {
+        get { return this.ammoCount; }
+        set { this.ammoCount = Math.Min(value, this.maxAmmo); }
+    }
 
-        public bool WeaponFired
-        {
-            get { return this.weaponFired; }
-        }
+    public int MaxAmmo
+    {
+        get { return this.maxAmmo; }
+        set { this.maxAmmo = value; }
+    }
 
-        public int AmmoCount
-        {
-            get { return this.ammoCount; }
-            set { this.ammoCount = Math.Min(value, this.maxAmmo); }
-        }
+    public bool InfiniteAmmo
+    {
+        get { return this.infiniteAmmo; }
+        set { this.infiniteAmmo = value; }
+    }
 
-        public int MaxAmmo
-        {
-            get { return this.maxAmmo; }
-            set { this.maxAmmo = value; }
-        }
+    public int AmmoMemory
+    {
+        get { return this.ammoMemory; }
+        set { this.ammoMemory = value; }
+    }
 
-        public bool InfiniteAmmo
-        {
-            get { return this.infiniteAmmo; }
-            set { this.infiniteAmmo = value; }
-        }
+    // CollisionChecking
+    private bool canCollide;
+    private Rectangle collisionBox;
+    private float collisionDamage;
 
-        public int AmmoMemory
-        {
-            get { return this.ammoMemory; }
-            set { this.ammoMemory = value; }
-        }
+    public Rectangle CollisionBox
+    {
+        get { return this.collisionBox; }
+        set { this.collisionBox = value; }
+    }
 
-        // CollisionChecking
-        private bool canCollide;
-        private Rectangle collisionBox;
-        private float collisionDamage;
+    public bool CanCollide
+    {
+        get { return this.canCollide; }
+        set { this.canCollide = value; }
+    }
 
-        public Rectangle CollisionBox
-        {
-            get { return this.collisionBox; }
-            set { this.collisionBox = value; }
-        }
+    public float CollisionDamage
+    {
+        get { return this.collisionDamage; }
+        set { this.collisionDamage = value; }
+    }
 
-        public bool CanCollide
-        {
-            get { return this.canCollide; }
-            set { this.canCollide = value; }
-        }
+    #endregion
 
-        public float CollisionDamage
-        {
-            get { return this.collisionDamage; }
-            set { this.collisionDamage = value; }
-        }
-
-        #endregion
-
-        public Weapon(IParticleEngine particleEngine, IAnimationManager animationManager)
-        {
+    public Weapon(IParticleEngine particleEngine, IAnimationManager animationManager)
+    {
             this.player = null;
             this.animationManager = animationManager;
             this.particleEngine = particleEngine;
@@ -196,10 +196,10 @@ namespace PhysicaliaRemastered.Weapons
             this.collisionDamage = 0F;
         }
 
-        #region Xml reading
+    #region Xml reading
 
-        public void LoadXml(XmlReader reader, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
-        {
+    public void LoadXml(XmlReader reader, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    {
             // Setup according to xml
             while (reader.Read())
             {
@@ -250,8 +250,8 @@ namespace PhysicaliaRemastered.Weapons
             }
         }
 
-        private void ParseGraphicsData(XmlReader reader, ISpriteLibrary spriteLibrary)
-        {
+    private void ParseGraphicsData(XmlReader reader, ISpriteLibrary spriteLibrary)
+    {
             while (reader.Read())
             {
                 // Sprite element
@@ -287,8 +287,8 @@ namespace PhysicaliaRemastered.Weapons
             }
         }
 
-        private Rectangle ReadRectangle(XmlReader reader)
-        {
+    private Rectangle ReadRectangle(XmlReader reader)
+    {
             int x = int.Parse(reader.GetAttribute("x"));
             int y = int.Parse(reader.GetAttribute("y"));
             int width = int.Parse(reader.GetAttribute("width"));
@@ -297,12 +297,12 @@ namespace PhysicaliaRemastered.Weapons
             return new Rectangle(x, y, width, height);
         }
 
-        #endregion
+    #endregion
 
-        #region Firing
+    #region Firing
 
-        public void Update(GameTime gameTime)
-        {
+    public void Update(GameTime gameTime)
+    {
             this.weaponFired = false;
 
             // Fire projectiles if needed
@@ -364,8 +364,8 @@ namespace PhysicaliaRemastered.Weapons
             }
         }
 
-        public void StartFiring()
-        {
+    public void StartFiring()
+    {
             // Start animation
             if (this.ammoCount > 0 || this.infiniteAmmo)
             {
@@ -374,8 +374,8 @@ namespace PhysicaliaRemastered.Weapons
             }
         }
 
-        public void StopFiring()
-        {
+    public void StopFiring()
+    {
             this.timeTillShot = 0;
 
             // Stop animation
@@ -386,25 +386,28 @@ namespace PhysicaliaRemastered.Weapons
             }
         }
 
-        #endregion
+    #endregion
 
-        public Weapon Copy(IAnimationManager animationManager)
-        {
+    public Weapon Copy(IAnimationManager animationManager)
+    {
             //Weapon weapon = new Weapon(this.particleEngine, this.animationManager);
             Weapon weapon = (Weapon)this.MemberwiseClone();
 
             // Copy animation and add to the IAnimationManager
-            /*
-            weapon.weaponAnim = this.weaponAnim.Copy();
-            this.animationManager.AddPlaybackAnimation(weapon.weaponAnim);
-            */
+           /*
+
+            eapon.weaponAnim = this.weaponAnim.Copy();
+
+            his.animationManager.AddPlaybackAnimation(weapon.weaponAnim);
+
+            //
             return weapon;
         }
 
-        #region Drawing
+    #region Drawing
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 positionOffset, SpriteEffects spriteEffects)
-        {
+    public void Draw(SpriteBatch spriteBatch, Vector2 positionOffset, SpriteEffects spriteEffects)
+    {
             // Weapon origin is at the same position as the player's origin
             Vector2 origin = this.player.Origin + new Vector2(this.player.CollisionBox.X, this.player.CollisionBox.Y);
             //Vector2 origin = this.playerOffset + this.player.Origin + new Vector2(this.player.CollisionBox.X, this.player.CollisionBox.Y);
@@ -438,26 +441,25 @@ namespace PhysicaliaRemastered.Weapons
                              1.0F);
         }
 
-        #endregion
+    #endregion
 
-        #region Reset methods
+    #region Reset methods
 
-        /// <summary>
-        /// Stores the weapon's current ammunition count for later retrival.
-        /// </summary>
-        public void StoreAmmoCount()
-        {
+    /// <summary>
+    /// Stores the weapon's current ammunition count for later retrival.
+    /// </summary>
+    public void StoreAmmoCount()
+    {
             this.ammoMemory = this.ammoCount;
         }
 
-        /// <summary>
-        /// Sets the weapon's ammunition count to the previously stored value.
-        /// </summary>
-        public void ApplyStoredAmmoCount()
-        {
+    /// <summary>
+    /// Sets the weapon's ammunition count to the previously stored value.
+    /// </summary>
+    public void ApplyStoredAmmoCount()
+    {
             this.ammoCount = this.ammoMemory;
         }
 
-        #endregion
-    }
+    #endregion
 }

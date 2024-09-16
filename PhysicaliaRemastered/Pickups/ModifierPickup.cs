@@ -2,67 +2,67 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PhysicaliaRemastered.Pickups
+namespace PhysicaliaRemastered.Pickups;
+
+/// <summary>
+/// Abstract class that acts as a base for all Pickups that are intended to
+/// change the behavior of the game.
+/// </summary>
+public abstract class ModifierPickup : Pickup
 {
-    /// <summary>
-    /// Abstract class that acts as a base for all Pickups that are intended to
-    /// change the behavior of the game.
-    /// </summary>
-    public abstract class ModifierPickup : Pickup
+    #region Fields
+
+    private const float ICON_TIMER_SPACING = 5F;
+    private const float DEFAULT_DURATION = 5F;
+
+    private bool active;
+    private float duration;
+    private float timeRemaining;
+
+    private Sprite icon;
+
+    #endregion
+
+    #region Properties
+
+    public bool IsActive
     {
-        #region Fields
+        get { return this.active; }
+        set { this.active = value; }
+    }
 
-        private const float ICON_TIMER_SPACING = 5F;
-        private const float DEFAULT_DURATION = 5F;
+    public float Duration
+    {
+        get { return this.duration; }
+        set { this.timeRemaining = this.duration = value; }
+    }
 
-        private bool active;
-        private float duration;
-        private float timeRemaining;
+    public float TimeRemaining
+    {
+        get { return this.timeRemaining; }
+        set { this.timeRemaining = value; }
+    }
 
-        private Sprite icon;
+    public Sprite Icon
+    {
+        get { return this.icon; }
+        set { this.icon = value; }
+    }
 
-        #endregion
+    #endregion
 
-        #region Properties
-
-        public bool IsActive
-        {
-            get { return this.active; }
-            set { this.active = value; }
-        }
-
-        public float Duration
-        {
-            get { return this.duration; }
-            set { this.timeRemaining = this.duration = value; }
-        }
-
-        public float TimeRemaining
-        {
-            get { return this.timeRemaining; }
-            set { this.timeRemaining = value; }
-        }
-
-        public Sprite Icon
-        {
-            get { return this.icon; }
-            set { this.icon = value; }
-        }
-
-        #endregion
-
-        public ModifierPickup(Level level, Sprite icon, Sprite sprite, float duration)
-            : base(level)
-        {
+    public ModifierPickup(Level level, Sprite icon, Sprite sprite, float duration)
+        : base(level)
+    {
             this.timeRemaining = this.duration = duration;
             this.Sprite = sprite;
             this.icon = icon;
         }
 
-        #region Methods
+    #region Methods
 
-        public sealed override void DoPickup()
-        {
+    public sealed override void DoPickup()
+    {
             // Add self to Level's collection of Modifiers
             this.Level.AddModifier(this);
             this.active = true;
@@ -72,8 +72,8 @@ namespace PhysicaliaRemastered.Pickups
             this.Activate();
         }
 
-        public override void Update(GameTime gameTime)
-        {
+    public override void Update(GameTime gameTime)
+    {
             if (this.IsActive)
             {
                 // Decrease the time remaning
@@ -88,19 +88,19 @@ namespace PhysicaliaRemastered.Pickups
             }
         }
 
-        public override void Reset()
-        {
+    public override void Reset()
+    {
             this.timeRemaining = this.duration;
             this.IsActive = false;
 
             base.Reset();
         }
 
-        public abstract void Activate();
-        public abstract void Deactivate();
+    public abstract void Activate();
+    public abstract void Deactivate();
 
-        public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
-        {
+    public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    {
             if (!this.PickedUp)
                 spriteBatch.Draw(this.Sprite.Texture,
                                  positionOffset,
@@ -108,14 +108,14 @@ namespace PhysicaliaRemastered.Pickups
                                  Color.White);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
-        /// <param name="position">Position of the upper-left corner of the modifier.</param>
-        /// <param name="font">SpriteFont to use when drawing the time left</param>
-        public void DrawTimer(SpriteBatch spriteBatch, Vector2 position, SpriteFont font)
-        {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
+    /// <param name="position">Position of the upper-left corner of the modifier.</param>
+    /// <param name="font">SpriteFont to use when drawing the time left</param>
+    public void DrawTimer(SpriteBatch spriteBatch, Vector2 position, SpriteFont font)
+    {
             // Draw icon
             spriteBatch.Draw(this.icon.Texture,
                             position,
@@ -149,6 +149,5 @@ namespace PhysicaliaRemastered.Pickups
             spriteBatch.DrawString(font, timeText, textPos, Color.White);
         }
 
-        #endregion
-    }
+    #endregion
 }

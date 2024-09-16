@@ -1,78 +1,77 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PhysicaliaRemastered.Pickups
+namespace PhysicaliaRemastered.Pickups;
+
+public abstract class Pickup
 {
-    public abstract class Pickup
+    #region Fields and Properties
+
+    private bool pickedUp;
+
+    public bool PickedUp
     {
-        #region Fields and Properties
+        get { return this.pickedUp; }
+        set { this.pickedUp = value; }
+    }
 
-        private bool pickedUp;
+    private Level level;
 
-        public bool PickedUp
-        {
-            get { return this.pickedUp; }
-            set { this.pickedUp = value; }
-        }
+    public Level Level
+    {
+        get { return this.level; }
+        set { this.level = value; }
+    }
 
-        private Level level;
+    private Sprite sprite;
 
-        public Level Level
-        {
-            get { return this.level; }
-            set { this.level = value; }
-        }
+    public Sprite Sprite
+    {
+        get { return this.sprite; }
+        set { this.sprite = value; }
+    }
 
-        private Sprite sprite;
+    private int id;
 
-        public Sprite Sprite
-        {
-            get { return this.sprite; }
-            set { this.sprite = value; }
-        }
+    public int ID
+    {
+        get { return this.id; }
+        set { this.id = value; }
+    }
 
-        private int id;
+    #endregion
 
-        public int ID
-        {
-            get { return this.id; }
-            set { this.id = value; }
-        }
-
-        #endregion
-
-        public Pickup(Level level)
-        {
+    public Pickup(Level level)
+    {
             this.level = level;
             this.pickedUp = false;
         }
 
-        public Pickup Copy()
-        {
+    public Pickup Copy()
+    {
             Pickup pickup = this.MemberwiseClone() as Pickup;
 
             return pickup;
         }
 
-        public virtual void Update(GameTime gameTime) { }
+    public virtual void Update(GameTime gameTime) { }
 
-        /// <summary>
-        /// When overriden in a derived class, takes actions needed when being
-        /// picked up.
-        /// </summary>
-        public abstract void DoPickup();
+    /// <summary>
+    /// When overriden in a derived class, takes actions needed when being
+    /// picked up.
+    /// </summary>
+    public abstract void DoPickup();
 
-        /// <summary>
-        /// When overriden in a derived class, resets the state of the Pickup.
-        /// </summary>
-        public virtual void Reset()
-        {
+    /// <summary>
+    /// When overriden in a derived class, resets the state of the Pickup.
+    /// </summary>
+    public virtual void Reset()
+    {
             this.pickedUp = false;
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
-        {
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    {
             spriteBatch.Draw(this.Sprite.Texture, positionOffset, this.Sprite.SourceRectangle, Color.White);
         }
-    }
 }

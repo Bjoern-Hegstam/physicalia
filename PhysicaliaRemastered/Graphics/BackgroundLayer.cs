@@ -1,85 +1,85 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PhysicaliaRemastered.Graphics
+namespace PhysicaliaRemastered.Graphics;
+
+/// <summary>
+/// Represents a background layer in the game. The layer has a depth value
+/// that dictates how fast the layer moves relative to the player.
+/// </summary>
+public class BackgroundLayer
 {
-    /// <summary>
-    /// Represents a background layer in the game. The layer has a depth value
-    /// that dictates how fast the layer moves relative to the player.
-    /// </summary>
-    public class BackgroundLayer
+    private Sprite backgroundSprite;
+    private float depthValue;
+    private Vector2 position;
+    private Vector2 startPosition;
+
+    private bool loopX, loopY;
+
+    public Sprite Background
     {
-        private Sprite backgroundSprite;
-        private float depthValue;
-        private Vector2 position;
-        private Vector2 startPosition;
+        get { return this.backgroundSprite; }
+        set { this.backgroundSprite = value; }
+    }
 
-        private bool loopX, loopY;
+    /// <summary>
+    /// Gets or sets the layer's depth value. A value of zero means that the
+    /// layer will not move at all, while a value of one has the layer moving
+    /// at the same velocity as the player.
+    /// </summary>
+    public float Depth
+    {
+        get { return this.depthValue; }
+        set { this.depthValue = value; }
+    }
 
-        public Sprite Background
-        {
-            get { return this.backgroundSprite; }
-            set { this.backgroundSprite = value; }
-        }
+    public bool LoopX
+    {
+        get { return this.loopX; }
+        set { this.loopX = value; }
+    }
 
-        /// <summary>
-        /// Gets or sets the layer's depth value. A value of zero means that the
-        /// layer will not move at all, while a value of one has the layer moving
-        /// at the same velocity as the player.
-        /// </summary>
-        public float Depth
-        {
-            get { return this.depthValue; }
-            set { this.depthValue = value; }
-        }
+    public bool LoopY
+    {
+        get { return this.loopY; }
+        set { this.loopY = value; }
+    }
 
-        public bool LoopX
-        {
-            get { return this.loopX; }
-            set { this.loopX = value; }
-        }
+    public Vector2 Position
+    {
+        get { return this.position; }
+        set { this.position = value; }
+    }
 
-        public bool LoopY
-        {
-            get { return this.loopY; }
-            set { this.loopY = value; }
-        }
+    public Vector2 StartPosition
+    {
+        get { return this.startPosition; }
+        set { this.startPosition = value; }
+    }
 
-        public Vector2 Position
-        {
-            get { return this.position; }
-            set { this.position = value; }
-        }
-
-        public Vector2 StartPosition
-        {
-            get { return this.startPosition; }
-            set { this.startPosition = value; }
-        }
-
-        public BackgroundLayer(Sprite background, float depthValue)
-        {
+    public BackgroundLayer(Sprite background, float depthValue)
+    {
             this.backgroundSprite = background;
             this.depthValue = depthValue;
             this.startPosition = this.position = Vector2.Zero;
             this.loopX = this.loopY = false;
         }
 
-        public void Update(Vector2 positionDelta)
-        {
+    public void Update(Vector2 positionDelta)
+    {
             this.position += positionDelta * this.depthValue;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
+    public void Draw(SpriteBatch spriteBatch)
+    {
             spriteBatch.Draw(this.backgroundSprite.Texture,
                              this.position,
                              this.backgroundSprite.SourceRectangle,
                              Color.White);
         }
 
-        public void Draw(SpriteBatch spriteBatch, ScreenSampler screenSampler)
-        {
+    public void Draw(SpriteBatch spriteBatch, ScreenSampler screenSampler)
+    {
             // Don't draw anything if the background isn't visible
             if (!this.LoopX &&
                 screenSampler.Position.X * this.depthValue > this.backgroundSprite.SourceRectangle.Width)
@@ -123,10 +123,10 @@ namespace PhysicaliaRemastered.Graphics
 
         }
 
-        #region IComparer<BackgroundLayer> Members
+    #region IComparer<BackgroundLayer> Members
 
-        public static int Compare(BackgroundLayer x, BackgroundLayer y)
-        {
+    public static int Compare(BackgroundLayer x, BackgroundLayer y)
+    {
             if (x.Depth > y.Depth)
                 return 1;
             else if (x.Depth < y.Depth)
@@ -134,6 +134,5 @@ namespace PhysicaliaRemastered.Graphics
             return 0;
         }
 
-        #endregion
-    }
+    #endregion
 }
