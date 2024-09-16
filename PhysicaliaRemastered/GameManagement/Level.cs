@@ -10,6 +10,7 @@ using PhysicaliaRemastered.Graphics;
 using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
+using PhysicaliaRemastered.Weapons.NewWeapons;
 using XNALibrary.Graphics;
 using XNALibrary.Graphics.Sprites;
 using XNALibrary.Graphics.TileEngine;

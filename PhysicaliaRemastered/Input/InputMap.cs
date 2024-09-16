@@ -1,3 +1,5 @@
+using XNALibrary.Interfaces;
+
 namespace PhysicaliaRemastered.Input;
 
 /// <summary>
@@ -25,9 +27,9 @@ public enum InputAction
 /// </summary>
 public abstract class InputMap
 {
-    private XNALibrary.Services.IInputHandler inputHandler;
+    private IInputHandler inputHandler;
 
-    public XNALibrary.Services.IInputHandler InputHandler
+    public IInputHandler InputHandler
     {
         get => inputHandler;
         set => inputHandler = value;

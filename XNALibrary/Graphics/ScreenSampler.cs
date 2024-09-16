@@ -87,7 +87,7 @@ public class ScreenSampler : IScreenSampler
     public ScreenSampler(Game game, Rectangle screenRectangle)
     {
         // Add the sampler as a service.
-        //game.Services.AddService(typeof(XNALibrary.Services.IScreenSampler), this);
+        //game.Services.AddService(typeof(IScreenSampler), this);
         // TODO: Look over whether the sample should really be a service
         // Set the screen rectangle and the position of the sampler
         screen = screenRectangle;

@@ -2,10 +2,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Input;
+using XNALibrary.Graphics.ScreenManagement;
 
 namespace PhysicaliaRemastered.Screens;
 
-public class TitleScreen : XNALibrary.Graphics.Screen
+public class TitleScreen : Screen
 {
     private ISettings settings;
 
@@ -14,7 +15,7 @@ public class TitleScreen : XNALibrary.Graphics.Screen
         set => settings = value;
     }
 
-    public TitleScreen(Game game, XNALibrary.Graphics.ScreenManager screenManager)
+    public TitleScreen(Game game, ScreenManager screenManager)
         : base(game, screenManager)
     {
 

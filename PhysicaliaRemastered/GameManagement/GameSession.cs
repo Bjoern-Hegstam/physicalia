@@ -132,8 +132,9 @@ public class GameSession
         get { return enemySaves; }
     }
 
-    public GameSession() 
-    aponSaves = new Dictionary<int, WeaponSave>();
+    public GameSession()
+    {
+        this.weaponSaves = new Dictionary<int, WeaponSave>();
         this.levelModifiers = new List<ModifierSave>();
         this.activatedObjects = new Dictionary<int, ActiveObjectSave>();
         this.enemySaves = new Dictionary<int, EnemySave>();
@@ -268,7 +269,6 @@ public class GameSession
 
     public static GameSession LoadFromXml(string path)
     {
-
         GameSession session = new GameSession();
 
         XmlReaderSettings readerSettings = new XmlReaderSettings();

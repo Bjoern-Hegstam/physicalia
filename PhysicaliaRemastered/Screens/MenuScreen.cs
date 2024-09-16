@@ -85,6 +85,7 @@ public class MenuScreen : Screen
                         ScreenManager.TransitionTo(typeof(GameScreen));
                         break;
                     case "Load Game":
+                        /*
                         OpenFileDialog loadDialog = new OpenFileDialog();
                         loadDialog.AddExtension = true;
                         loadDialog.DefaultExt = ".xml";
@@ -96,6 +97,7 @@ public class MenuScreen : Screen
                             gameManager.LoadSession(GameSession.LoadFromXml(loadDialog.FileName));
                             ScreenManager.TransitionTo(typeof(GameScreen));
                         }
+                        */
                         break;
                     case "Exit":
                         Game.Exit();
