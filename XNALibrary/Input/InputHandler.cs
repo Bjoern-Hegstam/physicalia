@@ -1,7 +1,6 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using XNALibrary.Services;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Input;
 

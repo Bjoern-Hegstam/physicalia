@@ -1,10 +1,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Input;
+using XNALibrary.Graphics.ScreenManagement;
 
 namespace PhysicaliaRemastered.Screens;
 
-public class MenuScreen : XNALibrary.Graphics.Screen
+public class MenuScreen : Screen
 {
     // Distance of the menu items from the right edge
     private const float MENU_ITEM_RIGHT_PADDING = 25F;
@@ -36,7 +38,7 @@ public class MenuScreen : XNALibrary.Graphics.Screen
         set => gameManager = value;
     }
 
-    public MenuScreen(Game game, XNALibrary.Graphics.ScreenManager screenManager)
+    public MenuScreen(Game game, ScreenManager screenManager)
         : base(game, screenManager) { }
 
     public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
