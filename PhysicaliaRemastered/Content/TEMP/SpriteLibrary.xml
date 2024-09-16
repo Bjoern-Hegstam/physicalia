@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.7.0 (http://www.liquid-technologies.com) -->
+<SpriteLibrary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///C:/Documents%20and%20Settings/bjorn.hegstam/Mina%20dokument/Texter/Projekt/Physicalia/Xml/schema_SpriteLibrary.xsd">
+	<Textures>
+		<Texture id="0">C:\Documents and Settings\bjorn.hegstam\Mina dokument\Mina bilder\Physicalia_Graphics\Images\Tilesheets\tiles_Grass_Earth.png</Texture>
+	</Textures>
+	<Sprites>
+		<Sprite id="0" textureKey="0" x="0" y="0" width="32" height="32" />
+		<Sprite id="1" textureKey="0" x="32" y="0" width="32" height="32" />
+		<Sprite id="2" textureKey="0" x="64" y="0" width="32" height="32" />
+		<Sprite id="3" textureKey="0" x="0" y="32" width="32" height="32" />
+		<Sprite id="4" textureKey="0" x="32" y="32" width="32" height="32" />
+		<Sprite id="5" textureKey="0" x="64" y="32" width="32" height="32" />
+		<Sprite id="6" textureKey="0" x="0" y="64" width="32" height="32" />
+		<Sprite id="7" textureKey="0" x="32" y="64" width="32" height="32" />
+		<Sprite id="8" textureKey="0" x="64" y="64" width="32" height="32" />
+	</Sprites>
+</SpriteLibrary>
