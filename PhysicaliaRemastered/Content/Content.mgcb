@@ -13,3 +13,46 @@
 
 #---------------------------------- Content ---------------------------------#
 
+# Menu assets
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Images/ScreenGraphics/screen_MenuTitle.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Images/ScreenGraphics/screen_MenuBackLevel.png
+
+# Fonts
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/DebugFont.spritefont
+
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/LevelIndexFont.spritefont
+
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/MainMenu.spritefont
+
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/PauseMenu.spritefont
+
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/PlayerDead.spritefont
+
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/WeaponAmmo.spritefont
+
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/WorldIndexFont.spritefont
+
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/WorldQuoteFont.spritefont
+
