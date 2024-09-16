@@ -8,8 +8,6 @@ namespace PhysicaliaRemastered.Weapons;
 
 public class Weapon
 {
-    #region Fields and Properties
-
     // Major objects
     private Player player;
     private IParticleEngine particleEngine;
@@ -17,8 +15,8 @@ public class Weapon
 
     public Player Player
     {
-        get { return this.player; }
-        set { this.player = value; }
+        get => player;
+        set => player = value;
     }
 
     // Graphics
@@ -36,14 +34,14 @@ public class Weapon
     /// </summary>
     public Vector2 PlayerOffset
     {
-        get { return this.playerOffset; }
-        set { this.playerOffset = value; }
+        get => playerOffset;
+        set => playerOffset = value;
     }
 
     public Sprite WeaponSprite
     {
-        get { return this.weaponSprite; }
-        set { this.weaponSprite = value; }
+        get => weaponSprite;
+        set => weaponSprite = value;
     }
 
     /// <summary>
@@ -51,20 +49,20 @@ public class Weapon
     /// </summary>
     public int TypeID
     {
-        get { return this.weaponID; }
-        set { this.weaponID = value; }
+        get => weaponID;
+        set => weaponID = value;
     }
 
     public Vector2 MuzzlePosition
     {
-        get { return this.muzzlePosition; }
-        set { this.muzzlePosition = value; }
+        get => muzzlePosition;
+        set => muzzlePosition = value;
     }
 
     public float MaxDeviation
     {
-        get { return this.maxDeviation; }
-        set { this.maxDeviation = value; }
+        get => maxDeviation;
+        set => maxDeviation = value;
     }
 
     // Weapon control
@@ -88,8 +86,8 @@ public class Weapon
     /// </summary>
     public int ProjectileID
     {
-        get { return this.projectileID; }
-        set { this.projectileID = value; }
+        get => projectileID;
+        set => projectileID = value;
     }
 
     /// <summary>
@@ -97,54 +95,48 @@ public class Weapon
     /// </summary>
     public float FireRate
     {
-        get { return this.fireRate; }
-        set { this.fireRate = value; }
+        get => fireRate;
+        set => fireRate = value;
     }
 
     public float Spread
     {
-        get { return this.spread; }
-        set { this.spread = value; }
+        get => spread;
+        set => spread = value;
     }
 
     public int ProjectilesPerShot
     {
-        get { return this.projectilesPerShot; }
-        set { this.projectilesPerShot = value; }
+        get => projectilesPerShot;
+        set => projectilesPerShot = value;
     }
 
-    public bool IsFiring
-    {
-        get { return this.firing; }
-    }
+    public bool IsFiring => firing;
 
-    public bool WeaponFired
-    {
-        get { return this.weaponFired; }
-    }
+    public bool WeaponFired => weaponFired;
 
     public int AmmoCount
     {
-        get { return this.ammoCount; }
-        set { this.ammoCount = Math.Min(value, this.maxAmmo); }
+        get => ammoCount;
+        set => ammoCount = Math.Min(value, maxAmmo);
     }
 
     public int MaxAmmo
     {
-        get { return this.maxAmmo; }
-        set { this.maxAmmo = value; }
+        get => maxAmmo;
+        set => maxAmmo = value;
     }
 
     public bool InfiniteAmmo
     {
-        get { return this.infiniteAmmo; }
-        set { this.infiniteAmmo = value; }
+        get => infiniteAmmo;
+        set => infiniteAmmo = value;
     }
 
     public int AmmoMemory
     {
-        get { return this.ammoMemory; }
-        set { this.ammoMemory = value; }
+        get => ammoMemory;
+        set => ammoMemory = value;
     }
 
     // CollisionChecking
@@ -154,49 +146,45 @@ public class Weapon
 
     public Rectangle CollisionBox
     {
-        get { return this.collisionBox; }
-        set { this.collisionBox = value; }
+        get => collisionBox;
+        set => collisionBox = value;
     }
 
     public bool CanCollide
     {
-        get { return this.canCollide; }
-        set { this.canCollide = value; }
+        get => canCollide;
+        set => canCollide = value;
     }
 
     public float CollisionDamage
     {
-        get { return this.collisionDamage; }
-        set { this.collisionDamage = value; }
+        get => collisionDamage;
+        set => collisionDamage = value;
     }
-
-    #endregion
 
     public Weapon(IParticleEngine particleEngine, IAnimationManager animationManager)
     {
-            this.player = null;
+            player = null;
             this.animationManager = animationManager;
             this.particleEngine = particleEngine;
 
-            this.firing = false;
-            this.spread = 0F;
-            this.projectilesPerShot = 1;
-            this.projectileID = -1;
-            this.fireRate = 0F;
-            this.maxAmmo = 0;
-            this.ammoCount = 0;
-            this.infiniteAmmo = false;
-            this.weaponFired = false;
+            firing = false;
+            spread = 0F;
+            projectilesPerShot = 1;
+            projectileID = -1;
+            fireRate = 0F;
+            maxAmmo = 0;
+            ammoCount = 0;
+            infiniteAmmo = false;
+            weaponFired = false;
 
-            this.weaponAnim = null;
-            this.weaponSprite = new Sprite();
+            weaponAnim = null;
+            weaponSprite = new Sprite();
 
-            this.canCollide = false;
-            this.collisionBox = Rectangle.Empty;
-            this.collisionDamage = 0F;
+            canCollide = false;
+            collisionBox = Rectangle.Empty;
+            collisionDamage = 0F;
         }
-
-    #region Xml reading
 
     public void LoadXml(XmlReader reader, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
     {
@@ -207,14 +195,14 @@ public class Weapon
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "Graphics")
                 {
-                    this.ParseGraphicsData(reader, spriteLibrary);
+                    ParseGraphicsData(reader, spriteLibrary);
                 }
 
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "MuzzlePosition")
                 {
                     int x = int.Parse(reader.GetAttribute("x")); int y = int.Parse(reader.GetAttribute("y"));
-                    this.muzzlePosition = new Vector2(x, y);
+                    muzzlePosition = new Vector2(x, y);
                 }
 
                 // Fire data
@@ -222,25 +210,25 @@ public class Weapon
                     reader.LocalName == "FireData")
                 {
                     reader.ReadToFollowing("Projectile");
-                    this.projectileID = int.Parse(reader.ReadElementContentAsString());
+                    projectileID = int.Parse(reader.ReadElementContentAsString());
 
-                    this.fireRate = int.Parse(reader.ReadElementContentAsString());
+                    fireRate = int.Parse(reader.ReadElementContentAsString());
 
-                    this.ammoCount = int.Parse(reader.GetAttribute("count"));
-                    this.maxAmmo = int.Parse(reader.GetAttribute("max"));
+                    ammoCount = int.Parse(reader.GetAttribute("count"));
+                    maxAmmo = int.Parse(reader.GetAttribute("max"));
 
-                    this.infiniteAmmo = (this.ammoCount == -1 ? true : false);
+                    infiniteAmmo = (ammoCount == -1 ? true : false);
                 }
 
                 // Collision
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "Collision")
                 {
-                    this.canCollide = bool.Parse(reader.GetAttribute("canCollide"));
-                    this.collisionDamage = float.Parse(reader.GetAttribute("collisionDamage"));
+                    canCollide = bool.Parse(reader.GetAttribute("canCollide"));
+                    collisionDamage = float.Parse(reader.GetAttribute("collisionDamage"));
                     
                     reader.ReadToFollowing("CollisionRectangle");
-                    this.collisionBox = this.ReadRectangle(reader);
+                    collisionBox = ReadRectangle(reader);
                 }
 
                 // End of weapon element?
@@ -259,7 +247,7 @@ public class Weapon
                     reader.LocalName == "Sprite")
                 {
                     int spriteKey = int.Parse(reader.GetAttribute(0));
-                    this.weaponSprite = spriteLibrary.GetSprite(spriteKey);
+                    weaponSprite = spriteLibrary.GetSprite(spriteKey);
                 }
 
                 // Animation element
@@ -267,17 +255,17 @@ public class Weapon
                     reader.LocalName == "Animation")
                 {
                     int key = int.Parse(reader.GetAttribute("key"));
-                    Animation anim = this.animationManager.GetBankAnimation(key).Copy();
-                    this.animationManager.AddPlaybackAnimation(anim);
+                    Animation anim = animationManager.GetBankAnimation(key).Copy();
+                    animationManager.AddPlaybackAnimation(anim);
 
-                    this.weaponAnim = anim;
+                    weaponAnim = anim;
                 }
 
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "PlayerOffset")
                 {
                     int x = int.Parse(reader.GetAttribute("x")); int y = int.Parse(reader.GetAttribute("y"));
-                    this.playerOffset = new Vector2(x, y);
+                    playerOffset = new Vector2(x, y);
                 }
 
                 // End of graphics element?
@@ -297,66 +285,62 @@ public class Weapon
             return new Rectangle(x, y, width, height);
         }
 
-    #endregion
-
-    #region Firing
-
     public void Update(GameTime gameTime)
     {
-            this.weaponFired = false;
+            weaponFired = false;
 
             // Fire projectiles if needed
-            if (this.firing &&
-                (this.infiniteAmmo || this.ammoCount > 0))
+            if (firing &&
+                (infiniteAmmo || ammoCount > 0))
             {
 
-                this.timeTillShot -= (float)gameTime.ElapsedGameTime.TotalSeconds * this.fireRate;
+                timeTillShot -= (float)gameTime.ElapsedGameTime.TotalSeconds * fireRate;
 
                 // Loop to make sure that all shots there are time for are fired
-                while (this.timeTillShot <= 0)
+                while (timeTillShot <= 0)
                 {
-                    this.weaponFired = true;
+                    weaponFired = true;
 
                     // Only fire a projectile if the weapon has a valid projectile id
-                    if (this.particleEngine.HasDefinition(this.projectileID))
+                    if (particleEngine.HasDefinition(projectileID))
                     {
                         // Get the position of the muzzle relative to the level
-                        Vector2 muzzle = this.muzzlePosition;
+                        Vector2 muzzle = muzzlePosition;
 
-                        if ((this.player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
-                            muzzle.X = this.weaponAnim.SourceRectangle.Width - this.muzzlePosition.X - this.player.CollisionBox.Width;
+                        if ((player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
+                            muzzle.X = weaponAnim.SourceRectangle.Width - muzzlePosition.X - player.CollisionBox.Width;
 
-                        if ((this.player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
-                            muzzle.Y = this.weaponAnim.SourceRectangle.Height - this.muzzlePosition.Y;
+                        if ((player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
+                            muzzle.Y = weaponAnim.SourceRectangle.Height - muzzlePosition.Y;
 
-                        Vector2 playerTopLeft = this.player.Position - this.player.Origin - new Vector2(this.player.CollisionBox.X, this.player.CollisionBox.Y);
-                        muzzle = playerTopLeft - this.playerOffset + muzzle;
+                        Vector2 playerTopLeft = player.Position - player.Origin - new Vector2(player.CollisionBox.X, player.CollisionBox.Y);
+                        muzzle = playerTopLeft - playerOffset + muzzle;
 
                         // Apply deviation to the projectile
-                        muzzle.Y -= this.maxDeviation / 2;
-                        muzzle.Y += this.maxDeviation * (float)Math.Sin(Settings.Random.NextDouble());
+                        muzzle.Y -= maxDeviation / 2;
+                        muzzle.Y += maxDeviation * (float)Math.Sin(Settings.Random.NextDouble());
 
-                        float angleSide = MathHelper.Pi * ((this.player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0 ? 1 : 0);
-                        float angleStep = this.spread / this.projectilesPerShot;
-                        float angle = this.projectilesPerShot == 1 ? 0 : this.spread / 2;
+                        float angleSide = MathHelper.Pi * ((player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0 ? 1 : 0);
+                        float angleStep = spread / projectilesPerShot;
+                        float angle = projectilesPerShot == 1 ? 0 : spread / 2;
                         angle += angleSide;
 
-                        for (int i = 0; i < this.projectilesPerShot; i++)
+                        for (int i = 0; i < projectilesPerShot; i++)
                         {
-                            this.particleEngine.Add(this.projectileID, 1, muzzle, angle);
+                            particleEngine.Add(projectileID, 1, muzzle, angle);
                             angle -= angleStep;
                         }
                     }
 
-                    this.timeTillShot += 1 / this.fireRate;
+                    timeTillShot += 1 / fireRate;
 
-                    if (!this.infiniteAmmo)
+                    if (!infiniteAmmo)
                     {
-                        this.ammoCount--;
+                        ammoCount--;
 
-                        if (this.ammoCount <= 0)
+                        if (ammoCount <= 0)
                         {
-                            this.StopFiring();
+                            StopFiring();
                             break;
                         }
                     }
@@ -367,31 +351,29 @@ public class Weapon
     public void StartFiring()
     {
             // Start animation
-            if (this.ammoCount > 0 || this.infiniteAmmo)
+            if (ammoCount > 0 || infiniteAmmo)
             {
-                this.weaponAnim.Play();
-                this.firing = true;
+                weaponAnim.Play();
+                firing = true;
             }
         }
 
     public void StopFiring()
     {
-            this.timeTillShot = 0;
+            timeTillShot = 0;
 
             // Stop animation
-            if (this.firing)
+            if (firing)
             {
-                this.weaponAnim.Stop();
-                this.firing = false;
+                weaponAnim.Stop();
+                firing = false;
             }
         }
-
-    #endregion
 
     public Weapon Copy(IAnimationManager animationManager)
     {
             //Weapon weapon = new Weapon(this.particleEngine, this.animationManager);
-            Weapon weapon = (Weapon)this.MemberwiseClone();
+            Weapon weapon = (Weapon)MemberwiseClone();
 
             // Copy animation and add to the IAnimationManager
            /*

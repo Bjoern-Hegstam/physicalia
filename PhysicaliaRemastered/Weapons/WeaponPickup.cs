@@ -24,29 +24,29 @@ public class WeaponPickup : Pickup
 
     public override void DoPickup()
     {
-            if (!this.PickedUp)
+            if (!PickedUp)
             {
-                this.PickedUp = true;
-                NewWeapons.Weapon weaponCopy = this.weapon.Copy();
-                this.Level.Player.AddWeapon(weaponCopy);
-                weaponCopy.Player = this.Level.Player;
+                PickedUp = true;
+                NewWeapons.Weapon weaponCopy = weapon.Copy();
+                Level.Player.AddWeapon(weaponCopy);
+                weaponCopy.Player = Level.Player;
             }
         }
 
     public override void Reset()
     {
             // Remove the weapon from the player if we've been picked up
-            if (this.PickedUp)
-                this.Level.Player.RemoveWeapon(this.weapon.WeaponID, this.weapon.AmmoCount);
+            if (PickedUp)
+                Level.Player.RemoveWeapon(weapon.WeaponID, weapon.AmmoCount);
 
             base.Reset();
         }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-            spriteBatch.Draw(this.weapon.WeaponSprite.Texture,
+            spriteBatch.Draw(weapon.WeaponSprite.Texture,
                              positionOffset,
-                             this.weapon.WeaponSprite.SourceRectangle,
+                             weapon.WeaponSprite.SourceRectangle,
                              Color.White);
         }
 }

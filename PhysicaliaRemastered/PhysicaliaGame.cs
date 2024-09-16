@@ -27,11 +27,11 @@ public class PhysicaliaGame : Game
     {
         graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
-        this.TargetElapsedTime = TimeSpan.FromSeconds(0.0083333); // 120fps
-        this.graphics.PreferredBackBufferWidth = 640;
-        this.graphics.PreferredBackBufferHeight = 480;
+        TargetElapsedTime = TimeSpan.FromSeconds(0.0083333); // 120fps
+        graphics.PreferredBackBufferWidth = 640;
+        graphics.PreferredBackBufferHeight = 480;
 
-        this.graphics.IsFullScreen = true;
+        graphics.IsFullScreen = true;
     }
 
     /// <summary>
@@ -43,22 +43,22 @@ public class PhysicaliaGame : Game
     protected override void Initialize()
     {
         // Create a new InputHandler and add it to the collection of Components
-        this.inputHandler = new InputHandler(this);
-        this.Components.Add(this.inputHandler);
+        inputHandler = new InputHandler(this);
+        Components.Add(inputHandler);
 
         // Create a new ScreenManager and add it to the collection of Components
-        this.screenManager = new ScreenManager(this);
-        this.Components.Add(this.screenManager);
+        screenManager = new ScreenManager(this);
+        Components.Add(screenManager);
 
         //this.titleScreen = new TitleScreen(this, this.screenManager);
-        this.menuScreen = new MenuScreen(this, this.screenManager);
-        this.gameScreen = new GameScreen(this, this.screenManager);
+        menuScreen = new MenuScreen(this, screenManager);
+        gameScreen = new GameScreen(this, screenManager);
             
-        this.screenManager.BaseScreen = this.menuScreen;
+        screenManager.BaseScreen = menuScreen;
 
         //this.screenManager.Screens.Add(this.titleScreen);
-        this.screenManager.Screens.Add(this.menuScreen);
-        this.screenManager.Screens.Add(this.gameScreen);
+        screenManager.Screens.Add(menuScreen);
+        screenManager.Screens.Add(gameScreen);
 
         base.Initialize();
     }
@@ -74,9 +74,9 @@ public class PhysicaliaGame : Game
 
         // The ScreenManager gets to load content before we get here
         //this.titleScreen.Settings = this.gameScreen.Settings;
-        this.menuScreen.Settings = this.gameScreen.Settings;
+        menuScreen.Settings = gameScreen.Settings;
 
-        this.menuScreen.GameManager = this.gameScreen.GameManager;
+        menuScreen.GameManager = gameScreen.GameManager;
 
         // TODO: use this.Content to load your game content here
     }

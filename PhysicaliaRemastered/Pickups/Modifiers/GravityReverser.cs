@@ -9,12 +9,12 @@ public class GravityReverser : ModifierPickup
 
     public override void Activate()
     {
-            this.Level.Player.Acceleration *= -1;
+            Level.Player.Acceleration *= -1;
         }
 
     public override void Deactivate()
     {
-            this.Level.Player.Acceleration *= -1;
+            Level.Player.Acceleration *= -1;
         }
 
     public static GravityReverser CreateFromXml(XmlReader reader, ISpriteLibrary spriteLibrary)

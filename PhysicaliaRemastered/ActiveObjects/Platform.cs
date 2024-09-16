@@ -13,7 +13,7 @@ public class Platform : MovingObject
     public Platform(ISpriteLibrary spriteLibrary, int spriteKey, Curve curveX, Curve curveY)
         : base(spriteLibrary, spriteKey, curveX, curveY)
     {
-            this.CanCollide = true;
+            CanCollide = true;
         }
 
     public override void CheckCollision(ICollisionObject collObject)

@@ -5,15 +5,11 @@ namespace PhysicaliaRemastered.Screens;
 
 public class TitleScreen : XNALibrary.Graphics.Screen
 {
-    #region Fields
-
     private ISettings settings;
-
-    #endregion
 
     public ISettings Settings
     {
-        set { this.settings = value; }
+        set => settings = value;
     }
 
     public TitleScreen(Game game, XNALibrary.Graphics.ScreenManager screenManager)
@@ -29,7 +25,7 @@ public class TitleScreen : XNALibrary.Graphics.Screen
 
     protected override void OnHandleInput()
     {
-            if (this.settings.InputMap.IsPressed(InputAction.MenuStart))
+            if (settings.InputMap.IsPressed(InputAction.MenuStart))
                 this.ScreenManager.TransitionTo(typeof(MenuScreen));
         }
 }

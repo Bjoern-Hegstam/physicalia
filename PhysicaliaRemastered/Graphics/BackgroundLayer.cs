@@ -18,8 +18,8 @@ public class BackgroundLayer
 
     public Sprite Background
     {
-        get { return this.backgroundSprite; }
-        set { this.backgroundSprite = value; }
+        get => backgroundSprite;
+        set => backgroundSprite = value;
     }
 
     /// <summary>
@@ -29,101 +29,99 @@ public class BackgroundLayer
     /// </summary>
     public float Depth
     {
-        get { return this.depthValue; }
-        set { this.depthValue = value; }
+        get => depthValue;
+        set => depthValue = value;
     }
 
     public bool LoopX
     {
-        get { return this.loopX; }
-        set { this.loopX = value; }
+        get => loopX;
+        set => loopX = value;
     }
 
     public bool LoopY
     {
-        get { return this.loopY; }
-        set { this.loopY = value; }
+        get => loopY;
+        set => loopY = value;
     }
 
     public Vector2 Position
     {
-        get { return this.position; }
-        set { this.position = value; }
+        get => position;
+        set => position = value;
     }
 
     public Vector2 StartPosition
     {
-        get { return this.startPosition; }
-        set { this.startPosition = value; }
+        get => startPosition;
+        set => startPosition = value;
     }
 
     public BackgroundLayer(Sprite background, float depthValue)
     {
-            this.backgroundSprite = background;
+            backgroundSprite = background;
             this.depthValue = depthValue;
-            this.startPosition = this.position = Vector2.Zero;
-            this.loopX = this.loopY = false;
+            startPosition = position = Vector2.Zero;
+            loopX = loopY = false;
         }
 
     public void Update(Vector2 positionDelta)
     {
-            this.position += positionDelta * this.depthValue;
+            position += positionDelta * depthValue;
         }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-            spriteBatch.Draw(this.backgroundSprite.Texture,
-                             this.position,
-                             this.backgroundSprite.SourceRectangle,
+            spriteBatch.Draw(backgroundSprite.Texture,
+                             position,
+                             backgroundSprite.SourceRectangle,
                              Color.White);
         }
 
     public void Draw(SpriteBatch spriteBatch, ScreenSampler screenSampler)
     {
             // Don't draw anything if the background isn't visible
-            if (!this.LoopX &&
-                screenSampler.Position.X * this.depthValue > this.backgroundSprite.SourceRectangle.Width)
+            if (!LoopX &&
+                screenSampler.Position.X * depthValue > backgroundSprite.SourceRectangle.Width)
                 return;
 
-            if (!this.LoopY &&
-                 screenSampler.Position.Y * this.depthValue > this.backgroundSprite.SourceRectangle.Height)
+            if (!LoopY &&
+                 screenSampler.Position.Y * depthValue > backgroundSprite.SourceRectangle.Height)
                 return;
 
             // Do a simple draw if no looping is used
-            if (!this.loopX && !this.loopY)
+            if (!loopX && !loopY)
             {
-                this.Draw(spriteBatch);
+                Draw(spriteBatch);
                 return;
             }
 
-            Vector2 startPos = this.position;
+            Vector2 startPos = position;
 
-            while (startPos.X < -this.backgroundSprite.SourceRectangle.Width)
-                startPos.X += this.backgroundSprite.SourceRectangle.Width;
+            while (startPos.X < -backgroundSprite.SourceRectangle.Width)
+                startPos.X += backgroundSprite.SourceRectangle.Width;
 
-            while (startPos.Y < -this.backgroundSprite.SourceRectangle.Height)
-                startPos.Y += this.backgroundSprite.SourceRectangle.Height;
+            while (startPos.Y < -backgroundSprite.SourceRectangle.Height)
+                startPos.Y += backgroundSprite.SourceRectangle.Height;
 
-            for (float y = startPos.Y; y < screenSampler.Position.Y + screenSampler.Height; y += this.backgroundSprite.SourceRectangle.Height)
+            for (float y = startPos.Y; y < screenSampler.Position.Y + screenSampler.Height; y += backgroundSprite.SourceRectangle.Height)
             {
-                for (float x = startPos.X; x < screenSampler.Position.X + screenSampler.Width; x += this.backgroundSprite.SourceRectangle.Width)
+                for (float x = startPos.X; x < screenSampler.Position.X + screenSampler.Width; x += backgroundSprite.SourceRectangle.Width)
                 {
-                    spriteBatch.Draw(this.backgroundSprite.Texture,
+                    spriteBatch.Draw(backgroundSprite.Texture,
                          new Vector2(x, y),
-                         this.backgroundSprite.SourceRectangle,
+                         backgroundSprite.SourceRectangle,
                          Color.White);
 
-                    if (!this.loopX)
+                    if (!loopX)
                         break;
                 }
 
-                if (!this.loopY)
+                if (!loopY)
                     break;
             }
 
         }
-
-    #region IComparer<BackgroundLayer> Members
 
     public static int Compare(BackgroundLayer x, BackgroundLayer y)
     {
@@ -133,6 +131,4 @@ public class BackgroundLayer
                 return -1;
             return 0;
         }
-
-    #endregion
 }

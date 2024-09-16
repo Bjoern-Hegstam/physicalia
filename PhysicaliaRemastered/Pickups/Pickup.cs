@@ -5,51 +5,47 @@ namespace PhysicaliaRemastered.Pickups;
 
 public abstract class Pickup
 {
-    #region Fields and Properties
-
     private bool pickedUp;
 
     public bool PickedUp
     {
-        get { return this.pickedUp; }
-        set { this.pickedUp = value; }
+        get => pickedUp;
+        set => pickedUp = value;
     }
 
     private Level level;
 
     public Level Level
     {
-        get { return this.level; }
-        set { this.level = value; }
+        get => level;
+        set => level = value;
     }
 
     private Sprite sprite;
 
     public Sprite Sprite
     {
-        get { return this.sprite; }
-        set { this.sprite = value; }
+        get => sprite;
+        set => sprite = value;
     }
 
     private int id;
 
     public int ID
     {
-        get { return this.id; }
-        set { this.id = value; }
+        get => id;
+        set => id = value;
     }
-
-    #endregion
 
     public Pickup(Level level)
     {
             this.level = level;
-            this.pickedUp = false;
+            pickedUp = false;
         }
 
     public Pickup Copy()
     {
-            Pickup pickup = this.MemberwiseClone() as Pickup;
+            Pickup pickup = MemberwiseClone() as Pickup;
 
             return pickup;
         }
@@ -67,11 +63,11 @@ public abstract class Pickup
     /// </summary>
     public virtual void Reset()
     {
-            this.pickedUp = false;
+            pickedUp = false;
         }
 
     public virtual void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-            spriteBatch.Draw(this.Sprite.Texture, positionOffset, this.Sprite.SourceRectangle, Color.White);
+            spriteBatch.Draw(Sprite.Texture, positionOffset, Sprite.SourceRectangle, Color.White);
         }
 }

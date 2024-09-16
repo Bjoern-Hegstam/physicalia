@@ -4,28 +4,18 @@ namespace PhysicaliaRemastered.Pickups;
 
 public class HealthPickup : Pickup
 {
-    #region Fields
-
     private float health;
-
-    #endregion
-
-    #region Constructor
 
     public HealthPickup(Level level, float health, Sprite sprite)
         : base(level)
     {
             this.health = health;
-            this.Sprite = sprite;
+            Sprite = sprite;
         }
-
-    #endregion
-
-    #region Pickup members
 
     public override void DoPickup()
     {
-            this.Level.Player.Health += this.health;
+            Level.Player.Health += health;
         }
 
     public static HealthPickup CreateFromXml(XmlReader reader, ISpriteLibrary spriteLibrary)
@@ -38,6 +28,4 @@ public class HealthPickup : Pickup
 
             return new HealthPickup(null, health, spriteLibrary.GetSprite(spriteKey));
         }
-
-    #endregion
 }

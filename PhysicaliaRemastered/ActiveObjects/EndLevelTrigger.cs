@@ -20,20 +20,16 @@ public class EndLevelTrigger : Pickup
 
     public override void Update(GameTime gametime) { }
 
-    #region Pickup members
-
     public override void DoPickup()
     {
-            this.Level.NextState = LevelState.Finished;
+            Level.NextState = LevelState.Finished;
         }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-            spriteBatch.Draw(this.sprite.Texture,
+            spriteBatch.Draw(sprite.Texture,
                             positionOffset,
-                            this.sprite.SourceRectangle,
+                            sprite.SourceRectangle,
                             Color.White);
         }
-
-    #endregion
 }

@@ -5,25 +5,15 @@ namespace PhysicaliaRemastered.Actors.Bosses;
 
 public class LambdaBoss : Boss
 {
-    #region Fields
-
     private Sprite spriteBody;
     private Sprite spriteArm;
     private Sprite spriteRail;
     private Sprite spriteShot;
 
-    #endregion
-
-    #region Constructor
-
     public LambdaBoss()
     {
 
         }
-
-    #endregion
-
-    #region Boss members
 
     public override void LoadContent(ISpriteLibrary spriteLibrary)
     {
@@ -44,6 +34,4 @@ public class LambdaBoss : Boss
     {
 
         }
-
-    #endregion
 }

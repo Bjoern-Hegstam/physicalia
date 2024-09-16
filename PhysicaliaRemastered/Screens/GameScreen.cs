@@ -16,15 +16,9 @@ public class GameScreen : XNALibrary.Graphics.Screen
         Menu
     }
 
-    #region Constants
-
     private const float PAUSE_MENU_Y = 165F;
     private const float PAUSE_MENU_X = 250F;
     private const float PAUSE_MENU_MARGIN = 5F;
-
-    #endregion
-
-    #region Fields
 
     private GameManager gameManager;
     private ISettings settings;
@@ -37,65 +31,59 @@ public class GameScreen : XNALibrary.Graphics.Screen
 
     private PauseMenuOption[] pauseMenuOptions = (PauseMenuOption[])Enum.GetValues(typeof(PauseMenuOption));
 
-    #endregion
-
     public ISettings Settings
     {
-        get { return this.gameManager.Settings; }
+        get { return gameManager.Settings; }
     }
 
     public GameManager GameManager
     {
-        get { return this.gameManager; }
+        get { return gameManager; }
     }
 
     public GameScreen(Game game, ScreenManager manager)
         : base(game, manager)
     {
-            this.gameManager = new GameManager(this.Game);
-            this.settings = this.gameManager.Settings;
+            gameManager = new GameManager(this.Game);
+            settings = gameManager.Settings;
         }
-
-    #region Initilization and content loading
 
     public override void Initialize()
     {
             base.Initialize();
 
             // Create Pause overlay texture
-            this.pauseOverlayTexture = new Texture2D(this.Game.GraphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
-            this.pauseOverlayTexture.SetData<Color>(new Color[] { new Color(0, 0, 0, 128) });
+            pauseOverlayTexture = new Texture2D(this.Game.GraphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
+            pauseOverlayTexture.SetData<Color>(new Color[] { new Color(0, 0, 0, 128) });
 
-            this.pauseOverlayArea = new Rectangle();
-            this.pauseOverlayArea.Width = this.Game.GraphicsDevice.Viewport.Width;
-            this.pauseOverlayArea.Height = this.Game.GraphicsDevice.Viewport.Height;
+            pauseOverlayArea = new Rectangle();
+            pauseOverlayArea.Width = this.Game.GraphicsDevice.Viewport.Width;
+            pauseOverlayArea.Height = this.Game.GraphicsDevice.Viewport.Height;
         }
 
     public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
     {
-            this.gameManager.LoadXml(@"Content\GameData\Game.xml");
-            this.gameManager.LoadContent(contentManager);
+            gameManager.LoadXml(@"Content\GameData\Game.xml");
+            gameManager.LoadContent(contentManager);
         }
-
-    #endregion
 
     protected override void OnUpdate(GameTime gameTime)
     {
-            if (this.gameManager.State == GameState.Paused)
-                this.HandlePauseMenu();
+            if (gameManager.State == GameState.Paused)
+                HandlePauseMenu();
 
             // Always update the game
-            this.gameManager.Update(gameTime);
+            gameManager.Update(gameTime);
         }
 
-    public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch)
     {
             spriteBatch.Begin();
 
-            this.gameManager.Draw(spriteBatch);
+            gameManager.Draw(spriteBatch);
 
-            if (this.gameManager.State == GameState.Paused)
-                this.DrawPauseMenu(spriteBatch);
+            if (gameManager.State == GameState.Paused)
+                DrawPauseMenu(spriteBatch);
 
             spriteBatch.End();
         }
@@ -105,35 +93,35 @@ public class GameScreen : XNALibrary.Graphics.Screen
             // Read input for moving between meny options
             // Because of the way the options are drawn the index goes in the
             // reverse direction of what the player presses
-            if (this.settings.InputMap.IsPressed(InputAction.MenuUp))
+            if (settings.InputMap.IsPressed(InputAction.MenuUp))
             {
-                this.pauseMenuIndex--;
+                pauseMenuIndex--;
 
-                if (this.pauseMenuIndex < 0)
-                    this.pauseMenuIndex = 0;
+                if (pauseMenuIndex < 0)
+                    pauseMenuIndex = 0;
             }
 
-            if (this.settings.InputMap.IsPressed(InputAction.MenuDown))
+            if (settings.InputMap.IsPressed(InputAction.MenuDown))
             {
-                this.pauseMenuIndex++;
+                pauseMenuIndex++;
 
-                if (this.pauseMenuIndex >= this.pauseMenuOptions.Length)
-                    this.pauseMenuIndex = this.pauseMenuOptions.Length - 1;
+                if (pauseMenuIndex >= pauseMenuOptions.Length)
+                    pauseMenuIndex = pauseMenuOptions.Length - 1;
             }
 
             // Check if MenuStart is pressed and take appropriate action
-            if (this.settings.InputMap.IsPressed(InputAction.MenuStart))
+            if (settings.InputMap.IsPressed(InputAction.MenuStart))
             {
-                PauseMenuOption selectedOption = this.pauseMenuOptions[this.pauseMenuIndex];
+                PauseMenuOption selectedOption = pauseMenuOptions[pauseMenuIndex];
 
                 switch (selectedOption)
                 {
                     case PauseMenuOption.Resume:
-                        this.gameManager.NextState = GameState.Playing;
+                        gameManager.NextState = GameState.Playing;
                         break;
                     case PauseMenuOption.Reset:
-                        this.gameManager.ResetLevel();
-                        this.pauseMenuIndex = 0;
+                        gameManager.ResetLevel();
+                        pauseMenuIndex = 0;
                         break;
                     case PauseMenuOption.Load:
                         OpenFileDialog loadDialog = new OpenFileDialog();
@@ -144,8 +132,8 @@ public class GameScreen : XNALibrary.Graphics.Screen
 
                         if (loadDialog.ShowDialog() == DialogResult.OK)
                         {
-                            this.gameManager.LoadSession(GameSession.LoadFromXml(loadDialog.FileName));
-                            this.pauseMenuIndex = 0;
+                            gameManager.LoadSession(GameSession.LoadFromXml(loadDialog.FileName));
+                            pauseMenuIndex = 0;
                         }
                         break;
                     case PauseMenuOption.Save:
@@ -157,8 +145,8 @@ public class GameScreen : XNALibrary.Graphics.Screen
 
                         if (saveDialog.ShowDialog() == DialogResult.OK)
                         {
-                            this.gameManager.SaveSession().SaveToXml(saveDialog.FileName);
-                            this.pauseMenuIndex = 0;
+                            gameManager.SaveSession().SaveToXml(saveDialog.FileName);
+                            pauseMenuIndex = 0;
                         }
                         break;
                     case PauseMenuOption.Menu:
@@ -175,15 +163,15 @@ public class GameScreen : XNALibrary.Graphics.Screen
             // Pause menu is drawn in the center of the screen
 
             // Draw texture overlay over world to fade it out a bit
-            if (this.pauseOverlayTexture != null)
-                spriteBatch.Draw(this.pauseOverlayTexture, this.pauseOverlayArea, Color.White);
+            if (pauseOverlayTexture != null)
+                spriteBatch.Draw(pauseOverlayTexture, pauseOverlayArea, Color.White);
 
             // Draw pause menu base
 
             // TODO: Mirror top graphics for bottom?
 
             // Draw pause menu text
-            SpriteFont pauseFont = this.settings.PauseMenuFont;
+            SpriteFont pauseFont = settings.PauseMenuFont;
             Vector2 textPos = new Vector2(PAUSE_MENU_X, PAUSE_MENU_Y);
 
             float pauseTextHeight = pauseFont.MeasureString("42").Y;
@@ -191,7 +179,7 @@ public class GameScreen : XNALibrary.Graphics.Screen
             int optionIndex = 0;
             foreach (PauseMenuOption menuOption in Enum.GetValues(typeof(PauseMenuOption)))
             {
-                spriteBatch.DrawString(pauseFont, menuOption.ToString(), textPos, this.pauseMenuIndex == optionIndex ? Color.Yellow : Color.White);
+                spriteBatch.DrawString(pauseFont, menuOption.ToString(), textPos, pauseMenuIndex == optionIndex ? Color.Yellow : Color.White);
 
                 // Move next item down
                 textPos.Y += pauseTextHeight + PAUSE_MENU_MARGIN;

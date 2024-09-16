@@ -12,31 +12,27 @@ public class MovingObject : ActiveObject
 
     public Vector2 Scale
     {
-        get { return this.curveScale; }
-        set { this.curveScale = value; }
+        get => curveScale;
+        set => curveScale = value;
     }
 
     public float ScaleX
     {
-        get { return this.curveScale.X; }
-        set { this.curveScale.X = value; }
+        get => curveScale.X;
+        set => curveScale.X = value;
     }
 
     public float ScaleY
     {
-        get { return this.curveScale.Y; }
-        set { this.curveScale.Y = value; }
+        get => curveScale.Y;
+        set => curveScale.Y = value;
     }
-
-    #region ActiveObjects members
 
     public override Vector2 Position
     {
-        get { return base.Position - this.positionOffset; }
-        set { base.Position = value; }
+        get => base.Position - positionOffset;
+        set => base.Position = value;
     }
-
-    #endregion
 
     public MovingObject(ISpriteLibrary spriteLibrary, int spriteKey)
         : this( spriteLibrary, spriteKey, new Curve()) { }
@@ -49,34 +45,34 @@ public class MovingObject : ActiveObject
     {
             this.curveX = curveX;
             this.curveY = curveY;
-            this.curvePosition = Vector2.Zero;
-            this.curveScale = new Vector2(1F);
+            curvePosition = Vector2.Zero;
+            curveScale = new Vector2(1F);
         }
 
     public override void CheckCollision(ICollisionObject collObject) { }
 
     public override void Reset()
     {
-            this.curvePosition = Vector2.Zero;
-            this.positionOffset.X = this.curveX.Evaluate(this.curvePosition.X);
-            this.positionOffset.Y = this.curveY.Evaluate(this.curvePosition.Y);
+            curvePosition = Vector2.Zero;
+            positionOffset.X = curveX.Evaluate(curvePosition.X);
+            positionOffset.Y = curveY.Evaluate(curvePosition.Y);
         }
 
     public override void Update(GameTime gametime)
     {
-            if (!this.IsActive)
+            if (!IsActive)
                 return;
 
             // Update the curve position
-            this.curvePosition += this.Velocity * (float)gametime.ElapsedGameTime.TotalSeconds;
+            curvePosition += Velocity * (float)gametime.ElapsedGameTime.TotalSeconds;
 
             // Update position when we're sure our curve position is valid
-            this.positionOffset = new Vector2(this.curveX.Evaluate(this.curvePosition.X) * this.curveScale.X,
-                                             this.curveY.Evaluate(this.curvePosition.Y) * this.curveScale.Y);
+            positionOffset = new Vector2(curveX.Evaluate(curvePosition.X) * curveScale.X,
+                                             curveY.Evaluate(curvePosition.Y) * curveScale.Y);
         }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-            base.Draw(spriteBatch, offsetPosition + this.positionOffset);
+            base.Draw(spriteBatch, offsetPosition + positionOffset);
         }
 }

@@ -33,8 +33,6 @@ public enum FireMode
 
 public class ProjectileWeapon : Weapon
 {
-    #region Fields
-
     private FireMode fireMode;
     private Vector2 warmupVibration;
     private Vector2 fireVibration;
@@ -47,28 +45,20 @@ public class ProjectileWeapon : Weapon
 
     private int shotsFired;
 
-    #endregion
-
-    #region Constructor
-
     public ProjectileWeapon(int weaponID, IParticleEngine particleEngine)
         : base(weaponID, particleEngine)
     {
-            this.warmupVibration = this.fireVibration = Vector2.Zero;
-            this.maxDeviation = 0F;
-            this.projectilesPerShot = 1;
-            this.spread = 0;
+            warmupVibration = fireVibration = Vector2.Zero;
+            maxDeviation = 0F;
+            projectilesPerShot = 1;
+            spread = 0;
         }
-
-    #endregion
-
-    #region Weapon members
 
     public override void Start()
     {
-            GamePad.SetVibration(PlayerIndex.One, this.warmupVibration.X, this.warmupVibration.Y);
+            GamePad.SetVibration(PlayerIndex.One, warmupVibration.X, warmupVibration.Y);
 
-            this.shotsFired = 0;
+            shotsFired = 0;
 
             base.Start();
         }
@@ -84,84 +74,84 @@ public class ProjectileWeapon : Weapon
     {
             // Coninuous fire means the vibration only needs to be started once
             // when the weapon starts firing
-            if (this.fireMode == FireMode.Continuous)
-                GamePad.SetVibration(PlayerIndex.One, this.fireVibration.X, this.fireVibration.Y);
+            if (fireMode == FireMode.Continuous)
+                GamePad.SetVibration(PlayerIndex.One, fireVibration.X, fireVibration.Y);
         }
 
     protected override void FireWeapon()
     {
-            if (this.fireMode == FireMode.SingleShot)
+            if (fireMode == FireMode.SingleShot)
             {
                 // Start vibrating if this is the first shot
-                if (this.shotsFired == 0)
+                if (shotsFired == 0)
                 {
-                    GamePad.SetVibration(PlayerIndex.One, this.fireVibration.X, this.fireVibration.Y);
-                    this.FireShot();
-                    this.shotsFired++;
+                    GamePad.SetVibration(PlayerIndex.One, fireVibration.X, fireVibration.Y);
+                    FireShot();
+                    shotsFired++;
                 }
                 else
                 {
                     // Stop the weapon
-                    this.Stop();
+                    Stop();
                     return;
                 }
             }
-            else if (this.fireMode == FireMode.MultiShot)
+            else if (fireMode == FireMode.MultiShot)
             {
                 // Switch between starting and stopping the vibration
-                if (this.shotsFired % 2 == 0)
+                if (shotsFired % 2 == 0)
                 {
-                    GamePad.SetVibration(PlayerIndex.One, this.fireVibration.X, this.fireVibration.Y);
-                    this.FireShot();
+                    GamePad.SetVibration(PlayerIndex.One, fireVibration.X, fireVibration.Y);
+                    FireShot();
                 }
                 else
                     // Stop vibration and dont fire any shots
                     GamePad.SetVibration(PlayerIndex.One, 0F, 0F);
 
                 // Increase so the other action will be taken next time
-                this.shotsFired++;
+                shotsFired++;
             }
             else
-                this.FireShot();
+                FireShot();
         }
 
     private void FireShot()
     {
             // Get needed fire data
-            Vector2 muzzle = this.GetMuzzlePosition();
+            Vector2 muzzle = GetMuzzlePosition();
 
             // Fire as many projectiles as specified.
-            for (int i = 0; i < this.projectilesPerShot; i++)
+            for (int i = 0; i < projectilesPerShot; i++)
             {
-                float angle = this.GetFireAngle(i);
+                float angle = GetFireAngle(i);
 
                 // Fire the projectile
-                this.ParticleEngine.Add(this.ParticleID, 1, muzzle, angle);
+                ParticleEngine.Add(ParticleID, 1, muzzle, angle);
             }
 
             // Decrease ammunition and count the number of fired shots
-            this.AmmoCount--;
+            AmmoCount--;
         }
 
     private Vector2 GetMuzzlePosition()
     {
             // Get the world position of the muzzle
-            Vector2 muzzle = this.muzzlePosition;
+            Vector2 muzzle = muzzlePosition;
 
             // Adjust muzzle position to accomodate for any SpriteEffects applied
             // to the player.
-            if ((this.Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
-                muzzle.X = this.WeaponFireAnimation.SourceRectangle.Width - this.muzzlePosition.X - this.Player.CollisionBox.Width;
+            if ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
+                muzzle.X = WeaponFireAnimation.SourceRectangle.Width - muzzlePosition.X - Player.CollisionBox.Width;
 
-            if ((this.Player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
-                muzzle.Y = this.WeaponFireAnimation.SourceRectangle.Height - this.muzzlePosition.Y;
+            if ((Player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
+                muzzle.Y = WeaponFireAnimation.SourceRectangle.Height - muzzlePosition.Y;
 
             // Adjust to world coordinates
-            Vector2 playerTopLeft = this.Player.Position - this.Player.Origin - new Vector2(this.Player.CollisionBox.X, this.Player.CollisionBox.Y);
-            muzzle = playerTopLeft - this.PlayerOffset + muzzle;
+            Vector2 playerTopLeft = Player.Position - Player.Origin - new Vector2(Player.CollisionBox.X, Player.CollisionBox.Y);
+            muzzle = playerTopLeft - PlayerOffset + muzzle;
 
             // Randomly offset muzzle's position in Y within the given max deviation
-            muzzle.Y += this.maxDeviation * (float)Math.Sin(MathHelper.TwoPi * Settings.Random.NextDouble());
+            muzzle.Y += maxDeviation * (float)Math.Sin(MathHelper.TwoPi * Settings.Random.NextDouble());
 
             return muzzle;
         }
@@ -169,15 +159,15 @@ public class ProjectileWeapon : Weapon
     private float GetFireAngle(int projNum)
     {
             // Get the angle at which to fire the projectiles
-            float angleSide = MathHelper.Pi * ((this.Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0 ? 1 : 0);
+            float angleSide = MathHelper.Pi * ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0 ? 1 : 0);
 
-            if (this.projectilesPerShot == 1)
+            if (projectilesPerShot == 1)
                 return angleSide;
             else
             {
-                float angleStep = this.spread / (this.projectilesPerShot - 1);
+                float angleStep = spread / (projectilesPerShot - 1);
 
-                float angle = this.spread / 2;
+                float angle = spread / 2;
                 angle += angleSide;
                 angle -= projNum * angleStep;
 
@@ -192,7 +182,7 @@ public class ProjectileWeapon : Weapon
                 if (reader.NodeType == System.Xml.XmlNodeType.Element &&
                     reader.LocalName == "FireMode")
                 {
-                    this.fireMode = (FireMode)Enum.Parse(typeof(FireMode), reader.ReadString());
+                    fireMode = (FireMode)Enum.Parse(typeof(FireMode), reader.ReadString());
                 }
 
                 if (reader.NodeType == System.Xml.XmlNodeType.Element &&
@@ -204,13 +194,13 @@ public class ProjectileWeapon : Weapon
                     low = float.Parse(reader.GetAttribute("low"));
                     high = float.Parse(reader.GetAttribute("high"));
 
-                    this.warmupVibration = new Vector2(low, high);
+                    warmupVibration = new Vector2(low, high);
 
                     reader.ReadToFollowing("Fire");
                     low = float.Parse(reader.GetAttribute("low"));
                     high = float.Parse(reader.GetAttribute("high"));
 
-                    this.fireVibration = new Vector2(low, high);
+                    fireVibration = new Vector2(low, high);
                 }
 
                 if (reader.NodeType == System.Xml.XmlNodeType.Element &&
@@ -218,19 +208,19 @@ public class ProjectileWeapon : Weapon
                 {
                     float x = float.Parse(reader.GetAttribute("x"));
                     float y = float.Parse(reader.GetAttribute("y"));
-                    this.muzzlePosition = new Vector2(x, y);
+                    muzzlePosition = new Vector2(x, y);
                     
-                    this.maxDeviation = float.Parse(reader.GetAttribute("maxDeviation"));
+                    maxDeviation = float.Parse(reader.GetAttribute("maxDeviation"));
                 }
 
                 if (reader.NodeType == System.Xml.XmlNodeType.Element &&
                     reader.LocalName == "Ammunition")
                 {
-                    this.MaxAmmo = int.Parse(reader.GetAttribute("max"));
-                    this.AmmoCount = int.Parse(reader.GetAttribute("count"));
+                    MaxAmmo = int.Parse(reader.GetAttribute("max"));
+                    AmmoCount = int.Parse(reader.GetAttribute("count"));
 
-                    this.projectilesPerShot = int.Parse(reader.GetAttribute("projectilesPerShot"));
-                    this.spread = float.Parse(reader.GetAttribute("spread"));
+                    projectilesPerShot = int.Parse(reader.GetAttribute("projectilesPerShot"));
+                    spread = float.Parse(reader.GetAttribute("spread"));
                 }
 
                 if (reader.NodeType == System.Xml.XmlNodeType.EndElement &&
@@ -238,6 +228,4 @@ public class ProjectileWeapon : Weapon
                     return;
             }
         }
-
-    #endregion
 }

@@ -14,9 +14,9 @@ public struct ActorStartValues
 
     public ActorStartValues(Vector2 position, Vector2 velocity, Vector2 acceleration)
     {
-            this.Position = position;
-            this.Velocity = velocity;
-            this.Acceleration = acceleration;
+            Position = position;
+            Velocity = velocity;
+            Acceleration = acceleration;
         }
 
     /// <summary>
@@ -33,15 +33,15 @@ public struct ActorStartValues
             {
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "Position")
-                    startValues.Position = ActorStartValues.ReadVector2(reader);
+                    startValues.Position = ReadVector2(reader);
 
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "Velocity")
-                    startValues.Velocity = ActorStartValues.ReadVector2(reader);
+                    startValues.Velocity = ReadVector2(reader);
 
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "Acceleration")
-                    startValues.Acceleration = ActorStartValues.ReadVector2(reader);
+                    startValues.Acceleration = ReadVector2(reader);
 
                 if (reader.NodeType == XmlNodeType.EndElement &&
                     reader.LocalName == endElement)
@@ -53,7 +53,7 @@ public struct ActorStartValues
 
     public static ActorStartValues FromXml(XmlReader reader)
     {
-            return ActorStartValues.FromXml(reader, "ActorStartValues");
+            return FromXml(reader, "ActorStartValues");
         }
 
     private static Vector2 ReadVector2(XmlReader reader)

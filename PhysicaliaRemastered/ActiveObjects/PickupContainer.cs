@@ -20,35 +20,29 @@ public class PickupContainer : ActiveObject
             this.pickup = pickup;
         }
 
-    #region Pickup
-
     private Pickup pickup;
 
     public Pickup PickupObject
     {
-        get { return this.pickup; }
-        set { this.pickup = value; }
+        get { return pickup; }
+        set { pickup = value; }
     }
 
     private void Pickup()
     {
             // Deactivate the pickup
-            this.IsActive = false;
-            this.CanCollide = false;
-            this.CanTakeDamage = false;
+            IsActive = false;
+            CanCollide = false;
+            CanTakeDamage = false;
 
             // Call the pickup to tell it to do its thing
-            this.pickup.DoPickup();
+            pickup.DoPickup();
         }
-
-    #endregion
-
-    #region ActiveObject members
 
     public override void CheckCollision(ICollisionObject collObject)
     {
             // Only check for collision if we're still active
-            if (!this.IsActive)
+            if (!IsActive)
                 return;
 
             // Can only be picked up by player
@@ -57,27 +51,25 @@ public class PickupContainer : ActiveObject
 
             // Check to see if the Container is colliding with the Player
             if (CollisionHelper.IsColliding(this, collObject))
-                this.Pickup();
+                Pickup();
         }
 
     public override void Reset()
     {
-            this.pickup.Reset();
+            pickup.Reset();
         }
 
     public override void Update(GameTime gametime)
     {
-            if (this.Enabled)
-                this.pickup.Update(gametime);
+            if (Enabled)
+                pickup.Update(gametime);
         }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
             // Only draw if we're still active
-            if (this.Visible)
+            if (Visible)
                 // The pickup is drawn at the upper-left corner of the container
-                this.pickup.Draw(spriteBatch, this.Position - this.Origin - offsetPosition);
+                pickup.Draw(spriteBatch, Position - Origin - offsetPosition);
         }
-
-    #endregion
 }

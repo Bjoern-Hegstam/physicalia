@@ -10,8 +10,6 @@ namespace PhysicaliaRemastered.Pickups;
 /// </summary>
 public abstract class ModifierPickup : Pickup
 {
-    #region Fields
-
     private const float ICON_TIMER_SPACING = 5F;
     private const float DEFAULT_DURATION = 5F;
 
@@ -21,77 +19,69 @@ public abstract class ModifierPickup : Pickup
 
     private Sprite icon;
 
-    #endregion
-
-    #region Properties
-
     public bool IsActive
     {
-        get { return this.active; }
-        set { this.active = value; }
+        get => active;
+        set => active = value;
     }
 
     public float Duration
     {
-        get { return this.duration; }
-        set { this.timeRemaining = this.duration = value; }
+        get => duration;
+        set => timeRemaining = duration = value;
     }
 
     public float TimeRemaining
     {
-        get { return this.timeRemaining; }
-        set { this.timeRemaining = value; }
+        get => timeRemaining;
+        set => timeRemaining = value;
     }
 
     public Sprite Icon
     {
-        get { return this.icon; }
-        set { this.icon = value; }
+        get => icon;
+        set => icon = value;
     }
-
-    #endregion
 
     public ModifierPickup(Level level, Sprite icon, Sprite sprite, float duration)
         : base(level)
     {
-            this.timeRemaining = this.duration = duration;
-            this.Sprite = sprite;
+            timeRemaining = this.duration = duration;
+            Sprite = sprite;
             this.icon = icon;
         }
-
-    #region Methods
 
     public sealed override void DoPickup()
     {
             // Add self to Level's collection of Modifiers
-            this.Level.AddModifier(this);
-            this.active = true;
-            this.PickedUp = true;
+            Level.AddModifier(this);
+            active = true;
+            PickedUp = true;
 
             // Activate modifier
-            this.Activate();
+            Activate();
         }
 
     public override void Update(GameTime gameTime)
     {
-            if (this.IsActive)
+            if (IsActive)
             {
                 // Decrease the time remaning
-                this.timeRemaining -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                timeRemaining -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 // Should the modifier be deactivated
-                if (this.timeRemaining <= 0F)
+                if (timeRemaining <= 0F)
                 {
-                    this.Deactivate();
-                    this.active = false;
+                    Deactivate();
+                    active = false;
                 }
             }
         }
 
     public override void Reset()
     {
-            this.timeRemaining = this.duration;
-            this.IsActive = false;
+            timeRemaining = duration;
+            IsActive = false;
 
             base.Reset();
         }
@@ -101,10 +91,10 @@ public abstract class ModifierPickup : Pickup
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-            if (!this.PickedUp)
-                spriteBatch.Draw(this.Sprite.Texture,
+            if (!PickedUp)
+                spriteBatch.Draw(Sprite.Texture,
                                  positionOffset,
-                                 this.Sprite.SourceRectangle,
+                                 Sprite.SourceRectangle,
                                  Color.White);
         }
 
@@ -117,14 +107,14 @@ public abstract class ModifierPickup : Pickup
     public void DrawTimer(SpriteBatch spriteBatch, Vector2 position, SpriteFont font)
     {
             // Draw icon
-            spriteBatch.Draw(this.icon.Texture,
+            spriteBatch.Draw(icon.Texture,
                             position,
-                            this.icon.SourceRectangle,
+                            icon.SourceRectangle,
                             Color.White);
 
             // Build the time string
             string timeText = "";
-            TimeSpan time = TimeSpan.FromSeconds(this.timeRemaining);
+            TimeSpan time = TimeSpan.FromSeconds(timeRemaining);
 
             if (time.Minutes < 10)
                 timeText += '0';
@@ -143,11 +133,9 @@ public abstract class ModifierPickup : Pickup
             // TODO: Use other font (ModifierFont)
 
             Vector2 textPos = position;
-            textPos.X += this.icon.SourceRectangle.Width + ICON_TIMER_SPACING;
-            textPos.Y += (this.icon.SourceRectangle.Height - timeStringSize.Y) / 2;
+            textPos.X += icon.SourceRectangle.Width + ICON_TIMER_SPACING;
+            textPos.Y += (icon.SourceRectangle.Height - timeStringSize.Y) / 2;
 
             spriteBatch.DrawString(font, timeText, textPos, Color.White);
         }
-
-    #endregion
 }

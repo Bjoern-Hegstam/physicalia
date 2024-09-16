@@ -26,8 +26,6 @@ public enum EnemyBehavior
 
 public class Enemy : Actor
 {
-    #region Fields
-
     private static int enemyCount = 0;
     private int uniqueID;
 
@@ -49,78 +47,72 @@ public class Enemy : Actor
     private float blinkInterval = 0.15F;
     private float blinkTime = 0;
 
-    #endregion
-
-    #region Properties
-
     public int UniqueID
     {
-        get { return this.uniqueID; }
+        get { return uniqueID; }
     }
 
     public int TypeID
     {
-        get { return this.typeID; }
+        get { return typeID; }
     }
 
     public bool IsActive
     {
-        get { return this.enabled || this.visible; }
+        get { return enabled || visible; }
         set
         {
-                this.enabled = this.visible = value;
+                enabled = visible = value;
 
                 if (value)
-                    this.CurrentAnimationType = this.CurrentAnimationType;
+                    CurrentAnimationType = CurrentAnimationType;
             }
     }
 
     public bool Enabled
     {
-        get { return this.enabled; }
-        set { this.enabled = value; }
+        get { return enabled; }
+        set { enabled = value; }
     }
 
     public bool Visible
     {
-        get { return this.visible; }
-        set { this.visible = value; }
+        get { return visible; }
+        set { visible = value; }
     }
 
     public int Damage
     {
-        get { return this.damageValue; }
-        set { this.damageValue = value; }
+        get { return damageValue; }
+        set { damageValue = value; }
     }
 
     public float AttackRange
     {
-        get { return this.attackRange; }
-        set { this.attackRange = value; }
+        get { return attackRange; }
+        set { attackRange = value; }
     }
 
     public Rectangle PatrolArea
     {
-        get { return this.patrolArea; }
-        set { this.patrolArea = value; }
+        get { return patrolArea; }
+        set { patrolArea = value; }
     }
 
     public AILevel Intelligence
     {
-        get { return this.intelligence; }
-        set { this.intelligence = value; }
+        get { return intelligence; }
+        set { intelligence = value; }
     }
-
-    #endregion
 
     public Enemy(ActorStartValues startValues)
     {
             // Provide the enemy with a "unique" id
-            this.uniqueID = Enemy.enemyCount++;
+            uniqueID = enemyCount++;
 
-            this.typeID = 0;
-            this.StartValues = startValues;
-            this.SetDefaults();
+            typeID = 0;
+            StartValues = startValues;
+            SetDefaults();
         }
 
     public override void UpdateAnimation()
@@ -136,42 +128,42 @@ public class Enemy : Actor
     /// <param name="player"></param>
     public virtual void Update(GameTime gameTime, Player player)
     {
-            if (this.Health > 0)
+            if (Health > 0)
             {
                 base.Update(gameTime);
 
                 // TODO: Remove temp code and make better!
-                if (!Enemy.WithinArea(this, this.patrolArea))
-                    this.MoveToArea();
+                if (!WithinArea(this, patrolArea))
+                    MoveToArea();
             }
             else
             {
                 // TODO: Probably redo or make better later (Blink)
 
                 // Start blinking after a set time
-                if (this.blinkDelay > 0)
-                    this.blinkDelay -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                else if (this.blinkCount > 0)
+                if (blinkDelay > 0)
+                    blinkDelay -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                else if (blinkCount > 0)
                 {
                     // Count down to the next blink
-                    this.blinkTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    blinkTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     // Blink if it's time
-                    if (this.blinkTime <= 0)
+                    if (blinkTime <= 0)
                     {
-                        this.visible = !this.visible;
-                        this.blinkTime = this.blinkInterval;
+                        visible = !visible;
+                        blinkTime = blinkInterval;
 
                         // Decrease the number of blinks to do
-                        if (!this.visible)
-                            this.blinkCount--;
+                        if (!visible)
+                            blinkCount--;
                     }
 
                     // Make sure we're not visible if we're done blinking
-                    if (this.blinkCount == 0 && this.visible)
+                    if (blinkCount == 0 && visible)
                     {
-                        this.visible = false;
-                        this.enabled = false;
+                        visible = false;
+                        enabled = false;
                     }
                 }
             }
@@ -179,11 +171,9 @@ public class Enemy : Actor
 
     public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-            if (this.visible)
+            if (visible)
                 base.Draw(spriteBatch, offsetPosition);
         }
-
-    #region Patrol control
 
     /// <summary>
     /// Checks whether the Actor's collision box is contained within the patrol area.
@@ -194,7 +184,7 @@ public class Enemy : Actor
     /// within the patrol area; false otherwise.</returns>
     public static bool WithinArea(Actor actor, Rectangle area)
     {
-            return Enemy.WithinArea(actor, area, actor.Position);
+            return WithinArea(actor, area, actor.Position);
         }
 
     /// <summary>
@@ -221,18 +211,14 @@ public class Enemy : Actor
     private void MoveToArea()
     {
             // Make the enemy move in the correct direction in X
-            if ((this.Position.X < this.patrolArea.X + this.patrolArea.Width / 2 && this.Velocity.X < 0) ||
-                (this.Position.X > this.patrolArea.X + this.patrolArea.Width / 2 && this.Velocity.X > 0))
+            if ((Position.X < patrolArea.X + patrolArea.Width / 2 && Velocity.X < 0) ||
+                (Position.X > patrolArea.X + patrolArea.Width / 2 && Velocity.X > 0))
             {
-                Vector2 velocity = this.Velocity;
+                Vector2 velocity = Velocity;
                 velocity.X *= -1;
-                this.Velocity = velocity;
+                Velocity = velocity;
             }
         }
-
-    #endregion
-
-    #region Other
 
     /// <summary>
     /// Sets all fields to their default values. Values stored in Enemy.StartValues
@@ -241,7 +227,7 @@ public class Enemy : Actor
     /// </summary>
     public virtual void SetDefaults()
     {
-            this.ApplyStartValues();
+            ApplyStartValues();
         }
 
     /// <summary>
@@ -251,7 +237,7 @@ public class Enemy : Actor
     public virtual Enemy Copy(ActorStartValues startValues)
     {
             Enemy enemy = new Enemy(startValues);
-            this.Copy(enemy);
+            Copy(enemy);
 
             return enemy;
         }
@@ -262,27 +248,23 @@ public class Enemy : Actor
     /// <param name="enemy"></param>
     public virtual void Copy(Enemy enemy)
     {
-            enemy.attackRange = this.attackRange;
-            enemy.behavior = this.behavior;
-            enemy.CanCollide = this.CanCollide;
-            enemy.CanTakeDamage = this.CanTakeDamage;
-            enemy.CollisionBox = this.CollisionBox;
-            enemy.damageValue = this.damageValue;
-            enemy.enabled = this.enabled;
-            enemy.intelligence = this.intelligence;
-            enemy.Health = this.Health;
+            enemy.attackRange = attackRange;
+            enemy.behavior = behavior;
+            enemy.CanCollide = CanCollide;
+            enemy.CanTakeDamage = CanTakeDamage;
+            enemy.CollisionBox = CollisionBox;
+            enemy.damageValue = damageValue;
+            enemy.enabled = enabled;
+            enemy.intelligence = intelligence;
+            enemy.Health = Health;
 
-            enemy.blinkCount = this.blinkCount;
-            enemy.blinkDelay = this.blinkDelay;
-            enemy.blinkInterval = this.blinkInterval;
-            enemy.blinkTime = this.blinkTime;
+            enemy.blinkCount = blinkCount;
+            enemy.blinkDelay = blinkDelay;
+            enemy.blinkInterval = blinkInterval;
+            enemy.blinkTime = blinkTime;
 
-            enemy.CurrentAnimationType = this.CurrentAnimationType;
+            enemy.CurrentAnimationType = CurrentAnimationType;
         }
-
-    #endregion
-
-    #region ICollisionObject
 
     public override ObjectType Type
     {
@@ -291,13 +273,13 @@ public class Enemy : Actor
 
     public override void TakeDamage(float damageLevel)
     {
-            this.Health -= damageLevel;
+            Health -= damageLevel;
 
-            if (this.Health <= 0)
+            if (Health <= 0)
             {
-                this.Velocity*= Vector2.Zero;
-                this.CanCollide = false;
-                this.CanTakeDamage = false;
+                Velocity*= Vector2.Zero;
+                CanCollide = false;
+                CanTakeDamage = false;
             }
         }
 
@@ -307,22 +289,20 @@ public class Enemy : Actor
 
             if (collidedObject.Type == ObjectType.Tile)
             {
-                this.Position = position;
+                Position = position;
 
                 if ((collisionSides & BoxSide.Left) != 0 || (collisionSides & BoxSide.Right) != 0)
                 {
                     // Jump
-                    velocity.Y = 200 * Math.Sign(this.Acceleration.Y) * -1;
+                    velocity.Y = 200 * Math.Sign(Acceleration.Y) * -1;
 
                     // Reverse velocity in X
-                    velocity.X = this.Velocity.X;// *-1;
+                    velocity.X = Velocity.X;// *-1;
                 }
 
-                this.Velocity = velocity;
+                Velocity = velocity;
             }
             else if (collidedObject.Type == ObjectType.Player)
-                collidedObject.TakeDamage(this.damageValue);
+                collidedObject.TakeDamage(damageValue);
         }
-
-    #endregion
 }

@@ -16,45 +16,31 @@ public interface IPickupLibrary
 
 public class PickupLibrary : IPickupLibrary
 {
-    #region Fields
-
     private Dictionary<int, Pickup> modifierLib;
-
-    #endregion
-
-    #region Constructors
 
     public PickupLibrary()
     {
-            this.modifierLib = new Dictionary<int, Pickup>();
+            modifierLib = new Dictionary<int, Pickup>();
         }
-
-    #endregion
-
-    #region Library access
 
     public void AddPickup(int key, Pickup modifier)
     {
-            this.modifierLib[key] = modifier;
+            modifierLib[key] = modifier;
         }
 
     public void RemovePickup(int key)
     {
-            if (this.modifierLib.ContainsKey(key))
-                this.modifierLib.Remove(key);
+            if (modifierLib.ContainsKey(key))
+                modifierLib.Remove(key);
         }
 
     public Pickup GetPickup(int key)
     {
-            if (this.modifierLib.ContainsKey(key))
-                return this.modifierLib[key].Copy();
+            if (modifierLib.ContainsKey(key))
+                return modifierLib[key].Copy();
 
             return null;
         }
-
-    #endregion
-
-    #region Xml loading
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary)
     {
@@ -65,7 +51,7 @@ public class PickupLibrary : IPickupLibrary
 
             using (XmlReader reader = XmlReader.Create(path, readerSettings))
             {
-                this.LoadXml(reader, spriteLibrary);
+                LoadXml(reader, spriteLibrary);
             }
         }
 
@@ -93,7 +79,7 @@ public class PickupLibrary : IPickupLibrary
                     if (pickup != null)
                     {
                         pickup.ID = key;
-                        this.modifierLib.Add(key, pickup);
+                        modifierLib.Add(key, pickup);
                     }
                 }
 
@@ -102,6 +88,4 @@ public class PickupLibrary : IPickupLibrary
                     return;
             }
         }
-
-    #endregion
 }

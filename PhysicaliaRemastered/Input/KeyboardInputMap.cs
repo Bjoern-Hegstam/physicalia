@@ -10,41 +10,31 @@ namespace PhysicaliaRemastered.Input;
 /// </summary>
 class KeyboardInputMap : InputMap
 {
-    #region Keys
-
     private Dictionary<InputAction, Keys> keys;
-
-    #endregion
-
-    #region Constructor
 
     public KeyboardInputMap()
     {
-            this.keys = new Dictionary<InputAction, Keys>();
+            keys = new Dictionary<InputAction, Keys>();
         }
-
-    #endregion
-
-    #region IInputMap Members
 
     public override bool IsPressed(InputAction action)
     {
-            return this.InputHandler.IsPressed(this.keys[action]);
+            return InputHandler.IsPressed(keys[action]);
         }
 
     public override bool IsHolding(InputAction action)
     {
-            return this.InputHandler.IsHolding(this.keys[action]);
+            return InputHandler.IsHolding(keys[action]);
         }
 
     public override bool IsReleased(InputAction action)
     {
-            return this.InputHandler.IsReleased(this.keys[action]);
+            return InputHandler.IsReleased(keys[action]);
         }
 
     public override void SetButton(InputAction action, int button)
     {
-            this.keys[action] = (Keys)button;
+            keys[action] = (Keys)button;
         }
 
     public override void LoadXml(string path)
@@ -64,11 +54,9 @@ class KeyboardInputMap : InputMap
                         InputAction action = (InputAction)Enum.Parse(typeof(InputAction), reader.GetAttribute("action"));
                         Keys key = (Keys)Enum.Parse(typeof(Keys), reader.GetAttribute("value"));
 
-                        this.keys[action] = key;
+                        keys[action] = key;
                     }
                 }
             }
         }
-
-    #endregion
 }

@@ -29,8 +29,8 @@ public abstract class InputMap
 
     public XNALibrary.Services.IInputHandler InputHandler
     {
-        get { return this.inputHandler; }
-        set { this.inputHandler = value; }
+        get => inputHandler;
+        set => inputHandler = value;
     }
 
     public abstract bool IsPressed(InputAction action);

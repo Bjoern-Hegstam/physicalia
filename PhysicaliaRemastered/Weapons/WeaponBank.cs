@@ -30,7 +30,7 @@ public class WeaponBank : IWeaponBank
         this.spriteLibrary = spriteLibrary;
         this.animationManager = animationManager;
 
-        this.weaponBank = new Dictionary<int, NewWeapons.Weapon>();
+        weaponBank = new Dictionary<int, NewWeapons.Weapon>();
     }
 
     /// <summary>
@@ -39,8 +39,8 @@ public class WeaponBank : IWeaponBank
     /// <param name="weapon">Weapon to add to the bank.</param>
     public void AddWeapon(NewWeapons.Weapon weapon)
     {
-        if (!this.weaponBank.ContainsValue(weapon))
-            this.weaponBank.Add(weapon.WeaponID, weapon);
+        if (!weaponBank.ContainsValue(weapon))
+            weaponBank.Add(weapon.WeaponID, weapon);
     }
 
     /// <summary>
@@ -49,8 +49,8 @@ public class WeaponBank : IWeaponBank
     /// <param name="weaponID">Id of the weapon to remove.</param>
     public void RemoveWeapon(int weaponID)
     {
-        if (this.weaponBank.ContainsKey(weaponID))
-            this.weaponBank.Remove(weaponID);
+        if (weaponBank.ContainsKey(weaponID))
+            weaponBank.Remove(weaponID);
     }
 
     /// <summary>
@@ -61,8 +61,8 @@ public class WeaponBank : IWeaponBank
     /// was found.</returns>
     public NewWeapons.Weapon GetWeapon(int weaponID)
     {
-        if (this.weaponBank.ContainsKey(weaponID))
-            return this.weaponBank[weaponID];
+        if (weaponBank.ContainsKey(weaponID))
+            return weaponBank[weaponID];
 
         return null;
     }
@@ -76,7 +76,7 @@ public class WeaponBank : IWeaponBank
 
         using (XmlReader reader = XmlReader.Create(path, readerSettings))
         {
-            this.LoadXml(reader);
+            LoadXml(reader);
         }
     }
 
@@ -96,20 +96,20 @@ public class WeaponBank : IWeaponBank
                 switch (weaponType)
                 {
                     case "Melee":
-                        weapon = new MeleeWeapon(weaponID, this.particleEngine);
+                        weapon = new MeleeWeapon(weaponID, particleEngine);
                         break;
                     case "Projectile":
-                        weapon = new ProjectileWeapon(weaponID, this.particleEngine);
+                        weapon = new ProjectileWeapon(weaponID, particleEngine);
                         break;
                     default:
                         break;
                 }
 
                 // Parse the weapon data
-                this.ParseWeaponData(reader, weapon);
+                ParseWeaponData(reader, weapon);
 
                 // Add the weapon to the bank
-                this.weaponBank.Add(weapon.WeaponID, weapon);
+                weaponBank.Add(weapon.WeaponID, weapon);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -129,16 +129,16 @@ public class WeaponBank : IWeaponBank
                 // Get sprite
                 reader.ReadToFollowing("Sprite");
                 int spriteKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WeaponSprite = this.spriteLibrary.GetSprite(spriteKey);
+                weapon.WeaponSprite = spriteLibrary.GetSprite(spriteKey);
 
                 // Get animations
                 reader.ReadToFollowing("Warmup");
                 int warmUpKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WarmupAnimation = this.animationManager.AddPlaybackAnimation(warmUpKey);
+                weapon.WarmupAnimation = animationManager.AddPlaybackAnimation(warmUpKey);
 
                 reader.ReadToFollowing("Fire");
                 int fireKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WeaponFireAnimation = this.animationManager.AddPlaybackAnimation(fireKey);
+                weapon.WeaponFireAnimation = animationManager.AddPlaybackAnimation(fireKey);
 
                 reader.ReadToFollowing("PlayerOffset");
                 float x = float.Parse(reader.GetAttribute("x"));

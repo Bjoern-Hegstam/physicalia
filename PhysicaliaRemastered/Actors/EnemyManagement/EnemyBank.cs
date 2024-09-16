@@ -7,8 +7,6 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement;
 
 public class EnemyBank : IEnemyBank
 {
-    #region Fields
-
     /// <summary>
     /// Dictionary mapping the Id's of the enemy types to the base enemies.
     /// The animation keys kept by the enemies are those going to the
@@ -17,14 +15,6 @@ public class EnemyBank : IEnemyBank
     private Dictionary<int, Enemy> enemyBank;
 
     private IAnimationManager animationManager;
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new EnemyBank instance and adds that instance as a service
@@ -37,12 +27,8 @@ public class EnemyBank : IEnemyBank
     {
             this.animationManager = animationManager;
 
-            this.enemyBank = new Dictionary<int, Enemy>();
+            enemyBank = new Dictionary<int, Enemy>();
         }
-
-    #endregion
-
-    #region Public methods
 
     public void LoadXml(string path)
     {
@@ -53,7 +39,7 @@ public class EnemyBank : IEnemyBank
 
             using (XmlReader reader = XmlReader.Create(path, readerSettings))
             {
-                this.LoadXml(reader);
+                LoadXml(reader);
             }
         }
 
@@ -72,12 +58,12 @@ public class EnemyBank : IEnemyBank
                     string typeName = reader.GetAttribute("type");
                     int typeID = int.Parse(reader.GetAttribute("typeID"));
 
-                    Enemy enemy = this.CreateBaseEnemy(typeName);
+                    Enemy enemy = CreateBaseEnemy(typeName);
 
-                    this.SetupEnemy(reader, enemy);
-                    this.LoadAnimations(reader, enemy);
+                    SetupEnemy(reader, enemy);
+                    LoadAnimations(reader, enemy);
                     
-                    this.enemyBank.Add(typeID, enemy);
+                    enemyBank.Add(typeID, enemy);
                 }
 
                 if (reader.NodeType == XmlNodeType.EndElement &&
@@ -93,7 +79,7 @@ public class EnemyBank : IEnemyBank
     /// <param name="enemy">The enemy to add.</param>
     public void AddBaseEnemy(int typeID, Enemy enemy)
     {
-            this.enemyBank.Add(typeID, enemy);
+            enemyBank.Add(typeID, enemy);
         }
 
     /// <summary>
@@ -105,14 +91,14 @@ public class EnemyBank : IEnemyBank
     public Enemy CreateEnemy(int typeID, ActorStartValues startValues)
     {
             // Make sure the type has been defined
-            if (!this.enemyBank.ContainsKey(typeID))
+            if (!enemyBank.ContainsKey(typeID))
                 return null;
 
             // Get a copy of the type
-            Enemy enemy = this.enemyBank[typeID].Copy(startValues);
+            Enemy enemy = enemyBank[typeID].Copy(startValues);
 
             // Set the enemies animation keys
-            this.SetPlaybackKeys(typeID, enemy);
+            SetPlaybackKeys(typeID, enemy);
 
             // Return the result
             // ^ That's a very excessive comment. <- (So is that...and this)
@@ -126,13 +112,9 @@ public class EnemyBank : IEnemyBank
     /// <param name="enemy">Enemy to the set the values on.</param>
     public void SetupEnemy(Enemy enemy)
     {
-            if (this.enemyBank.ContainsKey(enemy.TypeID))
-                this.enemyBank[enemy.TypeID].Copy(enemy);
+            if (enemyBank.ContainsKey(enemy.TypeID))
+                enemyBank[enemy.TypeID].Copy(enemy);
         }
-
-    #endregion
-
-    #region Private methods
 
     /// <summary>
     /// Sets up the passed in Enemy according to the xml data.
@@ -158,12 +140,12 @@ public class EnemyBank : IEnemyBank
 
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "CollisionBox")
-                    enemy.CollisionBox = this.ReadRectangle(reader);
+                    enemy.CollisionBox = ReadRectangle(reader);
 
                 if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "PatrolArea")
                 {
-                    enemy.PatrolArea = this.ReadRectangle(reader);
+                    enemy.PatrolArea = ReadRectangle(reader);
                 }
 
                 if (reader.NodeType == XmlNodeType.EndElement &&
@@ -190,7 +172,7 @@ public class EnemyBank : IEnemyBank
                     int animKey = int.Parse(reader.GetAttribute("key"));
                     int action = int.Parse(reader.GetAttribute("action"));
 
-                    Animation anim = this.animationManager.AddPlaybackAnimation(animKey);
+                    Animation anim = animationManager.AddPlaybackAnimation(animKey);
 
                     // Add the animation to the Enemy
                     enemy.AddAnimation(action, anim);
@@ -245,7 +227,7 @@ public class EnemyBank : IEnemyBank
     private void SetPlaybackKeys(int typeID, Enemy enemy)
     {
             // Get the types animation keys
-            Dictionary<int, Animation> bankAnimations = this.enemyBank[typeID].Animations;
+            Dictionary<int, Animation> bankAnimations = enemyBank[typeID].Animations;
 
             Animation anim;
             
@@ -256,12 +238,10 @@ public class EnemyBank : IEnemyBank
                 anim = bankAnimations[animType].Copy();
                 
                 // Store the animation
-                this.animationManager.AddPlaybackAnimation(anim);
+                animationManager.AddPlaybackAnimation(anim);
                 
                 // Give animation to the enemy
                 enemy.Animations.Add(animType, anim);
             }
         }
-
-    #endregion
 }

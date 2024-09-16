@@ -11,13 +11,7 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement;
 /// </summary>
 public class EnemyManager
 {
-    #region Constants
-
     private int DEFAULT_ACTIVATION_DISTANCE = 20;
-
-    #endregion
-
-    #region Fields
 
     private IEnemyBank enemyBank;
     private List<Enemy> activatedEnemies;
@@ -25,27 +19,16 @@ public class EnemyManager
 
     private int activationDistance;
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets or sets the distance from the screen at which an enemy is activated.
     /// </summary>
     public int ActivationDistance
     {
-        get { return this.activationDistance; }
-        set { this.activationDistance = value; }
+        get => activationDistance;
+        set => activationDistance = value;
     }
 
-    public Enemy[] ActivatedEnemies
-    {
-        get { return this.activatedEnemies.ToArray(); }
-    }
-
-    #endregion
-
-    #region Constructors
+    public Enemy[] ActivatedEnemies => activatedEnemies.ToArray();
 
     /// <summary>
     /// Creates a new EnemyManager.
@@ -56,15 +39,11 @@ public class EnemyManager
     {
             this.enemyBank = enemyBank;
 
-            this.activatedEnemies = new List<Enemy>();
-            this.inactiveEnemies = new List<Enemy>();
+            activatedEnemies = new List<Enemy>();
+            inactiveEnemies = new List<Enemy>();
 
-            this.activationDistance = DEFAULT_ACTIVATION_DISTANCE;
+            activationDistance = DEFAULT_ACTIVATION_DISTANCE;
         }
-
-    #endregion
-
-    #region Private methods
 
     /// <summary>
     /// Checks whether the passed in Enemy is either on screen or within the
@@ -81,28 +60,24 @@ public class EnemyManager
             enemyBox.X += (int)enemyPos.X; enemyBox.Y += (int)enemyPos.Y;
 
             // Add the activation distance to the side of the screen rectangle
-            screenRect.Inflate(this.activationDistance, this.activationDistance);
+            screenRect.Inflate(activationDistance, activationDistance);
 
             // Return a boolean indicating whether the rectangles are intersecting
             return screenRect.Intersects(enemyBox);
         }
 
-    #endregion
-
-    #region Public methods
-
     public void ActivateVisible(Rectangle screenRect)
     {
             // Activate Enemies near the screen
-            for (int i = this.inactiveEnemies.Count - 1; i >= 0; i--)
+            for (int i = inactiveEnemies.Count - 1; i >= 0; i--)
             {
-                Enemy enemy = this.inactiveEnemies[i];
+                Enemy enemy = inactiveEnemies[i];
 
-                if (this.EnemyOnScreen(enemy, screenRect))
+                if (EnemyOnScreen(enemy, screenRect))
                 {
-                    this.inactiveEnemies.RemoveAt(i);
+                    inactiveEnemies.RemoveAt(i);
                     enemy.IsActive = true;
-                    this.activatedEnemies.Add(enemy);
+                    activatedEnemies.Add(enemy);
                 }
             }
         }
@@ -117,10 +92,10 @@ public class EnemyManager
     public void Update(GameTime gameTime, Player player, Rectangle screenRect)
     {
             // Activate Enemies near the screen
-            this.ActivateVisible(screenRect);
+            ActivateVisible(screenRect);
 
             // Update the activated Enemies that are still active
-            foreach (Enemy enemy in this.activatedEnemies)
+            foreach (Enemy enemy in activatedEnemies)
                 if (enemy.IsActive)
                     enemy.Update(gameTime, player);
         }
@@ -169,7 +144,7 @@ public class EnemyManager
                 }
             }
 
-            foreach (Enemy enemy in this.activatedEnemies)
+            foreach (Enemy enemy in activatedEnemies)
             {
                 if (!enemy.CanCollide)
                     continue;
@@ -195,16 +170,16 @@ public class EnemyManager
     public void Reset()
     {
             // Set the default on all activated enemies
-            foreach (Enemy enemy in this.activatedEnemies)
+            foreach (Enemy enemy in activatedEnemies)
                 enemy.SetDefaults();
 
             // Transfer the reset Enemies to the queue
-            while (this.activatedEnemies.Count > 0)
+            while (activatedEnemies.Count > 0)
             {
-                Enemy enemy = this.activatedEnemies[0];
-                this.activatedEnemies.RemoveAt(0);
-                this.enemyBank.SetupEnemy(enemy);
-                this.inactiveEnemies.Add(enemy);
+                Enemy enemy = activatedEnemies[0];
+                activatedEnemies.RemoveAt(0);
+                enemyBank.SetupEnemy(enemy);
+                inactiveEnemies.Add(enemy);
             }
         }
 
@@ -215,17 +190,17 @@ public class EnemyManager
     /// <param name="startValues">Start values for the new enemy.</param>
     public void EnqueueEnemy(int typeID, ActorStartValues startValues)
     {
-            Enemy enemy = this.enemyBank.CreateEnemy(typeID, startValues);
+            Enemy enemy = enemyBank.CreateEnemy(typeID, startValues);
 
-            this.EnqueueEnemy(enemy);
+            EnqueueEnemy(enemy);
         }
 
     public void EnqueueEnemy(int typeID, ActorStartValues startValues, Rectangle patrolArea)
     {
-            Enemy enemy = this.enemyBank.CreateEnemy(typeID, startValues);
+            Enemy enemy = enemyBank.CreateEnemy(typeID, startValues);
             enemy.PatrolArea = patrolArea;
 
-            this.EnqueueEnemy(enemy);
+            EnqueueEnemy(enemy);
         }
         
     /// <summary>
@@ -234,7 +209,7 @@ public class EnemyManager
     /// <param name="enemy">Enemy to enqueue.</param>
     public void EnqueueEnemy(Enemy enemy)
     {
-            this.inactiveEnemies.Add(enemy);
+            inactiveEnemies.Add(enemy);
         }
 
     /// <summary>
@@ -242,7 +217,7 @@ public class EnemyManager
     /// </summary>
     public void UpdateAnimations()
     {
-            foreach (Enemy enemy in this.activatedEnemies)
+            foreach (Enemy enemy in activatedEnemies)
                 if (enemy.IsActive)
                     enemy.UpdateAnimation();
         }
@@ -254,19 +229,15 @@ public class EnemyManager
     /// <param name="offsetPosition">Position of the top-left corner of the screen.</param>
     public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-            foreach (Enemy enemy in this.activatedEnemies)
+            foreach (Enemy enemy in activatedEnemies)
             {
                 enemy.Draw(spriteBatch, offsetPosition);
             }
         }
 
-    #endregion
-
-    #region Session management
-
     public void SaveSession(GameSession session)
     {
-            foreach (Enemy enemy in this.activatedEnemies)
+            foreach (Enemy enemy in activatedEnemies)
             {
                 EnemySave enemySave = new EnemySave(enemy.Position, enemy.Velocity, enemy.Health, enemy.IsActive);
                 session.SavedEnemies.Add(enemy.UniqueID, enemySave);
@@ -275,14 +246,14 @@ public class EnemyManager
 
     public void LoadSession(GameSession session)
     {
-            for (int i = this.inactiveEnemies.Count - 1; i >= 0; i--)
+            for (int i = inactiveEnemies.Count - 1; i >= 0; i--)
             {
-                if (session.SavedEnemies.ContainsKey(this.inactiveEnemies[i].UniqueID))
+                if (session.SavedEnemies.ContainsKey(inactiveEnemies[i].UniqueID))
                 {
                     // Move the enemy
-                    Enemy enemy = this.inactiveEnemies[i];
-                    this.inactiveEnemies.RemoveAt(i);
-                    this.activatedEnemies.Add(enemy);
+                    Enemy enemy = inactiveEnemies[i];
+                    inactiveEnemies.RemoveAt(i);
+                    activatedEnemies.Add(enemy);
 
                     // Setup the enemy
                     EnemySave save = session.SavedEnemies[enemy.UniqueID];
@@ -301,6 +272,4 @@ public class EnemyManager
                 }
             }
         }
-
-    #endregion
 }

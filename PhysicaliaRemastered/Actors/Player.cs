@@ -10,8 +10,6 @@ namespace PhysicaliaRemastered.Actors;
 
 public class Player : Actor
 {
-    #region Movement fields
-
     public const float DEFAULT_JUMP_MAGNITUDE = -300F;
     public const float DEFAULT_WALK_SPEED = 100F;
     public const float DEFAULT_FALL_MOVEMENT_SPEED = 80F;
@@ -30,62 +28,48 @@ public class Player : Actor
 
     public float JumpMagnitude
     {
-        get { return this.jumpMagnitude; }
-        set { this.jumpMagnitude = value; }
+        get => jumpMagnitude;
+        set => jumpMagnitude = value;
     }
 
     public float WalkSpeed
     {
-        get { return this.walkSpeed; }
-        set { this.walkSpeed = value; }
+        get => walkSpeed;
+        set => walkSpeed = value;
     }
 
     public float FallMovementSpeed
     {
-        get { return this.fallMovementSpeed; }
-        set { this.fallMovementSpeed = value; }
+        get => fallMovementSpeed;
+        set => fallMovementSpeed = value;
     }
 
     public bool Flickering
     {
-        get { return this.invincibleTime > 0; }
+        get => invincibleTime > 0;
         set
         {
                 if (value)
                 {
-                    this.invincibleTime = DEFAULT_INVINCIBLE_TIME;
+                    invincibleTime = DEFAULT_INVINCIBLE_TIME;
                 }
                 else
                 {
-                    this.invincibleTime = 0;
-                    this.visible = true;
+                    invincibleTime = 0;
+                    visible = true;
                 }
             }
     }
 
-    #endregion
-
     public override float Health
     {
-        get { return base.Health; }
-        set
-        {
-                base.Health = Math.Max(Math.Min(settings.PlayerStartHealth, value), 0);
-            }
+        get => base.Health;
+        set => base.Health = Math.Max(Math.Min(settings.PlayerStartHealth, value), 0);
     }
-
-    #region General Management
 
     private ISettings settings;
 
-    public ISettings Settings
-    {
-        get { return this.settings; }
-    }
-
-    #endregion
-
-    #region Weapons
+    public ISettings Settings => settings;
 
     private Dictionary<int, Weapon> weapons;
     private int currentWeapon;
@@ -94,27 +78,25 @@ public class Player : Actor
     {
         get
         {
-                if (this.weapons.ContainsKey(this.currentWeapon))
-                    return this.weapons[this.currentWeapon];
+                if (weapons.ContainsKey(currentWeapon))
+                    return weapons[currentWeapon];
 
                 return null;
             }
     }
 
-    #endregion
-
     public Player(ISettings settings)
     {
             this.settings = settings;
 
-            this.jumpMagnitude = DEFAULT_JUMP_MAGNITUDE;
-            this.walkSpeed = DEFAULT_WALK_SPEED;
-            this.fallMovementSpeed = DEFAULT_FALL_MOVEMENT_SPEED;
+            jumpMagnitude = DEFAULT_JUMP_MAGNITUDE;
+            walkSpeed = DEFAULT_WALK_SPEED;
+            fallMovementSpeed = DEFAULT_FALL_MOVEMENT_SPEED;
 
-            this.Health = settings.PlayerStartHealth;
-            this.visible = true;
+            Health = settings.PlayerStartHealth;
+            visible = true;
 
-            this.weapons = new Dictionary<int, Weapon>();
+            weapons = new Dictionary<int, Weapon>();
         }
 
     /// <summary>
@@ -122,78 +104,78 @@ public class Player : Actor
     /// </summary>
     public void HandleInput()
     {
-            Vector2 velocity = this.Velocity;
+            Vector2 velocity = Velocity;
             velocity.X = 0;
 
-            float moveSpeed = this.walkSpeed;
-            if (this.CurrentAnimationType == (int)ActorAnimation.Fall ||
-                this.CurrentAnimationType == (int)ActorAnimation.Jump)
-                moveSpeed = this.fallMovementSpeed;
+            float moveSpeed = walkSpeed;
+            if (CurrentAnimationType == (int)ActorAnimation.Fall ||
+                CurrentAnimationType == (int)ActorAnimation.Jump)
+                moveSpeed = fallMovementSpeed;
 
             // Walk
-            if (this.Settings.InputMap.IsHolding(InputAction.WalkLeft))
+            if (Settings.InputMap.IsHolding(InputAction.WalkLeft))
                 velocity.X = -moveSpeed;
 
-            if (this.Settings.InputMap.IsHolding(InputAction.WalkRight))
+            if (Settings.InputMap.IsHolding(InputAction.WalkRight))
                 velocity.X = moveSpeed;
 
             // Jump
-            if (this.Settings.InputMap.IsPressed(InputAction.Jump) &&
-                this.CurrentAnimationType != (int)ActorAnimation.Jump &&
-                this.CurrentAnimationType != (int)ActorAnimation.Fall)
-                velocity.Y = this.jumpMagnitude * (this.Acceleration.Y > 0 ? 1 : -1);
+            if (Settings.InputMap.IsPressed(InputAction.Jump) &&
+                CurrentAnimationType != (int)ActorAnimation.Jump &&
+                CurrentAnimationType != (int)ActorAnimation.Fall)
+                velocity.Y = jumpMagnitude * (Acceleration.Y > 0 ? 1 : -1);
 
-            this.Velocity = velocity;
+            Velocity = velocity;
 
             // Weapon controls
             // Only check if the player has a weapon
-            if (this.weapons.Count == 0)
+            if (weapons.Count == 0)
                 return;
 
             // Should the weapons be switched?
-            if (this.Settings.InputMap.IsPressed(InputAction.NextWeapon))
+            if (Settings.InputMap.IsPressed(InputAction.NextWeapon))
             {
-                int prevWeapon = this.currentWeapon;
+                int prevWeapon = currentWeapon;
 
                 // Get the next weapon key
-                foreach (int key in this.weapons.Keys)
+                foreach (int key in weapons.Keys)
                 {
-                    if (key > this.currentWeapon)
+                    if (key > currentWeapon)
                     {
-                        this.currentWeapon = key;
+                        currentWeapon = key;
                         break;
                     }
                 }
 
                 // Was the previous weapon the last one?
-                if (this.currentWeapon == prevWeapon &&
-                    this.weapons.Count > 1)
+                if (currentWeapon == prevWeapon &&
+                    weapons.Count > 1)
                 {
                     // Get the weapon before the current one
-                    foreach (int key in this.weapons.Keys)
+                    foreach (int key in weapons.Keys)
                     {
-                        if (key < this.currentWeapon)
-                            this.currentWeapon = key;
+                        if (key < currentWeapon)
+                            currentWeapon = key;
                         else
                             break;
                     }
                 }
 
-                if (this.weapons[prevWeapon].IsFiring && this.weapons.Count > 1)
+                if (weapons[prevWeapon].IsFiring && weapons.Count > 1)
                 {
                     // Stop the previous weapon and start the next
-                    this.weapons[prevWeapon].Stop();
-                    this.weapons[this.currentWeapon].Start();
+                    weapons[prevWeapon].Stop();
+                    weapons[currentWeapon].Start();
                 }
             }
 
-            if (this.Settings.InputMap.IsPressed(InputAction.PreviousWeapon))
+            if (Settings.InputMap.IsPressed(InputAction.PreviousWeapon))
             {
                 // Get the weapon before the current one
-                int nextWeapon = this.currentWeapon;
-                foreach (int key in this.weapons.Keys)
+                int nextWeapon = currentWeapon;
+                foreach (int key in weapons.Keys)
                 {
-                    if (key < this.currentWeapon)
+                    if (key < currentWeapon)
                     {
                         nextWeapon = key;
                     }
@@ -202,47 +184,45 @@ public class Player : Actor
                 }
 
                 // Was the previous weapon the first one?
-                if (this.currentWeapon == nextWeapon &&
-                    this.weapons.Count > 1)
+                if (currentWeapon == nextWeapon &&
+                    weapons.Count > 1)
                 {
                     // Get the next weapon key
-                    foreach (int key in this.weapons.Keys)
+                    foreach (int key in weapons.Keys)
                     {
-                        if (key > this.currentWeapon)
+                        if (key > currentWeapon)
                         {
                             nextWeapon = key;
                         }
                     }
                 }
 
-                if (this.weapons[this.currentWeapon].IsFiring && this.weapons.Count > 1)
+                if (weapons[currentWeapon].IsFiring && weapons.Count > 1)
                 {
                     // Stop the previous weapon and start the next
-                    this.weapons[this.currentWeapon].Stop();
-                    this.weapons[nextWeapon].Start();
+                    weapons[currentWeapon].Stop();
+                    weapons[nextWeapon].Start();
                 }
 
-                this.currentWeapon = nextWeapon;
+                currentWeapon = nextWeapon;
             }
 
             // Should the weapon be firing or stopped firing
-            if (this.Settings.InputMap.IsPressed(InputAction.Shoot) &&
-                !this.weapons[this.currentWeapon].IsFiring)
-                this.weapons[this.currentWeapon].Start();
+            if (Settings.InputMap.IsPressed(InputAction.Shoot) &&
+                !weapons[currentWeapon].IsFiring)
+                weapons[currentWeapon].Start();
 
-            if (this.Settings.InputMap.IsReleased(InputAction.Shoot) &&
-                this.weapons[this.currentWeapon].IsFiring)
-                this.weapons[this.currentWeapon].Stop();
+            if (Settings.InputMap.IsReleased(InputAction.Shoot) &&
+                weapons[currentWeapon].IsFiring)
+                weapons[currentWeapon].Stop();
         }
-
-    #region Weapon control
 
     /// <summary>
     /// Clears the player's weapons.
     /// </summary>
     public void ClearWeapons()
     {
-            this.weapons.Clear();
+            weapons.Clear();
         }
 
     /// <summary>
@@ -253,20 +233,20 @@ public class Player : Actor
     public void AddWeapon(Weapon weapon)
     {
             // First weapon
-            if (this.weapons.Count == 0)
-                this.currentWeapon = weapon.WeaponID;
+            if (weapons.Count == 0)
+                currentWeapon = weapon.WeaponID;
 
             // Keep only the ammo if the player already has a weapon of the same type
-            if (this.weapons.ContainsKey(weapon.WeaponID))
-                this.weapons[weapon.WeaponID].AmmoCount += weapon.AmmoCount;
+            if (weapons.ContainsKey(weapon.WeaponID))
+                weapons[weapon.WeaponID].AmmoCount += weapon.AmmoCount;
             else
             {
-                this.weapons.Add(weapon.WeaponID, weapon);
+                weapons.Add(weapon.WeaponID, weapon);
                 weapon.Player = this;
 
                 // Switch to weapon if it's better than the current one
-                if (weapon.WeaponID > this.currentWeapon)
-                    this.currentWeapon = weapon.WeaponID;
+                if (weapon.WeaponID > currentWeapon)
+                    currentWeapon = weapon.WeaponID;
             }
         }
 
@@ -281,18 +261,18 @@ public class Player : Actor
             // during the last level and should be removed. Also
             // weapons with infinite ammo should only be picked up once
             // and therefor removed when the player dies on the same level
-            if (this.weapons.ContainsKey(weaponID) &&
-                (this.weapons[weaponID].AmmoMemory == 0 ||
-                this.weapons[weaponID].InfiniteAmmo))
+            if (weapons.ContainsKey(weaponID) &&
+                (weapons[weaponID].AmmoMemory == 0 ||
+                weapons[weaponID].InfiniteAmmo))
             {
-                this.weapons.Remove(weaponID);
+                weapons.Remove(weaponID);
 
                 // If the removed weapon was the currently selected one a new key
                 // must be found
-                if (this.currentWeapon == weaponID)
-                    foreach (int weapon in this.weapons.Keys)
+                if (currentWeapon == weaponID)
+                    foreach (int weapon in weapons.Keys)
                     {
-                        this.currentWeapon = weapon;
+                        currentWeapon = weapon;
                         break;
                     }
             }
@@ -304,144 +284,133 @@ public class Player : Actor
             base.Update(gameTime);
 
             // Update invincibility flicker
-            if (this.invincibleTime > 0)
+            if (invincibleTime > 0)
             {
-                this.invincibleTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                this.flickerInterval -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                invincibleTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                flickerInterval -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (this.invincibleTime < 0)
-                    this.visible = true;
-                else if (this.flickerInterval <= 0)
+                if (invincibleTime < 0)
+                    visible = true;
+                else if (flickerInterval <= 0)
                 {
-                    if (this.invincibleTime > 0)
+                    if (invincibleTime > 0)
                     {
-                        this.visible = !this.visible;
-                        this.flickerInterval = DEFAULT_FLICKER_INTERVAL;
+                        visible = !visible;
+                        flickerInterval = DEFAULT_FLICKER_INTERVAL;
                     }
                     else
-                        this.visible = true;
+                        visible = true;
                 }
             }
 
-            if (this.weapons.ContainsKey(this.currentWeapon))
-                this.weapons[this.currentWeapon].Update(gameTime);
+            if (weapons.ContainsKey(currentWeapon))
+                weapons[currentWeapon].Update(gameTime);
         }
 
     public void StoreWeaponAmmoCount()
     {
-            foreach (Weapon weapon in this.weapons.Values)
+            foreach (Weapon weapon in weapons.Values)
                 weapon.StoreAmmoCount();
         }
 
     public void ApplyStoredWeaponAmmoCount()
     {
-            foreach (Weapon weapon in this.weapons.Values)
+            foreach (Weapon weapon in weapons.Values)
                 weapon.ApplyStoredAmmoCount();
         }
 
-    #endregion
-
     public void Kill()
     {
-            if (!this.visible)
-                this.visible = true;
+            if (!visible)
+                visible = true;
 
             // Stop the player's motion in X
-            this.Velocity *= Vector2.UnitY;
+            Velocity *= Vector2.UnitY;
 
             // Stop firing if needed
-            if (this.weapons.ContainsKey(this.currentWeapon) &&
-                this.weapons[this.currentWeapon].IsFiring)
-                this.weapons[this.currentWeapon].Stop();
+            if (weapons.ContainsKey(currentWeapon) &&
+                weapons[currentWeapon].IsFiring)
+                weapons[currentWeapon].Stop();
         }
 
-    #region ICollisionObject members
-
-    public override ObjectType Type
-    {
-        get { return ObjectType.Player; }
-    }
+    public override ObjectType Type => ObjectType.Player;
 
     public override void TakeDamage(float damageLevel)
     {
             // Invincible?
-            if (this.invincibleTime > 0)
+            if (invincibleTime > 0)
                 return;
 
             // Decreaes health
-            this.Health -= damageLevel;
+            Health -= damageLevel;
 
             // Decrease life count if the player died
-            if (this.Health <= 0)
+            if (Health <= 0)
             {
-                this.Kill();
+                Kill();
             }
             else
-                this.invincibleTime = DEFAULT_INVINCIBLE_TIME;
+                invincibleTime = DEFAULT_INVINCIBLE_TIME;
         }
 
     public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
     {
             if (collidedObject.Type == ObjectType.Tile)
             {
-                this.Position = position;
-                this.Velocity = velocity;
+                Position = position;
+                Velocity = velocity;
 
                 // TODO: Fix so that player can't shoot through walls
 
             }
         }
 
-    #endregion
-
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-            if (!this.visible)
+            if (!visible)
                 return;
 
             // Draw player
             base.Draw(spriteBatch, offsetPosition);
 
             // Draw weapon
-            if (this.weapons.Count != 0 &&
-                this.weapons.ContainsKey(this.currentWeapon) &&
-                this.CurrentAnimationType != (int)ActorAnimation.Die &&
-                this.CurrentAnimationType != (int)ActorAnimation.Win)
-                this.weapons[this.currentWeapon].Draw(spriteBatch, offsetPosition, this.SpriteFlip);
+            if (weapons.Count != 0 &&
+                weapons.ContainsKey(currentWeapon) &&
+                CurrentAnimationType != (int)ActorAnimation.Die &&
+                CurrentAnimationType != (int)ActorAnimation.Win)
+                weapons[currentWeapon].Draw(spriteBatch, offsetPosition, SpriteFlip);
         }
-
-    #region Session management
 
     public void NewSession()
     {
-            this.weapons.Clear();
+            weapons.Clear();
 
-            this.invincibleTime = 0;
-            this.flickerInterval = DEFAULT_FLICKER_INTERVAL;
-            this.visible = true;
+            invincibleTime = 0;
+            flickerInterval = DEFAULT_FLICKER_INTERVAL;
+            visible = true;
         }
 
     public void LoadSession(GameSession session, WeaponBank weaponBank)
     {
-            this.CurrentAnimationType = 0;
+            CurrentAnimationType = 0;
 
-            this.invincibleTime = 0;
-            this.flickerInterval = DEFAULT_FLICKER_INTERVAL;
-            this.visible = true;
+            invincibleTime = 0;
+            flickerInterval = DEFAULT_FLICKER_INTERVAL;
+            visible = true;
 
             // Setup player
-            this.Position = session.PlayerValues.Position;
-            this.Velocity = session.PlayerValues.Velocity;
-            this.Acceleration = session.PlayerValues.Acceleration;
+            Position = session.PlayerValues.Position;
+            Velocity = session.PlayerValues.Velocity;
+            Acceleration = session.PlayerValues.Acceleration;
 
-            this.Health = session.PlayerHealth;
+            Health = session.PlayerHealth;
 
             // Clear previous weapons
-            if (this.weapons.Count > 0)
-                this.weapons.Clear();
+            if (weapons.Count > 0)
+                weapons.Clear();
 
             // Set the current weapon
-            this.currentWeapon = session.SelectedWeapon;
+            currentWeapon = session.SelectedWeapon;
 
             // Load in weapons and ammo
             foreach (int weaponID in session.WeaponSaves.Keys)
@@ -457,26 +426,24 @@ public class Player : Actor
 
                 weapon.Player = this;
 
-                this.weapons.Add(weapon.WeaponID, weapon);
+                weapons.Add(weapon.WeaponID, weapon);
             }
         }
 
     public void SaveSession(GameSession session)
     {
             ActorStartValues playerValues = new ActorStartValues();
-            playerValues.Position = this.Position;
-            playerValues.Velocity = this.Velocity;
-            playerValues.Acceleration = this.Acceleration;
+            playerValues.Position = Position;
+            playerValues.Velocity = Velocity;
+            playerValues.Acceleration = Acceleration;
 
             session.PlayerValues = playerValues;
-            session.PlayerHealth = this.Health;
+            session.PlayerHealth = Health;
 
             // Weapons
-            session.SelectedWeapon = this.currentWeapon;
+            session.SelectedWeapon = currentWeapon;
 
-            foreach (int weaponID in this.weapons.Keys)
-                session.WeaponSaves.Add(weaponID, new WeaponSave(this.weapons[weaponID].AmmoCount, this.weapons[weaponID].AmmoMemory));
+            foreach (int weaponID in weapons.Keys)
+                session.WeaponSaves.Add(weaponID, new WeaponSave(weapons[weaponID].AmmoCount, weapons[weaponID].AmmoMemory));
         }
-
-    #endregion
 }

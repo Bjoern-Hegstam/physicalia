@@ -12,29 +12,27 @@ class GamePadInputMap : InputMap
 
     public GamePadInputMap()
     {
-        this.buttons = new Dictionary<InputAction, Buttons>();
+        buttons = new Dictionary<InputAction, Buttons>();
     }
-
-    #region InputMap Members
 
     public override bool IsPressed(InputAction action)
     {
-        return this.InputHandler.IsPressed(PlayerIndex.One, this.buttons[action]);
+        return InputHandler.IsPressed(PlayerIndex.One, buttons[action]);
     }
 
     public override bool IsHolding(InputAction action)
     {
-        return this.InputHandler.IsHolding(PlayerIndex.One, this.buttons[action]);
+        return InputHandler.IsHolding(PlayerIndex.One, buttons[action]);
     }
 
     public override bool IsReleased(InputAction action)
     {
-        return this.InputHandler.IsReleased(PlayerIndex.One, this.buttons[action]);
+        return InputHandler.IsReleased(PlayerIndex.One, buttons[action]);
     }
 
     public override void SetButton(InputAction action, int button)
     {
-        this.buttons[action] = (Buttons)button;
+        buttons[action] = (Buttons)button;
     }
 
     public override void LoadXml(string path)
@@ -54,11 +52,9 @@ class GamePadInputMap : InputMap
                     InputAction action = (InputAction)Enum.Parse(typeof(InputAction), reader.GetAttribute("action"));
                     Buttons button = (Buttons)Enum.Parse(typeof(Buttons), reader.GetAttribute("value"));
 
-                    this.buttons[action] = button;
+                    buttons[action] = button;
                 }
             }
         }
     }
-
-    #endregion
 }
