@@ -34,19 +34,19 @@
 
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/build:Fonts/MainMenu.spritefont
+/build:Fonts/MainMenuFont.spritefont
 
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/build:Fonts/PauseMenu.spritefont
+/build:Fonts/PauseMenuFont.spritefont
 
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/build:Fonts/PlayerDead.spritefont
+/build:Fonts/PlayerDeadFont.spritefont
 
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/build:Fonts/WeaponAmmo.spritefont
+/build:Fonts/WeaponAmmoFont.spritefont
 
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -55,4 +55,3 @@
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /build:Fonts/WorldQuoteFont.spritefont
-
