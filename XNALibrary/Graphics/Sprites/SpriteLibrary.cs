@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Services;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.Sprites;
 
@@ -25,7 +21,7 @@ public class SpriteLibrary : ISpriteLibrary
     /// </summary>
     public Dictionary<int, Sprite> Sprites
     {
-        get { return this.sprites; }
+        get { return sprites; }
     }
 
     /// <summary>
@@ -35,7 +31,7 @@ public class SpriteLibrary : ISpriteLibrary
     {
         this.textureLibrary = textureLibrary;
 
-        this.sprites = new Dictionary<int, Sprite>();
+        sprites = new Dictionary<int, Sprite>();
     }
 
     /// <summary>
@@ -47,7 +43,7 @@ public class SpriteLibrary : ISpriteLibrary
     /// <param name="sprite">Sprite to add.</param>
     public void AddSprite(int key, Sprite sprite)
     {
-        this.sprites.Add(key, sprite);
+        sprites.Add(key, sprite);
     }
 
     /// <summary>
@@ -56,8 +52,8 @@ public class SpriteLibrary : ISpriteLibrary
     /// <param name="key"></param>
     public void RemoveSprite(int key)
     {
-        if (this.sprites.ContainsKey(key))
-            this.sprites.Remove(key);
+        if (sprites.ContainsKey(key))
+            sprites.Remove(key);
     }
 
     /// <summary>
@@ -67,7 +63,7 @@ public class SpriteLibrary : ISpriteLibrary
     /// <returns>The desired Sprite if it's found.</returns>
     public Sprite GetSprite(int key)
     {
-        return this.sprites[key];
+        return sprites[key];
     }
 
     /// <summary>
@@ -88,7 +84,7 @@ public class SpriteLibrary : ISpriteLibrary
 
         using (XmlReader reader = XmlReader.Create(path, settings))
         {
-            this.LoadXml(reader);
+            LoadXml(reader);
         }
     }
 
@@ -107,7 +103,7 @@ public class SpriteLibrary : ISpriteLibrary
                 int width = int.Parse(reader.GetAttribute(4));
                 int height = int.Parse(reader.GetAttribute(5));
 
-                this.sprites.Add(id, new Sprite(this.textureLibrary[textureKey], new Rectangle(x, y, width, height)));
+                sprites.Add(id, new Sprite(textureLibrary[textureKey], new Rectangle(x, y, width, height)));
             }
 
             // End of SpriteLibrary element

@@ -2,17 +2,15 @@ using System;
 
 namespace PhysicaliaRemastered;
 
-static class Program
+internal static class Program
 {
     /// <summary>
     /// The main entry point for the application.
     /// </summary>
     [STAThread]
-    static void Main(string[] args)
+    private static void Main()
     {
-            using (PhysicaliaGame game = new PhysicaliaGame())
-            {
-                game.Run();
-            }
-        }
+        using PhysicaliaGame game = new PhysicaliaGame();
+        game.Run();
+    }
 }

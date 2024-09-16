@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary;
+using PhysicaliaRemastered.ActiveObjects;
+using PhysicaliaRemastered.Actors;
+using PhysicaliaRemastered.Actors.EnemyManagement;
+using PhysicaliaRemastered.Graphics;
+using PhysicaliaRemastered.Input;
+using PhysicaliaRemastered.Pickups;
+using PhysicaliaRemastered.Weapons;
 using XNALibrary.Graphics;
-using XNALibrary.Services;
-using Physicalia.Pickups;
-using Physicalia.Input;
-using System.Xml;
-using Physicalia.Weapons;
-using Physicalia.Pickups.Modifiers;
+using XNALibrary.Graphics.Sprites;
+using XNALibrary.Graphics.TileEngine;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.GameManagement;
 
@@ -51,13 +54,13 @@ public class Level
 
     public LevelState State
     {
-        get { return this.state; }
+        get { return state; }
     }
 
     public LevelState NextState
     {
-        get { return this.nextState; }
-        set { this.nextState = value; }
+        get { return nextState; }
+        set { nextState = value; }
     }
 
     // View
@@ -84,126 +87,126 @@ public class Level
 
     public int WorldIndex
     {
-        get { return this.worldIndex; }
-        set { this.worldIndex = value; }
+        get { return worldIndex; }
+        set { worldIndex = value; }
     }
 
     public int LevelIndex
     {
-        get { return this.levelIndex; }
-        set { this.levelIndex = value; }
+        get { return levelIndex; }
+        set { levelIndex = value; }
     }
 
     public Player Player
     {
-        get { return this.player; }
-        set { this.player = value; }
+        get { return player; }
+        set { player = value; }
     }
 
     public IAnimationManager AnimationManager
     {
-        get { return this.animationManager; }
-        set { this.animationManager = value; }
+        get { return animationManager; }
+        set { animationManager = value; }
     }
 
     public ISpriteLibrary SpriteLibrary
     {
-        get { return this.spriteLibrary; }
-        set { this.spriteLibrary = value; }
+        get { return spriteLibrary; }
+        set { spriteLibrary = value; }
     }
 
     public IParticleEngine ParticleEngine
     {
-        get { return this.particleEngine; }
-        set { this.particleEngine = value; }
+        get { return particleEngine; }
+        set { particleEngine = value; }
     }
 
     public ISettings Settings
     {
-        get { return this.settings; }
+        get { return settings; }
     }
 
     public EnemyManager EnemyManager
     {
-        get { return this.enemyManager; }
-        set { this.enemyManager = value; }
+        get { return enemyManager; }
+        set { enemyManager = value; }
     }
 
     public ScreenSampler ScreenSampler
     {
-        get { return this.screenSampler; }
+        get { return screenSampler; }
     }
 
     public Level(Game game, Player player)
     {
         this.game = game;
 
-        this.backgrounds = new List<BackgroundLayer>();
+        backgrounds = new List<BackgroundLayer>();
 
         // Get needed services
-        this.settings = (ISettings)game.Services.GetService(typeof(ISettings));
-        this.animationManager = (IAnimationManager)game.Services.GetService(typeof(IAnimationManager));
-        this.spriteLibrary = (ISpriteLibrary)game.Services.GetService(typeof(ISpriteLibrary));
-        this.enemyManager = new EnemyManager((IEnemyBank)this.game.Services.GetService(typeof(IEnemyBank)));
-        this.weaponBank = (IWeaponBank)this.game.Services.GetService(typeof(IWeaponBank));
-        this.modifierLibrary = (IPickupLibrary)this.game.Services.GetService(typeof(IPickupLibrary));
+        settings = (ISettings)game.Services.GetService(typeof(ISettings));
+        animationManager = (IAnimationManager)game.Services.GetService(typeof(IAnimationManager));
+        spriteLibrary = (ISpriteLibrary)game.Services.GetService(typeof(ISpriteLibrary));
+        enemyManager = new EnemyManager((IEnemyBank)this.game.Services.GetService(typeof(IEnemyBank)));
+        weaponBank = (IWeaponBank)this.game.Services.GetService(typeof(IWeaponBank));
+        modifierLibrary = (IPickupLibrary)this.game.Services.GetService(typeof(IPickupLibrary));
 
         this.player = player;
-        this.playerStartValues = new ActorStartValues();
-        this.nextState = this.state = LevelState.Start;
-        this.particleEngine = (IParticleEngine)game.Services.GetService(typeof(IParticleEngine));
-        this.screenSampler = new ScreenSampler(game, 0, 0, this.game.GraphicsDevice.Viewport.Width, this.game.GraphicsDevice.Viewport.Height);
-        this.tileEngines = new List<TileEngine>();
-        this.modifiers = new List<ModifierPickup>();
+        playerStartValues = new ActorStartValues();
+        nextState = state = LevelState.Start;
+        particleEngine = (IParticleEngine)game.Services.GetService(typeof(IParticleEngine));
+        screenSampler = new ScreenSampler(game, 0, 0, this.game.GraphicsDevice.Viewport.Width, this.game.GraphicsDevice.Viewport.Height);
+        tileEngines = new List<TileEngine>();
+        modifiers = new List<ModifierPickup>();
 
-        this.activeObjects = new List<ActiveObject>();
-        this.inactiveObjects = new List<ActiveObject>();
+        activeObjects = new List<ActiveObject>();
+        inactiveObjects = new List<ActiveObject>();
     }
 
     public void Update(GameTime gameTime)
     {
         // Switch based on current state
-        switch (this.state)
+        switch (state)
         {
             case LevelState.Start:
-                if (this.settings.InputMap.IsPressed(InputAction.MenuStart))
-                    this.nextState = LevelState.Playing;
+                if (settings.InputMap.IsPressed(InputAction.MenuStart))
+                    nextState = LevelState.Playing;
                 break;
             case LevelState.Playing:
-                this.UpdateLevel(gameTime);
-                this.CheckCollisions();
-                this.player.HandleInput();
-                this.UpdateAnimations();
+                UpdateLevel(gameTime);
+                CheckCollisions();
+                player.HandleInput();
+                UpdateAnimations();
 
                 // See if the player has fallen out of the level
-                if (this.PlayerOutsideLevel())
+                if (PlayerOutsideLevel())
                 {
-                    this.player.Kill();
+                    player.Kill();
 
                     // Do a little jump into screen
-                    this.player.Velocity = new Vector2(0, this.player.JumpMagnitude * Math.Sign(this.player.Acceleration.Y));
-                    this.nextState = LevelState.Dead;
+                    player.Velocity = new Vector2(0, player.JumpMagnitude * Math.Sign(player.Acceleration.Y));
+                    nextState = LevelState.Dead;
                 }
 
                 // Check if the player's died
-                if (this.player.Health <= 0)
+                if (player.Health <= 0)
                 {
-                    this.player.CanCollide = false;
-                    this.player.Velocity = new Vector2(0, this.player.JumpMagnitude * Math.Sign(this.player.Acceleration.Y));
+                    player.CanCollide = false;
+                    player.Velocity = new Vector2(0, player.JumpMagnitude * Math.Sign(player.Acceleration.Y));
 
-                    this.nextState = LevelState.Dead;
+                    nextState = LevelState.Dead;
                 }
                 break;
             case LevelState.Dead:
                 // Continue updating the Level after death, just don't check input
-                this.UpdateLevel(gameTime);
-                this.CheckCollisions();
-                this.UpdateAnimations();
+                UpdateLevel(gameTime);
+                CheckCollisions();
+                UpdateAnimations();
 
                 // Don't let the player continue falling if it's outside of the level (i.e. falling)
                 if (player.Velocity != Vector2.Zero &&
-                    this.PlayerOffScreen() &&
-                    this.player.Velocity.Y / this.player.Acceleration.Y > 0)
+                    PlayerOffScreen() &&
+                    player.Velocity.Y / player.Acceleration.Y > 0)
                 {
                     player.Velocity = Vector2.Zero;
                     player.Acceleration = Vector2.Zero;
@@ -211,42 +214,40 @@ public class Level
                 break;
             case LevelState.Finished:
                 // Don't let the player continue falling if it's outside of the level (i.e. falling)
-                if (this.player.Velocity != Vector2.Zero &&
-                    this.PlayerOffScreen() &&
-                    this.player.Velocity.Y / this.player.Acceleration.Y > 0)
+                if (player.Velocity != Vector2.Zero &&
+                    PlayerOffScreen() &&
+                    player.Velocity.Y / player.Acceleration.Y > 0)
                 {
-                    this.player.Velocity = Vector2.Zero;
-                    this.player.Acceleration = Vector2.Zero;
+                    player.Velocity = Vector2.Zero;
+                    player.Acceleration = Vector2.Zero;
                 }
 
                 // Slow down the player's movement in X if needed
-                if (this.player.Velocity.X != 0)
+                if (player.Velocity.X != 0)
                 {
-                    this.player.Velocity *= new Vector2(PLAYER_FINISH_SLOWDOWN, 1F);
+                    player.Velocity *= new Vector2(PLAYER_FINISH_SLOWDOWN, 1F);
 
                     // Set velocity to zero if it's very close
-                    if (this.player.Velocity.X > -1 && this.player.Velocity.X < 1)
-                        this.player.Velocity *= Vector2.UnitY;
+                    if (player.Velocity.X > -1 && player.Velocity.X < 1)
+                        player.Velocity *= Vector2.UnitY;
                 }
 
-                this.UpdateLevel(gameTime);
-                this.CheckCollisions();
-                this.UpdateAnimations();
-                break;
-            default:
+                UpdateLevel(gameTime);
+                CheckCollisions();
+                UpdateAnimations();
                 break;
         }
 
         // Should the state be changed?
-        if (this.nextState != this.state)
-            this.ChangeState();
+        if (nextState != state)
+            ChangeState();
     }
 
     public void LoadXml(string path, ITileLibrary tileLibrary)
     {
-        using (System.Xml.XmlReader reader = System.Xml.XmlReader.Create(path))
+        using (XmlReader reader = XmlReader.Create(path))
         {
-            this.LoadXml(reader, tileLibrary);
+            LoadXml(reader, tileLibrary);
         }
     }
 
@@ -260,21 +261,21 @@ public class Level
                 int width = int.Parse(reader.GetAttribute("width"));
                 int height = int.Parse(reader.GetAttribute("height"));
 
-                this.screenSampler.MaxWidth = width;
-                this.screenSampler.MaxHeight = height;
+                screenSampler.MaxWidth = width;
+                screenSampler.MaxHeight = height;
             }
 
-            if (reader.NodeType == System.Xml.XmlNodeType.Element &&
+            if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "PlayerStart")
-                this.playerStartValues = ActorStartValues.FromXml(reader, "PlayerStart");
+                playerStartValues = ActorStartValues.FromXml(reader, "PlayerStart");
 
-            if (reader.NodeType == System.Xml.XmlNodeType.Element &&
+            if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Enemies")
-                this.LoadEnemies(reader);
+                LoadEnemies(reader);
 
-            if (reader.NodeType == System.Xml.XmlNodeType.Element &&
+            if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "ActiveObjects")
-                this.LoadActiveObjects(reader);
+                LoadActiveObjects(reader);
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Background")
@@ -284,7 +285,7 @@ public class Level
                 string loopString = reader.GetAttribute("loop");
                 bool loopX = loopString.Contains("x"); bool loopY = loopString.Contains("y");
 
-                Sprite sprite = this.spriteLibrary.GetSprite(spriteKey);
+                Sprite sprite = spriteLibrary.GetSprite(spriteKey);
                 BackgroundLayer background = new BackgroundLayer(sprite, depth);
                 background.LoopX = loopX; background.LoopY = loopY;
 
@@ -296,17 +297,17 @@ public class Level
                     background.StartPosition = new Vector2(x, y);
                 }
 
-                this.backgrounds.Add(background);
+                backgrounds.Add(background);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Backgrounds")
             {
-                this.backgrounds.Sort(BackgroundLayer.Compare);
+                backgrounds.Sort(BackgroundLayer.Compare);
             }
 
             // TileEngines?
-            if (reader.NodeType == System.Xml.XmlNodeType.Element &&
+            if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "TileEngines")
             {
                 int engineCount = int.Parse(reader.GetAttribute("count"));
@@ -314,9 +315,9 @@ public class Level
                 for (int i = 0; i < engineCount; i++)
                 {
                     // Add a new TileEngine
-                    this.tileEngines.Add(new TileEngine(tileLibrary, 32, 32));
+                    tileEngines.Add(new TileEngine(tileLibrary, 32, 32));
 
-                    TileEngine tileEngine = this.tileEngines[i];
+                    TileEngine tileEngine = tileEngines[i];
 
                     // Setup the new TileEngine
                     tileEngine.LoadXml(reader);
@@ -346,7 +347,7 @@ public class Level
                 int height = int.Parse(reader.GetAttribute("height"));
                 Rectangle patrolArea = new Rectangle(x, y, width, height);
 
-                this.enemyManager.EnqueueEnemy(type, startValues, patrolArea);
+                enemyManager.EnqueueEnemy(type, startValues, patrolArea);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -369,7 +370,7 @@ public class Level
                 if (reader.IsEmptyElement)
                     continue;
 
-                this.LoadWeapons(reader);
+                LoadWeapons(reader);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
@@ -378,7 +379,7 @@ public class Level
                 if (reader.IsEmptyElement)
                     continue;
 
-                this.LoadPickups(reader);
+                LoadPickups(reader);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
@@ -387,7 +388,7 @@ public class Level
                 int x = int.Parse(reader.GetAttribute("x"));
                 int y = int.Parse(reader.GetAttribute("y"));
 
-                Sprite triggerSprite = this.spriteLibrary.GetSprite(-1);
+                Sprite triggerSprite = spriteLibrary.GetSprite(-1);
                 EndLevelTrigger trigger = new EndLevelTrigger(this, triggerSprite);
 
                 PickupContainer cont = new PickupContainer(trigger);
@@ -396,7 +397,7 @@ public class Level
                 cont.CanCollide = true;
                 cont.IsActive = false;
 
-                this.EnqueueActiveObject(cont);
+                EnqueueActiveObject(cont);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -413,7 +414,7 @@ public class Level
                 reader.LocalName == "Weapon")
             {
                 int key = int.Parse(reader.GetAttribute("key"));
-                Weapon weapon = this.weaponBank.GetWeapon(key);
+                Weapon weapon = weaponBank.GetWeapon(key);
 
                 WeaponPickup weaponPickup = new WeaponPickup(this, weapon);
                 PickupContainer pickupCont = new PickupContainer(weaponPickup);
@@ -430,7 +431,7 @@ public class Level
                 int height = int.Parse(reader.GetAttribute("height"));
                 pickupCont.CollisionBox = new Rectangle(xBox, yBox, width, height);
 
-                this.EnqueueActiveObject(pickupCont);
+                EnqueueActiveObject(pickupCont);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -450,13 +451,13 @@ public class Level
                 int x = int.Parse(reader.GetAttribute("x"));
                 int y = int.Parse(reader.GetAttribute("y"));
 
-                Pickup pickup = this.modifierLibrary.GetPickup(key);
+                Pickup pickup = modifierLibrary.GetPickup(key);
                 pickup.Level = this;
 
                 PickupContainer cont = new PickupContainer(pickup);
                 cont.Position = new Vector2(x, y);
                 cont.CollisionBox = new Rectangle(0, 0, pickup.Sprite.SourceRectangle.Width, pickup.Sprite.SourceRectangle.Height);
-                this.EnqueueActiveObject(cont);
+                EnqueueActiveObject(cont);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -471,41 +472,41 @@ public class Level
     public void Reset()
     {
         // Reset background layers
-        foreach (BackgroundLayer background in this.backgrounds)
+        foreach (BackgroundLayer background in backgrounds)
             background.Position = background.StartPosition;
 
         // Reset enemies
-        this.enemyManager.Reset();
+        enemyManager.Reset();
 
         // Set and apply the start values of the player
-        this.player.StartValues = this.playerStartValues;
-        this.player.ApplyStartValues();
-        this.player.CanCollide = true;
-        this.player.CanTakeDamage = true;
+        player.StartValues = playerStartValues;
+        player.ApplyStartValues();
+        player.CanCollide = true;
+        player.CanTakeDamage = true;
 
-        this.player.Health = this.settings.PlayerStartHealth;
+        player.Health = settings.PlayerStartHealth;
 
         // Retrive the ammo count the player's weapons had at the start of the level
-        this.player.ApplyStoredWeaponAmmoCount();
+        player.ApplyStoredWeaponAmmoCount();
 
         // Set the start position of the screen sampler
-        this.screenSampler.Position = Vector2.Zero;
+        screenSampler.Position = Vector2.Zero;
 
-        while (this.activeObjects.Count > 0)
+        while (activeObjects.Count > 0)
         {
-            this.activeObjects[0].Reset();
-            this.EnqueueActiveObject(this.activeObjects[0]);
-            this.activeObjects.RemoveAt(0);
+            activeObjects[0].Reset();
+            EnqueueActiveObject(activeObjects[0]);
+            activeObjects.RemoveAt(0);
         }
 
         // Clear out any modifiers
-        this.modifiers.Clear();
+        modifiers.Clear();
 
         // Set the state of the level
-        this.nextState = this.state = LevelState.Start;
+        nextState = state = LevelState.Start;
 
         // Run a check so that any objects that's on screen is activated
-        this.ActivateObjects();
+        ActivateObjects();
     }
 
     /// <summary>
@@ -516,31 +517,31 @@ public class Level
     public void SoftReset()
     {
         // Reset background layers
-        foreach (BackgroundLayer background in this.backgrounds)
+        foreach (BackgroundLayer background in backgrounds)
             background.Position = background.StartPosition;
 
         // Reset enemies
-        this.enemyManager.Reset();
+        enemyManager.Reset();
 
-        this.player.CanCollide = true;
-        this.player.CanTakeDamage = true;
+        player.CanCollide = true;
+        player.CanTakeDamage = true;
 
         // Set the start position of the screen sampler
-        this.screenSampler.Position = Vector2.Zero;
+        screenSampler.Position = Vector2.Zero;
 
-        while (this.activeObjects.Count > 0)
+        while (activeObjects.Count > 0)
         {
-            this.activeObjects[0].Reset();
-            this.EnqueueActiveObject(this.activeObjects[0]);
-            this.activeObjects.RemoveAt(0);
+            activeObjects[0].Reset();
+            EnqueueActiveObject(activeObjects[0]);
+            activeObjects.RemoveAt(0);
         }
 
         // Clear out any modifiers
-        this.modifiers.Clear();
+        modifiers.Clear();
 
         // Run a check so that any objects that's on screen is activated
-        this.ActivateObjects();
-        this.enemyManager.ActivateVisible(this.screenSampler.ScreenRectangle);
+        ActivateObjects();
+        enemyManager.ActivateVisible(screenSampler.ScreenRectangle);
     }
 
     /// <summary>
@@ -549,7 +550,7 @@ public class Level
     /// <param name="modifier">The modifier to add.</param>
     public void AddModifier(ModifierPickup modifier)
     {
-        this.modifiers.Add(modifier);
+        modifiers.Add(modifier);
     }
 
     /// <summary>
@@ -558,7 +559,7 @@ public class Level
     /// <param name="obj">ActiveObject to add.</param>
     public void AddActiveObject(ActiveObject obj)
     {
-        this.activeObjects.Add(obj);
+        activeObjects.Add(obj);
     }
 
     /// <summary>
@@ -567,7 +568,7 @@ public class Level
     /// <param name="obj">ActiveObject to enqueue.</param>
     public void EnqueueActiveObject(ActiveObject obj)
     {
-        this.inactiveObjects.Add(obj);
+        inactiveObjects.Add(obj);
     }
 
     /// <summary>
@@ -576,43 +577,41 @@ public class Level
     /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
     public void Draw(SpriteBatch spriteBatch)
     {
-        switch (this.state)
+        switch (state)
         {
             case LevelState.Start:
-                string indexString = this.WorldIndex + " - " + this.levelIndex;
-                Vector2 indexStringSize = this.settings.LevelIndexFont.MeasureString(indexString);
+                string indexString = WorldIndex + " - " + levelIndex;
+                Vector2 indexStringSize = settings.LevelIndexFont.MeasureString(indexString);
                 Vector2 indexPosition = new Vector2();
-                indexPosition.X = (this.screenSampler.Width - indexStringSize.X) / 2;
-                indexPosition.Y = (this.screenSampler.Height - indexStringSize.Y) / 2;
+                indexPosition.X = (screenSampler.Width - indexStringSize.X) / 2;
+                indexPosition.Y = (screenSampler.Height - indexStringSize.Y) / 2;
 
-                spriteBatch.DrawString(this.settings.LevelIndexFont, indexString, indexPosition, Color.White);
+                spriteBatch.DrawString(settings.LevelIndexFont, indexString, indexPosition, Color.White);
                 break;
             case LevelState.Playing:
-                this.DrawLevel(spriteBatch);
+                DrawLevel(spriteBatch);
                 break;
             case LevelState.Dead:
-                this.DrawLevel(spriteBatch);
+                DrawLevel(spriteBatch);
 
                 String deadString = "You Have Died!";
-                Vector2 deadStringSize = this.settings.PlayerDeadFont.MeasureString(deadString);
+                Vector2 deadStringSize = settings.PlayerDeadFont.MeasureString(deadString);
                 Vector2 deadPos;
-                deadPos.X = (this.screenSampler.Width - deadStringSize.X) / 2;
-                deadPos.Y = (this.screenSampler.Width - deadStringSize.X) / 2;
+                deadPos.X = (screenSampler.Width - deadStringSize.X) / 2;
+                deadPos.Y = (screenSampler.Width - deadStringSize.X) / 2;
 
-                spriteBatch.DrawString(this.settings.PlayerDeadFont, deadString, deadPos, Color.White);
+                spriteBatch.DrawString(settings.PlayerDeadFont, deadString, deadPos, Color.White);
                 break;
             case LevelState.Finished:
-                this.DrawLevel(spriteBatch);
+                DrawLevel(spriteBatch);
 
                 String finishString = "Level Finished!";
-                Vector2 finishStringSize = this.settings.PlayerDeadFont.MeasureString(finishString);
+                Vector2 finishStringSize = settings.PlayerDeadFont.MeasureString(finishString);
                 Vector2 finishPos;
-                finishPos.X = (this.screenSampler.Width - finishStringSize.X) / 2;
-                finishPos.Y = (this.screenSampler.Width - finishStringSize.X) / 2;
+                finishPos.X = (screenSampler.Width - finishStringSize.X) / 2;
+                finishPos.Y = (screenSampler.Width - finishStringSize.X) / 2;
 
-                spriteBatch.DrawString(this.settings.PlayerDeadFont, finishString, finishPos, Color.White);
-                break;
-            default:
+                spriteBatch.DrawString(settings.PlayerDeadFont, finishString, finishPos, Color.White);
                 break;
         }
     }
@@ -623,54 +622,50 @@ public class Level
     /// </summary>
     private void ChangeState()
     {
-        switch (this.state)
+        switch (state)
         {
             case LevelState.Start:
                 break;
             case LevelState.Playing:
-                if (this.player.CurrentWeapon != null &&
-                    this.player.CurrentWeapon.IsFiring)
-                    this.player.CurrentWeapon.Stop();
+                if (player.CurrentWeapon != null &&
+                    player.CurrentWeapon.IsFiring)
+                    player.CurrentWeapon.Stop();
                 break;
             case LevelState.Dead:
                 break;
             case LevelState.Finished:
-                break;
-            default:
                 break;
         }
 
-        this.state = this.nextState;
+        state = nextState;
 
-        switch (this.nextState)
+        switch (nextState)
         {
             case LevelState.Start:
                 break;
             case LevelState.Playing:
                 // Store the current ammo count of the player's retrieved weapons
-                this.player.StoreWeaponAmmoCount();
+                player.StoreWeaponAmmoCount();
                 break;
             case LevelState.Dead:
                 break;
             case LevelState.Finished:
                 // Store the current ammo count of the player's retrieved weapons
-                this.player.StoreWeaponAmmoCount();
-                this.player.CurrentAnimationType = (int)ActorAnimation.Win;
+                player.StoreWeaponAmmoCount();
+                player.CurrentAnimationType = (int)ActorAnimation.Win;
 
-                this.player.CanTakeDamage = false;
-                break;
-            default:
+                player.CanTakeDamage = false;
                 break;
         }
     }
 
     private bool PlayerOffScreen()
     {
-        Rectangle playerRect = this.player.CurrentAnimation.SourceRectangle;
-        playerRect.X = (int)(this.player.Position.X - this.player.Origin.X);
-        playerRect.Y = (int)(this.player.Position.Y - this.player.Origin.Y);
+        Rectangle playerRect = player.CurrentAnimation.SourceRectangle;
+        playerRect.X = (int)(player.Position.X - player.Origin.X);
+        playerRect.Y = (int)(player.Position.Y - player.Origin.Y);
 
-        return !this.screenSampler.ScreenRectangle.Intersects(playerRect);
+        return !screenSampler.ScreenRectangle.Intersects(playerRect);
     }
 
     /// <summary>
@@ -682,12 +677,12 @@ public class Level
         bool result = false;
 
         Rectangle levelRect = new Rectangle();
-        levelRect.Width = this.screenSampler.MaxWidth;
-        levelRect.Height = this.screenSampler.MaxHeight;
+        levelRect.Width = screenSampler.MaxWidth;
+        levelRect.Height = screenSampler.MaxHeight;
 
-        Rectangle playerRect = this.player.CurrentAnimation.SourceRectangle;
-        playerRect.X = (int)(this.player.Position.X - this.player.Origin.X);
-        playerRect.Y = (int)(this.player.Position.Y - this.player.Origin.Y);
+        Rectangle playerRect = player.CurrentAnimation.SourceRectangle;
+        playerRect.X = (int)(player.Position.X - player.Origin.X);
+        playerRect.Y = (int)(player.Position.Y - player.Origin.Y);
 
         if (!levelRect.Intersects(playerRect))
         {
@@ -715,67 +710,67 @@ public class Level
         // Create a new GameTime variable with modified time
 
         // Player
-        this.player.Update(gameTime);
+        player.Update(gameTime);
 
         // Make sure the player's right and left edges are within the screen
 
         // Right edge
-        if (this.player.Position.X < this.player.Origin.X)
+        if (player.Position.X < player.Origin.X)
         {
-            this.player.Position *= Vector2.UnitY;
-            this.player.Position += new Vector2(this.player.Origin.X, 0);
+            player.Position *= Vector2.UnitY;
+            player.Position += new Vector2(player.Origin.X, 0);
         }
 
         // Left edge
-        if (this.player.Position.X - this.player.Origin.X + this.player.Width > this.screenSampler.MaxWidth)
+        if (player.Position.X - player.Origin.X + player.Width > screenSampler.MaxWidth)
         {
-            this.player.Position *= Vector2.UnitY;
-            this.player.Position += new Vector2(this.screenSampler.MaxWidth - this.player.Width + this.player.Origin.X, 0);
+            player.Position *= Vector2.UnitY;
+            player.Position += new Vector2(screenSampler.MaxWidth - player.Width + player.Origin.X, 0);
         }
 
         // EnemyManager
-        this.enemyManager.Update(gameTime, this.player, this.screenSampler.ScreenRectangle);
+        enemyManager.Update(gameTime, player, screenSampler.ScreenRectangle);
 
         // ParticleEngine
-        this.particleEngine.Update(gameTime);
+        particleEngine.Update(gameTime);
 
         // Modifiers
-        for (int i = this.modifiers.Count - 1; i >= 0; i--)
+        for (int i = modifiers.Count - 1; i >= 0; i--)
         {
             // Update modifier
-            this.modifiers[i].Update(gameTime);
+            modifiers[i].Update(gameTime);
 
             // Remove modifier if it's gone inactive
-            if (!this.modifiers[i].IsActive)
-                this.modifiers.RemoveAt(i);
+            if (!modifiers[i].IsActive)
+                modifiers.RemoveAt(i);
         }
 
         // Active ActiveObjects that are close to the screen.
-        this.ActivateObjects();
+        ActivateObjects();
 
         // Update all active ActiveObjects
-        for (int i = 0; i < this.activeObjects.Count; i++)
+        for (int i = 0; i < activeObjects.Count; i++)
         {
-            this.activeObjects[i].Update(gameTime);
+            activeObjects[i].Update(gameTime);
         }
 
-        this.UpdateScreenSampler();
+        UpdateScreenSampler();
     }
 
     private void UpdateScreenSampler()
     {
-        Vector2 positionDelta = this.screenSampler.Position;
+        Vector2 positionDelta = screenSampler.Position;
 
         // Only update the screen position if the player is still alive
-        if (this.player.Health > 0)
+        if (player.Health > 0)
         {
             // Update the position of the screen sampler
-            this.screenSampler.Position = this.player.Position - new Vector2(this.screenSampler.Width / 2, this.screenSampler.Height / 2);
+            screenSampler.Position = player.Position - new Vector2(screenSampler.Width / 2, screenSampler.Height / 2);
 
-            positionDelta -= this.screenSampler.Position;
+            positionDelta -= screenSampler.Position;
 
             // Background
-            foreach (BackgroundLayer background in this.backgrounds)
+            foreach (BackgroundLayer background in backgrounds)
                 background.Update(positionDelta);
         }
     }
@@ -786,16 +781,16 @@ public class Level
     /// </summary>
     private void ActivateObjects()
     {
-        Rectangle screenRect = new Rectangle((int)this.screenSampler.Position.X,
-            (int)this.screenSampler.Position.Y,
-            this.screenSampler.Width,
-            this.screenSampler.Height);
+        Rectangle screenRect = new Rectangle((int)screenSampler.Position.X,
+            (int)screenSampler.Position.Y,
+            screenSampler.Width,
+            screenSampler.Height);
 
         screenRect.Inflate(SCREEN_ACTIVATION_DISTANCE, SCREEN_ACTIVATION_DISTANCE);
 
-        for (int i = this.inactiveObjects.Count - 1; i >= 0; i--)
+        for (int i = inactiveObjects.Count - 1; i >= 0; i--)
         {
-            ActiveObject obj = this.inactiveObjects[i];
+            ActiveObject obj = inactiveObjects[i];
 
             // Get the collision box of the object
             Rectangle collBox = obj.CollisionBox;
@@ -810,8 +805,8 @@ public class Level
                 // Active the object
                 obj.IsActive = true;
                 // Add it to the list of activated objects
-                this.activeObjects.Add(obj);
-                this.inactiveObjects.RemoveAt(i);
+                activeObjects.Add(obj);
+                inactiveObjects.RemoveAt(i);
             }
         }
     }
@@ -823,30 +818,30 @@ public class Level
     private void CheckCollisions()
     {
         // Player -> EnemyManager
-        this.enemyManager.CheckCollisions(this.player);
+        enemyManager.CheckCollisions(player);
 
         // Actors -> ParticleEngine
-        this.particleEngine.CheckCollisions(this.player);
-        this.particleEngine.CheckCollisions(this.enemyManager.ActivatedEnemies);
+        particleEngine.CheckCollisions(player);
+        particleEngine.CheckCollisions(enemyManager.ActivatedEnemies);
 
         // Actors -> ActiveObjects
         // Particles -> ActiveObjects
-        for (int i = 0; i < this.activeObjects.Count; i++)
+        for (int i = 0; i < activeObjects.Count; i++)
         {
-            this.activeObjects[i].CheckCollision(this.player);
-            this.activeObjects[i].CheckCollisions(this.enemyManager.ActivatedEnemies);
-            this.activeObjects[i].CheckCollisions(this.particleEngine.Particles);
+            activeObjects[i].CheckCollision(player);
+            activeObjects[i].CheckCollisions(enemyManager.ActivatedEnemies);
+            activeObjects[i].CheckCollisions(particleEngine.Particles);
         }
 
         // ActiveObjects -> Particles
-        this.particleEngine.CheckCollisions(this.activeObjects.ToArray());
+        particleEngine.CheckCollisions(activeObjects.ToArray());
 
         // ICollisionObjects  -> TileEngine
-        for (int i = 0; i < this.tileEngines.Count; i++)
+        for (int i = 0; i < tileEngines.Count; i++)
         {
-            this.tileEngines[i].CheckCollision(this.player);
-            this.tileEngines[i].CheckCollisions(this.particleEngine.Particles);
-            this.tileEngines[i].CheckCollisions(this.enemyManager.ActivatedEnemies);
+            tileEngines[i].CheckCollision(player);
+            tileEngines[i].CheckCollisions(particleEngine.Particles);
+            tileEngines[i].CheckCollisions(enemyManager.ActivatedEnemies);
         }
     }
 
@@ -858,83 +853,83 @@ public class Level
     private void UpdateAnimations()
     {
         // Only update the player's animation if the game is being played
-        if (this.state == LevelState.Playing)
-            this.player.UpdateAnimation();
+        if (state == LevelState.Playing)
+            player.UpdateAnimation();
 
-        this.enemyManager.UpdateAnimations();
+        enemyManager.UpdateAnimations();
     }
 
     private void DrawLevel(SpriteBatch spriteBatch)
     {
         // Background
         int backgroundIndex;
-        for (backgroundIndex = 0; backgroundIndex < this.backgrounds.Count && this.backgrounds[backgroundIndex].Depth <= 1; backgroundIndex++)
-            this.backgrounds[backgroundIndex].Draw(spriteBatch, this.screenSampler);
+        for (backgroundIndex = 0; backgroundIndex < backgrounds.Count && backgrounds[backgroundIndex].Depth <= 1; backgroundIndex++)
+            backgrounds[backgroundIndex].Draw(spriteBatch, screenSampler);
 
         // TileEngine
-        for (int i = this.tileEngines.Count - 1; i >= 0; i--)
-            this.tileEngines[i].Draw(spriteBatch, this.screenSampler.Position);
+        for (int i = tileEngines.Count - 1; i >= 0; i--)
+            tileEngines[i].Draw(spriteBatch, screenSampler.Position);
 
         // ActiveObjects
-        for (int i = 0; i < this.activeObjects.Count; i++)
-            this.activeObjects[i].Draw(spriteBatch, this.screenSampler.Position);
+        for (int i = 0; i < activeObjects.Count; i++)
+            activeObjects[i].Draw(spriteBatch, screenSampler.Position);
 
         // Enemies
-        this.enemyManager.Draw(spriteBatch, this.screenSampler.Position);
+        enemyManager.Draw(spriteBatch, screenSampler.Position);
 
         // Player
-        this.player.Draw(spriteBatch, this.screenSampler.Position);
+        player.Draw(spriteBatch, screenSampler.Position);
 
         // ParticleEngine
-        this.particleEngine.Draw(spriteBatch, this.screenSampler.Position);
+        particleEngine.Draw(spriteBatch, screenSampler.Position);
 
         // Foreground
-        for (; backgroundIndex < this.backgrounds.Count; backgroundIndex++)
-            this.backgrounds[backgroundIndex].Draw(spriteBatch, this.screenSampler);
+        for (; backgroundIndex < backgrounds.Count; backgroundIndex++)
+            backgrounds[backgroundIndex].Draw(spriteBatch, screenSampler);
 
         // UI
-        this.DrawUI(spriteBatch);
+        DrawUI(spriteBatch);
     }
 
     private void DrawUI(SpriteBatch spriteBatch)
     {
         // HEALTH BAR
 
-        float playerHealthPercentage = this.player.Health / this.settings.PlayerStartHealth;
-        Rectangle fullHealthSource = this.settings.FullHealthUI.SourceRectangle;
+        float playerHealthPercentage = player.Health / settings.PlayerStartHealth;
+        Rectangle fullHealthSource = settings.FullHealthUI.SourceRectangle;
         // 48 is the start of the health indicator in x
         // 115 is the width of the health indicator
         fullHealthSource.Width = 48 + (int)(115 * playerHealthPercentage);
 
         // Draw empty health bar first
-        spriteBatch.Draw(this.settings.EmptyHealthUI.Texture,
+        spriteBatch.Draw(settings.EmptyHealthUI.Texture,
             Vector2.Zero,
-            this.settings.EmptyHealthUI.SourceRectangle,
+            settings.EmptyHealthUI.SourceRectangle,
             Color.White);
 
         // Draw the visible part of the full health bar
-        spriteBatch.Draw(this.settings.FullHealthUI.Texture,
+        spriteBatch.Draw(settings.FullHealthUI.Texture,
             Vector2.Zero,
             fullHealthSource,
             Color.White);
 
 
         // WORLD AND LEVEL NUMBERS
-        string indexString = this.worldIndex + " - " + this.levelIndex;
-        Vector2 indexSize = this.settings.LevelIndexFont.MeasureString(indexString);
+        string indexString = worldIndex + " - " + levelIndex;
+        Vector2 indexSize = settings.LevelIndexFont.MeasureString(indexString);
         Vector2 indexPos = new Vector2();
-        indexPos.X = (this.screenSampler.Width - indexSize.X) / 2;
+        indexPos.X = (screenSampler.Width - indexSize.X) / 2;
         indexPos.Y = UI_INDEX_POS_Y;
 
-        spriteBatch.DrawString(this.settings.LevelIndexFont, indexString, indexPos, Color.White);
+        spriteBatch.DrawString(settings.LevelIndexFont, indexString, indexPos, Color.White);
 
         // CURRENT WEAPON AND AMMONUTION COUNT
-        Weapon playerWeapon = this.player.CurrentWeapon;
+        Weapon playerWeapon = player.CurrentWeapon;
 
         if (playerWeapon != null)
         {
             // Ammo is drawn below the weapon sprite
-            Vector2 ammoPos = new Vector2(this.screenSampler.Width - 20, 0);
+            Vector2 ammoPos = new Vector2(screenSampler.Width - 20, 0);
 
             string ammoString;
             if (playerWeapon.InfiniteAmmo)
@@ -942,11 +937,11 @@ public class Level
             else
                 ammoString = playerWeapon.AmmoCount + " / " + playerWeapon.MaxAmmo;
 
-            Vector2 ammoStringSize = this.settings.LevelIndexFont.MeasureString(ammoString);
+            Vector2 ammoStringSize = settings.LevelIndexFont.MeasureString(ammoString);
             ammoPos.X -= ammoStringSize.X;
 
             // Draw ammo
-            spriteBatch.DrawString(this.settings.LevelIndexFont, ammoString, ammoPos, Color.White);
+            spriteBatch.DrawString(settings.LevelIndexFont, ammoString, ammoPos, Color.White);
 
             Vector2 weaponPos = new Vector2(470, 5);
             Sprite weaponSprite = playerWeapon.WeaponSprite;
@@ -959,57 +954,57 @@ public class Level
 
         // MODIFIERS
         // A little extra spacing is added (5 px)
-        Vector2 modifierPos = new Vector2(5, this.settings.FullHealthUI.SourceRectangle.Height + 5);
-        foreach (ModifierPickup modifier in this.modifiers)
+        Vector2 modifierPos = new Vector2(5, settings.FullHealthUI.SourceRectangle.Height + 5);
+        foreach (ModifierPickup modifier in modifiers)
         {
-            modifier.DrawTimer(spriteBatch, modifierPos, this.settings.LevelIndexFont);
+            modifier.DrawTimer(spriteBatch, modifierPos, settings.LevelIndexFont);
             modifierPos.Y += modifier.Icon.SourceRectangle.Height + UI_MODIFIER_SPACING;
         }
     }
 
     public void SaveSession(GameSession session)
     {
-        foreach (ModifierPickup modifier in this.modifiers)
+        foreach (ModifierPickup modifier in modifiers)
             session.LevelModifiers.Add(new ModifierSave(modifier.ID, modifier.TimeRemaining));
 
-        foreach (ActiveObject activeObject in this.activeObjects)
+        foreach (ActiveObject activeObject in activeObjects)
             session.ActivatedObjects.Add(activeObject.UniqueID, new ActiveObjectSave(activeObject.Position, activeObject.IsActive));
 
-        this.enemyManager.SaveSession(session);
+        enemyManager.SaveSession(session);
     }
 
     public void LoadSession(GameSession session)
     {
         // Make a soft reset to prepare for loading the new session
-        this.SoftReset();
+        SoftReset();
 
         // Get all active modifiers
         foreach (ModifierSave modifier in session.LevelModifiers)
         {
-            ModifierPickup levelMod = this.modifierLibrary.GetPickup(modifier.ID) as ModifierPickup;
+            ModifierPickup levelMod = modifierLibrary.GetPickup(modifier.ID) as ModifierPickup;
             levelMod.Level = this;
             levelMod.TimeRemaining = modifier.TimeLeft;
             levelMod.IsActive = true;
-            this.modifiers.Add(levelMod);
+            modifiers.Add(levelMod);
         }
 
         // Inactivate all active objects
-        for (int i = this.activeObjects.Count - 1; i >= 0; i--)
+        for (int i = activeObjects.Count - 1; i >= 0; i--)
         {
-            this.activeObjects[i].Reset();
-            this.inactiveObjects.Add(this.activeObjects[i]);
-            this.activeObjects.RemoveAt(i);
+            activeObjects[i].Reset();
+            inactiveObjects.Add(activeObjects[i]);
+            activeObjects.RemoveAt(i);
         }
 
         // Activate ActiveObjects
-        for (int i = this.inactiveObjects.Count - 1; i >= 0; i--)
+        for (int i = inactiveObjects.Count - 1; i >= 0; i--)
         {
-            if (session.ActivatedObjects.ContainsKey(this.inactiveObjects[i].UniqueID))
+            if (session.ActivatedObjects.ContainsKey(inactiveObjects[i].UniqueID))
             {
                 // Move the object to the list of actived objects
-                ActiveObject activeObj = this.inactiveObjects[i];
-                this.inactiveObjects.RemoveAt(i);
-                this.activeObjects.Add(activeObj);
+                ActiveObject activeObj = inactiveObjects[i];
+                inactiveObjects.RemoveAt(i);
+                activeObjects.Add(activeObj);
 
                 // Setup object
                 ActiveObjectSave save = session.ActivatedObjects[activeObj.UniqueID];
@@ -1021,17 +1016,17 @@ public class Level
                 // with a soft reset, there could be active objects that where
                 // activated that should inactive. Therefore all ActiveObjects
                 // not affected by the new session are reset
-                this.inactiveObjects[i].Reset();
+                inactiveObjects[i].Reset();
         }
 
-        this.enemyManager.LoadSession(session);
+        enemyManager.LoadSession(session);
 
         // Have the screensampler move to the players position
-        this.UpdateScreenSampler();
+        UpdateScreenSampler();
 
         // Update animations so that they reflect the state of the player and enemies
-        this.UpdateAnimations();
+        UpdateAnimations();
 
-        this.state = this.nextState = LevelState.Playing;
+        state = nextState = LevelState.Playing;
     }
 }

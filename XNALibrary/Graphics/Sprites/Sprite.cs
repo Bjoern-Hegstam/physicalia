@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -24,8 +21,8 @@ public struct Sprite
 
     public Texture2D Texture
     {
-        get { return this.texture; }
-        set { this.texture = value; }
+        get { return texture; }
+        set { texture = value; }
     }
 
     /// <summary>
@@ -33,8 +30,8 @@ public struct Sprite
     /// </summary>
     public Rectangle SourceRectangle
     {
-        get { return this.sourceRectangle; }
-        set { this.sourceRectangle = value; }
+        get { return sourceRectangle; }
+        set { sourceRectangle = value; }
     }
 
     /// <summary>
@@ -45,7 +42,7 @@ public struct Sprite
     public Sprite(Texture2D texture, Rectangle sourceRect)
     {
         this.texture = texture;
-        this.sourceRectangle = sourceRect;
+        sourceRectangle = sourceRect;
     }
 
     /// <summary>

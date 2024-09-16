@@ -2,7 +2,6 @@
 
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Screens;
 using XNALibrary.Graphics.ScreenManagement;
 using XNALibrary.Input;
@@ -14,26 +13,25 @@ namespace PhysicaliaRemastered;
 /// </summary>
 public class PhysicaliaGame : Game
 {
-    GraphicsDeviceManager graphics;
-    SpriteBatch spriteBatch;
+    private GraphicsDeviceManager _graphics;
 
-    InputHandler inputHandler;
+    private InputHandler _inputHandler;
 
-    ScreenManager screenManager;
+    private ScreenManager _screenManager;
 
-    private TitleScreen titleScreen;
-    private MenuScreen menuScreen;
-    private GameScreen gameScreen;
+    private TitleScreen _titleScreen;
+    private MenuScreen _menuScreen;
+    private GameScreen _gameScreen;
 
     public PhysicaliaGame()
     {
-        graphics = new GraphicsDeviceManager(this);
+        _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         TargetElapsedTime = TimeSpan.FromSeconds(0.0083333); // 120fps
-        graphics.PreferredBackBufferWidth = 640;
-        graphics.PreferredBackBufferHeight = 480;
+        _graphics.PreferredBackBufferWidth = 640;
+        _graphics.PreferredBackBufferHeight = 480;
 
-        graphics.IsFullScreen = true;
+        _graphics.IsFullScreen = true;
     }
 
     /// <summary>
@@ -44,19 +42,19 @@ public class PhysicaliaGame : Game
     /// </summary>
     protected override void Initialize()
     {
-        inputHandler = new InputHandler(this);
-        Components.Add(inputHandler);
+        _inputHandler = new InputHandler(this);
+        Components.Add(_inputHandler);
 
-        screenManager = new ScreenManager(this);
-        Components.Add(screenManager);
+        _screenManager = new ScreenManager(this);
+        Components.Add(_screenManager);
 
-        menuScreen = new MenuScreen(this, screenManager);
-        gameScreen = new GameScreen(this, screenManager);
+        _menuScreen = new MenuScreen(this, _screenManager);
+        _gameScreen = new GameScreen(this, _screenManager);
             
-        screenManager.BaseScreen = menuScreen;
+        _screenManager.BaseScreen = _menuScreen;
 
-        screenManager.Screens.Add(menuScreen);
-        screenManager.Screens.Add(gameScreen);
+        _screenManager.Screens.Add(_menuScreen);
+        _screenManager.Screens.Add(_gameScreen);
 
         base.Initialize();
     }
@@ -67,14 +65,11 @@ public class PhysicaliaGame : Game
     /// </summary>
     protected override void LoadContent()
     {
-        // Create a new SpriteBatch, which can be used to draw textures.
-        spriteBatch = new SpriteBatch(GraphicsDevice);
-
         // The ScreenManager gets to load content before we get here
         //this.titleScreen.Settings = this.gameScreen.Settings;
-        menuScreen.Settings = gameScreen.Settings;
+        _menuScreen.Settings = _gameScreen.Settings;
 
-        menuScreen.GameManager = gameScreen.GameManager;
+        _menuScreen.GameManager = _gameScreen.GameManager;
 
         // TODO: use this.Content to load your game content here
     }
@@ -85,9 +80,7 @@ public class PhysicaliaGame : Game
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Draw(GameTime gameTime)
     {
-        graphics.GraphicsDevice.Clear(Color.Black);
-
-        // TODO: Add your drawing code here
+        _graphics.GraphicsDevice.Clear(Color.Black);
 
         base.Draw(gameTime);
     }

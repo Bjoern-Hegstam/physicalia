@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Xml;
-using XNALibrary.Services;
+using Microsoft.Xna.Framework;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.Animation;
 
@@ -24,8 +21,8 @@ public class AnimationManager : GameComponent, IAnimationManager
     public AnimationManager(Game game, ITextureLibrary textureLibrary)
         : base(game)
     {
-        this.animationBank = new Dictionary<int, Animation>();
-        this.playbackAnims = new List<Animation>();
+        animationBank = new Dictionary<int, Animation>();
+        playbackAnims = new List<Animation>();
 
         this.textureLibrary = textureLibrary;
     }
@@ -38,9 +35,9 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <returns>True if the animation was succesfully added.</returns>
     public bool AddBankAnimation(int key, Animation animation)
     {
-        if (!this.animationBank.ContainsKey(key))
+        if (!animationBank.ContainsKey(key))
         {
-            this.animationBank.Add(key, animation);
+            animationBank.Add(key, animation);
             return true;
         }
 
@@ -59,10 +56,10 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <returns>True if the animation was succesfully added; false otherwise</returns>
     public bool AddBankAnimation(int key, Rectangle startFrame, int columns, int rows, float framerate, int textureKey)
     {
-        if (!this.animationBank.ContainsKey(key))
+        if (!animationBank.ContainsKey(key))
         {
-            Animation animation = new Animation(startFrame, columns, rows, framerate, this.textureLibrary[textureKey]);
-            this.animationBank.Add(key, animation);
+            Animation animation = new Animation(startFrame, columns, rows, framerate, textureLibrary[textureKey]);
+            animationBank.Add(key, animation);
             return true;
         }
 
@@ -75,8 +72,8 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <param name="storageKey">Key of the animation to remove.</param>
     public void RemoveBankAnimation(int key)
     {
-        if (this.animationBank.ContainsKey(key))
-            this.animationBank.Remove(key);
+        if (animationBank.ContainsKey(key))
+            animationBank.Remove(key);
     }
 
     /// <summary>
@@ -88,8 +85,8 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// no animation was found.</returns>
     public Animation GetBankAnimation(int key)
     {
-        if (this.animationBank.ContainsKey(key))
-            return this.animationBank[key];
+        if (animationBank.ContainsKey(key))
+            return animationBank[key];
 
         return null;
     }
@@ -99,7 +96,7 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// </summary>
     public void ClearAnimationBank()
     {
-        this.animationBank.Clear();
+        animationBank.Clear();
     }
 
     /// <summary>
@@ -107,7 +104,7 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// </summary>
     public void ClearPlaybackAnimations()
     {
-        this.playbackAnims.Clear();
+        playbackAnims.Clear();
     }
 
     /// <summary>
@@ -117,7 +114,7 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <returns>Always true.</returns>
     public bool AddPlaybackAnimation(Animation animation)
     {
-        this.playbackAnims.Add(animation);
+        playbackAnims.Add(animation);
 
         return true;
     }
@@ -131,10 +128,10 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// contain an animation with the specified key.</returns>
     public Animation AddPlaybackAnimation(int bankKey)
     {
-        if (this.animationBank.ContainsKey(bankKey))
+        if (animationBank.ContainsKey(bankKey))
         {
-            Animation animation = this.animationBank[bankKey].Copy();
-            this.playbackAnims.Add(animation);
+            Animation animation = animationBank[bankKey].Copy();
+            playbackAnims.Add(animation);
             return animation;
         }
 
@@ -149,7 +146,7 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <returns>True if an animation corresponding to the key was found; false otherwise.</returns>
     public bool HasBankAnimation(int bankKey)
     {
-        return this.animationBank.ContainsKey(bankKey);
+        return animationBank.ContainsKey(bankKey);
     }
 
     /// <summary>
@@ -162,7 +159,7 @@ public class AnimationManager : GameComponent, IAnimationManager
         int indexIncrease = 0;
 
         // Go throught every active animation
-        foreach (Animation animation in this.playbackAnims)
+        foreach (Animation animation in playbackAnims)
         {
             // Only update active animations
             if (!animation.IsActive)
@@ -206,7 +203,7 @@ public class AnimationManager : GameComponent, IAnimationManager
 
         using (XmlReader reader = XmlReader.Create(path))
         {
-            this.LoadXml(reader);
+            LoadXml(reader);
         }
     }
 
@@ -218,9 +215,9 @@ public class AnimationManager : GameComponent, IAnimationManager
                 reader.LocalName == "Animation")
             {
                 int id = int.Parse(reader.GetAttribute("id"));
-                Animation anim = this.LoadAnimationFromXml(reader);
+                Animation anim = LoadAnimationFromXml(reader);
 
-                this.animationBank.Add(id, anim);
+                animationBank.Add(id, anim);
             }
         }
     }
@@ -248,7 +245,7 @@ public class AnimationManager : GameComponent, IAnimationManager
         loop = bool.Parse(reader.ReadElementContentAsString());
 
         Rectangle startFrame = new Rectangle(x, y, width, height);
-        Animation anim = new Animation(startFrame, columns, rows, frameRate, this.textureLibrary[textureKey]);
+        Animation anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureKey]);
         anim.Loop = loop;
 
         return anim;

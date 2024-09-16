@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using XNALibrary.Graphics;
 using System.Xml;
+using XNALibrary.Graphics.Sprites;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.ParticleEngine.Particles;
 
@@ -13,14 +11,14 @@ public class ProjectileDefinition : SpriteParticleDefinition
 
     public ObjectType DamageObjects
     {
-        get { return this.damageObjects; }
-        set { this.damageObjects = value; }
+        get { return damageObjects; }
+        set { damageObjects = value; }
     }
 
     public float DamageAmount
     {
-        get { return this.damageAmount; }
-        set { this.damageAmount = value; }
+        get { return damageAmount; }
+        set { damageAmount = value; }
     }
 
     public ProjectileDefinition(int id, Sprite sprite)
@@ -28,7 +26,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
 
     public override Particle Create(float angle)
     {
-        Projectile projectile = new Projectile(this.Sprite);
+        Projectile projectile = new Projectile(Sprite);
         this.SetupParticle(projectile, angle);
 
         return projectile;
@@ -39,8 +37,8 @@ public class ProjectileDefinition : SpriteParticleDefinition
         base.SetupParticle(particle, angle);
 
         Projectile projectile = (Projectile)particle;
-        projectile.DamageObjects = this.damageObjects;
-        projectile.DamageAmount = this.damageAmount;
+        projectile.DamageObjects = damageObjects;
+        projectile.DamageAmount = damageAmount;
         projectile.CanCollide = true;
     }
 
@@ -49,7 +47,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
         if (reader.NodeType == XmlNodeType.Element &&
             reader.LocalName == "Damage")
         {
-            this.damageAmount = int.Parse(reader.GetAttribute("amount"));
+            damageAmount = int.Parse(reader.GetAttribute("amount"));
         }
 
         if (reader.NodeType == XmlNodeType.Element &&
@@ -61,7 +59,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
                 for (int i = 0; i < objects.Length; i++)
                 {
                     ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
-                    this.damageObjects |= objectType;
+                    damageObjects |= objectType;
                 }
         }
     }

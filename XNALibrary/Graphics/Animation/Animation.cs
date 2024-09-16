@@ -1,5 +1,3 @@
-using System;
-using System.Drawing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -74,14 +72,14 @@ public class Animation
     /// </summary>
     public int Columns
     {
-        get { return this.columnCount; }
+        get { return columnCount; }
         set
         {
-            this.columnCount = value;
-            if (this.column >= this.columnCount)
+            columnCount = value;
+            if (column >= columnCount)
             {
-                this.column = this.columnCount - 1;
-                this.UpdateSourceRectangle();
+                column = columnCount - 1;
+                UpdateSourceRectangle();
             }
         }
     }
@@ -91,14 +89,14 @@ public class Animation
     /// </summary>
     public int Rows
     {
-        get { return this.rowCount; }
+        get { return rowCount; }
         set
         {
-            this.rowCount = value;
-            if (this.row >= this.rowCount)
+            rowCount = value;
+            if (row >= rowCount)
             {
-                this.row = this.rowCount - 1;
-                this.UpdateSourceRectangle();
+                row = rowCount - 1;
+                UpdateSourceRectangle();
             }
         }
     }
@@ -108,8 +106,8 @@ public class Animation
     /// </summary>
     public float Framerate
     {
-        get { return this.framerate; }
-        set { this.framerate = value; }
+        get { return framerate; }
+        set { framerate = value; }
     }
 
     /// <summary>
@@ -117,24 +115,24 @@ public class Animation
     /// </summary>
     public int FrameIndex
     {
-        get { return this.index; }
+        get { return index; }
         set
         {
             // See if it's time to loop around
-            if (loop && value >= (this.rowCount * this.columnCount))
+            if (loop && value >= (rowCount * columnCount))
             {
-                this.row = this.column = this.index = 0;
-                this.UpdateSourceRectangle();
+                row = column = index = 0;
+                UpdateSourceRectangle();
                 return;
             }
 
             // Make sure the index is within the allowed range
-            value = (int)MathHelper.Clamp(value, 0, this.rowCount * this.columnCount);
+            value = (int)MathHelper.Clamp(value, 0, rowCount * columnCount);
                 
-            this.index = value;
-            this.row = this.index / this.columnCount;
-            this.column = this.index % this.columnCount;
-            this.UpdateSourceRectangle();
+            index = value;
+            row = index / columnCount;
+            column = index % columnCount;
+            UpdateSourceRectangle();
         }
     }
 
@@ -143,8 +141,8 @@ public class Animation
     /// </summary>
     public bool IsActive
     {
-        get { return this.active; }
-        set { this.active = value; }
+        get { return active; }
+        set { active = value; }
     }
 
     /// <summary>
@@ -152,8 +150,8 @@ public class Animation
     /// </summary>
     public bool Loop
     {
-        get { return this.loop; }
-        set { this.loop = value; }
+        get { return loop; }
+        set { loop = value; }
     }
 
     /// <summary>
@@ -162,8 +160,8 @@ public class Animation
     /// </summary>
     public float TimeTillNextFrame
     {
-        get { return this.timeTillFrameChange; }
-        set { this.timeTillFrameChange = value; }
+        get { return timeTillFrameChange; }
+        set { timeTillFrameChange = value; }
     }
 
     /// <summary>
@@ -171,7 +169,7 @@ public class Animation
     /// </summary>
     public Rectangle SourceRectangle
     {
-        get { return this.sourceRectangle; }
+        get { return sourceRectangle; }
     }
 
     /// <summary>
@@ -179,8 +177,8 @@ public class Animation
     /// </summary>
     public Texture2D Texture
     {
-        get { return this.texture; }
-        set { this.texture = value; }
+        get { return texture; }
+        set { texture = value; }
     }
 
     /// <summary>
@@ -193,15 +191,15 @@ public class Animation
     /// <param name="texture">The texture used by the animation.</param>
     public Animation(Rectangle startFrame, int columns, int rows, float framerate, Texture2D texture)
     {
-        this.active = false;
-        this.sourceRectangle = this.baseFrame = startFrame;
-        this.columnCount = columns;
-        this.rowCount = rows;
+        active = false;
+        sourceRectangle = baseFrame = startFrame;
+        columnCount = columns;
+        rowCount = rows;
         this.framerate = framerate;
-        this.timeTillFrameChange = 1 / this.framerate;
-        this.row = this.column = this.index = 0;
+        timeTillFrameChange = 1 / this.framerate;
+        row = column = index = 0;
         this.texture = texture;
-        this.UpdateSourceRectangle();
+        UpdateSourceRectangle();
     }
 
     /// <summary>
@@ -209,7 +207,7 @@ public class Animation
     /// </summary>
     public void Play()
     {
-        this.active = true;
+        active = true;
     }
 
     /// <summary>
@@ -217,7 +215,7 @@ public class Animation
     /// </summary>
     public void Pause()
     {
-        this.active = false;
+        active = false;
     }
 
     /// <summary>
@@ -225,9 +223,9 @@ public class Animation
     /// </summary>
     public void Stop()
     {
-        this.active = false;
-        this.FrameIndex = 0;
-        this.timeTillFrameChange = 1 / this.framerate;
+        active = false;
+        FrameIndex = 0;
+        timeTillFrameChange = 1 / framerate;
     }
 
     /// <summary>
@@ -236,8 +234,8 @@ public class Animation
     /// </summary>
     private void UpdateSourceRectangle()
     {
-        this.sourceRectangle.X = this.baseFrame.X + this.column * this.baseFrame.Width;
-        this.sourceRectangle.Y = this.baseFrame.Y + this.row * this.baseFrame.Height;
+        sourceRectangle.X = baseFrame.X + column * baseFrame.Width;
+        sourceRectangle.Y = baseFrame.Y + row * baseFrame.Height;
     }
 
     /// <summary>
@@ -246,12 +244,12 @@ public class Animation
     /// <returns>A new Animation that is a copy of the current animation.</returns>
     public Animation Copy()
     {
-        Animation animation = new Animation(this.baseFrame,
-            this.columnCount,
-            this.rowCount,
-            this.framerate,
-            this.texture);
-        animation.loop = this.loop;
+        Animation animation = new Animation(baseFrame,
+            columnCount,
+            rowCount,
+            framerate,
+            texture);
+        animation.loop = loop;
         return animation;
     }
 }

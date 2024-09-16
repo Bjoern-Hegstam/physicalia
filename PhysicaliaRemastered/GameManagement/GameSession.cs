@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using Physicalia.Pickups;
 using Microsoft.Xna.Framework;
+using PhysicaliaRemastered.Actors;
 
 namespace PhysicaliaRemastered.GameManagement;
 
@@ -14,8 +13,8 @@ public struct ModifierSave
 
     public ModifierSave(int id, float timeLeft)
     {
-        this.ID = id;
-        this.TimeLeft = timeLeft;
+        ID = id;
+        TimeLeft = timeLeft;
     }
 }
 
@@ -26,8 +25,8 @@ public struct ActiveObjectSave
 
     public ActiveObjectSave(Vector2 position, bool active)
     {
-        this.Position = position;
-        this.IsActive = active;
+        Position = position;
+        IsActive = active;
     }
 }
 
@@ -41,10 +40,10 @@ public struct EnemySave
 
     public EnemySave(Vector2 position, Vector2 velocity, float health, bool active)
     {
-        this.Position = position;
-        this.Velocity = velocity;
-        this.Health = health;
-        this.IsActive = active;
+        Position = position;
+        Velocity = velocity;
+        Health = health;
+        IsActive = active;
     }
 }
 
@@ -55,8 +54,8 @@ public struct WeaponSave
 
     public WeaponSave(int ammoCount, int storedAmmo)
     {
-        this.AmmoCount = ammoCount;
-        this.StoredAmmo = storedAmmo;
+        AmmoCount = ammoCount;
+        StoredAmmo = storedAmmo;
     }
 }
 
@@ -85,52 +84,52 @@ public class GameSession
 
     public int WorldIndex
     {
-        get { return this.worldIndex; }
-        set { this.worldIndex = value; }
+        get { return worldIndex; }
+        set { worldIndex = value; }
     }
 
     public int LevelIndex
     {
-        get { return this.levelIndex; }
-        set { this.levelIndex = value; }
+        get { return levelIndex; }
+        set { levelIndex = value; }
     }
 
     public ActorStartValues PlayerValues
     {
-        get { return this.playerValues; }
-        set { this.playerValues = value; }
+        get { return playerValues; }
+        set { playerValues = value; }
     }
 
     public float PlayerHealth
     {
-        get { return this.playerHealth; }
-        set { this.playerHealth = value; }
+        get { return playerHealth; }
+        set { playerHealth = value; }
     }
 
     public int SelectedWeapon
     {
-        get { return this.selectedWeapon; }
-        set { this.selectedWeapon = value; }
+        get { return selectedWeapon; }
+        set { selectedWeapon = value; }
     }
 
     public Dictionary<int, WeaponSave> WeaponSaves
     {
-        get { return this.weaponSaves; }
+        get { return weaponSaves; }
     }
 
     public List<ModifierSave> LevelModifiers
     {
-        get { return this.levelModifiers; }
+        get { return levelModifiers; }
     }
 
     public Dictionary<int, ActiveObjectSave> ActivatedObjects
     {
-        get { return this.activatedObjects; }
+        get { return activatedObjects; }
     }
 
     public Dictionary<int, EnemySave> SavedEnemies
     {
-        get { return this.enemySaves; }
+        get { return enemySaves; }
     }
 
     public GameSession() 

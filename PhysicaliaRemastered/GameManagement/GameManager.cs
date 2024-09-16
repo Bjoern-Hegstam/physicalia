@@ -1,15 +1,19 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Xml;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using PhysicaliaRemastered.Actors;
+using PhysicaliaRemastered.Actors.EnemyManagement;
+using PhysicaliaRemastered.Input;
+using PhysicaliaRemastered.Pickups;
+using PhysicaliaRemastered.Weapons;
 using XNALibrary.Graphics;
-using XNALibrary.Graphics.Particles;
-using XNALibrary.Services;
-using Physicalia.Input;
-using Physicalia.Weapons;
-using Physicalia.Pickups;
+using XNALibrary.Graphics.Animation;
+using XNALibrary.Graphics.ParticleEngine;
+using XNALibrary.Graphics.Sprites;
+using XNALibrary.Graphics.TileEngine;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.GameManagement;
 
@@ -54,20 +58,20 @@ public class GameManager
 
     public GameState State
     {
-        get { return this.currentState; }
-        set { this.currentState = value; }
+        get { return currentState; }
+        set { currentState = value; }
     }
 
     public GameState NextState
     {
-        get { return this.nextState; }
-        set { this.nextState = value; }
+        get { return nextState; }
+        set { nextState = value; }
     }
 
 
     public ISettings Settings
     {
-        get { return this.settings; }
+        get { return settings; }
     }
 
     /// <summary>
@@ -81,40 +85,40 @@ public class GameManager
 
         // Create and add needed services
         IInputHandler input = (IInputHandler)this.game.Services.GetService(typeof(IInputHandler));
-        this.settings = new Settings(input);
-        this.game.Services.AddService(typeof(ISettings), this.settings);
+        settings = new Settings(input);
+        this.game.Services.AddService(typeof(ISettings), settings);
 
-        this.textureLibrary = new TextureLibrary();
-        this.game.Services.AddService(typeof(ITextureLibrary), this.textureLibrary);
+        textureLibrary = new TextureLibrary();
+        this.game.Services.AddService(typeof(ITextureLibrary), textureLibrary);
 
-        this.spriteLibrary = new SpriteLibrary(this.textureLibrary);
-        this.game.Services.AddService(typeof(ISpriteLibrary), this.spriteLibrary);
+        spriteLibrary = new SpriteLibrary(textureLibrary);
+        this.game.Services.AddService(typeof(ISpriteLibrary), spriteLibrary);
 
-        this.animationManager = new AnimationManager(this.game, this.textureLibrary);
-        this.game.Services.AddService(typeof(IAnimationManager), this.animationManager);
-        this.game.Components.Add(this.animationManager);
+        animationManager = new AnimationManager(this.game, textureLibrary);
+        this.game.Services.AddService(typeof(IAnimationManager), animationManager);
+        this.game.Components.Add(animationManager);
 
-        this.tileLibrary = new TileLibrary();
-        this.game.Services.AddService(typeof(ITileLibrary), this.tileLibrary);
+        tileLibrary = new TileLibrary();
+        this.game.Services.AddService(typeof(ITileLibrary), tileLibrary);
 
-        this.particleEngine = new ParticleEngine();
-        this.game.Services.AddService(typeof(IParticleEngine), this.particleEngine);
+        particleEngine = new ParticleEngine();
+        this.game.Services.AddService(typeof(IParticleEngine), particleEngine);
 
-        this.enemyBank = new EnemyBank(this.animationManager);
-        this.game.Services.AddService(typeof(IEnemyBank), this.enemyBank);
+        enemyBank = new EnemyBank(animationManager);
+        this.game.Services.AddService(typeof(IEnemyBank), enemyBank);
 
-        this.weaponBank = new WeaponBank(this.particleEngine, this.spriteLibrary, this.animationManager);
-        this.game.Services.AddService(typeof(IWeaponBank), this.weaponBank);
+        weaponBank = new WeaponBank(particleEngine, spriteLibrary, animationManager);
+        this.game.Services.AddService(typeof(IWeaponBank), weaponBank);
 
-        this.modifierLibrary = new PickupLibrary();
-        this.game.Services.AddService(typeof(IPickupLibrary), this.modifierLibrary);
+        modifierLibrary = new PickupLibrary();
+        this.game.Services.AddService(typeof(IPickupLibrary), modifierLibrary);
 
-        this.worlds = new List<World>();
-        this.worldIndex = -1;
+        worlds = new List<World>();
+        worldIndex = -1;
 
-        this.player = new Player(this.settings);
+        player = new Player(settings);
 
-        this.nextState = this.currentState = GameState.Start;
+        nextState = currentState = GameState.Start;
     }
 
     /// <summary>
@@ -123,7 +127,7 @@ public class GameManager
     private void ChangeState()
     {
         // Cleanup things that was done when we previously entered the current state
-        switch (this.currentState)
+        switch (currentState)
         {
             case GameState.Start:
                 break;
@@ -132,14 +136,12 @@ public class GameManager
             case GameState.End:
                 break;
             case GameState.Paused:
-                this.animationManager.Enabled = true;
-                break;
-            default:
+                animationManager.Enabled = true;
                 break;
         }
 
         // Prepare for the next state
-        switch (this.nextState)
+        switch (nextState)
         {
             case GameState.Start:
                 break;
@@ -148,25 +150,23 @@ public class GameManager
             case GameState.End:
                 break;
             case GameState.Paused:
-                this.animationManager.Enabled = false;
-                break;
-            default:
+                animationManager.Enabled = false;
                 break;
         }
 
-        this.currentState = this.nextState;
+        currentState = nextState;
     }
 
     public void ResetLevel()
     {
-        if (this.worldIndex < this.worlds.Count)
+        if (worldIndex < worlds.Count)
         {
-            this.worlds[this.worldIndex].ResetLevel();
-            this.nextState = GameState.Playing;
-            this.pausePressedCount = 0;
+            worlds[worldIndex].ResetLevel();
+            nextState = GameState.Playing;
+            pausePressedCount = 0;
 
-            this.player.Health = this.settings.PlayerStartHealth;
-            this.player.Flickering = false;
+            player.Health = settings.PlayerStartHealth;
+            player.Flickering = false;
         }
     }
 
@@ -176,17 +176,17 @@ public class GameManager
     public void NewSession()
     {
         // Make sure the animation manager is enabled
-        this.animationManager.Enabled = true;
+        animationManager.Enabled = true;
 
-        this.worldIndex = 0;
-        this.worlds[this.worldIndex].NewSession();
+        worldIndex = 0;
+        worlds[worldIndex].NewSession();
 
-        this.player.Health = this.settings.PlayerStartHealth;
+        player.Health = settings.PlayerStartHealth;
         // Give the player his default weapon
-        this.player.ClearWeapons();
-        this.player.AddWeapon(this.weaponBank.GetWeapon(-1).Copy());
+        player.ClearWeapons();
+        player.AddWeapon(weaponBank.GetWeapon(-1).Copy());
 
-        this.State = this.nextState = GameState.Start;
+        State = nextState = GameState.Start;
     }
 
     /// <summary>
@@ -196,16 +196,16 @@ public class GameManager
     /// wanted state of the GameManager.</param>
     public void LoadSession(GameSession session)
     {
-        this.worldIndex = session.WorldIndex;
-        this.player.Health = this.settings.PlayerStartHealth;
+        worldIndex = session.WorldIndex;
+        player.Health = settings.PlayerStartHealth;
 
-        this.player.LoadSession(session, this.weaponBank);
+        player.LoadSession(session, weaponBank);
 
-        this.worlds[this.worldIndex].LoadSession(session);
+        worlds[worldIndex].LoadSession(session);
 
         // Pause the game and ensure
-        this.nextState = GameState.Paused;
-        this.pausePressedCount = 1;
+        nextState = GameState.Paused;
+        pausePressedCount = 1;
     }
 
     /// <summary>
@@ -215,20 +215,20 @@ public class GameManager
     /// the GameManager.</returns>
     public GameSession SaveSession()
     {
-        this.nextState = GameState.Paused;
+        nextState = GameState.Paused;
 
         GameSession session = new GameSession();
 
-        session.WorldIndex = this.worldIndex;
-        this.player.SaveSession(session);
-        this.worlds[this.worldIndex].SaveSession(session);
+        session.WorldIndex = worldIndex;
+        player.SaveSession(session);
+        worlds[worldIndex].SaveSession(session);
 
         return session;
     }
 
-    public void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
+    public void LoadContent(ContentManager contentManager)
     {
-        this.settings.LoadContent(contentManager);
+        settings.LoadContent(contentManager);
     }
 
     /// <summary>
@@ -244,7 +244,7 @@ public class GameManager
 
         using (XmlReader reader = XmlReader.Create(path, readerSettings))
         {
-            this.LoadXml(reader);
+            LoadXml(reader);
         }
     }
 
@@ -259,76 +259,76 @@ public class GameManager
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Settings")
             {
-                this.settings.LoadXml(GAMEDATA_PATH + reader.ReadString(), this.spriteLibrary);
+                settings.LoadXml(GAMEDATA_PATH + reader.ReadString(), spriteLibrary);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "TextureLibrary")
             {
-                this.textureLibrary.LoadXml(LIBRARY_PATH + reader.ReadString(), this.game.GraphicsDevice);
+                textureLibrary.LoadXml(LIBRARY_PATH + reader.ReadString(), game.GraphicsDevice);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "SpriteLibrary")
             {
-                this.spriteLibrary.LoadXml(LIBRARY_PATH + reader.ReadString());
+                spriteLibrary.LoadXml(LIBRARY_PATH + reader.ReadString());
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "AnimationBank")
             {
-                this.animationManager.LoadXml(LIBRARY_PATH + reader.ReadString());
+                animationManager.LoadXml(LIBRARY_PATH + reader.ReadString());
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "TileLibrary")
             {
-                this.tileLibrary.LoadXml(LIBRARY_PATH + reader.ReadString(), this.spriteLibrary, this.animationManager);
+                tileLibrary.LoadXml(LIBRARY_PATH + reader.ReadString(), spriteLibrary, animationManager);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "ParticleDefinitions")
             {
-                this.particleEngine.LoadXml(LIBRARY_PATH + reader.ReadString(), this.spriteLibrary, this.animationManager);
+                particleEngine.LoadXml(LIBRARY_PATH + reader.ReadString(), spriteLibrary, animationManager);
 
                 // Prepare the particle engine to avoid slow downs (JIT)
-                this.particleEngine.Prepare();
+                particleEngine.Prepare();
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "WeaponBank")
             {
-                this.weaponBank.LoadXml(LIBRARY_PATH + reader.ReadString());
+                weaponBank.LoadXml(LIBRARY_PATH + reader.ReadString());
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "EnemyBank")
             {
-                this.enemyBank.LoadXml(LIBRARY_PATH + reader.ReadString());
+                enemyBank.LoadXml(LIBRARY_PATH + reader.ReadString());
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "PickupLibrary")
             {
-                this.modifierLibrary.LoadXml(LIBRARY_PATH + reader.ReadString(), this.spriteLibrary);
+                modifierLibrary.LoadXml(LIBRARY_PATH + reader.ReadString(), spriteLibrary);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Player")
             {
-                this.SetupPlayer(reader);
+                SetupPlayer(reader);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Worlds")
             {
-                this.LoadWorlds(reader);
+                LoadWorlds(reader);
             }
         }
 
         // Set a valid index if one or more worlds has been added
-        if (this.worlds.Count > 0)
-            this.worldIndex = 0;
+        if (worlds.Count > 0)
+            worldIndex = 0;
     }
 
     /// <summary>
@@ -343,10 +343,10 @@ public class GameManager
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "World")
             {
-                World world = new World(this.game, this.player);
-                this.worlds.Add(world);
-                world.WorldIndex = this.worlds.Count;
-                world.LoadXml(WORLD_PATH + reader.ReadString(), this.tileLibrary, this.spriteLibrary);
+                World world = new World(game, player);
+                worlds.Add(world);
+                world.WorldIndex = worlds.Count;
+                world.LoadXml(WORLD_PATH + reader.ReadString(), tileLibrary, spriteLibrary);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -368,7 +368,7 @@ public class GameManager
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "CollisionBox")
             {
-                this.player.CollisionBox = this.ReadRectangle(reader);
+                player.CollisionBox = ReadRectangle(reader);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
@@ -376,9 +376,9 @@ public class GameManager
             {
                 int animKey = int.Parse(reader.GetAttribute("key"));
                 int action = int.Parse(reader.GetAttribute("action"));
-                Animation anim = this.animationManager.AddPlaybackAnimation(animKey);
-                this.player.AddAnimation(action, anim);
-                this.player.CurrentAnimationType = action;
+                Animation anim = animationManager.AddPlaybackAnimation(animKey);
+                player.AddAnimation(action, anim);
+                player.CurrentAnimationType = action;
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -399,78 +399,78 @@ public class GameManager
 
     public void Update(GameTime gameTime)
     {
-        switch (this.currentState)
+        switch (currentState)
         {
             case GameState.Start:
-                if (this.settings.InputMap.IsPressed(InputAction.MenuStart))
-                    this.nextState = GameState.Playing;
+                if (settings.InputMap.IsPressed(InputAction.MenuStart))
+                    nextState = GameState.Playing;
                 break;
             case GameState.Playing:
                 // Has the Player finished the game?
-                if (this.worlds[this.worldIndex].State == WorldState.Finished)
+                if (worlds[worldIndex].State == WorldState.Finished)
                 {
                     // Go to next world when the player wants that
-                    if (this.settings.InputMap.IsPressed(InputAction.MenuStart))
+                    if (settings.InputMap.IsPressed(InputAction.MenuStart))
                     {
-                        this.worldIndex++;
+                        worldIndex++;
                     }
 
-                    if (this.worldIndex >= this.worlds.Count)
+                    if (worldIndex >= worlds.Count)
                     {
                         // TODO: Congratulate player for winning the game
                         // Perhaps add some kind of special finish (Bonus level, etc.)
-                        this.nextState = GameState.End;
+                        nextState = GameState.End;
                     }
                 }
                 else
                 {
-                    if (this.worlds[this.worldIndex].LevelState == LevelState.Start ||
-                        this.worlds[this.worldIndex].LevelState == LevelState.Dead)
-                        this.pausePressedCount = 0;
+                    if (worlds[worldIndex].LevelState == LevelState.Start ||
+                        worlds[worldIndex].LevelState == LevelState.Dead)
+                        pausePressedCount = 0;
                     else
-                        this.pausePressedCount = 1;
+                        pausePressedCount = 1;
 
                     // Pause if start is pressed
                     // pausePressedCount is used as a workaround the fact that
                     // MenuStart will be pressed when a Level is start. The Level's
                     // state will then be set to LevelState.Playing which causes the
                     // Level to start paused.
-                    if (this.worlds[this.worldIndex].LevelState == LevelState.Playing &&
-                        this.settings.InputMap.IsPressed(InputAction.MenuStart) &&
-                        this.pausePressedCount == 1)
-                        this.nextState = GameState.Paused;
+                    if (worlds[worldIndex].LevelState == LevelState.Playing &&
+                        settings.InputMap.IsPressed(InputAction.MenuStart) &&
+                        pausePressedCount == 1)
+                        nextState = GameState.Paused;
 
-                    this.worlds[this.worldIndex].Update(gameTime);
+                    worlds[worldIndex].Update(gameTime);
                 }
                 break;
             case GameState.Paused:
                 // Continue playing if the player wants to go back
-                if (this.settings.InputMap.IsPressed(InputAction.MenuBack))
-                    this.nextState = GameState.Playing;
+                if (settings.InputMap.IsPressed(InputAction.MenuBack))
+                    nextState = GameState.Playing;
                 break;
             case GameState.End:
                 break;
         }
 
-        while (this.nextState != this.currentState)
-            this.ChangeState();
+        while (nextState != currentState)
+            ChangeState();
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        switch (this.currentState)
+        switch (currentState)
         {
             case GameState.Start:
-                spriteBatch.DrawString(this.settings.WorldQuoteFont, "And so it begins", new Vector2(130, 200), Color.White);
+                spriteBatch.DrawString(settings.WorldQuoteFont, "And so it begins", new Vector2(130, 200), Color.White);
                 break;
             case GameState.Playing:
-                this.worlds[this.worldIndex].Draw(spriteBatch);
+                worlds[worldIndex].Draw(spriteBatch);
                 break;
             case GameState.Paused:
-                this.worlds[this.worldIndex].Draw(spriteBatch);
+                worlds[worldIndex].Draw(spriteBatch);
                 break;
             case GameState.End:
-                spriteBatch.DrawString(this.settings.PlayerDeadFont, "Great Success!", new Vector2(150, 250), Color.White);
+                spriteBatch.DrawString(settings.PlayerDeadFont, "Great Success!", new Vector2(150, 250), Color.White);
                 break;
         }
     }

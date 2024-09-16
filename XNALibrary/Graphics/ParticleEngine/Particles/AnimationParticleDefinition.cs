@@ -1,67 +1,64 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml;
-using XNALibrary.Services;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.ParticleEngine.Particles;
 
 public class AnimationParticleDefinition : ParticleDefinition
 {
-    private Animation animation;
+    private Animation.Animation animation;
     private IAnimationManager animationManager;
     private ObjectType damageObjects;
     private float damageAmount;
 
-    private List<Animation> createdAnimations;
+    private List<Animation.Animation> createdAnimations;
 
-    public Animation Animation
+    public Animation.Animation Animation
     {
-        get { return this.animation; }
-        set { this.animation = value; }
+        get { return animation; }
+        set { animation = value; }
     }
 
     public ObjectType DamageObjects
     {
-        get { return this.damageObjects; }
-        set { this.damageObjects = value; }
+        get { return damageObjects; }
+        set { damageObjects = value; }
     }
 
     public float DamageAmount
     {
-        get { return this.damageAmount; }
-        set { this.damageAmount = value; }
+        get { return damageAmount; }
+        set { damageAmount = value; }
     }
 
-    public AnimationParticleDefinition(int id, Animation animation, IAnimationManager animationManager)
+    public AnimationParticleDefinition(int id, Animation.Animation animation, IAnimationManager animationManager)
         : base(id)
     {
         this.animation = animation;
         this.animationManager = animationManager;
 
-        this.createdAnimations = new List<Animation>();
+        createdAnimations = new List<Animation.Animation>();
     }
 
     public override Particle Create(float angle)
     {
-        Animation particleAnimation = null;
+        Animation.Animation particleAnimation = null;
 
         // See if a reusable animations has already been created
-        for (int i = 0; i < this.createdAnimations.Count; i++)
+        for (int i = 0; i < createdAnimations.Count; i++)
         {
-            if (this.createdAnimations[i].IsActive == false)
+            if (createdAnimations[i].IsActive == false)
             {
-                this.createdAnimations[i].FrameIndex = 0;
-                particleAnimation = this.createdAnimations[i];
+                createdAnimations[i].FrameIndex = 0;
+                particleAnimation = createdAnimations[i];
             }
         }
 
         // Create a new animation if none could be reused
         if (particleAnimation == null)
         {
-            particleAnimation = this.animation.Copy();
-            this.animationManager.AddPlaybackAnimation(particleAnimation);
-            this.createdAnimations.Add(particleAnimation);
+            particleAnimation = animation.Copy();
+            animationManager.AddPlaybackAnimation(particleAnimation);
+            createdAnimations.Add(particleAnimation);
         }
 
         AnimationParticle particle = new AnimationParticle(particleAnimation);
@@ -75,8 +72,8 @@ public class AnimationParticleDefinition : ParticleDefinition
         base.SetupParticle(particle, angle);
 
         AnimationParticle animParticle = (AnimationParticle)particle;
-        animParticle.DamageAmount = this.damageAmount;
-        animParticle.DamageObjects = this.damageObjects;
+        animParticle.DamageAmount = damageAmount;
+        animParticle.DamageObjects = damageObjects;
         animParticle.CanCollide = true;
         animParticle.IsActive = true;
         animParticle.Animation.Play();
@@ -87,7 +84,7 @@ public class AnimationParticleDefinition : ParticleDefinition
         if (reader.NodeType == XmlNodeType.Element &&
             reader.LocalName == "Damage")
         {
-            this.damageAmount = int.Parse(reader.GetAttribute("amount"));
+            damageAmount = int.Parse(reader.GetAttribute("amount"));
         }
 
         if (reader.NodeType == XmlNodeType.Element &&
@@ -99,7 +96,7 @@ public class AnimationParticleDefinition : ParticleDefinition
                 for (int i = 0; i < objects.Length; i++)
                 {
                     ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
-                    this.damageObjects |= objectType;
+                    damageObjects |= objectType;
                 }
         }
     }

@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics;
 
-public class ScreenSampler : XNALibrary.Services.IScreenSampler
+public class ScreenSampler : IScreenSampler
 {
     /// <summary>
     /// Current position of the sampler.
@@ -32,13 +30,13 @@ public class ScreenSampler : XNALibrary.Services.IScreenSampler
     /// </summary>
     public Vector2 Position
     {
-        get { return this.position; }
+        get { return position; }
         set
         {
-            this.position.X = MathHelper.Clamp(value.X, 0, this.maxWidth - this.screen.Width);
-            this.position.Y = MathHelper.Clamp(value.Y, 0, this.maxHeight - this.screen.Height);
-            this.screen.X = (int)this.position.X;
-            this.screen.Y = (int)this.position.Y;
+            position.X = MathHelper.Clamp(value.X, 0, maxWidth - screen.Width);
+            position.Y = MathHelper.Clamp(value.Y, 0, maxHeight - screen.Height);
+            screen.X = (int)position.X;
+            screen.Y = (int)position.Y;
         }
     }
 
@@ -47,8 +45,8 @@ public class ScreenSampler : XNALibrary.Services.IScreenSampler
     /// </summary>
     public int Width
     {
-        get { return this.screen.Width; }
-        set { this.screen.Width = (int)MathHelper.Clamp(value, 0, this.maxWidth); }
+        get { return screen.Width; }
+        set { screen.Width = (int)MathHelper.Clamp(value, 0, maxWidth); }
     }
 
     /// <summary>
@@ -56,13 +54,13 @@ public class ScreenSampler : XNALibrary.Services.IScreenSampler
     /// </summary>
     public int Height
     {
-        get { return this.screen.Height; }
-        set { this.screen.Height = (int)MathHelper.Clamp(value, 0, this.maxHeight); }
+        get { return screen.Height; }
+        set { screen.Height = (int)MathHelper.Clamp(value, 0, maxHeight); }
     }
 
     public Rectangle ScreenRectangle
     {
-        get { return this.screen; }
+        get { return screen; }
     }
 
     /// <summary>
@@ -70,8 +68,8 @@ public class ScreenSampler : XNALibrary.Services.IScreenSampler
     /// </summary>
     public int MaxWidth
     {
-        get { return this.maxWidth; }
-        set { this.maxWidth = value; }
+        get { return maxWidth; }
+        set { maxWidth = value; }
     }
 
     /// <summary>
@@ -79,8 +77,8 @@ public class ScreenSampler : XNALibrary.Services.IScreenSampler
     /// </summary>
     public int MaxHeight
     {
-        get { return this.maxHeight; }
-        set { this.maxHeight = value; }
+        get { return maxHeight; }
+        set { maxHeight = value; }
     }
 
     public ScreenSampler(Game game, int x, int y, int width, int height)
@@ -92,19 +90,19 @@ public class ScreenSampler : XNALibrary.Services.IScreenSampler
         //game.Services.AddService(typeof(XNALibrary.Services.IScreenSampler), this);
         // TODO: Look over whether the sample should really be a service
         // Set the screen rectangle and the position of the sampler
-        this.screen = screenRectangle;
-        this.position = new Vector2(this.screen.X, this.screen.Y);
-        this.maxWidth = this.screen.Width;
-        this.maxHeight = this.screen.Height;
+        screen = screenRectangle;
+        position = new Vector2(screen.X, screen.Y);
+        maxWidth = screen.Width;
+        maxHeight = screen.Height;
     }
 
     public ScreenSampler(Rectangle screenRectangle)
     {
         // Set the screen rectangle and the position of the sampler
-        this.screen = screenRectangle;
-        this.position = new Vector2(this.screen.X, this.screen.Y);
-        this.maxWidth = this.screen.Width;
-        this.maxHeight = this.screen.Height;
+        screen = screenRectangle;
+        position = new Vector2(screen.X, screen.Y);
+        maxWidth = screen.Width;
+        maxHeight = screen.Height;
     }
 
     /// <summary>
@@ -114,7 +112,7 @@ public class ScreenSampler : XNALibrary.Services.IScreenSampler
     /// <returns>True if the rectangle is on screen; false otherwise.</returns>
     public bool IsOnScreen(Rectangle boundingBox)
     {
-        return this.screen.Intersects(boundingBox);
+        return screen.Intersects(boundingBox);
     }
 
     /// <summary>
@@ -127,9 +125,9 @@ public class ScreenSampler : XNALibrary.Services.IScreenSampler
     /// <returns>True if the rectangle is on screen; false otherwise.</returns>
     public bool IsOnScreen(int x, int y, int width, int height)
     {
-        return x < this.screen.Right &&
-               y < this.screen.Bottom &&
-               (x + width) > this.screen.Left &&
-               (y + height) > this.screen.Top;
+        return x < screen.Right &&
+               y < screen.Bottom &&
+               (x + width) > screen.Left &&
+               (y + height) > screen.Top;
     }
 }

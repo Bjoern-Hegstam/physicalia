@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using XNALibrary.Graphics.Sprites;
 
 namespace XNALibrary.Graphics.TileEngine;
 
@@ -24,11 +22,11 @@ public class SpriteTile : Tile
 
     public override Rectangle SourceRectangle
     {
-        get { return this.sprite.SourceRectangle; }
+        get { return sprite.SourceRectangle; }
     }
 
     public override Texture2D Texture
     {
-        get { return this.sprite.Texture; }
+        get { return sprite.Texture; }
     }
 }

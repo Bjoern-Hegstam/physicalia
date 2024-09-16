@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Numerics;
-using System.Text;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using XNALibrary.Graphics;
-using XNALibrary.Graphics.Particles;
-using System.Xml;
-using XNALibrary.Graphic.Particles;
 using XNALibrary.Graphics.Animation;
+using XNALibrary.Graphics.ParticleEngine;
 using XNALibrary.Graphics.Sprites;
 using XNALibrary.Graphics.TileEngine;
 

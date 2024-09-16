@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Graphics;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.TileEngine;
 
@@ -39,8 +36,8 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public Rectangle CollisionBox
     {
-        get { return this.collisionBox; }
-        set { this.collisionBox = value; }
+        get { return collisionBox; }
+        set { collisionBox = value; }
     }
 
     /// <summary>
@@ -48,8 +45,8 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public BoxSide CollisionSides
     {
-        get { return this.collisionSides; }
-        set { this.collisionSides = value; }
+        get { return collisionSides; }
+        set { collisionSides = value; }
     }
 
     /// <summary>
@@ -57,8 +54,8 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public bool GivesDamage
     {
-        get { return this.givesDamage; }
-        set { this.givesDamage = value; }
+        get { return givesDamage; }
+        set { givesDamage = value; }
     }
 
     /// <summary>
@@ -67,8 +64,8 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public float DamageLevel
     {
-        get { return this.damageLevel; }
-        set { this.damageLevel = (float)MathHelper.Clamp(value, 0, 1); }
+        get { return damageLevel; }
+        set { damageLevel = (float)MathHelper.Clamp(value, 0, 1); }
     }
 
     /// <summary>
@@ -76,8 +73,8 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public BoxSide DamageSides
     {
-        get { return this.damageSides; }
-        set { this.damageSides = value; }
+        get { return damageSides; }
+        set { damageSides = value; }
     }
 
     /// <summary>
@@ -93,9 +90,9 @@ public abstract class Tile : ICollisionObject
     {
         this.collisionBox = collisionBox;
         this.collisionSides = collisionSides;
-        this.givesDamage = false;
-        this.damageLevel = 0;
-        this.damageSides = 0;
+        givesDamage = false;
+        damageLevel = 0;
+        damageSides = 0;
     }
 
     // ICollisionObject is only implemented for consistency and only provides
@@ -140,7 +137,7 @@ public abstract class Tile : ICollisionObject
     {
         get
         {
-            return this.collisionBox.Width;
+            return collisionBox.Width;
         }
         set
         {
@@ -152,7 +149,7 @@ public abstract class Tile : ICollisionObject
     {
         get
         {
-            return this.collisionBox.Height;
+            return collisionBox.Height;
         }
         set
         {
@@ -165,7 +162,7 @@ public abstract class Tile : ICollisionObject
 
     public bool CanCollide
     {
-        get { return this.collisionSides != 0; }
+        get { return collisionSides != 0; }
     }
 
     public bool CanTakeDamage

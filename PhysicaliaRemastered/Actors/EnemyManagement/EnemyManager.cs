@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors.Enemies;
+using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Weapons.NewWeapons;
+using XNALibrary.Graphics.TileEngine;
 
 namespace PhysicaliaRemastered.Actors.EnemyManagement;
 

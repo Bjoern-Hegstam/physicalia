@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
-using XNALibrary.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using XNALibrary.Graphics.TileEngine;
 
 namespace XNALibrary.Interfaces;
 
@@ -152,10 +149,10 @@ public static class CollisionHelper
     public static bool PerPixelCollisionCheck(ICollisionObject collA, ICollisionObject collB)
     {
         // Get correctly positioned Collision boxes
-        Rectangle rectA = CollisionHelper.GetAbsoluteCollisionBox(collA);
-        Rectangle rectB = CollisionHelper.GetAbsoluteCollisionBox(collB);
+        Rectangle rectA = GetAbsoluteCollisionBox(collA);
+        Rectangle rectB = GetAbsoluteCollisionBox(collB);
 
-        Rectangle collisionArea = CollisionHelper.GetCollisionArea(rectA, rectB);
+        Rectangle collisionArea = GetCollisionArea(rectA, rectB);
 
         return false;
     }

@@ -1,4 +1,6 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Input;
 
 namespace PhysicaliaRemastered.Screens;
@@ -18,7 +20,7 @@ public class TitleScreen : XNALibrary.Graphics.Screen
 
         }
 
-    public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
+    public override void LoadContent(ContentManager contentManager)
     {
             // TODO: Load Background
         }

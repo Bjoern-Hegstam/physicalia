@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Input;
@@ -41,7 +42,7 @@ public class MenuScreen : Screen
     public MenuScreen(Game game, ScreenManager screenManager)
         : base(game, screenManager) { }
 
-    public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
+    public override void LoadContent(ContentManager contentManager)
     {
             titleTexture = contentManager.Load<Texture2D>(@"Images\ScreenGraphics\screen_MenuTitle");
             backLevelTexture = contentManager.Load<Texture2D>(@"Images\ScreenGraphics\screen_MenuBackLevel");
@@ -81,7 +82,7 @@ public class MenuScreen : Screen
                 {
                     case "New Game":
                         gameManager.NewSession();
-                        this.ScreenManager.TransitionTo(typeof(GameScreen));
+                        ScreenManager.TransitionTo(typeof(GameScreen));
                         break;
                     case "Load Game":
                         OpenFileDialog loadDialog = new OpenFileDialog();
@@ -93,11 +94,11 @@ public class MenuScreen : Screen
                         if (loadDialog.ShowDialog() == DialogResult.OK)
                         {
                             gameManager.LoadSession(GameSession.LoadFromXml(loadDialog.FileName));
-                            this.ScreenManager.TransitionTo(typeof(GameScreen));
+                            ScreenManager.TransitionTo(typeof(GameScreen));
                         }
                         break;
                     case "Exit":
-                        this.Game.Exit();
+                        Game.Exit();
                         break;
                 }
             }
@@ -110,8 +111,8 @@ public class MenuScreen : Screen
             spriteBatch.Draw(titleTexture, Vector2.Zero, Color.White);
 
             // Draw menu
-            int screenWidth = this.Game.GraphicsDevice.Viewport.Width;
-            int screenHeight = this.Game.GraphicsDevice.Viewport.Height;
+            int screenWidth = Game.GraphicsDevice.Viewport.Width;
+            int screenHeight = Game.GraphicsDevice.Viewport.Height;
 
             Vector2 textPos = new Vector2(0, screenHeight - MENU_ITEM_BOTTOM_PADDING);
 

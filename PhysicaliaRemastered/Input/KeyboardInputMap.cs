@@ -8,7 +8,7 @@ namespace PhysicaliaRemastered.Input;
 /// <summary>
 /// Maps the keys on a Keyboard to the actions available in Physicalia.
 /// </summary>
-class KeyboardInputMap : InputMap
+internal class KeyboardInputMap : InputMap
 {
     private Dictionary<InputAction, Keys> keys;
 

@@ -1,5 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using XNALibrary.Graphics.TileEngine;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.Actors.Enemies;
 
@@ -169,7 +172,7 @@ public class Enemy : Actor
             }
         }
 
-    public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
             if (visible)
                 base.Draw(spriteBatch, offsetPosition);

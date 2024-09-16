@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using System.Xml;
+using XNALibrary.Graphics.Sprites;
 
 namespace XNALibrary.Graphics.ParticleEngine.Particles;
 
@@ -12,8 +9,8 @@ public class SpriteParticleDefinition : ParticleDefinition
 
     public Sprite Sprite
     {
-        get { return this.sprite; }
-        set { this.sprite = value; }
+        get { return sprite; }
+        set { sprite = value; }
     }
 
     public SpriteParticleDefinition(int id)
@@ -38,7 +35,7 @@ public class SpriteParticleDefinition : ParticleDefinition
 
             SpriteParticle spriteParticle = (SpriteParticle)particle;
             
-            spriteParticle.Sprite = this.sprite;
+            spriteParticle.Sprite = sprite;
             spriteParticle.Rotation = angle;
         }
 

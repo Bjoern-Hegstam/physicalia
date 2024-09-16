@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace XNALibrary.Graphics.ScreenManagement;
@@ -17,7 +14,7 @@ public class ScreenManager : DrawableGameComponent
 
     public List<Screen> Screens
     {
-        get { return this.screens; }
+        get { return screens; }
     }
 
     /// <summary>
@@ -30,10 +27,10 @@ public class ScreenManager : DrawableGameComponent
             if (value == null)
                 throw new ArgumentNullException("value", "BaseScreen cannot be null!");
 
-            if (this.screenStack.Count > 0)
-                this.screenStack.Clear();
+            if (screenStack.Count > 0)
+                screenStack.Clear();
 
-            this.screenStack.Push(value);
+            screenStack.Push(value);
         }
     }
 
@@ -59,7 +56,7 @@ public class ScreenManager : DrawableGameComponent
     /// </summary>
     public bool Transitioning
     {
-        get { return this.transitionState != ScreenTransitionState.None; }
+        get { return transitionState != ScreenTransitionState.None; }
     }
 
     /// <summary>
@@ -67,13 +64,13 @@ public class ScreenManager : DrawableGameComponent
     /// </summary>
     public float TransitionSpeed
     {
-        get { return this.transitionSpeed; }
+        get { return transitionSpeed; }
         set
         {
             if (value <= 0)
                 throw new ArgumentException("Transition speed must be greater than zero!");
             else
-                this.transitionSpeed = value;
+                transitionSpeed = value;
         }
     }
 
@@ -82,8 +79,8 @@ public class ScreenManager : DrawableGameComponent
 
     public IScreenTransitionEffect TransitionEffect
     {
-        get { return this.transitionEffect; }
-        set { this.transitionEffect = value; }
+        get { return transitionEffect; }
+        set { transitionEffect = value; }
     }
 
     private SpriteBatch spriteBatch;
@@ -97,18 +94,18 @@ public class ScreenManager : DrawableGameComponent
     public ScreenManager(Game game)
         : base(game)
     {
-        this.screenStack = new Stack<Screen>();
-        this.screens = new List<Screen>();
+        screenStack = new Stack<Screen>();
+        screens = new List<Screen>();
 
-        this.transitionSpeed = DEFAULT_TRANSITION_SPEED;
-        this.transitionAmount = 0F;
-        this.transitionState = ScreenTransitionState.None;
+        transitionSpeed = DEFAULT_TRANSITION_SPEED;
+        transitionAmount = 0F;
+        transitionState = ScreenTransitionState.None;
     }
 
     public ScreenManager(Game game, IScreenTransitionEffect effect)
         : base(game)
     {
-        this.transitionEffect = effect;
+        transitionEffect = effect;
     }
 
 
@@ -122,19 +119,19 @@ public class ScreenManager : DrawableGameComponent
         if (screenType == null)
             throw new ArgumentNullException("screenType cannot be null!");
 
-        if (this.Transitioning)
+        if (Transitioning)
             return false;
 
         // Go through every available screen
-        foreach (Screen screen in this.screens)
+        foreach (Screen screen in screens)
         {
             // See if a screen of the wanted type is available
             if (screen.GetType() == screenType)
             {
                 // Found the screen, start the transition
-                this.transitionScreen = screen;
-                this.transitionState = ScreenTransitionState.Forward;
-                this.StartTransition();
+                transitionScreen = screen;
+                transitionState = ScreenTransitionState.Forward;
+                StartTransition();
                 return true;
             }
         }
@@ -149,11 +146,11 @@ public class ScreenManager : DrawableGameComponent
     /// <returns>True if the transition was succesfully initialized; false otherwise.</returns>
     public bool TransitionBack()
     {
-        if (this.screenStack.Count > 1 && !this.Transitioning)
+        if (screenStack.Count > 1 && !Transitioning)
         {
-            this.transitionScreen = this.screenStack.Pop();
-            this.transitionState = ScreenTransitionState.Backward;
-            this.StartTransition();
+            transitionScreen = screenStack.Pop();
+            transitionState = ScreenTransitionState.Backward;
+            StartTransition();
             return true;
         }
 
@@ -166,21 +163,21 @@ public class ScreenManager : DrawableGameComponent
     private void StartTransition()
     {
         // Set needed variables to start the transítion
-        this.transitionAmount = 0F;
-        if (this.transitionSpeed < 0)
-            this.transitionSpeed = Math.Abs(this.transitionSpeed);
+        transitionAmount = 0F;
+        if (transitionSpeed < 0)
+            transitionSpeed = Math.Abs(transitionSpeed);
 
         // Notify the current screen that it's Transitioning away
         // and the next screen that it's Transitioning in
-        if (this.transitionState == ScreenTransitionState.Forward)
+        if (transitionState == ScreenTransitionState.Forward)
         {
-            this.screenStack.Peek().OnTransitionOut(false);
-            this.transitionScreen.OnTransitionIn(false);
+            screenStack.Peek().OnTransitionOut(false);
+            transitionScreen.OnTransitionIn(false);
         }
         else
         {
-            this.transitionScreen.OnTransitionOut(false);
-            this.screenStack.Peek().OnTransitionIn(false);
+            transitionScreen.OnTransitionOut(false);
+            screenStack.Peek().OnTransitionIn(false);
         }
     }
 
@@ -190,33 +187,33 @@ public class ScreenManager : DrawableGameComponent
     private void EndTransition()
     {
         // Notify the screens that the transition is over
-        if (this.transitionState == ScreenTransitionState.Forward)
+        if (transitionState == ScreenTransitionState.Forward)
         {
-            this.screenStack.Peek().OnTransitionOut(true);
-            this.transitionScreen.OnTransitionIn(true);
+            screenStack.Peek().OnTransitionOut(true);
+            transitionScreen.OnTransitionIn(true);
         }
         else
         {
-            this.transitionScreen.OnTransitionOut(true);
-            this.screenStack.Peek().OnTransitionIn(true);
+            transitionScreen.OnTransitionOut(true);
+            screenStack.Peek().OnTransitionIn(true);
         }
 
         // Push the new screen on the stack if we transitioned forward
-        if (this.transitionState == ScreenTransitionState.Forward)
-            this.screenStack.Push(this.transitionScreen);
+        if (transitionState == ScreenTransitionState.Forward)
+            screenStack.Push(transitionScreen);
 
         // Do needed cleanup
-        this.transitionScreen = null;
-        this.transitionState = ScreenTransitionState.None;
-        this.transitionAmount = 0F;
-        this.transitionSpeed *= -1;
+        transitionScreen = null;
+        transitionState = ScreenTransitionState.None;
+        transitionAmount = 0F;
+        transitionSpeed *= -1;
     }
 
 
     public override void Initialize()
     {
         // Initialize all screens
-        foreach (Screen screen in this.screens)
+        foreach (Screen screen in screens)
         {
             screen.Initialize();
         }
@@ -227,18 +224,18 @@ public class ScreenManager : DrawableGameComponent
     protected override void LoadContent()
     {
         // Initialize the SpriteBatch and RenderTarget2D
-        this.spriteBatch = new SpriteBatch(this.Game.GraphicsDevice);
+        spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-        this.renderTarget = new RenderTarget2D(this.Game.GraphicsDevice,
-            this.Game.GraphicsDevice.PresentationParameters.BackBufferWidth,
-            this.Game.GraphicsDevice.PresentationParameters.BackBufferHeight,
-            1,
-            SurfaceFormat.Color);
+        renderTarget = new RenderTarget2D(
+            Game.GraphicsDevice,
+            Game.GraphicsDevice.PresentationParameters.BackBufferWidth,
+            Game.GraphicsDevice.PresentationParameters.BackBufferHeight
+        );
 
         // Let screens load content
-        foreach (Screen screen in this.screens)
+        foreach (Screen screen in screens)
         {
-            screen.LoadContent(this.Game.Content);
+            screen.LoadContent(Game.Content);
         }
     }
 
@@ -247,122 +244,122 @@ public class ScreenManager : DrawableGameComponent
         base.Update(gameTime);
 
         // Don't update if no Screens are in the stack
-        if (this.screenStack.Count == 0)
+        if (screenStack.Count == 0)
             return;
 
         // Are we transitioning between screens
-        if (this.Transitioning)
+        if (Transitioning)
         {
             // Let both screens update but not handle input
-            this.screenStack.Peek().Update(gameTime, false);
-            this.transitionScreen.Update(gameTime, false);
+            screenStack.Peek().Update(gameTime, false);
+            transitionScreen.Update(gameTime, false);
 
             // Increase the transition amount
-            this.transitionAmount += (float)gameTime.ElapsedGameTime.TotalSeconds * this.transitionSpeed;
+            transitionAmount += (float)gameTime.ElapsedGameTime.TotalSeconds * transitionSpeed;
 
             // Has the transition come to its end?
-            if (this.transitionAmount >= 1.0F)
-                this.EndTransition();
+            if (transitionAmount >= 1.0F)
+                EndTransition();
         }
         // if not just update the current Screen
         else
         {
-            this.screenStack.Peek().Update(gameTime, true);
+            screenStack.Peek().Update(gameTime, true);
         }
     }
 
     public override void Draw(GameTime gameTime)
     {
         // Don't draw if no Screens are on the stack
-        if (this.screenStack.Count == 0)
+        if (screenStack.Count == 0)
             return;
 
         // Are we transitioning between Screens?
-        if (this.Transitioning && this.transitionEffect != null)
+        if (Transitioning && transitionEffect != null)
         {
             // Change the render target
-            this.GraphicsDevice.SetRenderTarget(0, this.renderTarget);
+            GraphicsDevice.SetRenderTarget(renderTarget);
 
             // Clear the graphics device
-            this.GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Black);
 
             // Draw the next screen to the render target
-            if (this.transitionState == ScreenTransitionState.Forward)
-                this.transitionScreen.Draw(spriteBatch);
+            if (transitionState == ScreenTransitionState.Forward)
+                transitionScreen.Draw(spriteBatch);
             else
-                this.screenStack.Peek().Draw(spriteBatch);
+                screenStack.Peek().Draw(spriteBatch);
 
             // Change the render target back
-            this.GraphicsDevice.SetRenderTarget(0, null);
+            GraphicsDevice.SetRenderTarget(null);
 
             // Draw current Screen
-            if (this.transitionState == ScreenTransitionState.Forward)
-                this.screenStack.Peek().Draw(spriteBatch);
+            if (transitionState == ScreenTransitionState.Forward)
+                screenStack.Peek().Draw(spriteBatch);
             else
-                this.transitionScreen.Draw(spriteBatch);
+                transitionScreen.Draw(spriteBatch);
 
             // Begin draw call
-            this.spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.None);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             // Set the transition mask
-            this.GraphicsDevice.Textures[1] = this.transitionEffect.TransitionMask;
+            GraphicsDevice.Textures[1] = transitionEffect.TransitionMask;
 
             // Set parameters on the used effect
-            this.transitionEffect.TransitionProgress = this.transitionAmount;
+            transitionEffect.TransitionProgress = transitionAmount;
 
             // Start effect
-            this.transitionEffect.Begin();
+            transitionEffect.Begin();
 
             // Draw texture of current Screen
-            this.spriteBatch.Draw(this.renderTarget.GetTexture(), Vector2.Zero, Color.White);
+            spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
 
             // End draw and the effect
-            this.spriteBatch.End();
-            this.transitionEffect.End();
+            spriteBatch.End();
+            transitionEffect.End();
         }
-        else if (this.Transitioning)
+        else if (Transitioning)
         {
             Vector3 overlay = Vector3.Zero;
 
             // Calculate an overlay color for the transition
-            if (this.transitionAmount < 0.5F)
-                overlay = Vector3.Lerp(Color.White.ToVector3(), Color.Black.ToVector3(), this.transitionAmount * 2);
+            if (transitionAmount < 0.5F)
+                overlay = Vector3.Lerp(Color.White.ToVector3(), Color.Black.ToVector3(), transitionAmount * 2);
             else
-                overlay = Vector3.Lerp(Color.Black.ToVector3(), Color.White.ToVector3(), (this.transitionAmount - 0.5F) * 2);
+                overlay = Vector3.Lerp(Color.Black.ToVector3(), Color.White.ToVector3(), (transitionAmount - 0.5F) * 2);
 
             // Set rendertarget and clear device
-            this.GraphicsDevice.SetRenderTarget(0, this.renderTarget);
-            this.GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.SetRenderTarget(renderTarget);
+            GraphicsDevice.Clear(Color.Black);
 
             // Draw current screen
-            if (this.transitionState == ScreenTransitionState.Forward)
+            if (transitionState == ScreenTransitionState.Forward)
             {
-                if (this.transitionAmount < 0.5F)
-                    this.screenStack.Peek().Draw(spriteBatch);
+                if (transitionAmount < 0.5F)
+                    screenStack.Peek().Draw(spriteBatch);
                 else
-                    this.transitionScreen.Draw(spriteBatch);
+                    transitionScreen.Draw(spriteBatch);
             }
             else
             {
-                if (this.transitionAmount < 0.5F)
-                    this.transitionScreen.Draw(spriteBatch);
+                if (transitionAmount < 0.5F)
+                    transitionScreen.Draw(spriteBatch);
                 else
-                    this.screenStack.Peek().Draw(spriteBatch);
+                    screenStack.Peek().Draw(spriteBatch);
             }
 
             // Reset the device
-            this.GraphicsDevice.SetRenderTarget(0, null);
-            this.GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Color.Black);
 
-            this.spriteBatch.Begin();
+            spriteBatch.Begin();
 
             // Draw screen texture using the overlay color
-            this.spriteBatch.Draw(this.renderTarget.GetTexture(), Vector2.Zero, new Color(overlay));
+            spriteBatch.Draw(renderTarget, Vector2.Zero, new Color(overlay));
 
-            this.spriteBatch.End();
+            spriteBatch.End();
         }
         else
             // Draw current Screen
-            this.screenStack.Peek().Draw(spriteBatch);
+            screenStack.Peek().Draw(spriteBatch);
     }
 }

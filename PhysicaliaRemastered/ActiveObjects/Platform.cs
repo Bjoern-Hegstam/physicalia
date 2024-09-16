@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.ActiveObjects;
 

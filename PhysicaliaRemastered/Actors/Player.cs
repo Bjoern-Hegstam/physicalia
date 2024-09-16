@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Weapons;
+using XNALibrary.Graphics.TileEngine;
+using XNALibrary.Interfaces;
 using Weapon = PhysicaliaRemastered.Weapons.NewWeapons.Weapon;
 
 namespace PhysicaliaRemastered.Actors;

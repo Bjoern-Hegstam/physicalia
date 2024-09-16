@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using PhysicaliaRemastered.Actors.Enemies;
+using XNALibrary.Graphics.Animation;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.Actors.EnemyManagement;
 
@@ -209,8 +211,6 @@ public class EnemyBank : IEnemyBank
             {
                 case "Enemy":
                     return new Enemy(new ActorStartValues());
-                default:
-                    break;
             }
 
             return null;

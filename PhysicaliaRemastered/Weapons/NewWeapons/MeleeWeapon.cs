@@ -1,6 +1,7 @@
 using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.Weapons.NewWeapons;
 

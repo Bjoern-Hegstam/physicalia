@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using XNALibrary.Services;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.ScreenManagement;
 
@@ -18,8 +15,8 @@ public class ScreenButton
     /// </summary>
     public Type ScreenLink
     {
-        get { return this.screenTypeLink; }
-        set { this.screenTypeLink = value; }
+        get { return screenTypeLink; }
+        set { screenTypeLink = value; }
     }
 
     private Texture2D texture;
@@ -29,8 +26,8 @@ public class ScreenButton
     /// </summary>
     public Texture2D Texture
     {
-        get { return this.texture; }
-        set { this.texture = value; }
+        get { return texture; }
+        set { texture = value; }
     }
 
     private Rectangle sourceRectangle;
@@ -40,8 +37,8 @@ public class ScreenButton
     /// </summary>
     public Rectangle SourceRectangle
     {
-        get { return this.sourceRectangle; }
-        set { this.sourceRectangle = value; }
+        get { return sourceRectangle; }
+        set { sourceRectangle = value; }
     }
 
     private Color selectedColor = Color.White;
@@ -51,8 +48,8 @@ public class ScreenButton
     /// </summary>
     public Color SelectedColor
     {
-        get { return this.selectedColor; }
-        set { this.selectedColor = value; }
+        get { return selectedColor; }
+        set { selectedColor = value; }
     }
 
     private Vector2 position;
@@ -62,8 +59,8 @@ public class ScreenButton
     /// </summary>
     public Vector2 Position
     {
-        get { return this.position; }
-        set { this.position = value; }
+        get { return position; }
+        set { position = value; }
     }
 
     private IInputHandler inputHandler;
@@ -75,7 +72,7 @@ public class ScreenButton
     /// </summary>
     public bool IsPressed
     {
-        get { return this.pressed; }
+        get { return pressed; }
     }
 
     private bool isSelected = false;
@@ -85,8 +82,8 @@ public class ScreenButton
     /// </summary>
     public bool IsSelected
     {
-        get { return this.isSelected; }
-        set { this.isSelected = value; }
+        get { return isSelected; }
+        set { isSelected = value; }
     }
 
     private bool readMouse = false;
@@ -96,14 +93,14 @@ public class ScreenButton
     /// </summary>
     public bool ReadMouseInput
     {
-        get { return this.readMouse; }
-        set { this.readMouse = value; }
+        get { return readMouse; }
+        set { readMouse = value; }
     }
 
     public ScreenButton(IInputHandler inputHandler, Texture2D texture)
     {
         this.inputHandler = inputHandler;
-        this.sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+        sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
         this.texture = texture;
     }
 
@@ -116,26 +113,26 @@ public class ScreenButton
     public virtual void HandleInput()
     {
         // Read mouse input?
-        if (this.readMouse)
+        if (readMouse)
         {
             // Button is always not pressed until proven otherwise
-            this.pressed = false;
+            pressed = false;
 
             // Button pressed and mouse in correct area?
-            if (this.inputHandler.CurrentMouseState.X > this.position.X &&
-                this.inputHandler.CurrentMouseState.X < this.position.X + this.texture.Width &&
-                this.inputHandler.CurrentMouseState.Y > this.position.Y &&
-                this.inputHandler.CurrentMouseState.Y < this.position.Y + this.texture.Height)
+            if (inputHandler.CurrentMouseState.X > position.X &&
+                inputHandler.CurrentMouseState.X < position.X + texture.Width &&
+                inputHandler.CurrentMouseState.Y > position.Y &&
+                inputHandler.CurrentMouseState.Y < position.Y + texture.Height)
             {
-                this.isSelected = true;
+                isSelected = true;
 
                 // Button pressed?
-                if (this.inputHandler.CurrentMouseState.LeftButton == ButtonState.Pressed &&
-                    this.inputHandler.OldMouseState.LeftButton == ButtonState.Released)
-                    this.pressed = true;
+                if (inputHandler.CurrentMouseState.LeftButton == ButtonState.Pressed &&
+                    inputHandler.OldMouseState.LeftButton == ButtonState.Released)
+                    pressed = true;
             }
             else
-                this.isSelected = false;
+                isSelected = false;
         }
     }
 
@@ -151,12 +148,12 @@ public class ScreenButton
     /// <param name="spriteBatch"></param>
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        if (this.texture != null)
+        if (texture != null)
         {
-            if (this.isSelected)
-                spriteBatch.Draw(this.texture, this.position, this.sourceRectangle, this.selectedColor);
+            if (isSelected)
+                spriteBatch.Draw(texture, position, sourceRectangle, selectedColor);
             else
-                spriteBatch.Draw(this.texture, this.position, this.sourceRectangle, Color.White);
+                spriteBatch.Draw(texture, position, sourceRectangle, Color.White);
         }
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using XNALibrary.Services;
+using Microsoft.Xna.Framework.Graphics;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.ScreenManagement;
 
@@ -17,7 +14,7 @@ public class Screen
     /// </summary>
     public List<ScreenButton> Buttons
     {
-        get { return this.buttons; }
+        get { return buttons; }
     }
 
     private Texture2D background;
@@ -27,8 +24,8 @@ public class Screen
     /// </summary>
     public Texture2D Background
     {
-        get { return this.background; }
-        set { this.background = value; }
+        get { return background; }
+        set { background = value; }
     }
 
     private Game game;
@@ -38,7 +35,7 @@ public class Screen
     /// </summary>
     public Game Game
     {
-        get { return this.game; }
+        get { return game; }
     }
 
     private IInputHandler inputHandler;
@@ -48,7 +45,7 @@ public class Screen
     /// </summary>
     public IInputHandler InputHandler
     {
-        get { return this.inputHandler; }
+        get { return inputHandler; }
     }
 
     private ScreenManager manager;
@@ -58,12 +55,12 @@ public class Screen
     /// </summary>
     public ScreenManager ScreenManager
     {
-        get { return this.manager; }
+        get { return manager; }
     }
 
     public Screen(Game game, ScreenManager manager)
     {
-        this.buttons = new List<ScreenButton>();
+        buttons = new List<ScreenButton>();
 
         this.game = game;
         this.manager = manager;
@@ -75,7 +72,7 @@ public class Screen
     /// </summary>
     public virtual void Initialize()
     {
-        this.inputHandler = (IInputHandler)this.game.Services.GetService(typeof(IInputHandler));
+        inputHandler = (IInputHandler)game.Services.GetService(typeof(IInputHandler));
     }
 
     public virtual void LoadContent(ContentManager contentManager) { }
@@ -90,18 +87,18 @@ public class Screen
     public void Update(GameTime gameTime, bool handleInput)
     {
         // Let child update
-        this.OnUpdate(gameTime);
+        OnUpdate(gameTime);
 
         // Update the buttons
-        this.UpdateButtons(gameTime);
+        UpdateButtons(gameTime);
 
         // Should input be handled?
         if (handleInput)
         {
-            this.HandleInput();
+            HandleInput();
 
             // Let child handle input
-            this.OnHandleInput();
+            OnHandleInput();
         }
     }
 
@@ -115,25 +112,25 @@ public class Screen
         spriteBatch.Begin();
 
         // Draw background if one has been set
-        if (this.background != null)
-            spriteBatch.Draw(this.background, Vector2.Zero, Color.White);
+        if (background != null)
+            spriteBatch.Draw(background, Vector2.Zero, Color.White);
 
         // Draw content before buttons
-        this.OnDrawBefore(spriteBatch);
+        OnDrawBefore(spriteBatch);
 
         // Draw all buttons
-        foreach (ScreenButton button in this.buttons)
+        foreach (ScreenButton button in buttons)
             button.Draw(spriteBatch);
 
         // Draw content after buttons
-        this.OnDrawAfter(spriteBatch);
+        OnDrawAfter(spriteBatch);
 
         spriteBatch.End();
     }
 
     private void UpdateButtons(GameTime gameTime)
     {
-        foreach (ScreenButton button in this.buttons)
+        foreach (ScreenButton button in buttons)
         {
             button.Update(gameTime);
         }
@@ -144,7 +141,7 @@ public class Screen
     /// </summary>
     private void HandleInput()
     {
-        foreach (ScreenButton button in this.buttons)
+        foreach (ScreenButton button in buttons)
         {
             button.HandleInput();
 
@@ -152,9 +149,9 @@ public class Screen
             if (button.IsPressed)
             {
                 if (button.ScreenLink != null)
-                    this.ScreenManager.TransitionTo(button.ScreenLink);
+                    ScreenManager.TransitionTo(button.ScreenLink);
                 else
-                    this.ScreenManager.TransitionBack();
+                    ScreenManager.TransitionBack();
 
                 // Don't check any more buttons
                 return;

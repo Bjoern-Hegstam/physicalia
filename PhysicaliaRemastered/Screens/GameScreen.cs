@@ -1,12 +1,14 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Input;
+using XNALibrary.Graphics.ScreenManagement;
 
 namespace PhysicaliaRemastered.Screens;
 
-public class GameScreen : XNALibrary.Graphics.Screen
+public class GameScreen : Screen
 {
     public enum PauseMenuOption
     {
@@ -45,7 +47,7 @@ public class GameScreen : XNALibrary.Graphics.Screen
     public GameScreen(Game game, ScreenManager manager)
         : base(game, manager)
     {
-            gameManager = new GameManager(this.Game);
+            gameManager = new GameManager(Game);
             settings = gameManager.Settings;
         }
 
@@ -54,15 +56,15 @@ public class GameScreen : XNALibrary.Graphics.Screen
             base.Initialize();
 
             // Create Pause overlay texture
-            pauseOverlayTexture = new Texture2D(this.Game.GraphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
+            pauseOverlayTexture = new Texture2D(Game.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
             pauseOverlayTexture.SetData<Color>(new Color[] { new Color(0, 0, 0, 128) });
 
             pauseOverlayArea = new Rectangle();
-            pauseOverlayArea.Width = this.Game.GraphicsDevice.Viewport.Width;
-            pauseOverlayArea.Height = this.Game.GraphicsDevice.Viewport.Height;
+            pauseOverlayArea.Width = Game.GraphicsDevice.Viewport.Width;
+            pauseOverlayArea.Height = Game.GraphicsDevice.Viewport.Height;
         }
 
-    public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
+    public override void LoadContent(ContentManager contentManager)
     {
             gameManager.LoadXml(@"Content\GameData\Game.xml");
             gameManager.LoadContent(contentManager);
@@ -125,6 +127,7 @@ public class GameScreen : XNALibrary.Graphics.Screen
                         pauseMenuIndex = 0;
                         break;
                     case PauseMenuOption.Load:
+                        /*
                         OpenFileDialog loadDialog = new OpenFileDialog();
                         loadDialog.AddExtension = true;
                         loadDialog.DefaultExt = ".xml";
@@ -136,8 +139,10 @@ public class GameScreen : XNALibrary.Graphics.Screen
                             gameManager.LoadSession(GameSession.LoadFromXml(loadDialog.FileName));
                             pauseMenuIndex = 0;
                         }
+                        */
                         break;
                     case PauseMenuOption.Save:
+                        /*
                         SaveFileDialog saveDialog = new SaveFileDialog();
                         saveDialog.AddExtension = true;
                         saveDialog.DefaultExt = ".xml";
@@ -149,11 +154,10 @@ public class GameScreen : XNALibrary.Graphics.Screen
                             gameManager.SaveSession().SaveToXml(saveDialog.FileName);
                             pauseMenuIndex = 0;
                         }
+                        */
                         break;
                     case PauseMenuOption.Menu:
-                        this.ScreenManager.TransitionBack();
-                        break;
-                    default:
+                        ScreenManager.TransitionBack();
                         break;
                 }
             }

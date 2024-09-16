@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Services;
-using XNALibrary.Graphics;
+using XNALibrary.Graphics.TileEngine;
+using XNALibrary.Interfaces;
 
-namespace XNALibrary.Graphics.Particles;
+namespace XNALibrary.Graphics.ParticleEngine;
 
 /// <summary>
 /// Determines what can affect the life of the particle.
@@ -53,62 +50,62 @@ public abstract class Particle : ICollisionObject
 
     public Vector2 Position
     {
-        get { return this.position; }
-        set { this.position = value; }
+        get { return position; }
+        set { position = value; }
     }
 
     public Vector2 Velocity
     {
-        get { return this.velocity; }
-        set { this.velocity = value; }
+        get { return velocity; }
+        set { velocity = value; }
     }
 
     public Vector2 Acceleration
     {
-        get { return this.acceleration; }
-        set { this.acceleration = value; }
+        get { return acceleration; }
+        set { acceleration = value; }
     }
 
     public CollisionMode CollisionMode
     {
-        get { return this.collisionMode; }
-        set { this.collisionMode = value; }
+        get { return collisionMode; }
+        set { collisionMode = value; }
     }
 
     public float Radius
     {
-        get { return this.radius; }
-        set { this.radius = value; }
+        get { return radius; }
+        set { radius = value; }
     }
 
     public ParticleLifeMode LifeMode
     {
-        get { return this.lifeMode; }
-        set { this.lifeMode = value; }
+        get { return lifeMode; }
+        set { lifeMode = value; }
     }
 
     public float Life
     {
-        get { return this.life; }
-        set { this.life = value; }
+        get { return life; }
+        set { life = value; }
     }
 
     public bool IsActive
     {
-        get { return this.active; }
-        set { this.active = value; }
+        get { return active; }
+        set { active = value; }
     }
 
     public ParticleDefinition Definition
     {
-        get { return this.definition; }
-        set { this.definition = value; }
+        get { return definition; }
+        set { definition = value; }
     }
 
     public IParticleEngine ParticleEngine
     {
-        get { return this.particleEngine; }
-        set { this.particleEngine = value; }
+        get { return particleEngine; }
+        set { particleEngine = value; }
     }
 
     public Particle()
@@ -117,26 +114,26 @@ public abstract class Particle : ICollisionObject
     public Particle(Vector2 position)
     {
         this.position = position;
-        this.acceleration = this.velocity = Vector2.Zero;
-        this.definition = null;
-        this.life = DEFAULT_LIFE;
-        this.lifeMode = ParticleLifeMode.Time;
-        this.active = true;
+        acceleration = velocity = Vector2.Zero;
+        definition = null;
+        life = DEFAULT_LIFE;
+        lifeMode = ParticleLifeMode.Time;
+        active = true;
     }
 
     public virtual void Update(GameTime gameTime)
     {
         // Update position
-        this.position += this.velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        this.velocity += this.acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         // Update life
-        if (this.lifeMode == ParticleLifeMode.Time)
-            this.life -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (lifeMode == ParticleLifeMode.Time)
+            life -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         // Dead?
-        if (this.life <= 0)
-            this.active = false;
+        if (life <= 0)
+            active = false;
     }
 
     public virtual void Draw(SpriteBatch spriteBatch) { }
@@ -160,20 +157,20 @@ public abstract class Particle : ICollisionObject
     private bool canTakeDamage;
     public bool CanTakeDamage
     {
-        get { return this.canTakeDamage; }
-        set { this.canTakeDamage = value; }
+        get { return canTakeDamage; }
+        set { canTakeDamage = value; }
     }
 
     private bool canCollide;
     public bool CanCollide
     {
-        get { return this.canCollide; }
-        set { this.canCollide = value; }
+        get { return canCollide; }
+        set { canCollide = value; }
     }
 
     public virtual void OnCollision(ICollisionObject collisionObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
     {
-        if (this.canCollide)
+        if (canCollide)
         {
             this.position = position;
             this.velocity = velocity;
@@ -182,11 +179,11 @@ public abstract class Particle : ICollisionObject
 
     public void TakeDamage(float damage)
     {
-        if (this.lifeMode == ParticleLifeMode.Damage)
+        if (lifeMode == ParticleLifeMode.Damage)
         {
-            this.life -= damage;
-            if (this.life <= 0)
-                this.active = false;
+            life -= damage;
+            if (life <= 0)
+                active = false;
         }
     }
 }

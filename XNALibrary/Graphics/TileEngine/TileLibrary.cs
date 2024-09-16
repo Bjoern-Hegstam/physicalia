@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using XNALibrary.Services;
 using System.Xml;
+using Microsoft.Xna.Framework;
+using XNALibrary.Graphics.Sprites;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.TileEngine;
 
@@ -12,7 +11,7 @@ public class TileLibrary : ITileLibrary
 
     public TileLibrary()
     {
-        this.tileLibrary = new Dictionary<int, Tile>();
+        tileLibrary = new Dictionary<int, Tile>();
     }
 
     /// <summary>
@@ -23,9 +22,9 @@ public class TileLibrary : ITileLibrary
     /// <returns>True if the Tile was succesfully added; false otherwise.</returns>
     public bool AddTile(int key, Tile tile)
     {
-        if (!this.tileLibrary.ContainsKey(key))
+        if (!tileLibrary.ContainsKey(key))
         {
-            this.tileLibrary.Add(key, tile);
+            tileLibrary.Add(key, tile);
             return true;
         }
 
@@ -39,7 +38,7 @@ public class TileLibrary : ITileLibrary
     /// <returns>True if the Tile was succesfully removed; false otherwise.</returns>
     public bool RemoveTile(int key)
     {
-        return this.tileLibrary.Remove(key);
+        return tileLibrary.Remove(key);
     }
 
     /// <summary>
@@ -49,8 +48,8 @@ public class TileLibrary : ITileLibrary
     /// <returns>The wanted Tile or null if no matching Tile was found.</returns>
     public Tile GetTile(int key)
     {
-        if (this.tileLibrary.ContainsKey(key))
-            return this.tileLibrary[key];
+        if (tileLibrary.ContainsKey(key))
+            return tileLibrary[key];
 
         return null;
     }
@@ -62,7 +61,7 @@ public class TileLibrary : ITileLibrary
     /// <returns>True if the TileLibrary contains the specified key; false otherwise.</returns>
     public bool ContainsKey(int key)
     {
-        return this.tileLibrary.ContainsKey(key);
+        return tileLibrary.ContainsKey(key);
     }
 
     /// <summary>
@@ -70,7 +69,7 @@ public class TileLibrary : ITileLibrary
     /// </summary>
     public void Clear()
     {
-        this.tileLibrary.Clear();
+        tileLibrary.Clear();
     }
 
     public void LoadXml(string path, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
@@ -83,7 +82,7 @@ public class TileLibrary : ITileLibrary
 
         using (XmlReader reader = XmlReader.Create(path, settings))
         {
-            this.LoadXml(reader, spriteLibrary, animationManager);
+            LoadXml(reader, spriteLibrary, animationManager);
         }
     }
 
@@ -100,7 +99,7 @@ public class TileLibrary : ITileLibrary
                 if (reader.GetAttribute("textureType") == "Animation")
                 {
                     int animationKey = int.Parse(reader.GetAttribute("textureKey"));
-                    Animation animation = animationManager.GetBankAnimation(animationKey).Copy();
+                    Animation.Animation animation = animationManager.GetBankAnimation(animationKey).Copy();
                     animationManager.AddPlaybackAnimation(animation);
                     tile = new AnimatedTile(animation);
                 }
@@ -118,7 +117,7 @@ public class TileLibrary : ITileLibrary
                 int x = int.Parse(reader.GetAttribute("x")); int y = int.Parse(reader.GetAttribute("y"));
                 int width = int.Parse(reader.GetAttribute("width")); int height = int.Parse(reader.GetAttribute("height"));
 
-                tile.CollisionBox = new Microsoft.Xna.Framework.Rectangle(x, y, width, height);
+                tile.CollisionBox = new Rectangle(x, y, width, height);
 
                 // Get the collision sides of the Tile
                 reader.ReadToFollowing("CollisionSides");
@@ -133,7 +132,7 @@ public class TileLibrary : ITileLibrary
                     }
 
                 // Store the Tile
-                this.tileLibrary.Add(id, tile);
+                tileLibrary.Add(id, tile);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&

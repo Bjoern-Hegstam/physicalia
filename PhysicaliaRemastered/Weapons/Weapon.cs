@@ -3,6 +3,10 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors;
+using PhysicaliaRemastered.GameManagement;
+using XNALibrary.Graphics.Animation;
+using XNALibrary.Graphics.Sprites;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.Weapons;
 

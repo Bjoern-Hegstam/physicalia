@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using PhysicaliaRemastered.Weapons.NewWeapons;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.Weapons;
 
@@ -100,8 +101,6 @@ public class WeaponBank : IWeaponBank
                         break;
                     case "Projectile":
                         weapon = new ProjectileWeapon(weaponID, particleEngine);
-                        break;
-                    default:
                         break;
                 }
 

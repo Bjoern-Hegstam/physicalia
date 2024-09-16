@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using XNALibrary.Services;
-using Microsoft.Xna.Framework.Graphics;
 using System.Xml;
+using Microsoft.Xna.Framework.Graphics;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics;
 
@@ -13,19 +10,19 @@ public class TextureLibrary : ITextureLibrary
 
     public Texture2D this[int key]
     {
-        get { return this.GetTexture(key); }
+        get { return GetTexture(key); }
     }
 
     public TextureLibrary()
     {
-        this.textureLibrary = new Dictionary<int, Texture2D>();
+        textureLibrary = new Dictionary<int, Texture2D>();
     }
 
     public bool AddTexture(int key, Texture2D texture)
     {
-        if (!this.textureLibrary.ContainsKey(key))
+        if (!textureLibrary.ContainsKey(key))
         {
-            this.textureLibrary.Add(key, texture);
+            textureLibrary.Add(key, texture);
             return true;
         }
 
@@ -34,25 +31,25 @@ public class TextureLibrary : ITextureLibrary
 
     public bool RemoveTexture(int key)
     {
-        return this.textureLibrary.Remove(key);
+        return textureLibrary.Remove(key);
     }
 
     public Texture2D GetTexture(int key)
     {
-        if (this.textureLibrary.ContainsKey(key))
-            return this.textureLibrary[key];
+        if (textureLibrary.ContainsKey(key))
+            return textureLibrary[key];
 
         return null;
     }
 
     public bool ContainsKey(int key)
     {
-        return this.textureLibrary.ContainsKey(key);
+        return textureLibrary.ContainsKey(key);
     }
 
     public void Clear()
     {
-        this.textureLibrary.Clear();
+        textureLibrary.Clear();
     }
 
     public void LoadXml(string path, GraphicsDevice graphics)
@@ -64,7 +61,7 @@ public class TextureLibrary : ITextureLibrary
 
         using (XmlReader reader = XmlReader.Create(path, readerSettings))
         {
-            this.LoadXml(reader, graphics);
+            LoadXml(reader, graphics);
         }
     }
 
@@ -78,7 +75,7 @@ public class TextureLibrary : ITextureLibrary
                 int id = int.Parse(reader.GetAttribute("id"));
                     
                 Texture2D texture = Texture2D.FromFile(graphics, reader.ReadString());
-                this.AddTexture(id, texture);
+                AddTexture(id, texture);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&

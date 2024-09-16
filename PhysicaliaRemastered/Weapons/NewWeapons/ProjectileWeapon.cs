@@ -1,7 +1,10 @@
 using System;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using PhysicaliaRemastered.GameManagement;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.Weapons.NewWeapons;
 
@@ -175,17 +178,17 @@ public class ProjectileWeapon : Weapon
             }
         }
 
-    public override void LoadXml(System.Xml.XmlReader reader)
+    public override void LoadXml(XmlReader reader)
     {
             while (reader.Read())
             {
-                if (reader.NodeType == System.Xml.XmlNodeType.Element &&
+                if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "FireMode")
                 {
                     fireMode = (FireMode)Enum.Parse(typeof(FireMode), reader.ReadString());
                 }
 
-                if (reader.NodeType == System.Xml.XmlNodeType.Element &&
+                if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "Vibration")
                 {
                     float low, high;
@@ -203,7 +206,7 @@ public class ProjectileWeapon : Weapon
                     fireVibration = new Vector2(low, high);
                 }
 
-                if (reader.NodeType == System.Xml.XmlNodeType.Element &&
+                if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "MuzzlePosition")
                 {
                     float x = float.Parse(reader.GetAttribute("x"));
@@ -213,7 +216,7 @@ public class ProjectileWeapon : Weapon
                     maxDeviation = float.Parse(reader.GetAttribute("maxDeviation"));
                 }
 
-                if (reader.NodeType == System.Xml.XmlNodeType.Element &&
+                if (reader.NodeType == XmlNodeType.Element &&
                     reader.LocalName == "Ammunition")
                 {
                     MaxAmmo = int.Parse(reader.GetAttribute("max"));
@@ -223,7 +226,7 @@ public class ProjectileWeapon : Weapon
                     spread = float.Parse(reader.GetAttribute("spread"));
                 }
 
-                if (reader.NodeType == System.Xml.XmlNodeType.EndElement &&
+                if (reader.NodeType == XmlNodeType.EndElement &&
                     reader.LocalName == "WeaponData")
                     return;
             }

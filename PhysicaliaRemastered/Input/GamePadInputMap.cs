@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PhysicaliaRemastered.Input;
 
-class GamePadInputMap : InputMap
+internal class GamePadInputMap : InputMap
 {
     private Dictionary<InputAction, Buttons> buttons;
 

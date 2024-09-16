@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using XNALibrary;
-using XNALibrary.Graphics.Particles;
 using Microsoft.Xna.Framework;
-using XNALibrary.Graphics;
+using XNALibrary.Graphics.Sprites;
+using XNALibrary.Graphics.TileEngine;
+using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.ParticleEngine.Particles;
 
@@ -17,14 +14,14 @@ public class Projectile : SpriteParticle
 
     public ObjectType DamageObjects
     {
-        get { return this.damageObjects; }
-        set { this.damageObjects = value; }
+        get { return damageObjects; }
+        set { damageObjects = value; }
     }
 
     public float DamageAmount
     {
-        get { return this.damageAmount; }
-        set { this.damageAmount = value; }
+        get { return damageAmount; }
+        set { damageAmount = value; }
     }
 
     /// <summary>
@@ -33,8 +30,8 @@ public class Projectile : SpriteParticle
     /// </summary>
     public bool SpawnOnImpact
     {
-        get { return this.spawnOnImpact; }
-        set { this.spawnOnImpact = value; }
+        get { return spawnOnImpact; }
+        set { spawnOnImpact = value; }
     }
 
     /// <summary>
@@ -43,25 +40,25 @@ public class Projectile : SpriteParticle
     /// </summary>
     public int CollisionProjectileID
     {
-        get { return this.collisionProjectileID; }
-        set { this.collisionProjectileID = value; }
+        get { return collisionProjectileID; }
+        set { collisionProjectileID = value; }
     }
 
     public Projectile(Sprite sprite)
     {
-        this.Sprite = sprite;
-        this.damageObjects = 0;
-        this.spawnOnImpact = false;
-        this.collisionProjectileID = -1;
+        Sprite = sprite;
+        damageObjects = 0;
+        spawnOnImpact = false;
+        collisionProjectileID = -1;
     }
 
     public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
     {
         // Damage the object if possible
-        if ((this.damageObjects & collidedObject.Type) != 0)
+        if ((damageObjects & collidedObject.Type) != 0)
         {
             if (collidedObject.CanTakeDamage)
-                collidedObject.TakeDamage(this.damageAmount);
+                collidedObject.TakeDamage(damageAmount);
 
             // Go inactive if we collided with the object
             if (collidedObject.CanCollide)
@@ -69,8 +66,8 @@ public class Projectile : SpriteParticle
                 this.IsActive = false;
 
                 // See if a new particle should be fired on collision
-                if (this.spawnOnImpact)
-                    this.ParticleEngine.Add(this.collisionProjectileID, 1, this.position);
+                if (spawnOnImpact)
+                    this.ParticleEngine.Add(collisionProjectileID, 1, this.position);
             }
         }
     }

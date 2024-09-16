@@ -1,6 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PhysicaliaRemastered.GameManagement;
+using XNALibrary.Graphics.Sprites;
 
 namespace PhysicaliaRemastered.Pickups;
 

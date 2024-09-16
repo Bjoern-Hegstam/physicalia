@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Pickups;
+using XNALibrary.Interfaces;
 
 namespace PhysicaliaRemastered.ActiveObjects;
 
