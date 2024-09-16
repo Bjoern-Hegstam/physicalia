@@ -32,8 +32,6 @@ public enum LevelState
 /// </summary>
 public class Level
 {
-    #region Constants
-
     // The start position of the UI in the y-axis
     private const float UI_INDEX_POS_Y = 10F;
     private const float UI_MODIFIER_SPACING = 5F;
@@ -41,10 +39,6 @@ public class Level
     private const int SCREEN_ACTIVATION_DISTANCE = 20;
 
     private const float PLAYER_FINISH_SLOWDOWN = 0.95F;
-
-    #endregion
-
-    #region Fields
 
     private int levelIndex;
     private int worldIndex;
@@ -87,10 +81,6 @@ public class Level
     // Lists of ActiveObjects
     private List<ActiveObject> activeObjects;
     private List<ActiveObject> inactiveObjects;
-
-    #endregion
-
-    #region Properties
 
     public int WorldIndex
     {
@@ -144,10 +134,6 @@ public class Level
         get { return this.screenSampler; }
     }
 
-    #endregion
-
-    #region Constructors
-
     public Level(Game game, Player player)
     {
         this.game = game;
@@ -173,10 +159,6 @@ public class Level
         this.activeObjects = new List<ActiveObject>();
         this.inactiveObjects = new List<ActiveObject>();
     }
-
-    #endregion
-
-    #region Public methods
 
     public void Update(GameTime gameTime)
     {
@@ -259,8 +241,6 @@ public class Level
         if (this.nextState != this.state)
             this.ChangeState();
     }
-
-    #region Xml loading
 
     public void LoadXml(string path, ITileLibrary tileLibrary)
     {
@@ -485,8 +465,6 @@ public class Level
         }
     }
 
-    #endregion
-
     /// <summary>
     /// Resets the Level to its initial state.
     /// </summary>
@@ -638,10 +616,6 @@ public class Level
                 break;
         }
     }
-
-    #endregion
-
-    #region Private methods
 
     /// <summary>
     /// Changes the current state of the level to the next selected one. Code
@@ -993,10 +967,6 @@ public class Level
         }
     }
 
-    #endregion
-
-    #region Session management
-
     public void SaveSession(GameSession session)
     {
         foreach (ModifierPickup modifier in this.modifiers)
@@ -1064,6 +1034,4 @@ public class Level
 
         this.state = this.nextState = LevelState.Playing;
     }
-
-    #endregion
 }

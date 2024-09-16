@@ -30,8 +30,6 @@ public class GameManager
     private const string LIBRARY_PATH = GAMEDATA_PATH + "Libraries\\";
     private const string WORLD_PATH = GAMEDATA_PATH + "Worlds\\";
 
-    #region Fields
-
     private Game game;
     private ISettings settings;
     private ITextureLibrary textureLibrary;
@@ -54,10 +52,6 @@ public class GameManager
     // Used for making sure pause mode is only entered when it's available
     private int pausePressedCount = 0;
 
-    #endregion
-
-    #region Properties
-
     public GameState State
     {
         get { return this.currentState; }
@@ -75,10 +69,6 @@ public class GameManager
     {
         get { return this.settings; }
     }
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new GameManager.
@@ -127,10 +117,6 @@ public class GameManager
         this.nextState = this.currentState = GameState.Start;
     }
 
-    #endregion
-
-    #region Private methods
-
     /// <summary>
     /// Changes the state of the GameManager.
     /// </summary>
@@ -171,8 +157,6 @@ public class GameManager
         this.currentState = this.nextState;
     }
 
-    #endregion
-
     public void ResetLevel()
     {
         if (this.worldIndex < this.worlds.Count)
@@ -185,8 +169,6 @@ public class GameManager
             this.player.Flickering = false;
         }
     }
-
-    #region Session management
 
     /// <summary>
     /// Makes the game ready for a new game session.
@@ -243,10 +225,6 @@ public class GameManager
 
         return session;
     }
-
-    #endregion
-
-    #region Load Data
 
     public void LoadContent(Microsoft.Xna.Framework.Content.ContentManager contentManager)
     {
@@ -419,10 +397,6 @@ public class GameManager
         return new Rectangle(x, y, width, height);
     }
 
-    #endregion
-
-    #region Update & Draw
-
     public void Update(GameTime gameTime)
     {
         switch (this.currentState)
@@ -500,6 +474,4 @@ public class GameManager
                 break;
         }
     }
-
-    #endregion
 }

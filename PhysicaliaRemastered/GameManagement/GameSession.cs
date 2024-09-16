@@ -7,8 +7,6 @@ using Microsoft.Xna.Framework;
 
 namespace PhysicaliaRemastered.GameManagement;
 
-#region GameSession helper classes/structs
-
 public struct ModifierSave
 {
     public int ID;
@@ -62,8 +60,6 @@ public struct WeaponSave
     }
 }
 
-#endregion
-
 /// <summary>
 /// A GameSession represents a state that the game can be in. A GameSession
 /// object can be de-/serialized from/to xml. GameSessions can be used to
@@ -71,8 +67,6 @@ public struct WeaponSave
 /// </summary>
 public class GameSession
 {
-    #region Fields
-
     private int worldIndex;
     private int levelIndex;
 
@@ -88,10 +82,6 @@ public class GameSession
 
     // EnemyManager
     private Dictionary<int, EnemySave> enemySaves;
-
-    #endregion
-
-    #region Properties
 
     public int WorldIndex
     {
@@ -143,17 +133,12 @@ public class GameSession
         get { return this.enemySaves; }
     }
 
-    #endregion
-
-    public GameSession()
-    {
-        this.weaponSaves = new Dictionary<int, WeaponSave>();
+    public GameSession() 
+    aponSaves = new Dictionary<int, WeaponSave>();
         this.levelModifiers = new List<ModifierSave>();
         this.activatedObjects = new Dictionary<int, ActiveObjectSave>();
         this.enemySaves = new Dictionary<int, EnemySave>();
     }
-
-    #region Xml
 
     public void SaveToXml(string path)
     {
@@ -430,6 +415,4 @@ public class GameSession
                 return;
         }
     }
-
-    #endregion
 }

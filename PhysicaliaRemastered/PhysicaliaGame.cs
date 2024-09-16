@@ -4,6 +4,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Screens;
+using XNALibrary.Graphics;
+using XNALibrary.Input;
 
 namespace PhysicaliaRemastered;
 
@@ -42,21 +44,17 @@ public class PhysicaliaGame : Game
     /// </summary>
     protected override void Initialize()
     {
-        // Create a new InputHandler and add it to the collection of Components
         inputHandler = new InputHandler(this);
         Components.Add(inputHandler);
 
-        // Create a new ScreenManager and add it to the collection of Components
         screenManager = new ScreenManager(this);
         Components.Add(screenManager);
 
-        //this.titleScreen = new TitleScreen(this, this.screenManager);
         menuScreen = new MenuScreen(this, screenManager);
         gameScreen = new GameScreen(this, screenManager);
             
         screenManager.BaseScreen = menuScreen;
 
-        //this.screenManager.Screens.Add(this.titleScreen);
         screenManager.Screens.Add(menuScreen);
         screenManager.Screens.Add(gameScreen);
 
@@ -80,28 +78,7 @@ public class PhysicaliaGame : Game
 
         // TODO: use this.Content to load your game content here
     }
-
-    /// <summary>
-    /// UnloadContent will be called once per game and is the place to unload
-    /// all content.
-    /// </summary>
-    protected override void UnloadContent()
-    {
-        // TODO: Unload any non ContentManager content here
-    }
-
-    /// <summary>
-    /// Allows the game to run logic such as updating the world,
-    /// checking for collisions, gathering input, and playing audio.
-    /// </summary>
-    /// <param name="gameTime">Provides a snapshot of timing values.</param>
-    protected override void Update(GameTime gameTime)
-    {
-        // TODO: Add your update logic here
-
-        base.Update(gameTime);
-    }
-
+    
     /// <summary>
     /// This is called when the game should draw itself.
     /// </summary>

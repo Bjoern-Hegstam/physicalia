@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhysicaliaRemastered", "PhysicaliaRemastered\PhysicaliaRemastered.csproj", "{2D7B2CE6-B66A-424A-9A8C-8EAF97B17A60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNALibrary", "XNALibrary\XNALibrary.csproj", "{3DA58B37-71BB-4AB1-AB36-D224B2A8C5EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2D7B2CE6-B66A-424A-9A8C-8EAF97B17A60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D7B2CE6-B66A-424A-9A8C-8EAF97B17A60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D7B2CE6-B66A-424A-9A8C-8EAF97B17A60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DA58B37-71BB-4AB1-AB36-D224B2A8C5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DA58B37-71BB-4AB1-AB36-D224B2A8C5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DA58B37-71BB-4AB1-AB36-D224B2A8C5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DA58B37-71BB-4AB1-AB36-D224B2A8C5EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
