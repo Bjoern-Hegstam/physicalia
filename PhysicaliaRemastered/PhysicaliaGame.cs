@@ -19,7 +19,6 @@ public class PhysicaliaGame : Game
 
     private ScreenManager _screenManager;
 
-    private TitleScreen _titleScreen;
     private MenuScreen _menuScreen;
     private GameScreen _gameScreen;
 
@@ -31,7 +30,7 @@ public class PhysicaliaGame : Game
         _graphics.PreferredBackBufferWidth = 640;
         _graphics.PreferredBackBufferHeight = 480;
 
-        _graphics.IsFullScreen = true;
+        _graphics.IsFullScreen = false;
     }
 
     /// <summary>
