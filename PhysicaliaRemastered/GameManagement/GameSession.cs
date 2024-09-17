@@ -3,6 +3,7 @@ using System.Text;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using PhysicaliaRemastered.Actors;
+using XNALibrary;
 
 namespace PhysicaliaRemastered.GameManagement;
 
@@ -105,12 +106,12 @@ public class GameSession
 
     public void SaveToXml(string path)
     {
-        XmlWriterSettings writerSettings = new XmlWriterSettings
+        var writerSettings = new XmlWriterSettings
         {
             Encoding = Encoding.UTF8
         };
 
-        using XmlWriter writer = XmlWriter.Create(path, writerSettings);
+        using var writer = XmlWriter.Create(path, writerSettings);
         writer.WriteStartDocument();
 
         writer.WriteStartElement("GameSession");
@@ -232,24 +233,24 @@ public class GameSession
 
     public static GameSession LoadFromXml(string path)
     {
-        GameSession session = new GameSession();
+        var session = new GameSession();
 
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreProcessingInstructions = true,
             IgnoreWhitespace = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         reader.ReadToFollowing("WorldIndex");
-        session.WorldIndex = int.Parse(reader.GetAttribute("value"));
+        session.WorldIndex = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("LevelIndex");
-        session.LevelIndex = int.Parse(reader.GetAttribute("value"));
+        session.LevelIndex = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("Player");
-        session.PlayerHealth = float.Parse(reader.GetAttribute("health"));
+        session.PlayerHealth = float.Parse(reader.GetAttribute("health") ?? throw new ResourceLoadException());
 
         session._playerValues = ActorStartValues.FromXml(reader, "PlayerValues");
 
@@ -265,29 +266,26 @@ public class GameSession
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Weapons")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapons" })
             {
                 if (reader.IsEmptyElement)
                 {
                     return;
                 }
 
-                session.SelectedWeapon = int.Parse(reader.GetAttribute("selected"));
+                session.SelectedWeapon = int.Parse(reader.GetAttribute("selected") ?? throw new ResourceLoadException());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Weapon")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapon" })
             {
-                int id = int.Parse(reader.GetAttribute("id"));
-                int ammoCount = int.Parse(reader.GetAttribute("ammoCount"));
-                int storedAmmo = int.Parse(reader.GetAttribute("storedAmmo"));
+                int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
+                int ammoCount = int.Parse(reader.GetAttribute("ammoCount") ?? throw new ResourceLoadException());
+                int storedAmmo = int.Parse(reader.GetAttribute("storedAmmo") ?? throw new ResourceLoadException());
 
                 session.WeaponSaves.Add(id, new WeaponSave(ammoCount, storedAmmo));
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Weapons")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Weapons" })
             {
                 break;
             }
@@ -299,23 +297,20 @@ public class GameSession
         while (reader.Read())
         {
             if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Modifiers" &&
-                reader.IsEmptyElement)
+                reader is { LocalName: "Modifiers", IsEmptyElement: true })
             {
                 return;
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Modifier")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Modifier" })
             {
-                int id = int.Parse(reader.GetAttribute("id"));
-                float timeLeft = float.Parse(reader.GetAttribute("timeLeft"));
+                int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
+                float timeLeft = float.Parse(reader.GetAttribute("timeLeft") ?? throw new ResourceLoadException());
 
                 session.LevelModifiers.Add(new ModifierSave(id, timeLeft));
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Modifiers")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Modifiers" })
             {
                 return;
             }
@@ -327,28 +322,25 @@ public class GameSession
         while (reader.Read())
         {
             if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "ActiveObjects" &&
-                reader.IsEmptyElement)
+                reader is { LocalName: "ActiveObjects", IsEmptyElement: true })
             {
                 return;
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "ActiveObject")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "ActiveObject" })
             {
-                int key = int.Parse(reader.GetAttribute("key"));
-                bool active = bool.Parse(reader.GetAttribute("active"));
+                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                bool active = bool.Parse(reader.GetAttribute("active") ?? throw new ResourceLoadException());
 
                 reader.ReadToFollowing("Position");
-                float x = float.Parse(reader.GetAttribute("x"));
-                float y = float.Parse(reader.GetAttribute("y"));
-                Vector2 position = new Vector2(x, y);
+                float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                float y = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                var position = new Vector2(x, y);
 
                 session.ActivatedObjects.Add(key, new ActiveObjectSave(position, active));
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "ActiveObjects")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "ActiveObjects" })
             {
                 return;
             }
@@ -360,34 +352,31 @@ public class GameSession
         while (reader.Read())
         {
             if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Enemies" &&
-                reader.IsEmptyElement)
+                reader is { LocalName: "Enemies", IsEmptyElement: true })
             {
                 return;
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Enemy")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Enemy" })
             {
-                int key = int.Parse(reader.GetAttribute("key"));
-                float health = float.Parse(reader.GetAttribute("health"));
-                bool active = bool.Parse(reader.GetAttribute("active"));
+                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                float health = float.Parse(reader.GetAttribute("health") ?? throw new ResourceLoadException());
+                bool active = bool.Parse(reader.GetAttribute("active") ?? throw new ResourceLoadException());
 
                 reader.ReadToFollowing("Position");
-                float posX = float.Parse(reader.GetAttribute("x"));
-                float posY = float.Parse(reader.GetAttribute("y"));
-                Vector2 position = new Vector2(posX, posY);
+                float posX = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                float posY = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                var position = new Vector2(posX, posY);
 
                 reader.ReadToFollowing("Velocity");
-                float velX = float.Parse(reader.GetAttribute("x"));
-                float velY = float.Parse(reader.GetAttribute("y"));
-                Vector2 velocity = new Vector2(velX, velY);
+                float velX = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                float velY = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                var velocity = new Vector2(velX, velY);
 
                 session.SavedEnemies.Add(key, new EnemySave(position, velocity, health, active));
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Enemies")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Enemies" })
             {
                 return;
             }

@@ -23,7 +23,7 @@ public abstract class Pickup
 
     public Pickup Copy()
     {
-        Pickup pickup = MemberwiseClone() as Pickup;
+        var pickup = MemberwiseClone() as Pickup;
 
         return pickup;
     }
@@ -46,7 +46,7 @@ public abstract class Pickup
         PickedUp = false;
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    public virtual void Draw(SpriteBatch? spriteBatch, Vector2 positionOffset)
     {
         spriteBatch.Draw(Sprite.Texture, positionOffset, Sprite.SourceRectangle, Color.White);
     }

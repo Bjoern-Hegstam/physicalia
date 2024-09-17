@@ -37,17 +37,17 @@ public class MovingObject : ActiveObject
         set => base.Position = value;
     }
 
-    public MovingObject(ISpriteLibrary spriteLibrary, int spriteKey)
+    public MovingObject(SpriteLibrary spriteLibrary, int spriteKey)
         : this(spriteLibrary, spriteKey, new Curve())
     {
     }
 
-    public MovingObject(ISpriteLibrary spriteLibrary, int spriteKey, Curve curve)
+    public MovingObject(SpriteLibrary spriteLibrary, int spriteKey, Curve curve)
         : this(spriteLibrary, spriteKey, curve, curve)
     {
     }
 
-    public MovingObject(ISpriteLibrary spriteLibrary, int spriteKey, Curve curveX, Curve curveY)
+    public MovingObject(SpriteLibrary spriteLibrary, int spriteKey, Curve curveX, Curve curveY)
         : base(spriteLibrary, spriteKey)
     {
         _curveX = curveX;
@@ -82,7 +82,7 @@ public class MovingObject : ActiveObject
             _curveY.Evaluate(_curvePosition.Y) * _curveScale.Y);
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
         base.Draw(spriteBatch, offsetPosition + _positionOffset);
     }

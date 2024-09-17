@@ -16,7 +16,7 @@ public class PhysicaliaGame : Game
 
     private ScreenManager _screenManager;
 
-    private MenuScreen _menuScreen;
+    private MenuScreen? _menuScreen;
     private GameScreen _gameScreen;
 
     public PhysicaliaGame()

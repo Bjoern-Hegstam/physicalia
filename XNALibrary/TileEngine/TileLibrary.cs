@@ -60,9 +60,9 @@ public class TileLibrary : ITileLibrary
         _tileLibrary.Clear();
     }
 
-    public void LoadXml(string path, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    public void LoadXml(string path, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
     {
-        XmlReaderSettings settings = new XmlReaderSettings
+        var settings = new XmlReaderSettings
         {
             CloseInput = true,
             IgnoreComments = true,
@@ -70,30 +70,29 @@ public class TileLibrary : ITileLibrary
             CheckCharacters = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, settings);
+        using var reader = XmlReader.Create(path, settings);
         LoadXml(reader, spriteLibrary, animationManager);
     }
 
-    public void LoadXml(XmlReader reader, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Tile")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
             {
                 Tile tile;
-                int id = int.Parse(reader.GetAttribute("id"));
+                int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
                 if (reader.GetAttribute("textureType") == "Animation")
                 {
-                    int animationKey = int.Parse(reader.GetAttribute("textureKey"));
+                    int animationKey = int.Parse(reader.GetAttribute("textureKey") ?? throw new ResourceLoadException());
                     Animation.Animation animation = animationManager.GetBankAnimation(animationKey).Copy();
                     animationManager.AddPlaybackAnimation(animation);
                     tile = new AnimatedTile(animation);
                 }
                 else
                 {
-                    int spriteKey = int.Parse(reader.GetAttribute("textureKey"));
+                    int spriteKey = int.Parse(reader.GetAttribute("textureKey") ?? throw new ResourceLoadException());
                     Sprite sprite = spriteLibrary.GetSprite(spriteKey);
 
                     tile = new SpriteTile(sprite);
@@ -102,23 +101,23 @@ public class TileLibrary : ITileLibrary
                 // Get the Tile's collision box
                 reader.ReadToFollowing("CollisionBox");
 
-                int x = int.Parse(reader.GetAttribute("x"));
-                int y = int.Parse(reader.GetAttribute("y"));
-                int width = int.Parse(reader.GetAttribute("width"));
-                int height = int.Parse(reader.GetAttribute("height"));
+                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
+                int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
 
                 tile.CollisionBox = new Rectangle(x, y, width, height);
 
                 // Get the collision sides of the Tile
                 reader.ReadToFollowing("CollisionSides");
 
-                String[] sides = reader.ReadElementContentAsString().Split(' ');
+                string[] sides = reader.ReadElementContentAsString().Split(' ');
 
                 if (sides.Length > 0 && sides[0] != "")
                 {
-                    for (int i = 0; i < sides.Length; i++)
+                    for (var i = 0; i < sides.Length; i++)
                     {
-                        BoxSide side = (BoxSide)Enum.Parse(typeof(BoxSide), sides[i]);
+                        var side = (BoxSide)Enum.Parse(typeof(BoxSide), sides[i]);
                         tile.CollisionSides |= side;
                     }
                 }
@@ -127,8 +126,7 @@ public class TileLibrary : ITileLibrary
                 _tileLibrary.Add(id, tile);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "TileLibrary")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TileLibrary" })
             {
                 return;
             }

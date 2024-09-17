@@ -26,7 +26,7 @@ public class TileEngine
     /// File path to the xml file defining the tiles and the tile map
     /// to be used by the engine.
     /// </summary>
-    private String _xmlTilePath;
+    private string _xmlTilePath;
 
     /// <summary>
     /// The map used by the engine for drawing the correct tiles.
@@ -106,7 +106,7 @@ public class TileEngine
     /// Sets the path to the Xml file defining the Tiles and the tile map
     /// to be loaded by the Engine when TileEngine.LoadXml is called.
     /// </summary>
-    public String XmlPath
+    public string XmlPath
     {
         set => _xmlTilePath = value;
     }
@@ -214,9 +214,9 @@ public class TileEngine
         _height = height;
 
         // Set all values in the tile map to DEFAULT_TILE_VALUE
-        for (int y = 0; y < _height; y++)
+        for (var y = 0; y < _height; y++)
         {
-            for (int x = 0; x < _width; x++)
+            for (var x = 0; x < _width; x++)
             {
                 _tileMap[x, y] = DefaultTileValue;
             }
@@ -236,11 +236,11 @@ public class TileEngine
         }
 
         // Create a new temporary map
-        int[,] newMap = new int[width, _height];
+        var newMap = new int[width, _height];
 
-        for (int y = 0; y < _height; y++)
+        for (var y = 0; y < _height; y++)
         {
-            for (int x = 0; x < width; x++)
+            for (var x = 0; x < width; x++)
             {
                 // Copy all old values over to the new map
                 if (x < _width)
@@ -275,11 +275,11 @@ public class TileEngine
         }
 
         // Create a new temporary map
-        int[,] newMap = new int[_width, height];
+        var newMap = new int[_width, height];
 
-        for (int x = 0; x < _width; x++)
+        for (var x = 0; x < _width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (var y = 0; y < height; y++)
             {
                 // Copy all old values over to the new map
                 if (y < _height)
@@ -320,8 +320,7 @@ public class TileEngine
         while (reader.Read())
         {
             // TileMap node ?
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "TileMap")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileMap" })
             {
                 _width = int.Parse(reader.GetAttribute(0));
                 _height = int.Parse(reader.GetAttribute(1));
@@ -330,8 +329,7 @@ public class TileEngine
             }
 
             // (Map) Tile node ?
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Tile")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
             {
                 int x = int.Parse(reader.GetAttribute(0));
                 int y = int.Parse(reader.GetAttribute(1));
@@ -341,8 +339,7 @@ public class TileEngine
             }
 
             // End node?
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "TileEngine")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TileEngine" })
             {
                 return;
             }
@@ -353,7 +350,7 @@ public class TileEngine
     /// Loads the Tiles and the tile map to be used from an Xml file.
     /// </summary>
     /// <param name="path">Path to the xml file.</param>
-    public void LoadXml(String path)
+    public void LoadXml(string path)
     {
         if (path == null)
         {
@@ -365,7 +362,7 @@ public class TileEngine
             throw new ArgumentException("File is not of type '.xml'");
         }
 
-        XmlReaderSettings settings = new XmlReaderSettings
+        var settings = new XmlReaderSettings
         {
             CloseInput = true,
             IgnoreComments = true,
@@ -373,7 +370,7 @@ public class TileEngine
             CheckCharacters = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, settings);
+        using var reader = XmlReader.Create(path, settings);
         LoadXml(reader);
     }
 
@@ -412,12 +409,12 @@ public class TileEngine
     public void CheckCollision(ICollisionObject collObject)
     {
         // Get the positions of the Tiles to check
-        int xMin = (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X) / TileWidth);
-        int xMax = (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X +
+        var xMin = (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X) / TileWidth);
+        var xMax = (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X +
                           collObject.CollisionBox.Width) / TileWidth);
 
-        int yMin = (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y) / TileHeight);
-        int yMax = (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y +
+        var yMin = (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y) / TileHeight);
+        var yMax = (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y +
                           collObject.CollisionBox.Height) / TileHeight);
 
         // Loop through the Tiles
@@ -459,7 +456,7 @@ public class TileEngine
 
                 // Don't check the tile if it can't give damage or
                 // be collided with
-                if (tile.CollisionSides == 0 && !tile.GivesDamage)
+                if (tile is { CollisionSides: 0, GivesDamage: false })
                 {
                     continue;
                 }
@@ -629,14 +626,14 @@ public class TileEngine
     /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
     /// <param name="positionOffset">The positional offset to use for
     /// drawing the correct tiles.</param>
-    public void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    public void Draw(SpriteBatch? spriteBatch, Vector2 positionOffset)
     {
         // Calculate the unit position if the top left corner
-        int xBase = (int)(positionOffset.X / _tileWidth);
-        int yBase = (int)(positionOffset.Y / _tileHeight);
+        var xBase = (int)(positionOffset.X / _tileWidth);
+        var yBase = (int)(positionOffset.Y / _tileHeight);
 
         Tile tile;
-        Vector2 position = new Vector2();
+        var position = new Vector2();
 
         for (int yi = yBase; yi < _height; yi++)
         {

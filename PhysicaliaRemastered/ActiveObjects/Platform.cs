@@ -6,17 +6,17 @@ namespace PhysicaliaRemastered.ActiveObjects;
 
 public class Platform : MovingObject
 {
-    public Platform(ISpriteLibrary spriteLibrary, int spriteKey)
+    public Platform(SpriteLibrary spriteLibrary, int spriteKey)
         : base(spriteLibrary, spriteKey)
     {
     }
 
-    public Platform(ISpriteLibrary spriteLibrary, int spriteKey, Curve curve)
+    public Platform(SpriteLibrary spriteLibrary, int spriteKey, Curve curve)
         : this(spriteLibrary, spriteKey, curve, curve)
     {
     }
 
-    public Platform(ISpriteLibrary spriteLibrary, int spriteKey, Curve curveX, Curve curveY)
+    public Platform(SpriteLibrary spriteLibrary, int spriteKey, Curve curveX, Curve curveY)
         : base(spriteLibrary, spriteKey, curveX, curveY)
     {
         CanCollide = true;

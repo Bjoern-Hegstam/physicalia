@@ -79,11 +79,11 @@ public abstract class Particle : ICollisionObject
         }
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch)
+    public virtual void Draw(SpriteBatch? spriteBatch)
     {
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public virtual void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
     }
 

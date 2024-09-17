@@ -1,5 +1,3 @@
 namespace XNALibrary.Graphics;
 
-public class MissingTextureException : Exception
-{
-}
+public class MissingTextureException : Exception;

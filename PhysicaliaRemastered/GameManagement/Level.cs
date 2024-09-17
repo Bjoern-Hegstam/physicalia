@@ -11,6 +11,7 @@ using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
 using PhysicaliaRemastered.Weapons.NewWeapons;
+using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.Graphics;
 using XNALibrary.ParticleEngine;
@@ -60,7 +61,7 @@ public class Level
     private readonly List<ModifierPickup> _modifiers;
     private readonly List<TileEngine> _tileEngines;
     private ActorStartValues _playerStartValues;
-    private readonly IWeaponBank _weaponBank;
+    private readonly WeaponBank _weaponBank;
     private readonly IPickupLibrary _modifierLibrary;
 
     // ActiveObjects
@@ -77,11 +78,11 @@ public class Level
 
     public IAnimationManager AnimationManager { get; set; }
 
-    public ISpriteLibrary SpriteLibrary { get; set; }
+    public SpriteLibrary SpriteLibrary { get; set; }
 
     public IParticleEngine ParticleEngine { get; set; }
 
-    public ISettings Settings { get; }
+    public Settings Settings { get; }
 
     public EnemyManager EnemyManager { get; set; }
 
@@ -94,11 +95,11 @@ public class Level
         _backgrounds = [];
 
         // Get needed services
-        Settings = (ISettings)game.Services.GetService(typeof(ISettings));
+        Settings = (Settings)game.Services.GetService(typeof(Settings));
         AnimationManager = (IAnimationManager)game.Services.GetService(typeof(IAnimationManager));
-        SpriteLibrary = (ISpriteLibrary)game.Services.GetService(typeof(ISpriteLibrary));
-        EnemyManager = new EnemyManager((IEnemyBank)_game.Services.GetService(typeof(IEnemyBank)));
-        _weaponBank = (IWeaponBank)_game.Services.GetService(typeof(IWeaponBank));
+        SpriteLibrary = (SpriteLibrary)game.Services.GetService(typeof(SpriteLibrary));
+        EnemyManager = new EnemyManager((EnemyBank)_game.Services.GetService(typeof(EnemyBank)));
+        _weaponBank = (WeaponBank)_game.Services.GetService(typeof(WeaponBank));
         _modifierLibrary = (IPickupLibrary)_game.Services.GetService(typeof(IPickupLibrary));
 
         Player = player;
@@ -184,7 +185,7 @@ public class Level
                     Player.Velocity *= new Vector2(PlayerFinishSlowdown, 1F);
 
                     // Set velocity to zero if it's very close
-                    if (Player.Velocity.X > -1 && Player.Velocity.X < 1)
+                    if (Player.Velocity.X is > -1 and < 1)
                     {
                         Player.Velocity *= Vector2.UnitY;
                     }
@@ -205,7 +206,7 @@ public class Level
 
     public void LoadXml(string path, ITileLibrary tileLibrary)
     {
-        using XmlReader reader = XmlReader.Create(path);
+        using var reader = XmlReader.Create(path);
         LoadXml(reader, tileLibrary);
     }
 
@@ -213,45 +214,40 @@ public class Level
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Level")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Level" })
             {
-                int width = int.Parse(reader.GetAttribute("width"));
-                int height = int.Parse(reader.GetAttribute("height"));
+                int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
+                int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
 
                 ScreenSampler.MaxWidth = width;
                 ScreenSampler.MaxHeight = height;
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "PlayerStart")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "PlayerStart" })
             {
                 _playerStartValues = ActorStartValues.FromXml(reader, "PlayerStart");
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Enemies")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Enemies" })
             {
                 LoadEnemies(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "ActiveObjects")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "ActiveObjects" })
             {
                 LoadActiveObjects(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Background")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Background" })
             {
-                int spriteKey = int.Parse(reader.GetAttribute("spriteKey"));
-                float depth = float.Parse(reader.GetAttribute("depth"));
+                int spriteKey = int.Parse(reader.GetAttribute("spriteKey") ?? throw new ResourceLoadException());
+                float depth = float.Parse(reader.GetAttribute("depth") ?? throw new ResourceLoadException());
                 string loopString = reader.GetAttribute("loop");
                 bool loopX = loopString.Contains("x");
                 bool loopY = loopString.Contains("y");
 
                 Sprite sprite = SpriteLibrary.GetSprite(spriteKey);
-                BackgroundLayer background = new BackgroundLayer(sprite, depth)
+                var background = new BackgroundLayer(sprite, depth)
                 {
                     LoopX = loopX,
                     LoopY = loopY
@@ -260,27 +256,25 @@ public class Level
                 if (!reader.IsEmptyElement)
                 {
                     reader.ReadToFollowing("Position");
-                    float x = float.Parse(reader.GetAttribute("x"));
-                    float y = float.Parse(reader.GetAttribute("y"));
+                    float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                    float y = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                     background.StartPosition = new Vector2(x, y);
                 }
 
                 _backgrounds.Add(background);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Backgrounds")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Backgrounds" })
             {
                 _backgrounds.Sort(BackgroundLayer.Compare);
             }
 
             // TileEngines?
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "TileEngines")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileEngines" })
             {
-                int engineCount = int.Parse(reader.GetAttribute("count"));
+                int engineCount = int.Parse(reader.GetAttribute("count") ?? throw new ResourceLoadException());
 
-                for (int i = 0; i < engineCount; i++)
+                for (var i = 0; i < engineCount; i++)
                 {
                     // Add a new TileEngine
                     _tileEngines.Add(new TileEngine(tileLibrary, 32, 32));
@@ -302,24 +296,22 @@ public class Level
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Enemy")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Enemy" })
             {
-                int type = int.Parse(reader.GetAttribute("type"));
+                int type = int.Parse(reader.GetAttribute("type") ?? throw new ResourceLoadException());
                 ActorStartValues startValues = ActorStartValues.FromXml(reader, "StartValues");
 
                 reader.ReadToFollowing("PatrolArea");
-                int x = int.Parse(reader.GetAttribute("x"));
-                int y = int.Parse(reader.GetAttribute("y"));
-                int width = int.Parse(reader.GetAttribute("width"));
-                int height = int.Parse(reader.GetAttribute("height"));
-                Rectangle patrolArea = new Rectangle(x, y, width, height);
+                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
+                int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
+                var patrolArea = new Rectangle(x, y, width, height);
 
                 EnemyManager.EnqueueEnemy(type, startValues, patrolArea);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Enemies")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Enemies" })
             {
                 return;
             }
@@ -334,8 +326,7 @@ public class Level
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Weapons")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapons" })
             {
                 if (reader.IsEmptyElement)
                 {
@@ -345,8 +336,7 @@ public class Level
                 LoadWeapons(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Pickups")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Pickups" })
             {
                 if (reader.IsEmptyElement)
                 {
@@ -356,16 +346,15 @@ public class Level
                 LoadPickups(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "LevelFinishTrigger")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "LevelFinishTrigger" })
             {
-                int x = int.Parse(reader.GetAttribute("x"));
-                int y = int.Parse(reader.GetAttribute("y"));
+                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
 
                 Sprite triggerSprite = SpriteLibrary.GetSprite(-1);
-                EndLevelTrigger trigger = new EndLevelTrigger(this, triggerSprite);
+                var trigger = new EndLevelTrigger(this, triggerSprite);
 
-                PickupContainer cont = new PickupContainer(trigger)
+                var cont = new PickupContainer(trigger)
                 {
                     Position = new Vector2(x, y),
                     CollisionBox = new Rectangle(0, 0, triggerSprite.SourceRectangle.Width,
@@ -377,8 +366,7 @@ public class Level
                 EnqueueActiveObject(cont);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "ActiveObjects")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "ActiveObjects" })
             {
                 return;
             }
@@ -389,32 +377,30 @@ public class Level
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Weapon")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapon" })
             {
-                int key = int.Parse(reader.GetAttribute("key"));
+                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 Weapon weapon = _weaponBank.GetWeapon(key);
 
-                WeaponPickup weaponPickup = new WeaponPickup(this, weapon);
-                PickupContainer pickupCont = new PickupContainer(weaponPickup);
+                var weaponPickup = new WeaponPickup(this, weapon);
+                var pickupCont = new PickupContainer(weaponPickup);
 
                 reader.ReadToFollowing("Position");
-                float x = float.Parse(reader.GetAttribute("x"));
-                float y = float.Parse(reader.GetAttribute("y"));
+                float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                float y = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 pickupCont.Position = new Vector2(x, y);
 
                 reader.ReadToFollowing("CollisionBox");
-                int xBox = int.Parse(reader.GetAttribute("x"));
-                int yBox = int.Parse(reader.GetAttribute("y"));
-                int width = int.Parse(reader.GetAttribute("width"));
-                int height = int.Parse(reader.GetAttribute("height"));
+                int xBox = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int yBox = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
+                int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
                 pickupCont.CollisionBox = new Rectangle(xBox, yBox, width, height);
 
                 EnqueueActiveObject(pickupCont);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Weapons")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Weapons" })
             {
                 return;
             }
@@ -425,17 +411,16 @@ public class Level
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Pickup")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Pickup" })
             {
-                int key = int.Parse(reader.GetAttribute("key"));
+                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 int x = int.Parse(reader.GetAttribute("x"));
                 int y = int.Parse(reader.GetAttribute("y"));
 
                 Pickup pickup = _modifierLibrary.GetPickup(key);
                 pickup.Level = this;
 
-                PickupContainer cont = new PickupContainer(pickup)
+                var cont = new PickupContainer(pickup)
                 {
                     Position = new Vector2(x, y),
                     CollisionBox = new Rectangle(0, 0, pickup.Sprite.SourceRectangle.Width,
@@ -444,8 +429,7 @@ public class Level
                 EnqueueActiveObject(cont);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Pickups")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Pickups" })
             {
                 return;
             }
@@ -561,14 +545,14 @@ public class Level
     /// Draws the level.
     /// </summary>
     /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch? spriteBatch)
     {
         switch (State)
         {
             case LevelState.Start:
                 string indexString = WorldIndex + " - " + LevelIndex;
                 Vector2 indexStringSize = Settings.LevelIndexFont.MeasureString(indexString);
-                Vector2 indexPosition = new Vector2
+                var indexPosition = new Vector2
                 {
                     X = (ScreenSampler.Width - indexStringSize.X) / 2,
                     Y = (ScreenSampler.Height - indexStringSize.Y) / 2
@@ -582,7 +566,7 @@ public class Level
             case LevelState.Dead:
                 DrawLevel(spriteBatch);
 
-                String deadString = "You Have Died!";
+                var deadString = "You Have Died!";
                 Vector2 deadStringSize = Settings.PlayerDeadFont.MeasureString(deadString);
                 Vector2 deadPos;
                 deadPos.X = (ScreenSampler.Width - deadStringSize.X) / 2;
@@ -593,7 +577,7 @@ public class Level
             case LevelState.Finished:
                 DrawLevel(spriteBatch);
 
-                String finishString = "Level Finished!";
+                var finishString = "Level Finished!";
                 Vector2 finishStringSize = Settings.PlayerDeadFont.MeasureString(finishString);
                 Vector2 finishPos;
                 finishPos.X = (ScreenSampler.Width - finishStringSize.X) / 2;
@@ -615,8 +599,7 @@ public class Level
             case LevelState.Start:
                 break;
             case LevelState.Playing:
-                if (Player.CurrentWeapon != null &&
-                    Player.CurrentWeapon.IsFiring)
+                if (Player.CurrentWeapon is { IsFiring: true })
                 {
                     Player.CurrentWeapon.Stop();
                 }
@@ -665,9 +648,9 @@ public class Level
     /// <returns>True if the player is outside of the Level; false otherwise.</returns>
     private bool PlayerOutsideLevel()
     {
-        bool result = false;
+        var result = false;
 
-        Rectangle levelRect = new Rectangle
+        var levelRect = new Rectangle
         {
             Width = ScreenSampler.MaxWidth,
             Height = ScreenSampler.MaxHeight
@@ -750,7 +733,7 @@ public class Level
         ActivateObjects();
 
         // Update all active ActiveObjects
-        for (int i = 0; i < _activeObjects.Count; i++)
+        for (var i = 0; i < _activeObjects.Count; i++)
         {
             _activeObjects[i].Update(gameTime);
         }
@@ -782,7 +765,7 @@ public class Level
     /// </summary>
     private void ActivateObjects()
     {
-        Rectangle screenRect = new Rectangle((int)ScreenSampler.Position.X,
+        var screenRect = new Rectangle((int)ScreenSampler.Position.X,
             (int)ScreenSampler.Position.Y,
             ScreenSampler.Width,
             ScreenSampler.Height);
@@ -827,7 +810,7 @@ public class Level
 
         // Actors -> ActiveObjects
         // Particles -> ActiveObjects
-        for (int i = 0; i < _activeObjects.Count; i++)
+        for (var i = 0; i < _activeObjects.Count; i++)
         {
             _activeObjects[i].CheckCollision(Player);
             _activeObjects[i].CheckCollisions(EnemyManager.ActivatedEnemies);
@@ -838,7 +821,7 @@ public class Level
         ParticleEngine.CheckCollisions(_activeObjects.ToArray());
 
         // ICollisionObjects  -> TileEngine
-        for (int i = 0; i < _tileEngines.Count; i++)
+        for (var i = 0; i < _tileEngines.Count; i++)
         {
             _tileEngines[i].CheckCollision(Player);
             _tileEngines[i].CheckCollisions(ParticleEngine.Particles);
@@ -862,7 +845,7 @@ public class Level
         EnemyManager.UpdateAnimations();
     }
 
-    private void DrawLevel(SpriteBatch spriteBatch)
+    private void DrawLevel(SpriteBatch? spriteBatch)
     {
         // Background
         int backgroundIndex;
@@ -876,7 +859,7 @@ public class Level
             _tileEngines[i].Draw(spriteBatch, ScreenSampler.Position);
 
         // ActiveObjects
-        for (int i = 0; i < _activeObjects.Count; i++)
+        for (var i = 0; i < _activeObjects.Count; i++)
             _activeObjects[i].Draw(spriteBatch, ScreenSampler.Position);
 
         // Enemies
@@ -896,7 +879,7 @@ public class Level
         DrawUi(spriteBatch);
     }
 
-    private void DrawUi(SpriteBatch spriteBatch)
+    private void DrawUi(SpriteBatch? spriteBatch)
     {
         // HEALTH BAR
 
@@ -922,7 +905,7 @@ public class Level
         // WORLD AND LEVEL NUMBERS
         string indexString = WorldIndex + " - " + LevelIndex;
         Vector2 indexSize = Settings.LevelIndexFont.MeasureString(indexString);
-        Vector2 indexPos = new Vector2
+        var indexPos = new Vector2
         {
             X = (ScreenSampler.Width - indexSize.X) / 2,
             Y = UiIndexPosY
@@ -936,7 +919,7 @@ public class Level
         if (playerWeapon != null)
         {
             // Ammo is drawn below the weapon sprite
-            Vector2 ammoPos = new Vector2(ScreenSampler.Width - 20, 0);
+            var ammoPos = new Vector2(ScreenSampler.Width - 20, 0);
 
             string ammoString;
             if (playerWeapon.InfiniteAmmo)
@@ -954,7 +937,7 @@ public class Level
             // Draw ammo
             spriteBatch.DrawString(Settings.LevelIndexFont, ammoString, ammoPos, Color.White);
 
-            Vector2 weaponPos = new Vector2(470, 5);
+            var weaponPos = new Vector2(470, 5);
             Sprite weaponSprite = playerWeapon.WeaponSprite;
             // Draw weapon sprite
             spriteBatch.Draw(weaponSprite.Texture,
@@ -965,7 +948,7 @@ public class Level
 
         // MODIFIERS
         // A little extra spacing is added (5 px)
-        Vector2 modifierPos = new Vector2(5, Settings.FullHealthUi.SourceRectangle.Height + 5);
+        var modifierPos = new Vector2(5, Settings.FullHealthUi.SourceRectangle.Height + 5);
         foreach (ModifierPickup modifier in _modifiers)
         {
             modifier.DrawTimer(spriteBatch, modifierPos, Settings.LevelIndexFont);
@@ -993,7 +976,7 @@ public class Level
         // Get all active modifiers
         foreach (ModifierSave modifier in session.LevelModifiers)
         {
-            ModifierPickup levelMod = _modifierLibrary.GetPickup(modifier.Id) as ModifierPickup;
+            var levelMod = _modifierLibrary.GetPickup(modifier.Id) as ModifierPickup;
             levelMod.Level = this;
             levelMod.TimeRemaining = modifier.TimeLeft;
             levelMod.IsActive = true;

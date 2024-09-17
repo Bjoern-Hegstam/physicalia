@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using PhysicaliaRemastered.Pickups.Modifiers;
+using XNALibrary;
 using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Pickups;
@@ -49,14 +50,14 @@ public class PickupLibrary : IPickupLibrary
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreWhitespace = true,
             IgnoreProcessingInstructions = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader, spriteLibrary);
     }
 
@@ -64,11 +65,10 @@ public class PickupLibrary : IPickupLibrary
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Pickup")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Pickup" })
             {
                 string type = reader.GetAttribute("type");
-                int key = int.Parse(reader.GetAttribute("key"));
+                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
 
                 Pickup pickup = null;
                 switch (type)
@@ -88,8 +88,7 @@ public class PickupLibrary : IPickupLibrary
                 }
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Pickups")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Pickups" })
             {
                 return;
             }

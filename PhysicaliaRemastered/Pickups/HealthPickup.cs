@@ -1,5 +1,6 @@
 using System.Xml;
 using PhysicaliaRemastered.GameManagement;
+using XNALibrary;
 using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Pickups;
@@ -20,13 +21,13 @@ public class HealthPickup : Pickup
         Level.Player.Health += _health;
     }
 
-    public static HealthPickup CreateFromXml(XmlReader reader, ISpriteLibrary spriteLibrary)
+    public static HealthPickup CreateFromXml(XmlReader reader, SpriteLibrary spriteLibrary)
     {
         reader.ReadToFollowing("Sprite");
-        int spriteKey = int.Parse(reader.GetAttribute("key"));
+        int spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("Health");
-        int health = int.Parse(reader.GetAttribute("value"));
+        int health = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
 
         return new HealthPickup(null, health, spriteLibrary.GetSprite(spriteKey));
     }

@@ -4,7 +4,7 @@ using XNALibrary.Graphics;
 
 namespace XNALibrary.Animation;
 
-public class AnimationManager(Game game, ITextureLibrary textureLibrary) : GameComponent(game), IAnimationManager
+public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameComponent(game), IAnimationManager
 {
     private readonly Dictionary<int, Animation> _animationBank = new();
     private readonly List<Animation> _playbackAnims = [];
@@ -37,7 +37,7 @@ public class AnimationManager(Game game, ITextureLibrary textureLibrary) : GameC
             return false;
         }
 
-        Animation animation = new Animation(startFrame, columns, rows, framerate, textureLibrary[textureKey]);
+        var animation = new Animation(startFrame, columns, rows, framerate, textureLibrary[textureKey]);
         _animationBank.Add(key, animation);
         return true;
 
@@ -101,7 +101,7 @@ public class AnimationManager(Game game, ITextureLibrary textureLibrary) : GameC
     public override void Update(GameTime gameTime)
     {
         // The increase in frame index
-        int indexIncrease = 0;
+        var indexIncrease = 0;
 
         // Go throught every active animation
         foreach (Animation animation in _playbackAnims)
@@ -152,7 +152,7 @@ public class AnimationManager(Game game, ITextureLibrary textureLibrary) : GameC
         {
             if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "Animation") continue;
             
-            int id = int.Parse(reader.GetAttribute("id"));
+            int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
             Animation anim = LoadAnimationFromXml(reader);
 
             _animationBank.Add(id, anim);
@@ -180,8 +180,8 @@ public class AnimationManager(Game game, ITextureLibrary textureLibrary) : GameC
         reader.ReadToFollowing("Loop");
         var loop = bool.Parse(reader.ReadElementContentAsString());
 
-        Rectangle startFrame = new Rectangle(x, y, width, height);
-        Animation anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureKey])
+        var startFrame = new Rectangle(x, y, width, height);
+        var anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureKey])
         {
             Loop = loop
         };

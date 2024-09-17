@@ -16,7 +16,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
 
     public override Particle Create(float angle)
     {
-        Projectile projectile = new Projectile(Sprite);
+        var projectile = new Projectile(Sprite);
         SetupParticle(projectile, angle);
 
         return projectile;
@@ -26,7 +26,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
     {
         base.SetupParticle(particle, angle);
 
-        Projectile projectile = (Projectile)particle;
+        var projectile = (Projectile)particle;
         projectile.DamageObjects = DamageObjects;
         projectile.DamageAmount = DamageAmount;
         projectile.CanCollide = true;
@@ -34,22 +34,20 @@ public class ProjectileDefinition : SpriteParticleDefinition
 
     protected override void OnLoadXml(XmlReader reader)
     {
-        if (reader.NodeType == XmlNodeType.Element &&
-            reader.LocalName == "Damage")
+        if (reader is { NodeType: XmlNodeType.Element, LocalName: "Damage" })
         {
             DamageAmount = int.Parse(reader.GetAttribute("amount"));
         }
 
-        if (reader.NodeType == XmlNodeType.Element &&
-            reader.LocalName == "DamageObjects")
+        if (reader is { NodeType: XmlNodeType.Element, LocalName: "DamageObjects" })
         {
-            String[] objects = reader.ReadElementContentAsString().Split(' ');
+            string[] objects = reader.ReadElementContentAsString().Split(' ');
 
             if (objects.Length > 0 && objects[0] != "")
             {
-                for (int i = 0; i < objects.Length; i++)
+                for (var i = 0; i < objects.Length; i++)
                 {
-                    ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
+                    var objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
                     DamageObjects |= objectType;
                 }
             }

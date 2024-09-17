@@ -97,19 +97,17 @@ public abstract class ParticleDefinition
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Life")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Life" })
             {
-                ParticleLifeMode mode =
-                    (ParticleLifeMode)Enum.Parse(typeof(ParticleLifeMode), reader.GetAttribute("mode"));
+                var mode =
+                    (ParticleLifeMode)Enum.Parse(typeof(ParticleLifeMode), reader.GetAttribute("mode") ?? throw new ResourceLoadException());
                 float value = float.Parse(reader.GetAttribute("value"));
 
                 LifeMode = mode;
                 LifeTime = value;
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Movement")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Movement" })
             {
                 reader.ReadToFollowing("VelocityScale");
                 VelocityScale = int.Parse(reader.ReadElementContentAsString());
@@ -119,10 +117,9 @@ public abstract class ParticleDefinition
                 Acceleration = new Vector2(x, y);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Collision")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Collision" })
             {
-                CollisionMode mode = (CollisionMode)Enum.Parse(typeof(CollisionMode), reader.GetAttribute("mode"));
+                var mode = (CollisionMode)Enum.Parse(typeof(CollisionMode), reader.GetAttribute("mode"));
 
                 CollisionMode = mode;
             }
@@ -130,8 +127,7 @@ public abstract class ParticleDefinition
             // Let derived classes process the input as well
             OnLoadXml(reader);
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "ParticleDefinition")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "ParticleDefinition" })
             {
                 return;
             }

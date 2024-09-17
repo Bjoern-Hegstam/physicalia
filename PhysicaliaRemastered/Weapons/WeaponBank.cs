@@ -2,90 +2,41 @@ using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using PhysicaliaRemastered.Weapons.NewWeapons;
+using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Weapons;
 
-public interface IWeaponBank
-{
-    void AddWeapon(Weapon weapon);
-    void RemoveWeapon(int weaponId);
-    Weapon GetWeapon(int weaponId);
-}
-
 /// <summary>
-/// Class for mananing over a collection of weapons that serve as the base
+/// Class for managing over a collection of weapons that serve as the base
 /// for all weapons in the game.
 /// </summary>
-public class WeaponBank : IWeaponBank
+public class WeaponBank(IParticleEngine particleEngine, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
 {
-    private readonly Dictionary<int, Weapon> _weaponBank;
+    private readonly Dictionary<int, Weapon?> _weaponBank = new();
 
-    private readonly IParticleEngine _particleEngine;
-    private readonly ISpriteLibrary _spriteLibrary;
-    private readonly IAnimationManager _animationManager;
-
-    public WeaponBank(IParticleEngine particleEngine, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
-    {
-        _particleEngine = particleEngine;
-        _spriteLibrary = spriteLibrary;
-        _animationManager = animationManager;
-
-        _weaponBank = new Dictionary<int, Weapon>();
-    }
-
-    /// <summary>
-    /// Adds the passed in Weapon to the bank.
-    /// </summary>
-    /// <param name="weapon">Weapon to add to the bank.</param>
-    public void AddWeapon(Weapon weapon)
-    {
-        if (!_weaponBank.ContainsValue(weapon))
-        {
-            _weaponBank.Add(weapon.WeaponId, weapon);
-        }
-    }
-
-    /// <summary>
-    /// Removes the weapon with the specified id form the bank.
-    /// </summary>
-    /// <param name="weaponId">Id of the weapon to remove.</param>
-    public void RemoveWeapon(int weaponId)
-    {
-        if (_weaponBank.ContainsKey(weaponId))
-        {
-            _weaponBank.Remove(weaponId);
-        }
-    }
-
-    /// <summary>
-    /// Gets the weapon with the specified id.
-    /// </summary>
-    /// <param name="weaponId">Id of the weapon to get.</param>
-    /// <returns>The weapon with the specified id or null if no match
-    /// was found.</returns>
     public Weapon GetWeapon(int weaponId)
     {
-        if (_weaponBank.ContainsKey(weaponId))
+        if (_weaponBank.TryGetValue(weaponId, out Weapon? weapon))
         {
-            return _weaponBank[weaponId];
+            return weapon;
         }
 
-        return null;
+        throw new MissingWeaponException();
     }
 
     public void LoadXml(string path)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreWhitespace = true,
             IgnoreProcessingInstructions = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader);
     }
 
@@ -93,23 +44,24 @@ public class WeaponBank : IWeaponBank
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Weapon")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapon" })
             {
                 // Get the type of weapon to add
                 string weaponType = reader.GetAttribute("type");
-                int weaponId = int.Parse(reader.GetAttribute("id"));
+                int weaponId = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
-                Weapon weapon = null;
-                // Create an instance of the wanted type
+                Weapon? weapon = null;
+                
                 switch (weaponType)
                 {
                     case "Melee":
-                        weapon = new MeleeWeapon(weaponId, _particleEngine);
+                        weapon = new MeleeWeapon(weaponId, particleEngine);
                         break;
                     case "Projectile":
-                        weapon = new ProjectileWeapon(weaponId, _particleEngine);
+                        weapon = new ProjectileWeapon(weaponId, particleEngine);
                         break;
+                    default:
+                        throw new InvalidGameStateException($"Unknown weapon type {weaponType}");
                 }
 
                 // Parse the weapon data
@@ -119,58 +71,54 @@ public class WeaponBank : IWeaponBank
                 _weaponBank.Add(weapon.WeaponId, weapon);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "WeaponBank")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "WeaponBank" })
             {
                 return;
             }
         }
     }
 
-    private void ParseWeaponData(XmlReader reader, Weapon weapon)
+    private void ParseWeaponData(XmlReader reader, Weapon? weapon)
     {
         // Parse xml data
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Graphics")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Graphics" })
             {
                 // Get sprite
                 reader.ReadToFollowing("Sprite");
-                int spriteKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WeaponSprite = _spriteLibrary.GetSprite(spriteKey);
+                int spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                weapon.WeaponSprite = spriteLibrary.GetSprite(spriteKey);
 
                 // Get animations
                 reader.ReadToFollowing("Warmup");
-                int warmUpKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WarmupAnimation = _animationManager.AddPlaybackAnimation(warmUpKey);
+                int warmUpKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                weapon.WarmupAnimation = animationManager.AddPlaybackAnimation(warmUpKey);
 
                 reader.ReadToFollowing("Fire");
-                int fireKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WeaponFireAnimation = _animationManager.AddPlaybackAnimation(fireKey);
+                int fireKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                weapon.WeaponFireAnimation = animationManager.AddPlaybackAnimation(fireKey);
 
                 reader.ReadToFollowing("PlayerOffset");
-                float x = float.Parse(reader.GetAttribute("x"));
-                float y = float.Parse(reader.GetAttribute("y"));
+                float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                float y = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 weapon.PlayerOffset = new Vector2(x, y);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "FireData")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "FireData" })
             {
                 // Parse fire data
-                weapon.WeaponWarmUp = int.Parse(reader.GetAttribute("warmupTime"));
-                weapon.ShotsPerSecond = int.Parse(reader.GetAttribute("shotsPerSecond"));
+                weapon.WeaponWarmUp = int.Parse(reader.GetAttribute("warmupTime") ?? throw new ResourceLoadException());
+                weapon.ShotsPerSecond = int.Parse(reader.GetAttribute("shotsPerSecond") ?? throw new ResourceLoadException());
 
                 // Get particle id
                 reader.ReadToFollowing("Particle");
-                weapon.ParticleId = int.Parse(reader.GetAttribute("id"));
+                weapon.ParticleId = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Collision")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Collision" })
             {
-                weapon.CanCollide = bool.Parse(reader.GetAttribute("canCollide"));
+                weapon.CanCollide = bool.Parse(reader.GetAttribute("canCollide") ?? throw new ResourceLoadException());
 
                 // Don't read anymore collision data if the weapon can't collide
                 if (!weapon.CanCollide)
@@ -178,29 +126,24 @@ public class WeaponBank : IWeaponBank
                     continue;
                 }
 
-                weapon.CollisionDamage = int.Parse(reader.GetAttribute("collisionDamage"));
+                weapon.CollisionDamage = int.Parse(reader.GetAttribute("collisionDamage") ?? throw new ResourceLoadException());
 
                 // Parse collision box
                 reader.ReadToFollowing("CollisionBox");
-                int x = int.Parse(reader.GetAttribute("x"));
-                int y = int.Parse(reader.GetAttribute("y"));
-                int width = int.Parse(reader.GetAttribute("width"));
-                int height = int.Parse(reader.GetAttribute("height"));
+                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
+                int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
 
                 weapon.CollisionBox = new Rectangle(x, y, width, height);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "WeaponData")
+            if (reader.NodeType == XmlNodeType.Element && reader is { LocalName: "WeaponData", IsEmptyElement: false })
             {
-                if (!reader.IsEmptyElement)
-                {
-                    weapon.LoadXml(reader);
-                }
+                weapon.LoadXml(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Weapon")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Weapon" })
             {
                 return;
             }

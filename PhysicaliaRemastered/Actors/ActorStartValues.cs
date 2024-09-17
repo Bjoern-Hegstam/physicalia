@@ -1,5 +1,6 @@
 using System.Xml;
 using Microsoft.Xna.Framework;
+using XNALibrary;
 
 namespace PhysicaliaRemastered.Actors;
 
@@ -27,24 +28,21 @@ public struct ActorStartValues
     /// <returns></returns>
     public static ActorStartValues FromXml(XmlReader reader, string endElement)
     {
-        ActorStartValues startValues = new ActorStartValues();
+        var startValues = new ActorStartValues();
 
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Position")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Position" })
             {
                 startValues.Position = ReadVector2(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Velocity")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Velocity" })
             {
                 startValues.Velocity = ReadVector2(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Acceleration")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Acceleration" })
             {
                 startValues.Acceleration = ReadVector2(reader);
             }
@@ -66,8 +64,8 @@ public struct ActorStartValues
 
     private static Vector2 ReadVector2(XmlReader reader)
     {
-        float x = float.Parse(reader.GetAttribute("x"));
-        float y = float.Parse(reader.GetAttribute("y"));
+        float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+        float y = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
 
         return new Vector2(x, y);
     }

@@ -102,7 +102,7 @@ public static class CollisionHelper
 
     private static Rectangle GetCollisionArea(Rectangle rectA, Rectangle rectB)
     {
-        Rectangle collisionArea = Rectangle.Empty;
+        var collisionArea = Rectangle.Empty;
 
         collisionArea.X = Math.Max(rectA.X, rectB.X);
         collisionArea.Y = Math.Max(rectA.Y, rectB.Y);

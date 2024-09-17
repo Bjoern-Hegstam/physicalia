@@ -1,5 +1,3 @@
 namespace XNALibrary;
 
-public class ResourceLoadException : Exception
-{
-}
+public class ResourceLoadException : Exception;

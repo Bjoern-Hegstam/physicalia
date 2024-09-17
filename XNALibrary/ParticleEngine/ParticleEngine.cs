@@ -27,27 +27,26 @@ public class ParticleEngine : IParticleEngine
         _activeParticles = [];
     }
 
-    public void LoadXml(string path, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    public void LoadXml(string path, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreWhitespace = true,
             IgnoreProcessingInstructions = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader, spriteLibrary, animationManager);
     }
 
-    public void LoadXml(XmlReader reader, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "ParticleDefinition")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "ParticleDefinition" })
             {
-                int id = int.Parse(reader.GetAttribute("id"));
+                int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
                 string particleType = reader.GetAttribute("type");
                 ParticleDefinition particleDef = null;
 
@@ -59,14 +58,14 @@ public class ParticleEngine : IParticleEngine
                 {
                     case "SpriteParticle":
                         reader.ReadToFollowing("Sprite");
-                        spriteKey = int.Parse(reader.GetAttribute("key"));
+                        spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                         sprite = spriteLibrary.GetSprite(spriteKey);
 
                         particleDef = new SpriteParticleDefinition(id, sprite);
                         break;
                     case "Projectile":
                         reader.ReadToFollowing("Sprite");
-                        spriteKey = int.Parse(reader.GetAttribute("key"));
+                        spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                         sprite = spriteLibrary.GetSprite(spriteKey);
 
                         particleDef = new ProjectileDefinition(id, sprite);
@@ -89,8 +88,7 @@ public class ParticleEngine : IParticleEngine
                 AddDefinition(particleDef);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "ParticleDefinitions")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "ParticleDefinitions" })
             {
                 return;
             }
@@ -117,13 +115,13 @@ public class ParticleEngine : IParticleEngine
         // Rinse the buffers?
         if (rinseBuffer)
         {
-            for (int i = 0; i < _activeParticles.Count; i++)
+            for (var i = 0; i < _activeParticles.Count; i++)
                 if (_activeParticles[i].Definition.Id == definitionId)
                 {
                     _activeParticles.RemoveAt(i);
                 }
 
-            for (int i = 0; i < _particleBuffer.Count; i++)
+            for (var i = 0; i < _particleBuffer.Count; i++)
                 if (_particleBuffer[i].Definition.Id == definitionId)
                 {
                     _particleBuffer.RemoveAt(i);
@@ -215,7 +213,7 @@ public class ParticleEngine : IParticleEngine
         collObjRect.X += (int)boxPos.X;
         collObjRect.Y += (int)boxPos.Y;
 
-        for (int i = 0; i < _activeParticles.Count; i++)
+        for (var i = 0; i < _activeParticles.Count; i++)
         {
             Particle particle = _activeParticles[i];
 
@@ -293,14 +291,14 @@ public class ParticleEngine : IParticleEngine
         }
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch? spriteBatch)
     {
         Draw(spriteBatch, Vector2.Zero);
     }
 
-    public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
-        for (int i = 0; i < _activeParticles.Count; i++)
+        for (var i = 0; i < _activeParticles.Count; i++)
         {
             _activeParticles[i].Draw(spriteBatch, offsetPosition);
         }

@@ -33,6 +33,6 @@ public interface IParticleEngine
     void Prepare();
 
     void Update(GameTime gameTime);
-    void Draw(SpriteBatch spriteBatch);
-    void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition);
+    void Draw(SpriteBatch? spriteBatch);
+    void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition);
 }

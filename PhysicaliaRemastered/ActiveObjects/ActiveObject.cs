@@ -17,7 +17,7 @@ public abstract class ActiveObject : ICollisionObject
 
     private Vector2 _position;
 
-    private readonly ISpriteLibrary _spriteLibrary;
+    private readonly SpriteLibrary _spriteLibrary;
     private Sprite _sprite;
 
     // Width and Height must not be the same dimensions as the Sprite.
@@ -94,7 +94,7 @@ public abstract class ActiveObject : ICollisionObject
         CanTakeDamage = false;
     }
 
-    public ActiveObject(ISpriteLibrary spriteLibrary, int spriteKey)
+    public ActiveObject(SpriteLibrary spriteLibrary, int spriteKey)
         : this()
     {
         _spriteLibrary = spriteLibrary;
@@ -105,7 +105,7 @@ public abstract class ActiveObject : ICollisionObject
     {
         if (CanCollide)
         {
-            for (int i = 0; i < collObjects.Length; i++)
+            for (var i = 0; i < collObjects.Length; i++)
             {
                 CheckCollision(collObjects[i]);
             }
@@ -123,12 +123,12 @@ public abstract class ActiveObject : ICollisionObject
 
     public abstract void Update(GameTime gametime);
 
-    public virtual void Draw(SpriteBatch spriteBatch)
+    public virtual void Draw(SpriteBatch? spriteBatch)
     {
         Draw(spriteBatch, Vector2.Zero);
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public virtual void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
         if (Visible && _spriteLibrary != null)
         {

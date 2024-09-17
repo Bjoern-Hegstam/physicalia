@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework.Input;
+using XNALibrary;
 
 namespace PhysicaliaRemastered.Input;
 
@@ -39,21 +40,20 @@ internal class KeyboardInputMap : InputMap
 
     public override void LoadXml(string path)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreWhitespace = true,
             IgnoreProcessingInstructions = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Key")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Key" })
             {
-                InputAction action = (InputAction)Enum.Parse(typeof(InputAction), reader.GetAttribute("action"));
-                Keys key = (Keys)Enum.Parse(typeof(Keys), reader.GetAttribute("value"));
+                var action = (InputAction)Enum.Parse(typeof(InputAction), reader.GetAttribute("action") ?? throw new ResourceLoadException());
+                var key = (Keys)Enum.Parse(typeof(Keys), reader.GetAttribute("value") ?? throw new ResourceLoadException());
 
                 _keys[action] = key;
             }

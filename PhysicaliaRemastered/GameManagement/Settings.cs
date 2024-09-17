@@ -3,21 +3,16 @@ using System.Xml;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Input;
+using XNALibrary;
 using XNALibrary.Interfaces;
 using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.GameManagement;
 
-public enum InputType
-{
-    Gamepad,
-    Keyboard
-}
-
 /// <summary>
 /// Contains the data needed to create the game.
 /// </summary>
-public class Settings : ISettings
+public class Settings
 {
     private InputType _inputType;
     private readonly KeyboardInputMap _keyboardMap;
@@ -68,16 +63,14 @@ public class Settings : ISettings
 
     public Settings(IInputHandler inputHandler)
     {
-        IInputHandler input = inputHandler;
-
         _gamePadMap = new GamePadInputMap
         {
-            InputHandler = input
+            InputHandler = inputHandler
         };
 
         _keyboardMap = new KeyboardInputMap
         {
-            InputHandler = input
+            InputHandler = inputHandler
         };
 
         InputMap = _keyboardMap;
@@ -94,83 +87,55 @@ public class Settings : ISettings
         PauseMenuFont = contentManager.Load<SpriteFont>(@"Fonts\PauseMenuFont");
     }
 
-    public void LoadXml(string path, ISpriteLibrary spriteLibrary)
+    public void LoadXml(string path, SpriteLibrary spriteLibrary)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreWhitespace = true,
             IgnoreProcessingInstructions = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "InputType")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "InputType" })
             {
-                InputType input = (InputType)Enum.Parse(typeof(InputType), reader.ReadString());
+                var input = (InputType)Enum.Parse(typeof(InputType), reader.ReadString());
                 InputType = input;
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "PlayerHealth")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "PlayerHealth" })
             {
                 int health = int.Parse(reader.ReadString());
                 PlayerStartHealth = health;
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "KeyboardMap")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "KeyboardMap" })
             {
                 _keyboardMap.LoadXml(reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "GamepadMap")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "GamepadMap" })
             {
                 _gamePadMap.LoadXml(reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "UI")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "UI" })
             {
                 reader.ReadToFollowing("FullHealthBar");
-                int spriteKey = int.Parse(reader.GetAttribute("key"));
+                int spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 FullHealthUi = spriteLibrary.GetSprite(spriteKey);
 
                 reader.ReadToFollowing("EmptyHealthBar");
-                spriteKey = int.Parse(reader.GetAttribute("key"));
+                spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 EmptyHealthUi = spriteLibrary.GetSprite(spriteKey);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Settings")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Settings" })
             {
                 break;
             }
         }
     }
-}
-
-// Interface for providing the Settings as a service that can be accessed via the Game.
-public interface ISettings
-{
-    InputType InputType { get; set; }
-    InputMap InputMap { get; }
-
-    float PlayerStartHealth { get; set; }
-
-    SpriteFont WorldQuoteFont { get; }
-    SpriteFont WorldIndexFont { get; }
-    SpriteFont LevelIndexFont { get; }
-    SpriteFont PlayerDeadFont { get; }
-    SpriteFont WeaponAmmoFont { get; }
-    SpriteFont PauseMenuFont { get; }
-
-    Sprite FullHealthUi { get; }
-    Sprite EmptyHealthUi { get; }
-
-    void LoadContent(ContentManager contentManager);
-    void LoadXml(string path, ISpriteLibrary spriteLibrary);
 }

@@ -67,7 +67,7 @@ public class PickupContainer : ActiveObject
         }
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
         // Only draw if we're still active
         if (Visible)

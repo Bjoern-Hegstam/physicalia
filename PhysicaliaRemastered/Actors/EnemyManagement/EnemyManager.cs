@@ -15,7 +15,7 @@ public class EnemyManager
 {
     private readonly int _defaultActivationDistance = 20;
 
-    private readonly IEnemyBank _enemyBank;
+    private readonly EnemyBank _enemyBank;
     private readonly List<Enemy> _activatedEnemies;
     private readonly List<Enemy> _inactiveEnemies;
 
@@ -29,9 +29,9 @@ public class EnemyManager
     /// <summary>
     /// Creates a new EnemyManager.
     /// </summary>
-    /// <param name="enemyBank">Class implementing IEnemyBank, that contains the
+    /// <param name="enemyBank">Class implementing EnemyBank, that contains the
     /// definitions for the enemies to use.</param>
-    public EnemyManager(IEnemyBank enemyBank)
+    public EnemyManager(EnemyBank enemyBank)
     {
         _enemyBank = enemyBank;
 
@@ -118,9 +118,9 @@ public class EnemyManager
         playerBox.Y += (int)boxPos.Y;
 
         Weapon weapon = player.CurrentWeapon;
-        Rectangle weaponBox = new Rectangle();
+        var weaponBox = new Rectangle();
 
-        if (weapon != null && weapon.CanCollide)
+        if (weapon is { CanCollide: true })
         {
             weaponBox = weapon.CollisionBox;
 
@@ -167,7 +167,7 @@ public class EnemyManager
             }
 
             // Check to see whether the player's weapon is damaging the enemy
-            if (weapon != null && weapon.WeaponFired &&
+            if (weapon is { WeaponFired: true } &&
                 enemyBox.Intersects(weaponBox))
             {
                 enemy.TakeDamage(weapon.CollisionDamage);
@@ -241,7 +241,7 @@ public class EnemyManager
     /// </summary>
     /// <param name="spriteBatch">SpriteBatch to draw with.</param>
     /// <param name="offsetPosition">Position of the top-left corner of the screen.</param>
-    public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
         foreach (Enemy enemy in _activatedEnemies)
         {
@@ -253,7 +253,7 @@ public class EnemyManager
     {
         foreach (Enemy enemy in _activatedEnemies)
         {
-            EnemySave enemySave = new EnemySave(enemy.Position, enemy.Velocity, enemy.Health, enemy.IsActive);
+            var enemySave = new EnemySave(enemy.Position, enemy.Velocity, enemy.Health, enemy.IsActive);
             session.SavedEnemies.Add(enemy.UniqueId, enemySave);
         }
     }

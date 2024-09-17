@@ -47,7 +47,7 @@ public class BackgroundLayer
         Position += positionDelta * Depth;
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch? spriteBatch)
     {
         spriteBatch.Draw(_backgroundSprite.Texture,
             Position,
@@ -55,7 +55,7 @@ public class BackgroundLayer
             Color.White);
     }
 
-    public void Draw(SpriteBatch spriteBatch, ScreenSampler screenSampler)
+    public void Draw(SpriteBatch? spriteBatch, ScreenSampler screenSampler)
     {
         // Don't draw anything if the background isn't visible
         if (!LoopX &&

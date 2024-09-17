@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PhysicaliaRemastered.GameManagement;
+using XNALibrary;
 using XNALibrary.ParticleEngine;
 
 namespace PhysicaliaRemastered.Weapons.NewWeapons;
@@ -129,7 +130,7 @@ public class ProjectileWeapon : Weapon
         Vector2 muzzle = GetMuzzlePosition();
 
         // Fire as many projectiles as specified.
-        for (int i = 0; i < _projectilesPerShot; i++)
+        for (var i = 0; i < _projectilesPerShot; i++)
         {
             float angle = GetFireAngle(i);
 
@@ -192,52 +193,47 @@ public class ProjectileWeapon : Weapon
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "FireMode")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "FireMode" })
             {
                 _fireMode = (FireMode)Enum.Parse(typeof(FireMode), reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Vibration")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Vibration" })
             {
                 float low, high;
 
                 reader.ReadToFollowing("Warmup");
-                low = float.Parse(reader.GetAttribute("low"));
-                high = float.Parse(reader.GetAttribute("high"));
+                low = float.Parse(reader.GetAttribute("low") ?? throw new ResourceLoadException());
+                high = float.Parse(reader.GetAttribute("high") ?? throw new ResourceLoadException());
 
                 _warmupVibration = new Vector2(low, high);
 
                 reader.ReadToFollowing("Fire");
-                low = float.Parse(reader.GetAttribute("low"));
-                high = float.Parse(reader.GetAttribute("high"));
+                low = float.Parse(reader.GetAttribute("low") ?? throw new ResourceLoadException());
+                high = float.Parse(reader.GetAttribute("high") ?? throw new ResourceLoadException());
 
                 _fireVibration = new Vector2(low, high);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "MuzzlePosition")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "MuzzlePosition" })
             {
-                float x = float.Parse(reader.GetAttribute("x"));
-                float y = float.Parse(reader.GetAttribute("y"));
+                float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                float y = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 _muzzlePosition = new Vector2(x, y);
 
-                _maxDeviation = float.Parse(reader.GetAttribute("maxDeviation"));
+                _maxDeviation = float.Parse(reader.GetAttribute("maxDeviation") ?? throw new ResourceLoadException());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Ammunition")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Ammunition" })
             {
-                MaxAmmo = int.Parse(reader.GetAttribute("max"));
-                AmmoCount = int.Parse(reader.GetAttribute("count"));
+                MaxAmmo = int.Parse(reader.GetAttribute("max") ?? throw new ResourceLoadException());
+                AmmoCount = int.Parse(reader.GetAttribute("count") ?? throw new ResourceLoadException());
 
-                _projectilesPerShot = int.Parse(reader.GetAttribute("projectilesPerShot"));
-                _spread = float.Parse(reader.GetAttribute("spread"));
+                _projectilesPerShot = int.Parse(reader.GetAttribute("projectilesPerShot") ?? throw new ResourceLoadException());
+                _spread = float.Parse(reader.GetAttribute("spread") ?? throw new ResourceLoadException());
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "WeaponData")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "WeaponData" })
             {
                 return;
             }

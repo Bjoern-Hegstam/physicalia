@@ -87,7 +87,7 @@ public abstract class Actor : ICollisionObject
     {
         get
         {
-            Vector2 origin = new Vector2(_collisionBox.X, _collisionBox.Y);
+            var origin = new Vector2(_collisionBox.X, _collisionBox.Y);
             origin += new Vector2(_collisionBox.Width / 2, _collisionBox.Height / 2);
 
             return origin;
@@ -325,12 +325,12 @@ public abstract class Actor : ICollisionObject
         Position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch)
+    public virtual void Draw(SpriteBatch? spriteBatch)
     {
         Draw(spriteBatch, Vector2.Zero);
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public virtual void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
         // Only draw if a valid animation is set
         if (Animations.ContainsKey(_currentAnimType))

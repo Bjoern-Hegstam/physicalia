@@ -13,6 +13,6 @@ public interface ITileLibrary
     bool ContainsKey(int key);
     void Clear();
 
-    void LoadXml(string path, ISpriteLibrary spriteLibrary, IAnimationManager animationManager);
-    void LoadXml(XmlReader reader, ISpriteLibrary spriteLibrary, IAnimationManager animationManager);
+    void LoadXml(string path, SpriteLibrary spriteLibrary, IAnimationManager animationManager);
+    void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, IAnimationManager animationManager);
 }

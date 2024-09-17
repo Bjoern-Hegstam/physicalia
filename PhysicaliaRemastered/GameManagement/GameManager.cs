@@ -33,7 +33,7 @@ public class GameManager
     private const string WorldPath = GamedataPath + "Worlds/";
 
     private readonly Game _game;
-    private readonly ITextureLibrary _textureLibrary;
+    private readonly TextureLibrary _textureLibrary;
     private readonly TileLibrary _tileLibrary;
     private readonly SpriteLibrary _spriteLibrary;
     private readonly ParticleEngine _particleEngine;
@@ -55,27 +55,27 @@ public class GameManager
     public GameState NextState { get; set; }
 
 
-    public ISettings Settings { get; }
+    public Settings Settings { get; }
 
     /// <summary>
     /// Creates a new GameManager.
     /// </summary>
     /// <param name="game">The game creating the GameManager. The Manager expects
-    /// the Game to have an ISettings service.</param>
+    /// the Game to have an Settings service.</param>
     public GameManager(Game game)
     {
         _game = game;
 
         // Create and add needed services
-        IInputHandler input = (IInputHandler)_game.Services.GetService(typeof(IInputHandler));
+        var input = (IInputHandler)_game.Services.GetService(typeof(IInputHandler));
         Settings = new Settings(input);
-        _game.Services.AddService(typeof(ISettings), Settings);
+        _game.Services.AddService(typeof(Settings), Settings);
 
         _textureLibrary = new TextureLibrary();
-        _game.Services.AddService(typeof(ITextureLibrary), _textureLibrary);
+        _game.Services.AddService(typeof(TextureLibrary), _textureLibrary);
 
         _spriteLibrary = new SpriteLibrary(_textureLibrary);
-        _game.Services.AddService(typeof(ISpriteLibrary), _spriteLibrary);
+        _game.Services.AddService(typeof(SpriteLibrary), _spriteLibrary);
 
         _animationManager = new AnimationManager(_game, _textureLibrary);
         _game.Services.AddService(typeof(IAnimationManager), _animationManager);
@@ -88,10 +88,10 @@ public class GameManager
         _game.Services.AddService(typeof(IParticleEngine), _particleEngine);
 
         _enemyBank = new EnemyBank(_animationManager);
-        _game.Services.AddService(typeof(IEnemyBank), _enemyBank);
+        _game.Services.AddService(typeof(EnemyBank), _enemyBank);
 
         _weaponBank = new WeaponBank(_particleEngine, _spriteLibrary, _animationManager);
-        _game.Services.AddService(typeof(IWeaponBank), _weaponBank);
+        _game.Services.AddService(typeof(WeaponBank), _weaponBank);
 
         _modifierLibrary = new PickupLibrary();
         _game.Services.AddService(typeof(IPickupLibrary), _modifierLibrary);
@@ -200,7 +200,7 @@ public class GameManager
     {
         NextState = GameState.Paused;
 
-        GameSession session = new GameSession
+        var session = new GameSession
         {
             WorldIndex = _worldIndex
         };
@@ -222,14 +222,14 @@ public class GameManager
     /// <param name="path">Path to the file containing the xml data to load.</param>
     public void LoadXml(string path)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreWhitespace = true,
             IgnoreProcessingInstructions = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader);
     }
 
@@ -241,32 +241,32 @@ public class GameManager
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "Settings")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Settings" })
             {
                 Settings.LoadXml(GamedataPath + reader.ReadString(), _spriteLibrary);
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "TextureLibrary")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "TextureLibrary" })
             {
                 _textureLibrary.LoadXml(LibraryPath + reader.ReadString(), _game.GraphicsDevice);
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "SpriteLibrary")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "SpriteLibrary" })
             {
                 _spriteLibrary.LoadXml(LibraryPath + reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "AnimationBank")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "AnimationBank" })
             {
                 _animationManager.LoadXml(LibraryPath + reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "TileLibrary")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileLibrary" })
             {
                 _tileLibrary.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary, _animationManager);
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "ParticleDefinitions")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "ParticleDefinitions" })
             {
                 _particleEngine.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary, _animationManager);
 
@@ -274,27 +274,27 @@ public class GameManager
                 _particleEngine.Prepare();
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "WeaponBank")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "WeaponBank" })
             {
                 _weaponBank.LoadXml(LibraryPath + reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "EnemyBank")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "EnemyBank" })
             {
                 _enemyBank.LoadXml(LibraryPath + reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "PickupLibrary")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "PickupLibrary" })
             {
                 _modifierLibrary.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary);
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "Player")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Player" })
             {
                 SetupPlayer(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "Worlds")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Worlds" })
             {
                 LoadWorlds(reader);
             }
@@ -311,15 +311,15 @@ public class GameManager
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "World")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "World" })
             {
-                World world = new World(_game, _player);
+                var world = new World(_game, _player);
                 _worlds.Add(world);
                 world.WorldIndex = _worlds.Count;
                 world.LoadXml(WorldPath + reader.ReadString(), _tileLibrary, _spriteLibrary);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == "Worlds")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Worlds" })
             {
                 return;
             }
@@ -330,12 +330,12 @@ public class GameManager
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "CollisionBox")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "CollisionBox" })
             {
                 _player.CollisionBox = ReadRectangle(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "Animation")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Animation" })
             {
                 int animKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 int action = int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
@@ -344,7 +344,7 @@ public class GameManager
                 _player.CurrentAnimationType = action;
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == "Player")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Player" })
             {
                 return;
             }
@@ -434,7 +434,7 @@ public class GameManager
         }
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch? spriteBatch)
     {
         switch (State)
         {

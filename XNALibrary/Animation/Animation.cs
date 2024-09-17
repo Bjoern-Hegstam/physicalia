@@ -241,7 +241,7 @@ public class Animation
     /// <returns>A new Animation that is a copy of the current animation.</returns>
     public Animation Copy()
     {
-        Animation animation = new Animation(_baseFrame,
+        var animation = new Animation(_baseFrame,
             _columnCount,
             _rowCount,
             _framerate,

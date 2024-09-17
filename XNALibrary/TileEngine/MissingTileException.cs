@@ -1,5 +1,3 @@
 namespace XNALibrary.TileEngine;
 
-public class MissingTileException : Exception
-{
-}
+public class MissingTileException : Exception;

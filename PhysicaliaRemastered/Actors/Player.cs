@@ -55,7 +55,7 @@ public class Player : Actor
         set => base.Health = Math.Max(Math.Min(Settings.PlayerStartHealth, value), 0);
     }
 
-    public ISettings Settings { get; }
+    public Settings Settings { get; }
 
     private readonly Dictionary<int, Weapon> _weapons;
     private int _currentWeapon;
@@ -73,7 +73,7 @@ public class Player : Actor
         }
     }
 
-    public Player(ISettings settings)
+    public Player(Settings settings)
     {
         Settings = settings;
 
@@ -393,7 +393,7 @@ public class Player : Actor
         }
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
         if (!_visible)
         {
@@ -466,7 +466,7 @@ public class Player : Actor
 
     public void SaveSession(GameSession session)
     {
-        ActorStartValues playerValues = new ActorStartValues
+        var playerValues = new ActorStartValues
         {
             Position = Position,
             Velocity = Velocity,

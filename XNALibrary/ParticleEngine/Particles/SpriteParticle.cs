@@ -36,12 +36,12 @@ public class SpriteParticle : Particle
 
     public override Rectangle CollisionBox => new(0, 0, _sprite.SourceRectangle.Width, _sprite.SourceRectangle.Height);
 
-    public override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch? spriteBatch)
     {
         Draw(spriteBatch, Vector2.Zero);
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
     {
         spriteBatch.Draw(_sprite.Texture,
             Position - offsetPosition,

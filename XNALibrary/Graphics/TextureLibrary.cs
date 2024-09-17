@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XNALibrary.Graphics;
 
-public class TextureLibrary : ITextureLibrary
+public class TextureLibrary
 {
     private readonly Dictionary<int, Texture2D> _textureLibrary = new();
 
@@ -14,36 +14,21 @@ public class TextureLibrary : ITextureLibrary
         return _textureLibrary.TryAdd(key, texture);
     }
 
-    public bool RemoveTexture(int key)
-    {
-        return _textureLibrary.Remove(key);
-    }
-
     public Texture2D GetTexture(int key)
     {
         return _textureLibrary.TryGetValue(key, out var texture) ? texture : throw new MissingTextureException();
     }
 
-    public bool ContainsKey(int key)
-    {
-        return _textureLibrary.ContainsKey(key);
-    }
-
-    public void Clear()
-    {
-        _textureLibrary.Clear();
-    }
-
     public void LoadXml(string path, GraphicsDevice graphics)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreProcessingInstructions = true,
             IgnoreWhitespace = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader, graphics);
     }
 
@@ -51,17 +36,15 @@ public class TextureLibrary : ITextureLibrary
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Texture")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Texture" })
             {
-                int id = int.Parse(reader.GetAttribute("id"));
+                int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
                 Texture2D texture = Texture2D.FromFile(graphics, reader.ReadString());
                 AddTexture(id, texture);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "TextureLibrary")
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TextureLibrary" })
             {
                 return;
             }

@@ -17,7 +17,7 @@ public class MenuScreen : Screen
     private readonly Color _menuSelectedColor = Color.SlateGray;
     private readonly Color _menuColor = Color.White;
 
-    private ISettings _settings;
+    private Settings _settings;
 
     private string[] _menuItems;
     private int _menuIndex;
@@ -29,7 +29,7 @@ public class MenuScreen : Screen
 
     private GameManager _gameManager;
 
-    public ISettings Settings
+    public Settings Settings
     {
         set => _settings = value;
     }
@@ -112,7 +112,7 @@ public class MenuScreen : Screen
         }
     }
 
-    protected override void OnDrawAfter(SpriteBatch spriteBatch)
+    protected override void OnDraw(SpriteBatch? spriteBatch)
     {
         // Draw backgrounds
         spriteBatch.Draw(_backLevelTexture, Vector2.Zero, Color.White);
@@ -122,7 +122,7 @@ public class MenuScreen : Screen
         int screenWidth = Game.GraphicsDevice.Viewport.Width;
         int screenHeight = Game.GraphicsDevice.Viewport.Height;
 
-        Vector2 textPos = new Vector2(0, screenHeight - MenuItemBottomPadding);
+        var textPos = new Vector2(0, screenHeight - MenuItemBottomPadding);
 
         for (int i = _menuItems.Length - 1; i >= 0; i--)
         {

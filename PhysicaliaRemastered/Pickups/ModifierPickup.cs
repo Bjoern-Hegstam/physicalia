@@ -81,7 +81,7 @@ public abstract class ModifierPickup : Pickup
     public abstract void Activate();
     public abstract void Deactivate();
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    public override void Draw(SpriteBatch? spriteBatch, Vector2 positionOffset)
     {
         if (!PickedUp)
         {
@@ -98,7 +98,7 @@ public abstract class ModifierPickup : Pickup
     /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
     /// <param name="position">Position of the upper-left corner of the modifier.</param>
     /// <param name="font">SpriteFont to use when drawing the time left</param>
-    public void DrawTimer(SpriteBatch spriteBatch, Vector2 position, SpriteFont font)
+    public void DrawTimer(SpriteBatch? spriteBatch, Vector2 position, SpriteFont font)
     {
         // Draw icon
         spriteBatch.Draw(_icon.Texture,
@@ -107,7 +107,7 @@ public abstract class ModifierPickup : Pickup
             Color.White);
 
         // Build the time string
-        string timeText = "";
+        var timeText = "";
         TimeSpan time = TimeSpan.FromSeconds(TimeRemaining);
 
         if (time.Minutes < 10)

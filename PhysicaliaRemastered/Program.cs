@@ -10,7 +10,7 @@ internal static class Program
     [STAThread]
     private static void Main()
     {
-        using PhysicaliaGame game = new PhysicaliaGame();
+        using var game = new PhysicaliaGame();
         game.Run();
     }
 }

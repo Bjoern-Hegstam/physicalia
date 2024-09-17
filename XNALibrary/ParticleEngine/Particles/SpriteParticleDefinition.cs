@@ -20,7 +20,7 @@ public class SpriteParticleDefinition : ParticleDefinition
 
     public override Particle Create(float angle)
     {
-        SpriteParticle particle = new SpriteParticle();
+        var particle = new SpriteParticle();
         SetupParticle(particle, angle);
         return particle;
     }
@@ -29,7 +29,7 @@ public class SpriteParticleDefinition : ParticleDefinition
     {
         base.SetupParticle(particle, angle);
 
-        SpriteParticle spriteParticle = (SpriteParticle)particle;
+        var spriteParticle = (SpriteParticle)particle;
 
         spriteParticle.Sprite = Sprite;
         spriteParticle.Rotation = angle;

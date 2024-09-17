@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -5,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors;
 using PhysicaliaRemastered.Input;
+using XNALibrary;
 using XNALibrary.Sprites;
 using XNALibrary.TileEngine;
 
@@ -27,7 +29,7 @@ public class World
 {
     private const string LevelPath = "Content/GameData/Worlds/Levels/";
 
-    private readonly ISettings _settings;
+    private readonly Settings _settings;
 
     private readonly List<Level> _levels;
     private int _levelIndex;
@@ -56,7 +58,7 @@ public class World
         _game = game;
         _player = player;
 
-        _settings = (ISettings)_game.Services.GetService(typeof(ISettings));
+        _settings = _game.Services.GetService(typeof(Settings)) as Settings ?? throw new ArgumentNullException();
 
         _levels = [];
         _levelIndex = -1;
@@ -65,39 +67,38 @@ public class World
 
         WorldIndex = -1;
         _worldIndexColor = Color.White;
-        _worldQuoteLines = null;
+        _worldQuoteLines = [];
         _worldQuoteColor = Color.White;
     }
 
-    public void LoadXml(string path, ITileLibrary tileLibrary, ISpriteLibrary spriteLibrary)
+    public void LoadXml(string path, ITileLibrary tileLibrary, SpriteLibrary spriteLibrary)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings
+        var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
             IgnoreProcessingInstructions = true,
             IgnoreWhitespace = true
         };
 
-        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        using var reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader, tileLibrary, spriteLibrary);
     }
 
-    public void LoadXml(XmlReader reader, ITileLibrary tileLibrary, ISpriteLibrary spriteLibrary)
+    public void LoadXml(XmlReader reader, ITileLibrary tileLibrary, SpriteLibrary spriteLibrary)
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "StartSprite")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "StartSprite" })
             {
-                int key = int.Parse(reader.GetAttribute("key"));
+                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 _worldSprite = spriteLibrary.GetSprite(key);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Quote")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Quote" })
             {
                 // Read color
-                string[] colorValues = reader.GetAttribute("color").Split(' ');
+                string colorString = reader.GetAttribute("color") ?? throw new ResourceLoadException();
+                string[] colorValues = colorString.Split(' ');
 
                 // Must have all needed value (rgba)
                 if (colorValues.Length < 4)
@@ -113,12 +114,11 @@ public class World
                 _worldQuoteColor = new Color(r, b, g, a);
 
                 // Get the quote
-                StringBuilder quoteBuilder = new StringBuilder();
+                var quoteBuilder = new StringBuilder();
                 List<string> quoteLines = [];
 
                 // Read in any special characters
-                while (!(reader.NodeType == XmlNodeType.EndElement &&
-                         reader.LocalName == "Quote"))
+                while (!(reader is { NodeType: XmlNodeType.EndElement, LocalName: "Quote" }))
                 {
                     if (reader.LocalName == "br")
                     {
@@ -127,11 +127,10 @@ public class World
 
                         reader.Read();
                     }
-                    else if (reader.NodeType == XmlNodeType.Element &&
-                             reader.LocalName == "Char")
+                    else if (reader is { NodeType: XmlNodeType.Element, LocalName: "Char" })
                     {
                         int charNum = int.Parse(reader.ReadString());
-                        char character = (char)charNum;
+                        var character = (char)charNum;
                         quoteBuilder.Append(character);
                     }
                     else if (reader.NodeType == XmlNodeType.Text)
@@ -154,13 +153,12 @@ public class World
             }
 
             // Read in Levels
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Level")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "Level" })
             {
                 // Create and initialize the new Level
-                Level level = new Level(_game, _player);
+                var level = new Level(_game, _player);
 
-                using (XmlReader levelReader = XmlReader.Create(LevelPath + reader.ReadString(), reader.Settings))
+                using (var levelReader = XmlReader.Create(LevelPath + reader.ReadString(), reader.Settings))
                     level.LoadXml(levelReader, tileLibrary);
 
                 // Store the Level reference
@@ -170,12 +168,11 @@ public class World
             }
 
             // Read in BossLevels
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "BossLevel")
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "BossLevel" })
             {
-                BossLevel level = new BossLevel(_game, _player);
+                var level = new BossLevel(_game, _player);
 
-                using (XmlReader levelReader = XmlReader.Create(reader.ReadElementContentAsString()))
+                using (var levelReader = XmlReader.Create(reader.ReadElementContentAsString()))
                     level.LoadXml(levelReader, tileLibrary);
 
                 _levels.Add(level);
@@ -247,7 +244,7 @@ public class World
             ChangeState();
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch? spriteBatch)
     {
         switch (State)
         {
@@ -255,24 +252,24 @@ public class World
                 // Write draw world index
                 string indexString = "World " + WorldIndex;
                 Vector2 indexStringSize = _settings.WorldIndexFont.MeasureString(indexString);
-                Vector2 indexPosition = new Vector2
+                var indexPosition = new Vector2
                 {
                     X = (_levels[0].ScreenSampler.Width - indexStringSize.X) / 2,
-                    Y = _levels[0].ScreenSampler.Height / 4 - indexStringSize.Y / 2
+                    Y = _levels[0].ScreenSampler.Height / 4f - indexStringSize.Y / 2
                 };
                 spriteBatch.DrawString(_settings.WorldIndexFont, indexString, indexPosition, _worldIndexColor);
 
                 // Draw quote
-                if (_worldQuoteLines != null)
+                if (_worldQuoteLines.Length > 0)
                 {
                     float quoteHeight = _settings.WorldQuoteFont.MeasureString("W").Y;
-                    Vector2 quoteStartPos = new Vector2
+                    var quoteStartPos = new Vector2
                     {
-                        Y = _levels[0].ScreenSampler.Height * 3 / 4 -
+                        Y = _levels[0].ScreenSampler.Height * 3f / 4 -
                             quoteHeight * _worldQuoteLines.Length / 2
                     };
 
-                    for (int i = 0; i < _worldQuoteLines.Length; i++)
+                    for (var i = 0; i < _worldQuoteLines.Length; i++)
                     {
                         Vector2 quoteSize = _settings.WorldQuoteFont.MeasureString(_worldQuoteLines[i]);
                         quoteStartPos.X = (_levels[0].ScreenSampler.Width - quoteSize.X) / 2;
@@ -287,10 +284,10 @@ public class World
                 }
 
                 // Draw World Sprite
-                Vector2 spritePos = new Vector2
+                var spritePos = new Vector2
                 {
-                    X = (_levels[0].ScreenSampler.Width - _worldSprite.SourceRectangle.Width) / 2,
-                    Y = (_levels[0].ScreenSampler.Height - _worldSprite.SourceRectangle.Height) / 2
+                    X = (_levels[0].ScreenSampler.Width - _worldSprite.SourceRectangle.Width) / 2f,
+                    Y = (_levels[0].ScreenSampler.Height - _worldSprite.SourceRectangle.Height) / 2f
                 };
 
                 spriteBatch.Draw(_worldSprite.Texture,

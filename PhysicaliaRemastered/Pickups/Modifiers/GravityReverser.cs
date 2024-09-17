@@ -1,5 +1,6 @@
 using System.Xml;
 using PhysicaliaRemastered.GameManagement;
+using XNALibrary;
 using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Pickups.Modifiers;
@@ -21,16 +22,16 @@ public class GravityReverser : ModifierPickup
         Level.Player.Acceleration *= -1;
     }
 
-    public static GravityReverser CreateFromXml(XmlReader reader, ISpriteLibrary spriteLibrary)
+    public static GravityReverser CreateFromXml(XmlReader reader, SpriteLibrary spriteLibrary)
     {
         reader.ReadToFollowing("Icon");
-        int iconKey = int.Parse(reader.GetAttribute("key"));
+        int iconKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("Sprite");
-        int spriteKey = int.Parse(reader.GetAttribute("key"));
+        int spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("Duration");
-        int duration = int.Parse(reader.GetAttribute("value"));
+        int duration = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
 
         return new GravityReverser(null, spriteLibrary.GetSprite(iconKey), spriteLibrary.GetSprite(spriteKey),
             duration);

@@ -1,5 +1,3 @@
 namespace XNALibrary.Animation;
 
-public class MissingAnimationException : Exception
-{
-}
+public class MissingAnimationException : Exception;

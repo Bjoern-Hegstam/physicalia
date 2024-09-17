@@ -116,7 +116,7 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>The moved distance as a Vector2.</returns>
     public Vector2 GetMouseMove()
     {
-        Vector2 distance = new Vector2(_currentMouseState.X - _oldMouseState.X,
+        var distance = new Vector2(_currentMouseState.X - _oldMouseState.X,
             _currentMouseState.Y - _oldMouseState.Y);
 
         return distance;
@@ -138,7 +138,7 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>The moved distance as a normalized Vector2.</returns>
     public Vector2 GetNormalizedMouseMove()
     {
-        Vector2 distance = new Vector2(_currentMouseState.X - _oldMouseState.X,
+        var distance = new Vector2(_currentMouseState.X - _oldMouseState.X,
             _currentMouseState.Y - _oldMouseState.Y);
 
         distance.Normalize();
@@ -164,7 +164,7 @@ public class InputHandler : GameComponent, IInputHandler
 
         foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
         {
-            int i = (int)index;
+            var i = (int)index;
             OldGamePadState[i] = _currentGamePadState[i] = GamePad.GetState(index);
         }
 
@@ -186,7 +186,7 @@ public class InputHandler : GameComponent, IInputHandler
         // Gamepads
         foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
         {
-            int i = (int)index;
+            var i = (int)index;
             OldGamePadState[i] = _currentGamePadState[i];
             _currentGamePadState[i] = GamePad.GetState(index);
         }

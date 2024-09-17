@@ -31,7 +31,7 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
             _createdAnimations.Add(particleAnimation);
         }
 
-        AnimationParticle particle = new AnimationParticle(particleAnimation);
+        var particle = new AnimationParticle(particleAnimation);
         SetupParticle(particle, angle);
 
         return particle;
@@ -41,7 +41,7 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
     {
         base.SetupParticle(particle, angle);
 
-        AnimationParticle animParticle = (AnimationParticle)particle;
+        var animParticle = (AnimationParticle)particle;
         animParticle.DamageAmount = DamageAmount;
         animParticle.DamageObjects = DamageObjects;
         animParticle.CanCollide = true;
@@ -51,8 +51,7 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
 
     protected override void OnLoadXml(XmlReader reader)
     {
-        if (reader.NodeType == XmlNodeType.Element &&
-            reader.LocalName == "Damage")
+        if (reader is { NodeType: XmlNodeType.Element, LocalName: "Damage" })
         {
             DamageAmount = int.Parse(reader.GetAttribute("amount") ?? throw new ResourceLoadException());
         }

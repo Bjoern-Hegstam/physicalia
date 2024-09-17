@@ -23,7 +23,7 @@ public class GameScreen : Screen
     private const float PauseMenuX = 250F;
     private const float PauseMenuMargin = 5F;
 
-    private readonly ISettings _settings;
+    private readonly Settings _settings;
 
     // Pause menu fields
     private Texture2D _pauseOverlayTexture;
@@ -33,7 +33,7 @@ public class GameScreen : Screen
 
     private readonly PauseMenuOption[] _pauseMenuOptions = (PauseMenuOption[])Enum.GetValues(typeof(PauseMenuOption));
 
-    public ISettings Settings => GameManager.Settings;
+    public Settings Settings => GameManager.Settings;
 
     public GameManager GameManager { get; }
 
@@ -76,7 +76,7 @@ public class GameScreen : Screen
         GameManager.Update(gameTime);
     }
 
-    public override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch? spriteBatch)
     {
         spriteBatch.Begin();
 
@@ -166,7 +166,7 @@ public class GameScreen : Screen
         }
     }
 
-    private void DrawPauseMenu(SpriteBatch spriteBatch)
+    private void DrawPauseMenu(SpriteBatch? spriteBatch)
     {
         // Pause menu is drawn in the center of the screen
 
@@ -182,11 +182,11 @@ public class GameScreen : Screen
 
         // Draw pause menu text
         SpriteFont pauseFont = _settings.PauseMenuFont;
-        Vector2 textPos = new Vector2(PauseMenuX, PauseMenuY);
+        var textPos = new Vector2(PauseMenuX, PauseMenuY);
 
         float pauseTextHeight = pauseFont.MeasureString("42").Y;
 
-        int optionIndex = 0;
+        var optionIndex = 0;
         foreach (PauseMenuOption menuOption in Enum.GetValues(typeof(PauseMenuOption)))
         {
             spriteBatch.DrawString(pauseFont, menuOption.ToString(), textPos,

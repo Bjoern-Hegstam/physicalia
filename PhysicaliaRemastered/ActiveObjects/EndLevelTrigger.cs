@@ -29,7 +29,7 @@ public class EndLevelTrigger : Pickup
         Level.NextState = LevelState.Finished;
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    public override void Draw(SpriteBatch? spriteBatch, Vector2 positionOffset)
     {
         spriteBatch.Draw(_sprite.Texture,
             positionOffset,
