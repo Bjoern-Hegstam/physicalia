@@ -66,7 +66,7 @@ public class GameScreen : Screen
 
     public override void LoadContent(ContentManager contentManager)
     {
-            gameManager.LoadXml(@"Content\GameData\Game.xml");
+            gameManager.LoadXml("Content/GameData/Game.xml");
             gameManager.LoadContent(contentManager);
         }
 

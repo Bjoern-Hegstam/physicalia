@@ -30,9 +30,9 @@ public enum GameState
 /// </summary>
 public class GameManager
 {
-    private const string GAMEDATA_PATH = @"Content\GameData\";
-    private const string LIBRARY_PATH = GAMEDATA_PATH + "Libraries\\";
-    private const string WORLD_PATH = GAMEDATA_PATH + "Worlds\\";
+    private const string GAMEDATA_PATH = "Content/GameData/";
+    private const string LIBRARY_PATH = GAMEDATA_PATH + "Libraries/";
+    private const string WORLD_PATH = GAMEDATA_PATH + "Worlds/";
 
     private Game game;
     private ISettings settings;
