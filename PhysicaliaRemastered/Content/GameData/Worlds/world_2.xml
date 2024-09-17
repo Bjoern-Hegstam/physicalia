@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
+<World xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../Schemas/schema_world.xsd">
+	<Presentation>
+		<StartSprite key="0" />
+		<Quote color="255 255 255 255">Alpha &amp; Omega</Quote>
+	</Presentation>
+	<Levels>
+		<Level>level_5.xml</Level>
+		<Level>level_6.xml</Level>
+		<Level>level_7.xml</Level>
+	</Levels>
+</World>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="schema_dataTypes.xsd" />
+  <xs:element name="World">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Presentation">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="StartSprite">
+                <xs:complexType>
+                  <xs:attribute name="key" type="xs:int" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Quote">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="Char" type="xs:string" />
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="br" />
+                  </xs:sequence>
+                  <xs:attribute name="color" type="ColorType" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Levels">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="Level" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

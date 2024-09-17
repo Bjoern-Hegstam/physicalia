@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level width="1000" height="479">
+    <PlayerStart>
+        <Position x="398" y="260" />
+        <Acceleration x="0" y="600" />
+    </PlayerStart>
+    <Enemies>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="489" y="238" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="352" y="278" width="221" height="108" />
+        </Enemy>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="524" y="238" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="419" y="250" width="125" height="106" />
+        </Enemy>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="459" y="239" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="355" y="289" width="219" height="99" />
+        </Enemy>
+    </Enemies>
+    <ActiveObjects>
+        <Weapons />
+        <Pickups />
+        <LevelFinishTrigger x="484" y="321" />
+    </ActiveObjects>
+    <Backgrounds />
+    <TileEngines count="1">
+        <TileEngine>
+            <TileMap width="63" height="46">
+                <Tile x="13" y="11" tileKey="10" />
+                <Tile x="14" y="11" tileKey="11" />
+                <Tile x="15" y="11" tileKey="11" />
+                <Tile x="16" y="11" tileKey="12" />
+                <Tile x="11" y="12" tileKey="11" />
+                <Tile x="12" y="12" tileKey="11" />
+                <Tile x="13" y="12" tileKey="11" />
+                <Tile x="14" y="12" tileKey="11" />
+                <Tile x="15" y="12" tileKey="11" />
+                <Tile x="16" y="12" tileKey="11" />
+                <Tile x="17" y="12" tileKey="11" />
+            </TileMap>
+        </TileEngine>
+    </TileEngines>
+</Level>

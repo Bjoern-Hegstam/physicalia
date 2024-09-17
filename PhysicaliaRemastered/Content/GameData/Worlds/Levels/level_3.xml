@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
+<Level width="320" height="640">
+	<PlayerStart>
+		<Position x="91" y="41" />
+		<Acceleration x="0" y="600" />
+	</PlayerStart>
+	<Enemies>
+		<Enemy type="0">
+			<StartValues>
+				<Position x="92" y="209" />
+				<Velocity x="50" y="0" />
+				<Acceleration x="0" y="600" />
+			</StartValues>
+			<PatrolArea x="72" y="152" width="150" height="107" />
+		</Enemy>
+		<Enemy type="0">
+			<StartValues>
+				<Position x="124" y="146" />
+				<Velocity x="50" y="0" />
+				<Acceleration x="0" y="600" />
+			</StartValues>
+			<PatrolArea x="104" y="92" width="82" height="101" />
+		</Enemy>
+		<Enemy type="0">
+			<StartValues>
+				<Position x="109" y="274" />
+				<Velocity x="50" y="0" />
+				<Acceleration x="0" y="600" />
+			</StartValues>
+			<PatrolArea x="75" y="228" width="209" height="92" />
+		</Enemy>
+	</Enemies>
+	<ActiveObjects>
+		
+			<Weapons>
+				<Weapon key="0">
+					<Position x="234" y="41" />
+					<CollisionBox x="0" y="0" width="25" height="13" />
+				</Weapon>
+			</Weapons>
+			<Pickups />
+		<LevelFinishTrigger x="249" y="579" />
+	</ActiveObjects>
+	<Backgrounds />
+	<TileEngines count="1">
+		<TileEngine>
+			<TileMap width="10" height="20">
+				<Tile x="0" y="0" tileKey="15" />
+				<Tile x="9" y="0" tileKey="13" />
+				<Tile x="0" y="1" tileKey="5" />
+				<Tile x="9" y="1" tileKey="3" />
+				<Tile x="0" y="2" tileKey="5" />
+				<Tile x="1" y="2" tileKey="11" />
+				<Tile x="2" y="2" tileKey="11" />
+				<Tile x="3" y="2" tileKey="11" />
+				<Tile x="4" y="2" tileKey="11" />
+				<Tile x="5" y="2" tileKey="11" />
+				<Tile x="6" y="2" tileKey="11" />
+				<Tile x="7" y="2" tileKey="11" />
+				<Tile x="9" y="2" tileKey="3" />
+				<Tile x="0" y="3" tileKey="5" />
+				<Tile x="9" y="3" tileKey="3" />
+				<Tile x="0" y="4" tileKey="5" />
+				<Tile x="9" y="4" tileKey="3" />
+				<Tile x="0" y="5" tileKey="5" />
+				<Tile x="9" y="5" tileKey="3" />
+				<Tile x="0" y="6" tileKey="5" />
+				<Tile x="3" y="6" tileKey="10" />
+				<Tile x="4" y="6" tileKey="11" />
+				<Tile x="5" y="6" tileKey="12" />
+				<Tile x="9" y="6" tileKey="3" />
+				<Tile x="0" y="7" tileKey="5" />
+				<Tile x="3" y="7" tileKey="13" />
+				<Tile x="4" y="7" tileKey="17" />
+				<Tile x="5" y="7" tileKey="15" />
+				<Tile x="9" y="7" tileKey="3" />
+				<Tile x="0" y="8" tileKey="5" />
+				<Tile x="2" y="8" tileKey="10" />
+				<Tile x="3" y="8" tileKey="11" />
+				<Tile x="4" y="8" tileKey="11" />
+				<Tile x="5" y="8" tileKey="11" />
+				<Tile x="6" y="8" tileKey="12" />
+				<Tile x="9" y="8" tileKey="3" />
+				<Tile x="0" y="9" tileKey="5" />
+				<Tile x="2" y="9" tileKey="13" />
+				<Tile x="3" y="9" tileKey="17" />
+				<Tile x="4" y="9" tileKey="17" />
+				<Tile x="5" y="9" tileKey="17" />
+				<Tile x="6" y="9" tileKey="15" />
+				<Tile x="9" y="9" tileKey="3" />
+				<Tile x="0" y="10" tileKey="15" />
+				<Tile x="2" y="10" tileKey="10" />
+				<Tile x="3" y="10" tileKey="1" />
+				<Tile x="4" y="10" tileKey="1" />
+				<Tile x="5" y="10" tileKey="1" />
+				<Tile x="6" y="10" tileKey="1" />
+				<Tile x="7" y="10" tileKey="1" />
+				<Tile x="8" y="10" tileKey="1" />
+				<Tile x="9" y="10" tileKey="6" />
+				<Tile x="0" y="11" tileKey="15" />
+				<Tile x="0" y="12" tileKey="15" />
+				<Tile x="0" y="13" tileKey="8" />
+				<Tile x="1" y="13" tileKey="11" />
+				<Tile x="2" y="13" tileKey="11" />
+				<Tile x="3" y="13" tileKey="11" />
+				<Tile x="4" y="13" tileKey="11" />
+				<Tile x="5" y="13" tileKey="11" />
+				<Tile x="6" y="13" tileKey="11" />
+				<Tile x="7" y="13" tileKey="2" />
+				<Tile x="9" y="13" tileKey="0" />
+				<Tile x="9" y="14" tileKey="13" />
+				<Tile x="9" y="15" tileKey="13" />
+				<Tile x="0" y="16" tileKey="2" />
+				<Tile x="2" y="16" tileKey="0" />
+				<Tile x="3" y="16" tileKey="11" />
+				<Tile x="4" y="16" tileKey="11" />
+				<Tile x="5" y="16" tileKey="11" />
+				<Tile x="6" y="16" tileKey="11" />
+				<Tile x="7" y="16" tileKey="11" />
+				<Tile x="8" y="16" tileKey="11" />
+				<Tile x="9" y="16" tileKey="3" />
+				<Tile x="0" y="17" tileKey="15" />
+				<Tile x="9" y="17" tileKey="3" />
+				<Tile x="0" y="18" tileKey="15" />
+				<Tile x="9" y="18" tileKey="3" />
+				<Tile x="0" y="19" tileKey="8" />
+				<Tile x="1" y="19" tileKey="11" />
+				<Tile x="2" y="19" tileKey="11" />
+				<Tile x="3" y="19" tileKey="11" />
+				<Tile x="4" y="19" tileKey="11" />
+				<Tile x="5" y="19" tileKey="11" />
+				<Tile x="6" y="19" tileKey="11" />
+				<Tile x="7" y="19" tileKey="11" />
+				<Tile x="8" y="19" tileKey="11" />
+				<Tile x="9" y="19" tileKey="6" />
+			</TileMap>
+		</TileEngine>
+	</TileEngines>
+</Level>

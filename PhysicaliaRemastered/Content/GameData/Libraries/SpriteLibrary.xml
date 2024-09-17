@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.7.0 (http://www.liquid-technologies.com) -->
+<SpriteLibrary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../Schemas/schema_spriteLibrary.xsd">
+	<Sprites>
+		<!-- EndLevelTrigger sprite -->
+		<Sprite id="-1" textureKey="100" x="0" y="0" width="48" height="48" />
+		
+		<!-- UI -->
+		<Sprite id="-2" textureKey="21" x="0" y="0" width="172" height="48" />
+		<Sprite id="-3" textureKey="21" x="0" y="48" width="172" height="48" />
+		
+		<!-- Tiles Grass -->
+		<Sprite id="0" textureKey="0" x="0" y="0" width="32" height="32" />
+		<Sprite id="1" textureKey="0" x="32" y="0" width="32" height="32" />
+		<Sprite id="2" textureKey="0" x="64" y="0" width="32" height="32" />
+		<Sprite id="3" textureKey="0" x="0" y="32" width="32" height="32" />
+		<Sprite id="4" textureKey="0" x="32" y="32" width="32" height="32" />
+		<Sprite id="5" textureKey="0" x="64" y="32" width="32" height="32" />
+		<Sprite id="6" textureKey="0" x="0" y="64" width="32" height="32" />
+		<Sprite id="7" textureKey="0" x="32" y="64" width="32" height="32" />
+		<Sprite id="8" textureKey="0" x="64" y="64" width="32" height="32" />
+		
+		<!-- Tiles Grass Upside down-->
+		<Sprite id="20" textureKey="0" x="0" y="96" width="32" height="32" />
+		<Sprite id="21" textureKey="0" x="32" y="96" width="32" height="32" />
+		<Sprite id="22" textureKey="0" x="64" y="96" width="32" height="32" />
+		<Sprite id="23" textureKey="0" x="0" y="128" width="32" height="32" />
+		<Sprite id="24" textureKey="0" x="32" y="128" width="32" height="32" />
+		<Sprite id="25" textureKey="0" x="64" y="128" width="32" height="32" />
+		<Sprite id="26" textureKey="0" x="0" y="160" width="32" height="32" />
+		<Sprite id="27" textureKey="0" x="32" y="160" width="32" height="32" />
+		<Sprite id="28" textureKey="0" x="64" y="160" width="32" height="32" />
+		
+		<!-- Tiles Mechanical -->
+		<Sprite id="10" textureKey="1" x="0" y="0" width="32" height="32" />
+		<Sprite id="11" textureKey="1" x="32" y="0" width="32" height="32" />
+		<Sprite id="12" textureKey="1" x="64" y="0" width="32" height="32" />
+		<Sprite id="13" textureKey="1" x="128" y="0" width="32" height="32" />
+		<Sprite id="14" textureKey="1" x="0" y="32" width="32" height="32" />
+		<Sprite id="15" textureKey="1" x="32" y="32" width="32" height="32" />
+		<Sprite id="16" textureKey="1" x="64" y="32" width="32" height="32" />
+		<Sprite id="17" textureKey="1" x="128" y="32" width="32" height="32" />
+		
+		<!-- School set -->
+		<!-- Interior -->
+		<!-- 	Wall Colors -->
+		<!-- 		Light Yellow-->
+		<Sprite id="30" textureKey="2" x="32" y="0" width="32" height="32" />
+		
+		<!-- 	Straight lines -->
+		<!-- 		Vertical -->
+		<Sprite id="31" textureKey="2" x="0" y="0" width="32" height="32" />
+		<Sprite id="32" textureKey="2" x="0" y="32" width="32" height="32" />
+		<Sprite id="33" textureKey="2" x="0" y="64" width="32" height="32" />
+		
+		<Sprite id="34" textureKey="2" x="64" y="0" width="32" height="32" />
+		<Sprite id="35" textureKey="2" x="64" y="32" width="32" height="32" />
+		<Sprite id="36" textureKey="2" x="64" y="64" width="32" height="32" />
+		
+		<!-- 		Horizontal -->
+		<Sprite id="37" textureKey="2" x="0" y="160" width="32" height="32" />
+		<Sprite id="38" textureKey="2" x="32" y="160" width="32" height="32" />
+		<Sprite id="39" textureKey="2" x="64" y="160" width="32" height="32" />
+		
+		<Sprite id="40" textureKey="2" x="96" y="96" width="32" height="32" />
+		<Sprite id="41" textureKey="2" x="128" y="96" width="32" height="32" />
+		<Sprite id="42" textureKey="2" x="160" y="96" width="32" height="32" />
+		
+		<!-- 	Corners -->
+		<Sprite id="43" textureKey="2" x="32" y="32" width="32" height="32" />
+		<Sprite id="44" textureKey="2" x="32" y="64" width="32" height="32" />
+		
+		<Sprite id="45" textureKey="2" x="0" y="96" width="32" height="32" />
+		<Sprite id="46" textureKey="2" x="32" y="96" width="32" height="32" />
+		
+		<Sprite id="47" textureKey="2" x="0" y="128" width="32" height="32" />
+		<Sprite id="48" textureKey="2" x="32" y="128" width="32" height="32" />
+		
+		<!-- Blackboard -->
+		<Sprite id="49" textureKey="2" x="96" y="0" width="32" height="32" />
+		<Sprite id="50" textureKey="2" x="128" y="0" width="32" height="32" />
+		<Sprite id="51" textureKey="2" x="160" y="0" width="32" height="32" />
+		
+		<Sprite id="52" textureKey="2" x="96" y="32" width="32" height="32" />
+		<Sprite id="53" textureKey="2" x="128" y="32" width="32" height="32" />
+		<Sprite id="54" textureKey="2" x="160" y="32" width="32" height="32" />
+		
+		<Sprite id="55" textureKey="2" x="96" y="64" width="32" height="32" />
+		<Sprite id="56" textureKey="2" x="128" y="64" width="32" height="32" />
+		<Sprite id="57" textureKey="2" x="160" y="64" width="32" height="32" />
+		
+		<!-- Blackboard decorations -->
+		<Sprite id="58" textureKey="2" x="192" y="0" width="32" height="32" />
+		<Sprite id="59" textureKey="2" x="192" y="32" width="32" height="32" />
+		<Sprite id="60" textureKey="2" x="192" y="64" width="32" height="32" />
+		<Sprite id="61" textureKey="2" x="224" y="0" width="32" height="32" />
+		<Sprite id="62" textureKey="2" x="224" y="32" width="32" height="32" />
+		
+		<!-- Door -->
+		<Sprite id="63" textureKey="2" x="96" y="128" width="32" height="32" />
+		<Sprite id="64" textureKey="2" x="96" y="160" width="32" height="32" />
+		
+		<!-- Top edges -->
+		<Sprite id="65" textureKey="2" x="128" y="128" width="32" height="32" />
+		<Sprite id="66" textureKey="2" x="160" y="128" width="32" height="32" />
+		<Sprite id="67" textureKey="2" x="192" y="128" width="32" height="32" />
+		
+		<Sprite id="68" textureKey="2" x="128" y="160" width="32" height="32" />
+		<Sprite id="69" textureKey="2" x="160" y="160" width="32" height="32" />
+		
+		<!-- Weapon sprites 1xx-->
+		<!-- Arms -->
+		<Sprite id="100" textureKey="10" x="0" y="0" width="32" height="13" />
+		<!-- Chainsaw -->
+		<Sprite id="101" textureKey="10" x="128" y="49" width="25" height="13" />
+		<!-- Minigun -->
+		<Sprite id="102" textureKey="10" x="256" y="97" width="64" height="48" />
+		
+		<!-- Particle sprites 2xx -->
+		<Sprite id="200" textureKey="200" x="10" y="48" width="8" height="2" />
+		
+		<!-- Backgrounds 3xx -->
+		<Sprite id="300" textureKey="300" x="0" y="0" width="640" height="480" />
+		<Sprite id="301" textureKey="301" x="0" y="0" width="1600" height="500" />
+		<Sprite id="302" textureKey="302" x="0" y="0" width="1600" height="528" />
+		<Sprite id="303" textureKey="303" x="0" y="0" width="2048" height="960" />
+		<Sprite id="304" textureKey="304" x="0" y="0" width="352" height="960" />
+		
+		<!-- Pickups 4xx -->
+		<Sprite id="400" textureKey="100" x="48" y="0" width="32" height="32" />
+		<Sprite id="401" textureKey="100" x="80" y="0" width="14" height="14" />
+	</Sprites>
+</SpriteLibrary>

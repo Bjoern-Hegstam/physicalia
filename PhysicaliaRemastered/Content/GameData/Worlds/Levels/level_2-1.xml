@@ -1,0 +1,610 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level width="2400" height="960">
+    <PlayerStart>
+        <Position x="25" y="904" />
+        <Acceleration x="0" y="600" />
+    </PlayerStart>
+    <Enemies>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="439" y="747" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="326" y="677" width="406" height="117" />
+        </Enemy>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="671" y="747" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="327" y="679" width="407" height="115" />
+        </Enemy>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="747" y="619" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="290" y="525" width="528" height="141" />
+        </Enemy>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="444" y="619" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="291" y="521" width="527" height="145" />
+        </Enemy>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="1829" y="883" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="1766" y="779" width="472" height="150" />
+        </Enemy>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="2121" y="883" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="1765" y="766" width="474" height="163" />
+        </Enemy>
+        <Enemy type="0">
+            <StartValues>
+                <Position x="1986" y="883" />
+                <Velocity x="50" y="0" />
+                <Acceleration x="0" y="600" />
+            </StartValues>
+            <PatrolArea x="1765" y="788" width="472" height="144" />
+        </Enemy>
+    </Enemies>
+    <ActiveObjects>
+        <Weapons>
+            <Weapon key="1">
+                <Position x="2170" y="916" />
+                <CollisionBox x="0" y="0" width="64" height="48" />
+            </Weapon>
+            <Weapon key="0">
+                <Position x="451" y="895" />
+                <CollisionBox x="0" y="0" width="25" height="13" />
+            </Weapon>
+        </Weapons>
+        <Pickups>
+            <Pickup key="1" x="1173" y="579" />
+            <Pickup key="1" x="1202" y="578" />
+            <Pickup key="0" x="2048" y="799" />
+        </Pickups>
+        <LevelFinishTrigger x="2356" y="898" />
+    </ActiveObjects>
+    <Backgrounds>
+        <Background spriteKey="303" depth="1" loop="" />
+        <Background spriteKey="304" depth="1" loop="x" />
+    </Backgrounds>
+    <TileEngines count="5">
+        <TileEngine>
+            <TileMap width="75" height="30">
+                <Tile x="69" y="9" tileKey="59" />
+                <Tile x="40" y="16" tileKey="68" />
+                <Tile x="40" y="17" tileKey="36" />
+                <Tile x="38" y="18" tileKey="36" />
+                <Tile x="10" y="26" tileKey="58" />
+                <Tile x="8" y="27" tileKey="60" />
+            </TileMap>
+        </TileEngine>
+        <TileEngine>
+            <TileMap width="75" height="30">
+                <Tile x="6" y="14" tileKey="65" />
+                <Tile x="7" y="14" tileKey="66" />
+                <Tile x="8" y="14" tileKey="66" />
+                <Tile x="9" y="14" tileKey="66" />
+                <Tile x="10" y="14" tileKey="66" />
+                <Tile x="11" y="14" tileKey="66" />
+                <Tile x="12" y="14" tileKey="66" />
+                <Tile x="13" y="14" tileKey="66" />
+                <Tile x="14" y="14" tileKey="66" />
+                <Tile x="15" y="14" tileKey="66" />
+                <Tile x="16" y="14" tileKey="66" />
+                <Tile x="17" y="14" tileKey="66" />
+                <Tile x="18" y="14" tileKey="66" />
+                <Tile x="19" y="14" tileKey="66" />
+                <Tile x="20" y="14" tileKey="66" />
+                <Tile x="21" y="14" tileKey="66" />
+                <Tile x="22" y="14" tileKey="66" />
+                <Tile x="23" y="14" tileKey="66" />
+                <Tile x="24" y="14" tileKey="66" />
+                <Tile x="25" y="14" tileKey="66" />
+                <Tile x="26" y="14" tileKey="66" />
+                <Tile x="27" y="14" tileKey="66" />
+                <Tile x="28" y="14" tileKey="66" />
+                <Tile x="29" y="14" tileKey="66" />
+                <Tile x="30" y="14" tileKey="66" />
+                <Tile x="31" y="14" tileKey="66" />
+                <Tile x="32" y="14" tileKey="66" />
+                <Tile x="33" y="14" tileKey="66" />
+                <Tile x="34" y="14" tileKey="66" />
+                <Tile x="35" y="14" tileKey="66" />
+                <Tile x="36" y="14" tileKey="66" />
+                <Tile x="37" y="14" tileKey="66" />
+                <Tile x="38" y="14" tileKey="66" />
+                <Tile x="39" y="14" tileKey="66" />
+                <Tile x="40" y="14" tileKey="66" />
+                <Tile x="41" y="14" tileKey="66" />
+                <Tile x="42" y="14" tileKey="66" />
+                <Tile x="43" y="14" tileKey="66" />
+                <Tile x="44" y="14" tileKey="66" />
+                <Tile x="45" y="14" tileKey="66" />
+                <Tile x="46" y="14" tileKey="66" />
+                <Tile x="47" y="14" tileKey="66" />
+                <Tile x="48" y="14" tileKey="66" />
+                <Tile x="49" y="14" tileKey="66" />
+                <Tile x="50" y="14" tileKey="67" />
+                <Tile x="41" y="16" tileKey="40" />
+                <Tile x="42" y="16" tileKey="41" />
+                <Tile x="43" y="16" tileKey="41" />
+                <Tile x="44" y="16" tileKey="41" />
+                <Tile x="45" y="16" tileKey="41" />
+                <Tile x="46" y="16" tileKey="41" />
+                <Tile x="47" y="16" tileKey="41" />
+                <Tile x="48" y="16" tileKey="42" />
+                <Tile x="38" y="17" tileKey="68" />
+                <Tile x="39" y="17" tileKey="40" />
+                <Tile x="40" y="17" tileKey="42" />
+                <Tile x="25" y="18" tileKey="68" />
+                <Tile x="26" y="18" tileKey="40" />
+                <Tile x="27" y="18" tileKey="41" />
+                <Tile x="28" y="18" tileKey="41" />
+                <Tile x="29" y="18" tileKey="41" />
+                <Tile x="30" y="18" tileKey="41" />
+                <Tile x="31" y="18" tileKey="41" />
+                <Tile x="32" y="18" tileKey="41" />
+                <Tile x="33" y="18" tileKey="41" />
+                <Tile x="34" y="18" tileKey="41" />
+                <Tile x="35" y="18" tileKey="41" />
+                <Tile x="36" y="18" tileKey="41" />
+                <Tile x="37" y="18" tileKey="41" />
+                <Tile x="38" y="18" tileKey="41" />
+                <Tile x="25" y="19" tileKey="35" />
+                <Tile x="25" y="20" tileKey="35" />
+                <Tile x="25" y="21" tileKey="35" />
+                <Tile x="25" y="22" tileKey="35" />
+                <Tile x="25" y="23" tileKey="35" />
+                <Tile x="25" y="24" tileKey="35" />
+                <Tile x="25" y="25" tileKey="35" />
+                <Tile x="7" y="26" tileKey="49" />
+                <Tile x="8" y="26" tileKey="50" />
+                <Tile x="9" y="26" tileKey="50" />
+                <Tile x="10" y="26" tileKey="50" />
+                <Tile x="11" y="26" tileKey="51" />
+                <Tile x="25" y="26" tileKey="35" />
+                <Tile x="7" y="27" tileKey="55" />
+                <Tile x="8" y="27" tileKey="56" />
+                <Tile x="9" y="27" tileKey="56" />
+                <Tile x="10" y="27" tileKey="56" />
+                <Tile x="11" y="27" tileKey="57" />
+                <Tile x="25" y="27" tileKey="35" />
+                <Tile x="25" y="28" tileKey="36" />
+            </TileMap>
+        </TileEngine>
+        <TileEngine>
+            <TileMap width="75" height="30">
+                <Tile x="51" y="14" tileKey="69" />
+                <Tile x="6" y="15" tileKey="31" />
+                <Tile x="51" y="15" tileKey="31" />
+                <Tile x="6" y="16" tileKey="32" />
+                <Tile x="51" y="16" tileKey="32" />
+                <Tile x="6" y="17" tileKey="32" />
+                <Tile x="48" y="17" tileKey="34" />
+                <Tile x="51" y="17" tileKey="32" />
+                <Tile x="6" y="18" tileKey="32" />
+                <Tile x="48" y="18" tileKey="35" />
+                <Tile x="51" y="18" tileKey="32" />
+                <Tile x="6" y="19" tileKey="32" />
+                <Tile x="48" y="19" tileKey="35" />
+                <Tile x="51" y="19" tileKey="32" />
+                <Tile x="6" y="20" tileKey="32" />
+                <Tile x="48" y="20" tileKey="35" />
+                <Tile x="51" y="20" tileKey="32" />
+                <Tile x="6" y="21" tileKey="32" />
+                <Tile x="48" y="21" tileKey="36" />
+                <Tile x="51" y="21" tileKey="33" />
+                <Tile x="6" y="22" tileKey="32" />
+                <Tile x="7" y="22" tileKey="45" />
+                <Tile x="6" y="23" tileKey="32" />
+                <Tile x="7" y="23" tileKey="47" />
+                <Tile x="8" y="23" tileKey="45" />
+                <Tile x="6" y="24" tileKey="33" />
+                <Tile x="8" y="24" tileKey="47" />
+                <Tile x="9" y="24" tileKey="43" />
+                <Tile x="25" y="25" tileKey="46" />
+                <Tile x="15" y="26" tileKey="68" />
+                <Tile x="16" y="26" tileKey="66" />
+                <Tile x="17" y="26" tileKey="69" />
+                <Tile x="24" y="26" tileKey="46" />
+                <Tile x="25" y="26" tileKey="48" />
+                <Tile x="15" y="27" tileKey="35" />
+                <Tile x="16" y="27" tileKey="63" />
+                <Tile x="17" y="27" tileKey="32" />
+                <Tile x="23" y="27" tileKey="46" />
+                <Tile x="24" y="27" tileKey="48" />
+                <Tile x="15" y="28" tileKey="36" />
+                <Tile x="16" y="28" tileKey="64" />
+                <Tile x="17" y="28" tileKey="33" />
+                <Tile x="22" y="28" tileKey="44" />
+                <Tile x="23" y="28" tileKey="48" />
+            </TileMap>
+        </TileEngine>
+        <TileEngine>
+            <TileMap width="75" height="30">
+                <Tile x="9" y="20" tileKey="40" />
+                <Tile x="10" y="20" tileKey="41" />
+                <Tile x="11" y="20" tileKey="41" />
+                <Tile x="12" y="20" tileKey="41" />
+                <Tile x="13" y="20" tileKey="41" />
+                <Tile x="14" y="20" tileKey="41" />
+                <Tile x="15" y="20" tileKey="41" />
+                <Tile x="16" y="20" tileKey="41" />
+                <Tile x="17" y="20" tileKey="41" />
+                <Tile x="18" y="20" tileKey="41" />
+                <Tile x="19" y="20" tileKey="41" />
+                <Tile x="20" y="20" tileKey="41" />
+                <Tile x="21" y="20" tileKey="41" />
+                <Tile x="22" y="20" tileKey="41" />
+                <Tile x="23" y="20" tileKey="41" />
+                <Tile x="24" y="20" tileKey="41" />
+                <Tile x="25" y="20" tileKey="41" />
+                <Tile x="6" y="21" tileKey="45" />
+                <Tile x="6" y="22" tileKey="47" />
+                <Tile x="6" y="24" tileKey="40" />
+                <Tile x="7" y="24" tileKey="41" />
+                <Tile x="8" y="24" tileKey="41" />
+                <Tile x="9" y="24" tileKey="41" />
+                <Tile x="10" y="24" tileKey="41" />
+                <Tile x="11" y="24" tileKey="41" />
+                <Tile x="12" y="24" tileKey="41" />
+                <Tile x="13" y="24" tileKey="41" />
+                <Tile x="14" y="24" tileKey="41" />
+                <Tile x="15" y="24" tileKey="41" />
+                <Tile x="16" y="24" tileKey="41" />
+                <Tile x="17" y="24" tileKey="41" />
+                <Tile x="18" y="24" tileKey="41" />
+                <Tile x="19" y="24" tileKey="41" />
+                <Tile x="20" y="24" tileKey="41" />
+                <Tile x="21" y="24" tileKey="41" />
+                <Tile x="22" y="24" tileKey="42" />
+                <Tile x="6" y="28" tileKey="41" />
+                <Tile x="7" y="28" tileKey="41" />
+                <Tile x="8" y="28" tileKey="41" />
+                <Tile x="9" y="28" tileKey="41" />
+                <Tile x="10" y="28" tileKey="41" />
+                <Tile x="11" y="28" tileKey="41" />
+                <Tile x="12" y="28" tileKey="41" />
+                <Tile x="13" y="28" tileKey="41" />
+                <Tile x="14" y="28" tileKey="41" />
+                <Tile x="15" y="28" tileKey="41" />
+                <Tile x="17" y="28" tileKey="41" />
+                <Tile x="18" y="28" tileKey="41" />
+                <Tile x="19" y="28" tileKey="41" />
+                <Tile x="20" y="28" tileKey="41" />
+                <Tile x="21" y="28" tileKey="41" />
+                <Tile x="22" y="28" tileKey="41" />
+                <Tile x="23" y="28" tileKey="41" />
+                <Tile x="24" y="28" tileKey="41" />
+                <Tile x="25" y="28" tileKey="41" />
+            </TileMap>
+        </TileEngine>
+        <TileEngine>
+            <TileMap width="75" height="30">
+                <Tile x="62" y="0" tileKey="15" />
+                <Tile x="62" y="1" tileKey="15" />
+                <Tile x="62" y="2" tileKey="15" />
+                <Tile x="62" y="3" tileKey="15" />
+                <Tile x="62" y="4" tileKey="15" />
+                <Tile x="63" y="4" tileKey="1" />
+                <Tile x="64" y="4" tileKey="12" />
+                <Tile x="67" y="4" tileKey="0" />
+                <Tile x="68" y="4" tileKey="1" />
+                <Tile x="69" y="4" tileKey="1" />
+                <Tile x="70" y="4" tileKey="1" />
+                <Tile x="71" y="4" tileKey="2" />
+                <Tile x="62" y="5" tileKey="5" />
+                <Tile x="67" y="5" tileKey="3" />
+                <Tile x="68" y="5" tileKey="7" />
+                <Tile x="69" y="5" tileKey="7" />
+                <Tile x="70" y="5" tileKey="7" />
+                <Tile x="71" y="5" tileKey="5" />
+                <Tile x="62" y="6" tileKey="5" />
+                <Tile x="65" y="6" tileKey="10" />
+                <Tile x="66" y="6" tileKey="11" />
+                <Tile x="67" y="6" tileKey="3" />
+                <Tile x="68" y="6" tileKey="7" />
+                <Tile x="69" y="6" tileKey="7" />
+                <Tile x="70" y="6" tileKey="7" />
+                <Tile x="71" y="6" tileKey="5" />
+                <Tile x="62" y="7" tileKey="5" />
+                <Tile x="67" y="7" tileKey="3" />
+                <Tile x="68" y="7" tileKey="7" />
+                <Tile x="69" y="7" tileKey="7" />
+                <Tile x="70" y="7" tileKey="7" />
+                <Tile x="71" y="7" tileKey="5" />
+                <Tile x="62" y="8" tileKey="5" />
+                <Tile x="63" y="8" tileKey="11" />
+                <Tile x="64" y="8" tileKey="12" />
+                <Tile x="67" y="8" tileKey="3" />
+                <Tile x="68" y="8" tileKey="7" />
+                <Tile x="69" y="8" tileKey="7" />
+                <Tile x="70" y="8" tileKey="7" />
+                <Tile x="71" y="8" tileKey="5" />
+                <Tile x="62" y="9" tileKey="5" />
+                <Tile x="67" y="9" tileKey="3" />
+                <Tile x="68" y="9" tileKey="7" />
+                <Tile x="69" y="9" tileKey="7" />
+                <Tile x="70" y="9" tileKey="7" />
+                <Tile x="71" y="9" tileKey="5" />
+                <Tile x="62" y="10" tileKey="5" />
+                <Tile x="65" y="10" tileKey="10" />
+                <Tile x="66" y="10" tileKey="11" />
+                <Tile x="67" y="10" tileKey="3" />
+                <Tile x="68" y="10" tileKey="7" />
+                <Tile x="69" y="10" tileKey="7" />
+                <Tile x="70" y="10" tileKey="7" />
+                <Tile x="71" y="10" tileKey="5" />
+                <Tile x="62" y="11" tileKey="5" />
+                <Tile x="67" y="11" tileKey="3" />
+                <Tile x="68" y="11" tileKey="7" />
+                <Tile x="69" y="11" tileKey="7" />
+                <Tile x="70" y="11" tileKey="7" />
+                <Tile x="71" y="11" tileKey="5" />
+                <Tile x="51" y="12" tileKey="0" />
+                <Tile x="52" y="12" tileKey="1" />
+                <Tile x="53" y="12" tileKey="1" />
+                <Tile x="54" y="12" tileKey="2" />
+                <Tile x="62" y="12" tileKey="5" />
+                <Tile x="63" y="12" tileKey="1" />
+                <Tile x="64" y="12" tileKey="2" />
+                <Tile x="67" y="12" tileKey="3" />
+                <Tile x="68" y="12" tileKey="7" />
+                <Tile x="69" y="12" tileKey="7" />
+                <Tile x="70" y="12" tileKey="7" />
+                <Tile x="71" y="12" tileKey="5" />
+                <Tile x="51" y="13" tileKey="3" />
+                <Tile x="52" y="13" tileKey="7" />
+                <Tile x="53" y="13" tileKey="7" />
+                <Tile x="54" y="13" tileKey="5" />
+                <Tile x="62" y="13" tileKey="5" />
+                <Tile x="67" y="13" tileKey="3" />
+                <Tile x="68" y="13" tileKey="7" />
+                <Tile x="69" y="13" tileKey="7" />
+                <Tile x="70" y="13" tileKey="7" />
+                <Tile x="71" y="13" tileKey="5" />
+                <Tile x="51" y="14" tileKey="3" />
+                <Tile x="52" y="14" tileKey="7" />
+                <Tile x="53" y="14" tileKey="7" />
+                <Tile x="54" y="14" tileKey="5" />
+                <Tile x="62" y="14" tileKey="8" />
+                <Tile x="63" y="14" tileKey="1" />
+                <Tile x="64" y="14" tileKey="1" />
+                <Tile x="65" y="14" tileKey="1" />
+                <Tile x="66" y="14" tileKey="1" />
+                <Tile x="67" y="14" tileKey="3" />
+                <Tile x="68" y="14" tileKey="7" />
+                <Tile x="69" y="14" tileKey="7" />
+                <Tile x="70" y="14" tileKey="7" />
+                <Tile x="71" y="14" tileKey="5" />
+                <Tile x="51" y="15" tileKey="17" />
+                <Tile x="52" y="15" tileKey="17" />
+                <Tile x="53" y="15" tileKey="17" />
+                <Tile x="54" y="15" tileKey="5" />
+                <Tile x="67" y="15" tileKey="3" />
+                <Tile x="68" y="15" tileKey="7" />
+                <Tile x="69" y="15" tileKey="7" />
+                <Tile x="70" y="15" tileKey="7" />
+                <Tile x="71" y="15" tileKey="5" />
+                <Tile x="51" y="16" tileKey="17" />
+                <Tile x="52" y="16" tileKey="17" />
+                <Tile x="53" y="16" tileKey="17" />
+                <Tile x="54" y="16" tileKey="5" />
+                <Tile x="57" y="16" tileKey="1" />
+                <Tile x="58" y="16" tileKey="1" />
+                <Tile x="61" y="16" tileKey="0" />
+                <Tile x="62" y="16" tileKey="1" />
+                <Tile x="63" y="16" tileKey="1" />
+                <Tile x="64" y="16" tileKey="1" />
+                <Tile x="65" y="16" tileKey="1" />
+                <Tile x="66" y="16" tileKey="1" />
+                <Tile x="67" y="16" tileKey="6" />
+                <Tile x="68" y="16" tileKey="7" />
+                <Tile x="69" y="16" tileKey="7" />
+                <Tile x="70" y="16" tileKey="7" />
+                <Tile x="71" y="16" tileKey="5" />
+                <Tile x="51" y="17" tileKey="17" />
+                <Tile x="52" y="17" tileKey="17" />
+                <Tile x="53" y="17" tileKey="17" />
+                <Tile x="54" y="17" tileKey="8" />
+                <Tile x="55" y="17" tileKey="2" />
+                <Tile x="61" y="17" tileKey="3" />
+                <Tile x="62" y="17" tileKey="7" />
+                <Tile x="63" y="17" tileKey="7" />
+                <Tile x="64" y="17" tileKey="7" />
+                <Tile x="65" y="17" tileKey="7" />
+                <Tile x="66" y="17" tileKey="7" />
+                <Tile x="67" y="17" tileKey="7" />
+                <Tile x="68" y="17" tileKey="7" />
+                <Tile x="69" y="17" tileKey="7" />
+                <Tile x="70" y="17" tileKey="7" />
+                <Tile x="71" y="17" tileKey="5" />
+                <Tile x="51" y="18" tileKey="7" />
+                <Tile x="52" y="18" tileKey="7" />
+                <Tile x="53" y="18" tileKey="7" />
+                <Tile x="54" y="18" tileKey="7" />
+                <Tile x="55" y="18" tileKey="8" />
+                <Tile x="56" y="18" tileKey="2" />
+                <Tile x="61" y="18" tileKey="26" />
+                <Tile x="62" y="18" tileKey="27" />
+                <Tile x="63" y="18" tileKey="27" />
+                <Tile x="64" y="18" tileKey="27" />
+                <Tile x="65" y="18" tileKey="27" />
+                <Tile x="66" y="18" tileKey="27" />
+                <Tile x="67" y="18" tileKey="27" />
+                <Tile x="68" y="18" tileKey="27" />
+                <Tile x="69" y="18" tileKey="27" />
+                <Tile x="70" y="18" tileKey="20" />
+                <Tile x="71" y="18" tileKey="5" />
+                <Tile x="51" y="19" tileKey="7" />
+                <Tile x="52" y="19" tileKey="7" />
+                <Tile x="53" y="19" tileKey="7" />
+                <Tile x="54" y="19" tileKey="7" />
+                <Tile x="55" y="19" tileKey="7" />
+                <Tile x="56" y="19" tileKey="8" />
+                <Tile x="57" y="19" tileKey="2" />
+                <Tile x="70" y="19" tileKey="3" />
+                <Tile x="71" y="19" tileKey="5" />
+                <Tile x="51" y="20" tileKey="7" />
+                <Tile x="52" y="20" tileKey="7" />
+                <Tile x="53" y="20" tileKey="7" />
+                <Tile x="54" y="20" tileKey="7" />
+                <Tile x="55" y="20" tileKey="7" />
+                <Tile x="56" y="20" tileKey="7" />
+                <Tile x="57" y="20" tileKey="8" />
+                <Tile x="58" y="20" tileKey="2" />
+                <Tile x="70" y="20" tileKey="3" />
+                <Tile x="71" y="20" tileKey="5" />
+                <Tile x="51" y="21" tileKey="7" />
+                <Tile x="52" y="21" tileKey="7" />
+                <Tile x="53" y="21" tileKey="7" />
+                <Tile x="54" y="21" tileKey="7" />
+                <Tile x="55" y="21" tileKey="7" />
+                <Tile x="56" y="21" tileKey="7" />
+                <Tile x="57" y="21" tileKey="7" />
+                <Tile x="58" y="21" tileKey="8" />
+                <Tile x="59" y="21" tileKey="1" />
+                <Tile x="60" y="21" tileKey="1" />
+                <Tile x="61" y="21" tileKey="1" />
+                <Tile x="62" y="21" tileKey="1" />
+                <Tile x="63" y="21" tileKey="1" />
+                <Tile x="64" y="21" tileKey="1" />
+                <Tile x="65" y="21" tileKey="2" />
+                <Tile x="70" y="21" tileKey="3" />
+                <Tile x="71" y="21" tileKey="5" />
+                <Tile x="48" y="22" tileKey="5" />
+                <Tile x="51" y="22" tileKey="3" />
+                <Tile x="52" y="22" tileKey="7" />
+                <Tile x="53" y="22" tileKey="7" />
+                <Tile x="54" y="22" tileKey="22" />
+                <Tile x="55" y="22" tileKey="27" />
+                <Tile x="56" y="22" tileKey="27" />
+                <Tile x="57" y="22" tileKey="27" />
+                <Tile x="58" y="22" tileKey="27" />
+                <Tile x="59" y="22" tileKey="27" />
+                <Tile x="60" y="22" tileKey="27" />
+                <Tile x="61" y="22" tileKey="27" />
+                <Tile x="62" y="22" tileKey="27" />
+                <Tile x="63" y="22" tileKey="27" />
+                <Tile x="64" y="22" tileKey="27" />
+                <Tile x="65" y="22" tileKey="28" />
+                <Tile x="67" y="22" tileKey="1" />
+                <Tile x="70" y="22" tileKey="3" />
+                <Tile x="71" y="22" tileKey="5" />
+                <Tile x="48" y="23" tileKey="5" />
+                <Tile x="51" y="23" tileKey="26" />
+                <Tile x="52" y="23" tileKey="27" />
+                <Tile x="53" y="23" tileKey="27" />
+                <Tile x="54" y="23" tileKey="28" />
+                <Tile x="69" y="23" tileKey="10" />
+                <Tile x="70" y="23" tileKey="3" />
+                <Tile x="71" y="23" tileKey="5" />
+                <Tile x="48" y="24" tileKey="5" />
+                <Tile x="70" y="24" tileKey="3" />
+                <Tile x="71" y="24" tileKey="5" />
+                <Tile x="48" y="25" tileKey="5" />
+                <Tile x="69" y="25" tileKey="10" />
+                <Tile x="70" y="25" tileKey="3" />
+                <Tile x="71" y="25" tileKey="5" />
+                <Tile x="48" y="26" tileKey="5" />
+                <Tile x="59" y="26" tileKey="1" />
+                <Tile x="60" y="26" tileKey="1" />
+                <Tile x="63" y="26" tileKey="1" />
+                <Tile x="64" y="26" tileKey="1" />
+                <Tile x="70" y="26" tileKey="3" />
+                <Tile x="71" y="26" tileKey="5" />
+                <Tile x="48" y="27" tileKey="8" />
+                <Tile x="49" y="27" tileKey="1" />
+                <Tile x="50" y="27" tileKey="1" />
+                <Tile x="51" y="27" tileKey="1" />
+                <Tile x="52" y="27" tileKey="1" />
+                <Tile x="53" y="27" tileKey="1" />
+                <Tile x="54" y="27" tileKey="2" />
+                <Tile x="56" y="27" tileKey="1" />
+                <Tile x="57" y="27" tileKey="1" />
+                <Tile x="69" y="27" tileKey="10" />
+                <Tile x="70" y="27" tileKey="3" />
+                <Tile x="71" y="27" tileKey="5" />
+                <Tile x="48" y="28" tileKey="7" />
+                <Tile x="49" y="28" tileKey="7" />
+                <Tile x="50" y="28" tileKey="7" />
+                <Tile x="51" y="28" tileKey="7" />
+                <Tile x="52" y="28" tileKey="7" />
+                <Tile x="53" y="28" tileKey="7" />
+                <Tile x="54" y="28" tileKey="5" />
+                <Tile x="70" y="28" tileKey="3" />
+                <Tile x="71" y="28" tileKey="5" />
+                <Tile x="0" y="29" tileKey="1" />
+                <Tile x="1" y="29" tileKey="1" />
+                <Tile x="2" y="29" tileKey="1" />
+                <Tile x="3" y="29" tileKey="1" />
+                <Tile x="4" y="29" tileKey="1" />
+                <Tile x="5" y="29" tileKey="1" />
+                <Tile x="6" y="29" tileKey="1" />
+                <Tile x="7" y="29" tileKey="1" />
+                <Tile x="8" y="29" tileKey="1" />
+                <Tile x="9" y="29" tileKey="1" />
+                <Tile x="10" y="29" tileKey="1" />
+                <Tile x="11" y="29" tileKey="1" />
+                <Tile x="12" y="29" tileKey="1" />
+                <Tile x="13" y="29" tileKey="1" />
+                <Tile x="14" y="29" tileKey="1" />
+                <Tile x="15" y="29" tileKey="1" />
+                <Tile x="16" y="29" tileKey="1" />
+                <Tile x="17" y="29" tileKey="1" />
+                <Tile x="18" y="29" tileKey="1" />
+                <Tile x="19" y="29" tileKey="1" />
+                <Tile x="20" y="29" tileKey="1" />
+                <Tile x="21" y="29" tileKey="1" />
+                <Tile x="22" y="29" tileKey="1" />
+                <Tile x="23" y="29" tileKey="1" />
+                <Tile x="24" y="29" tileKey="1" />
+                <Tile x="25" y="29" tileKey="1" />
+                <Tile x="48" y="29" tileKey="7" />
+                <Tile x="49" y="29" tileKey="7" />
+                <Tile x="50" y="29" tileKey="7" />
+                <Tile x="51" y="29" tileKey="7" />
+                <Tile x="52" y="29" tileKey="7" />
+                <Tile x="53" y="29" tileKey="7" />
+                <Tile x="54" y="29" tileKey="8" />
+                <Tile x="55" y="29" tileKey="1" />
+                <Tile x="56" y="29" tileKey="1" />
+                <Tile x="57" y="29" tileKey="1" />
+                <Tile x="58" y="29" tileKey="1" />
+                <Tile x="59" y="29" tileKey="1" />
+                <Tile x="60" y="29" tileKey="1" />
+                <Tile x="61" y="29" tileKey="1" />
+                <Tile x="62" y="29" tileKey="1" />
+                <Tile x="63" y="29" tileKey="1" />
+                <Tile x="64" y="29" tileKey="1" />
+                <Tile x="65" y="29" tileKey="1" />
+                <Tile x="66" y="29" tileKey="1" />
+                <Tile x="67" y="29" tileKey="1" />
+                <Tile x="68" y="29" tileKey="1" />
+                <Tile x="69" y="29" tileKey="1" />
+                <Tile x="70" y="29" tileKey="16" />
+                <Tile x="71" y="29" tileKey="8" />
+                <Tile x="72" y="29" tileKey="1" />
+                <Tile x="73" y="29" tileKey="1" />
+                <Tile x="74" y="29" tileKey="1" />
+            </TileMap>
+        </TileEngine>
+    </TileEngines>
+</Level>
