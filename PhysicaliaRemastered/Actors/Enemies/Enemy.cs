@@ -1,8 +1,9 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Graphics.TileEngine;
-using XNALibrary.Interfaces;
+using XNALibrary;
+using XNALibrary.Collision;
+using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors.Enemies;
 

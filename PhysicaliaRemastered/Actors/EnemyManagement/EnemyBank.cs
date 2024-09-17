@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using PhysicaliaRemastered.Actors.Enemies;
-using XNALibrary.Graphics.Animation;
-using XNALibrary.Interfaces;
+using XNALibrary.Animation;
 
 namespace PhysicaliaRemastered.Actors.EnemyManagement;
 

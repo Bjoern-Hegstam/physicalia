@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics;
 

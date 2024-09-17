@@ -11,10 +11,11 @@ using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
 using PhysicaliaRemastered.Weapons.NewWeapons;
+using XNALibrary.Animation;
 using XNALibrary.Graphics;
-using XNALibrary.Graphics.Sprites;
-using XNALibrary.Graphics.TileEngine;
-using XNALibrary.Interfaces;
+using XNALibrary.ParticleEngine;
+using XNALibrary.Sprites;
+using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.GameManagement;
 

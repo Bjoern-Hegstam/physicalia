@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
-using XNALibrary.Interfaces;
+using XNALibrary.Collision;
+using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.ActiveObjects;
 

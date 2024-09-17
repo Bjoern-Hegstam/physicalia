@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors;
 using PhysicaliaRemastered.Input;
-using XNALibrary.Graphics.Sprites;
-using XNALibrary.Interfaces;
+using XNALibrary.Sprites;
+using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.GameManagement;
 

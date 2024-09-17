@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Graphics.Animation;
-using XNALibrary.Graphics.TileEngine;
-using XNALibrary.Interfaces;
+using XNALibrary;
+using XNALibrary.Animation;
+using XNALibrary.Collision;
+using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors;
 

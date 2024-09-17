@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors.Enemies;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Weapons.NewWeapons;
-using XNALibrary.Graphics.TileEngine;
+using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors.EnemyManagement;
 

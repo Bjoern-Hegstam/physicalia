@@ -1,8 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Graphics.ParticleEngine;
-using XNALibrary.Graphics.Sprites;
-using XNALibrary.Interfaces;
+using XNALibrary.ParticleEngine;
+using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Actors.Bosses;
 

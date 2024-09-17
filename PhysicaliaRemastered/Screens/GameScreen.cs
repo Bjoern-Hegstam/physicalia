@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Input;
-using XNALibrary.Graphics.ScreenManagement;
+using XNALibrary.ScreenManagement;
 
 namespace PhysicaliaRemastered.Screens;
 

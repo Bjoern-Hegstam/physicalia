@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PhysicaliaRemastered.Actors;
-using XNALibrary.Graphics.Animation;
-using XNALibrary.Graphics.Sprites;
-using XNALibrary.Interfaces;
+using XNALibrary.Animation;
+using XNALibrary.ParticleEngine;
+using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Weapons.NewWeapons;
 

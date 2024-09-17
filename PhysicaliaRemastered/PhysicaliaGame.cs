@@ -3,8 +3,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using PhysicaliaRemastered.Screens;
-using XNALibrary.Graphics.ScreenManagement;
 using XNALibrary.Input;
+using XNALibrary.ScreenManagement;
 
 namespace PhysicaliaRemastered;
 

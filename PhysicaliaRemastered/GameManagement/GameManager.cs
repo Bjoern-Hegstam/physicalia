@@ -8,12 +8,12 @@ using PhysicaliaRemastered.Actors.EnemyManagement;
 using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
+using XNALibrary.Animation;
 using XNALibrary.Graphics;
-using XNALibrary.Graphics.Animation;
-using XNALibrary.Graphics.ParticleEngine;
-using XNALibrary.Graphics.Sprites;
-using XNALibrary.Graphics.TileEngine;
 using XNALibrary.Interfaces;
+using XNALibrary.ParticleEngine;
+using XNALibrary.Sprites;
+using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.GameManagement;
 

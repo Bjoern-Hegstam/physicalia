@@ -3,8 +3,8 @@ using System.Xml;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Input;
-using XNALibrary.Graphics.Sprites;
 using XNALibrary.Interfaces;
+using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.GameManagement;
 

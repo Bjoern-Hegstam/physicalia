@@ -1,6 +1,5 @@
 using System.Xml;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics;
 

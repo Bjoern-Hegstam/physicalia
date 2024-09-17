@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using PhysicaliaRemastered.Weapons.NewWeapons;
-using XNALibrary.Interfaces;
+using XNALibrary.Animation;
+using XNALibrary.ParticleEngine;
+using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Weapons;
 

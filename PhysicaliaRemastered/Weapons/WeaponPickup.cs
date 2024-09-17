@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Pickups;
+using PhysicaliaRemastered.Weapons.NewWeapons;
 
 namespace PhysicaliaRemastered.Weapons;
 
@@ -15,9 +16,9 @@ namespace PhysicaliaRemastered.Weapons;
 /// </summary>
 public class WeaponPickup : Pickup
 {
-    private readonly NewWeapons.Weapon _weapon;
+    private readonly Weapon _weapon;
 
-    public WeaponPickup(Level level, NewWeapons.Weapon weapon)
+    public WeaponPickup(Level level, Weapon weapon)
         : base(level)
     {
         _weapon = weapon;
@@ -28,7 +29,7 @@ public class WeaponPickup : Pickup
         if (!PickedUp)
         {
             PickedUp = true;
-            NewWeapons.Weapon weaponCopy = _weapon.Copy();
+            Weapon weaponCopy = _weapon.Copy();
             Level.Player.AddWeapon(weaponCopy);
             weaponCopy.Player = Level.Player;
         }

@@ -1,7 +1,6 @@
 using System.Xml;
 using PhysicaliaRemastered.GameManagement;
-using XNALibrary.Graphics.Sprites;
-using XNALibrary.Interfaces;
+using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Pickups.Modifiers;
 

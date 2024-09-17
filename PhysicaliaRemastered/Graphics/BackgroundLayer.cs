@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Graphics;
-using XNALibrary.Graphics.Sprites;
+using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Graphics;
 

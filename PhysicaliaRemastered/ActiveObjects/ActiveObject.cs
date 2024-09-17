@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Graphics.Sprites;
-using XNALibrary.Graphics.TileEngine;
-using XNALibrary.Interfaces;
+using XNALibrary;
+using XNALibrary.Collision;
+using XNALibrary.Sprites;
+using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.ActiveObjects;
 
