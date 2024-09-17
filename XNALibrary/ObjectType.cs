@@ -3,10 +3,10 @@ namespace XNALibrary;
 [Flags]
 public enum ObjectType
 {
-    Particle,
-    Player,
-    Enemy,
-    Tile,
-    ActiveObject,
-    Pickup
+    Particle = 1,
+    Player = 2,
+    Enemy = 4,
+    Tile = 8,
+    ActiveObject = 16,
+    Pickup = 32
 }
