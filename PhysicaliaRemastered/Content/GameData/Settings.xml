@@ -5,8 +5,8 @@
 <!--	<InputType>Gamepad</InputType>-->
     <InputType>Keyboard</InputType>
 	<ButtonMaps>
-		<KeyboardMap>Content\GameData\KeyboardMap.xml</KeyboardMap>
-		<GamepadMap>Content\GameData\GamepadMap.xml</GamepadMap>
+		<KeyboardMap>Content/GameData/KeyboardMap.xml</KeyboardMap>
+		<GamepadMap>Content/GameData/GamepadMap.xml</GamepadMap>
 	</ButtonMaps>
 	<UI>
 		<FullHealthBar key="-2" />

@@ -25,7 +25,7 @@ public enum WorldState
 /// </summary>
 public class World
 {
-    private const string LEVEL_PATH = @"Content\GameData\Worlds\Levels\";
+    private const string LEVEL_PATH = "Content/GameData/Worlds/Levels/";
 
     private ISettings settings;
 
