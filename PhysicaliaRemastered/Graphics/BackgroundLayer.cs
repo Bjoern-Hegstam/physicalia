@@ -117,7 +117,8 @@ public class BackgroundLayer
         {
             return 1;
         }
-        else if (x.Depth < y.Depth)
+
+        if (x.Depth < y.Depth)
         {
             return -1;
         }

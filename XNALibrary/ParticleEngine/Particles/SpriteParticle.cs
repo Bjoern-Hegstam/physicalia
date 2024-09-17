@@ -6,7 +6,6 @@ namespace XNALibrary.ParticleEngine.Particles;
 
 public class SpriteParticle : Particle
 {
-    private float _rotation;
     private Sprite _sprite;
 
     public Sprite Sprite
@@ -15,17 +14,9 @@ public class SpriteParticle : Particle
         set => _sprite = value;
     }
 
-    public float Rotation
-    {
-        get => _rotation;
-        set => _rotation = value;
-    }
+    public float Rotation { get; set; }
 
-    public SpriteParticle()
-    {
-    }
-
-    public override Vector2 Origin => new(_sprite.SourceRectangle.Width / 2, _sprite.SourceRectangle.Height / 2);
+    public override Vector2 Origin => new(_sprite.SourceRectangle.Width / 2f, _sprite.SourceRectangle.Height / 2f);
 
     public override int Width
     {
@@ -53,10 +44,10 @@ public class SpriteParticle : Particle
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         spriteBatch.Draw(_sprite.Texture,
-            position - offsetPosition,
+            Position - offsetPosition,
             _sprite.SourceRectangle,
             Color.White,
-            -_rotation,
+            -Rotation,
             Origin,
             1.0F,
             SpriteEffects.None,

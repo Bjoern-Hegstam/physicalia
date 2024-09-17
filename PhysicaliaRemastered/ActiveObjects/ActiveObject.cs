@@ -83,7 +83,7 @@ public abstract class ActiveObject : ICollisionObject
     {
         UniqueId = _activeObjectCount++;
 
-        Children = new List<ActiveObject>();
+        Children = [];
         Width = _sprite.SourceRectangle.Width;
         Height = _sprite.SourceRectangle.Height;
 

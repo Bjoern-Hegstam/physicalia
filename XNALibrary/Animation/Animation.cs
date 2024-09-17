@@ -127,7 +127,7 @@ public class Animation
             }
 
             // Make sure the index is within the allowed range
-            value = (int)MathHelper.Clamp(value, 0, _rowCount * _columnCount);
+            value = MathHelper.Clamp(value, 0, _rowCount * _columnCount);
 
             _index = value;
             _row = _index / _columnCount;
@@ -245,8 +245,10 @@ public class Animation
             _columnCount,
             _rowCount,
             _framerate,
-            _texture);
-        animation._loop = _loop;
+            _texture)
+        {
+            _loop = _loop
+        };
         return animation;
     }
 }

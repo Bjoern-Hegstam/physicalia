@@ -49,10 +49,12 @@ public class PickupLibrary : IPickupLibrary
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings();
-        readerSettings.IgnoreComments = true;
-        readerSettings.IgnoreWhitespace = true;
-        readerSettings.IgnoreProcessingInstructions = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            IgnoreProcessingInstructions = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader, spriteLibrary);

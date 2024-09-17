@@ -466,10 +466,12 @@ public class Player : Actor
 
     public void SaveSession(GameSession session)
     {
-        ActorStartValues playerValues = new ActorStartValues();
-        playerValues.Position = Position;
-        playerValues.Velocity = Velocity;
-        playerValues.Acceleration = Acceleration;
+        ActorStartValues playerValues = new ActorStartValues
+        {
+            Position = Position,
+            Velocity = Velocity,
+            Acceleration = Acceleration
+        };
 
         session.PlayerValues = playerValues;
         session.PlayerHealth = Health;

@@ -45,7 +45,7 @@ public class ScreenSampler : IScreenSampler
     public int Width
     {
         get => _screen.Width;
-        set => _screen.Width = (int)MathHelper.Clamp(value, 0, _maxWidth);
+        set => _screen.Width = MathHelper.Clamp(value, 0, _maxWidth);
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class ScreenSampler : IScreenSampler
     public int Height
     {
         get => _screen.Height;
-        set => _screen.Height = (int)MathHelper.Clamp(value, 0, _maxHeight);
+        set => _screen.Height = MathHelper.Clamp(value, 0, _maxHeight);
     }
 
     public Rectangle ScreenRectangle => _screen;

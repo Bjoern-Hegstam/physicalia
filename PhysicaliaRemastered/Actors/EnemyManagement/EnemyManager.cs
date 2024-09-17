@@ -35,8 +35,8 @@ public class EnemyManager
     {
         _enemyBank = enemyBank;
 
-        _activatedEnemies = new List<Enemy>();
-        _inactiveEnemies = new List<Enemy>();
+        _activatedEnemies = [];
+        _inactiveEnemies = [];
 
         ActivationDistance = _defaultActivationDistance;
     }

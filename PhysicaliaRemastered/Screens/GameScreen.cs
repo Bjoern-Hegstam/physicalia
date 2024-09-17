@@ -50,11 +50,13 @@ public class GameScreen : Screen
 
         // Create Pause overlay texture
         _pauseOverlayTexture = new Texture2D(Game.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
-        _pauseOverlayTexture.SetData<Color>(new Color[] { new Color(0, 0, 0, 128) });
+        _pauseOverlayTexture.SetData([new Color(0, 0, 0, 128)]);
 
-        _pauseOverlayArea = new Rectangle();
-        _pauseOverlayArea.Width = Game.GraphicsDevice.Viewport.Width;
-        _pauseOverlayArea.Height = Game.GraphicsDevice.Viewport.Height;
+        _pauseOverlayArea = new Rectangle
+        {
+            Width = Game.GraphicsDevice.Viewport.Width,
+            Height = Game.GraphicsDevice.Viewport.Height
+        };
     }
 
     public override void LoadContent(ContentManager contentManager)

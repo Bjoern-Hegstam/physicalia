@@ -237,8 +237,6 @@ public abstract class Actor : ICollisionObject
             {
                 CurrentAnimationType = (int)ActorAnimation.Rest;
             }
-
-            return;
         }
     }
 

@@ -8,6 +8,7 @@ using PhysicaliaRemastered.Actors.EnemyManagement;
 using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
+using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.Graphics;
 using XNALibrary.Interfaces;
@@ -25,9 +26,6 @@ public enum GameState
     Paused
 }
 
-/// <summary>
-/// Manages over the game components of the Physicalia game.
-/// </summary>
 public class GameManager
 {
     private const string GamedataPath = "Content/GameData/";
@@ -98,7 +96,7 @@ public class GameManager
         _modifierLibrary = new PickupLibrary();
         _game.Services.AddService(typeof(IPickupLibrary), _modifierLibrary);
 
-        _worlds = new List<World>();
+        _worlds = [];
         _worldIndex = -1;
 
         _player = new Player(Settings);
@@ -202,9 +200,11 @@ public class GameManager
     {
         NextState = GameState.Paused;
 
-        GameSession session = new GameSession();
+        GameSession session = new GameSession
+        {
+            WorldIndex = _worldIndex
+        };
 
-        session.WorldIndex = _worldIndex;
         _player.SaveSession(session);
         _worlds[_worldIndex].SaveSession(session);
 
@@ -222,10 +222,12 @@ public class GameManager
     /// <param name="path">Path to the file containing the xml data to load.</param>
     public void LoadXml(string path)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings();
-        readerSettings.IgnoreComments = true;
-        readerSettings.IgnoreWhitespace = true;
-        readerSettings.IgnoreProcessingInstructions = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            IgnoreProcessingInstructions = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader);
@@ -239,38 +241,32 @@ public class GameManager
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Settings")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "Settings")
             {
                 Settings.LoadXml(GamedataPath + reader.ReadString(), _spriteLibrary);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "TextureLibrary")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "TextureLibrary")
             {
                 _textureLibrary.LoadXml(LibraryPath + reader.ReadString(), _game.GraphicsDevice);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "SpriteLibrary")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "SpriteLibrary")
             {
                 _spriteLibrary.LoadXml(LibraryPath + reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "AnimationBank")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "AnimationBank")
             {
                 _animationManager.LoadXml(LibraryPath + reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "TileLibrary")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "TileLibrary")
             {
                 _tileLibrary.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary, _animationManager);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "ParticleDefinitions")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "ParticleDefinitions")
             {
                 _particleEngine.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary, _animationManager);
 
@@ -278,32 +274,27 @@ public class GameManager
                 _particleEngine.Prepare();
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "WeaponBank")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "WeaponBank")
             {
                 _weaponBank.LoadXml(LibraryPath + reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "EnemyBank")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "EnemyBank")
             {
                 _enemyBank.LoadXml(LibraryPath + reader.ReadString());
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "PickupLibrary")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "PickupLibrary")
             {
                 _modifierLibrary.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Player")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "Player")
             {
                 SetupPlayer(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Worlds")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "Worlds")
             {
                 LoadWorlds(reader);
             }
@@ -316,17 +307,11 @@ public class GameManager
         }
     }
 
-    /// <summary>
-    /// Loads in the World specified in the xml file read by the passed in
-    /// XmlReader.
-    /// </summary>
-    /// <param name="reader"></param>
     private void LoadWorlds(XmlReader reader)
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "World")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "World")
             {
                 World world = new World(_game, _player);
                 _worlds.Add(world);
@@ -334,40 +319,32 @@ public class GameManager
                 world.LoadXml(WorldPath + reader.ReadString(), _tileLibrary, _spriteLibrary);
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Worlds")
+            if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == "Worlds")
             {
                 return;
             }
         }
     }
 
-    /// <summary>
-    /// Sets up the player according to the xml data.
-    /// </summary>
-    /// <param name="reader"></param>
     private void SetupPlayer(XmlReader reader)
     {
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "CollisionBox")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "CollisionBox")
             {
                 _player.CollisionBox = ReadRectangle(reader);
             }
 
-            if (reader.NodeType == XmlNodeType.Element &&
-                reader.LocalName == "Animation")
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName == "Animation")
             {
-                int animKey = int.Parse(reader.GetAttribute("key"));
-                int action = int.Parse(reader.GetAttribute("action"));
+                int animKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                int action = int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
                 Animation anim = _animationManager.AddPlaybackAnimation(animKey);
                 _player.AddAnimation(action, anim);
                 _player.CurrentAnimationType = action;
             }
 
-            if (reader.NodeType == XmlNodeType.EndElement &&
-                reader.LocalName == "Player")
+            if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName == "Player")
             {
                 return;
             }
@@ -376,10 +353,10 @@ public class GameManager
 
     private Rectangle ReadRectangle(XmlReader reader)
     {
-        int x = int.Parse(reader.GetAttribute("x"));
-        int y = int.Parse(reader.GetAttribute("y"));
-        int width = int.Parse(reader.GetAttribute("width"));
-        int height = int.Parse(reader.GetAttribute("height"));
+        int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+        int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+        int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
+        int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
 
         return new Rectangle(x, y, width, height);
     }
@@ -430,8 +407,7 @@ public class GameManager
                     // state will then be set to LevelState.Playing which causes the
                     // Level to start paused.
                     if (_worlds[_worldIndex].LevelState == LevelState.Playing &&
-                        Settings.InputMap.IsPressed(InputAction.MenuStart) &&
-                        _pausePressedCount == 1)
+                        Settings.InputMap.IsPressed(InputAction.MenuStart) && _pausePressedCount == 1)
                     {
                         NextState = GameState.Paused;
                     }
@@ -452,8 +428,10 @@ public class GameManager
                 break;
         }
 
-        while (NextState != State)
+        if (NextState != State)
+        {
             ChangeState();
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)

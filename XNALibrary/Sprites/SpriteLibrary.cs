@@ -81,9 +81,11 @@ public class SpriteLibrary : ISpriteLibrary
             throw new ArgumentException("File is not of type '.xml'");
         }
 
-        XmlReaderSettings settings = new XmlReaderSettings();
-        settings.IgnoreComments = true;
-        settings.IgnoreProcessingInstructions = true;
+        XmlReaderSettings settings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreProcessingInstructions = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, settings);
         LoadXml(reader);

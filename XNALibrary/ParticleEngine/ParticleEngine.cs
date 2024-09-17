@@ -23,16 +23,18 @@ public class ParticleEngine : IParticleEngine
     public ParticleEngine()
     {
         _definitions = new Dictionary<int, ParticleDefinition>();
-        _particleBuffer = new List<Particle>();
-        _activeParticles = new List<Particle>();
+        _particleBuffer = [];
+        _activeParticles = [];
     }
 
     public void LoadXml(string path, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings();
-        readerSettings.IgnoreComments = true;
-        readerSettings.IgnoreWhitespace = true;
-        readerSettings.IgnoreProcessingInstructions = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            IgnoreProcessingInstructions = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader, spriteLibrary, animationManager);
@@ -141,7 +143,7 @@ public class ParticleEngine : IParticleEngine
 
     public void Add(int typeId, int count, Vector2 position, float angle)
     {
-        Debug.WriteLine(_activeParticles.Count.ToString() + " : " + _particleBuffer.Count.ToString());
+        Debug.WriteLine(_activeParticles.Count + " : " + _particleBuffer.Count);
 
         // Is the key valid?
         if (!_definitions.ContainsKey(typeId))

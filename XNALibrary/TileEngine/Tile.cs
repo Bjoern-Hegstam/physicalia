@@ -65,7 +65,7 @@ public abstract class Tile : ICollisionObject
     public float DamageLevel
     {
         get => _damageLevel;
-        set => _damageLevel = (float)MathHelper.Clamp(value, 0, 1);
+        set => _damageLevel = MathHelper.Clamp(value, 0, 1);
     }
 
     /// <summary>

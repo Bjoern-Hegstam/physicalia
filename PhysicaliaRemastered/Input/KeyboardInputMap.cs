@@ -39,10 +39,12 @@ internal class KeyboardInputMap : InputMap
 
     public override void LoadXml(string path)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings();
-        readerSettings.IgnoreComments = true;
-        readerSettings.IgnoreWhitespace = true;
-        readerSettings.IgnoreProcessingInstructions = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            IgnoreProcessingInstructions = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, readerSettings);
         while (reader.Read())

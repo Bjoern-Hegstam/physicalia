@@ -72,7 +72,7 @@ public class AnimationParticle(Animation.Animation animation) : Particle
         if (Animation.IsActive)
         {
             spriteBatch.Draw(Animation.Texture,
-                position - offsetPosition,
+                Position - offsetPosition,
                 Animation.SourceRectangle,
                 Color.White,
                 0F,

@@ -73,10 +73,8 @@ public class TileEngine
             {
                 return _tileMap[x, y];
             }
-            else
-            {
-                throw new ArgumentException("One or more arguments are invalid!");
-            }
+
+            throw new ArgumentException("One or more arguments are invalid!");
         }
 
         set
@@ -367,11 +365,13 @@ public class TileEngine
             throw new ArgumentException("File is not of type '.xml'");
         }
 
-        XmlReaderSettings settings = new XmlReaderSettings();
-        settings.CloseInput = true;
-        settings.IgnoreComments = true;
-        settings.IgnoreWhitespace = true;
-        settings.CheckCharacters = true;
+        XmlReaderSettings settings = new XmlReaderSettings
+        {
+            CloseInput = true,
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            CheckCharacters = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, settings);
         LoadXml(reader);

@@ -62,11 +62,13 @@ public class TileLibrary : ITileLibrary
 
     public void LoadXml(string path, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
     {
-        XmlReaderSettings settings = new XmlReaderSettings();
-        settings.CloseInput = true;
-        settings.IgnoreComments = true;
-        settings.IgnoreWhitespace = true;
-        settings.CheckCharacters = true;
+        XmlReaderSettings settings = new XmlReaderSettings
+        {
+            CloseInput = true,
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            CheckCharacters = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, settings);
         LoadXml(reader, spriteLibrary, animationManager);

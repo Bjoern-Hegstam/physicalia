@@ -69,10 +69,8 @@ public class ScreenManager : DrawableGameComponent
             {
                 throw new ArgumentException("Transition speed must be greater than zero!");
             }
-            else
-            {
-                _transitionSpeed = value;
-            }
+
+            _transitionSpeed = value;
         }
     }
 
@@ -93,7 +91,7 @@ public class ScreenManager : DrawableGameComponent
         : base(game)
     {
         _screenStack = new Stack<Screen>();
-        _screens = new List<Screen>();
+        _screens = [];
 
         _transitionSpeed = DefaultTransitionSpeed;
         _transitionAmount = 0F;

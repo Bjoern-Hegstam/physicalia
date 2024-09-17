@@ -70,11 +70,15 @@ public class Settings : ISettings
     {
         IInputHandler input = inputHandler;
 
-        _gamePadMap = new GamePadInputMap();
-        _gamePadMap.InputHandler = input;
+        _gamePadMap = new GamePadInputMap
+        {
+            InputHandler = input
+        };
 
-        _keyboardMap = new KeyboardInputMap();
-        _keyboardMap.InputHandler = input;
+        _keyboardMap = new KeyboardInputMap
+        {
+            InputHandler = input
+        };
 
         InputMap = _keyboardMap;
         _inputType = InputType.Keyboard;
@@ -92,10 +96,12 @@ public class Settings : ISettings
 
     public void LoadXml(string path, ISpriteLibrary spriteLibrary)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings();
-        readerSettings.IgnoreComments = true;
-        readerSettings.IgnoreWhitespace = true;
-        readerSettings.IgnoreProcessingInstructions = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreWhitespace = true,
+            IgnoreProcessingInstructions = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, readerSettings);
         while (reader.Read())

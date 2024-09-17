@@ -7,7 +7,7 @@ namespace XNALibrary.Animation;
 public class AnimationManager(Game game, ITextureLibrary textureLibrary) : GameComponent(game), IAnimationManager
 {
     private readonly Dictionary<int, Animation> _animationBank = new();
-    private readonly List<Animation> _playbackAnims = new();
+    private readonly List<Animation> _playbackAnims = [];
 
     /// <summary>
     /// Adds a new animation to the manager.
@@ -181,8 +181,10 @@ public class AnimationManager(Game game, ITextureLibrary textureLibrary) : GameC
         var loop = bool.Parse(reader.ReadElementContentAsString());
 
         Rectangle startFrame = new Rectangle(x, y, width, height);
-        Animation anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureKey]);
-        anim.Loop = loop;
+        Animation anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureKey])
+        {
+            Loop = loop
+        };
 
         return anim;
     }

@@ -91,7 +91,7 @@ public class Level
     {
         _game = game;
 
-        _backgrounds = new List<BackgroundLayer>();
+        _backgrounds = [];
 
         // Get needed services
         Settings = (ISettings)game.Services.GetService(typeof(ISettings));
@@ -107,11 +107,11 @@ public class Level
         ParticleEngine = (IParticleEngine)game.Services.GetService(typeof(IParticleEngine));
         ScreenSampler = new ScreenSampler(game, 0, 0, _game.GraphicsDevice.Viewport.Width,
             _game.GraphicsDevice.Viewport.Height);
-        _tileEngines = new List<TileEngine>();
-        _modifiers = new List<ModifierPickup>();
+        _tileEngines = [];
+        _modifiers = [];
 
-        _activeObjects = new List<ActiveObject>();
-        _inactiveObjects = new List<ActiveObject>();
+        _activeObjects = [];
+        _inactiveObjects = [];
     }
 
     public void Update(GameTime gameTime)
@@ -251,9 +251,11 @@ public class Level
                 bool loopY = loopString.Contains("y");
 
                 Sprite sprite = SpriteLibrary.GetSprite(spriteKey);
-                BackgroundLayer background = new BackgroundLayer(sprite, depth);
-                background.LoopX = loopX;
-                background.LoopY = loopY;
+                BackgroundLayer background = new BackgroundLayer(sprite, depth)
+                {
+                    LoopX = loopX,
+                    LoopY = loopY
+                };
 
                 if (!reader.IsEmptyElement)
                 {
@@ -363,12 +365,14 @@ public class Level
                 Sprite triggerSprite = SpriteLibrary.GetSprite(-1);
                 EndLevelTrigger trigger = new EndLevelTrigger(this, triggerSprite);
 
-                PickupContainer cont = new PickupContainer(trigger);
-                cont.Position = new Vector2(x, y);
-                cont.CollisionBox = new Rectangle(0, 0, triggerSprite.SourceRectangle.Width,
-                    triggerSprite.SourceRectangle.Height);
-                cont.CanCollide = true;
-                cont.IsActive = false;
+                PickupContainer cont = new PickupContainer(trigger)
+                {
+                    Position = new Vector2(x, y),
+                    CollisionBox = new Rectangle(0, 0, triggerSprite.SourceRectangle.Width,
+                        triggerSprite.SourceRectangle.Height),
+                    CanCollide = true,
+                    IsActive = false
+                };
 
                 EnqueueActiveObject(cont);
             }
@@ -431,10 +435,12 @@ public class Level
                 Pickup pickup = _modifierLibrary.GetPickup(key);
                 pickup.Level = this;
 
-                PickupContainer cont = new PickupContainer(pickup);
-                cont.Position = new Vector2(x, y);
-                cont.CollisionBox = new Rectangle(0, 0, pickup.Sprite.SourceRectangle.Width,
-                    pickup.Sprite.SourceRectangle.Height);
+                PickupContainer cont = new PickupContainer(pickup)
+                {
+                    Position = new Vector2(x, y),
+                    CollisionBox = new Rectangle(0, 0, pickup.Sprite.SourceRectangle.Width,
+                        pickup.Sprite.SourceRectangle.Height)
+                };
                 EnqueueActiveObject(cont);
             }
 
@@ -562,9 +568,11 @@ public class Level
             case LevelState.Start:
                 string indexString = WorldIndex + " - " + LevelIndex;
                 Vector2 indexStringSize = Settings.LevelIndexFont.MeasureString(indexString);
-                Vector2 indexPosition = new Vector2();
-                indexPosition.X = (ScreenSampler.Width - indexStringSize.X) / 2;
-                indexPosition.Y = (ScreenSampler.Height - indexStringSize.Y) / 2;
+                Vector2 indexPosition = new Vector2
+                {
+                    X = (ScreenSampler.Width - indexStringSize.X) / 2,
+                    Y = (ScreenSampler.Height - indexStringSize.Y) / 2
+                };
 
                 spriteBatch.DrawString(Settings.LevelIndexFont, indexString, indexPosition, Color.White);
                 break;
@@ -659,9 +667,11 @@ public class Level
     {
         bool result = false;
 
-        Rectangle levelRect = new Rectangle();
-        levelRect.Width = ScreenSampler.MaxWidth;
-        levelRect.Height = ScreenSampler.MaxHeight;
+        Rectangle levelRect = new Rectangle
+        {
+            Width = ScreenSampler.MaxWidth,
+            Height = ScreenSampler.MaxHeight
+        };
 
         Rectangle playerRect = Player.CurrentAnimation.SourceRectangle;
         playerRect.X = (int)(Player.Position.X - Player.Origin.X);
@@ -912,9 +922,11 @@ public class Level
         // WORLD AND LEVEL NUMBERS
         string indexString = WorldIndex + " - " + LevelIndex;
         Vector2 indexSize = Settings.LevelIndexFont.MeasureString(indexString);
-        Vector2 indexPos = new Vector2();
-        indexPos.X = (ScreenSampler.Width - indexSize.X) / 2;
-        indexPos.Y = UiIndexPosY;
+        Vector2 indexPos = new Vector2
+        {
+            X = (ScreenSampler.Width - indexSize.X) / 2,
+            Y = UiIndexPosY
+        };
 
         spriteBatch.DrawString(Settings.LevelIndexFont, indexString, indexPos, Color.White);
 

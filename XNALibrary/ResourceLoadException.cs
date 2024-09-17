@@ -1,5 +1,5 @@
 namespace XNALibrary;
 
-internal class ResourceLoadException : Exception
+public class ResourceLoadException : Exception
 {
 }

@@ -8,9 +8,6 @@ using XNALibrary.ScreenManagement;
 
 namespace PhysicaliaRemastered;
 
-/// <summary>
-/// This is the main type for your game
-/// </summary>
 public class PhysicaliaGame : Game
 {
     private readonly GraphicsDeviceManager _graphics;

@@ -46,7 +46,7 @@ public class Screen
 
     public Screen(Game game, ScreenManager manager)
     {
-        _buttons = new List<ScreenButton>();
+        _buttons = [];
 
         _game = game;
         ScreenManager = manager;

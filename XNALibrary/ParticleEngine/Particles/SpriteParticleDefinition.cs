@@ -5,13 +5,7 @@ namespace XNALibrary.ParticleEngine.Particles;
 
 public class SpriteParticleDefinition : ParticleDefinition
 {
-    private Sprite _sprite;
-
-    public Sprite Sprite
-    {
-        get => _sprite;
-        set => _sprite = value;
-    }
+    public Sprite Sprite { get; set; }
 
     public SpriteParticleDefinition(int id)
         : base(id)
@@ -21,7 +15,7 @@ public class SpriteParticleDefinition : ParticleDefinition
     public SpriteParticleDefinition(int id, Sprite sprite)
         : this(id)
     {
-        _sprite = sprite;
+        Sprite = sprite;
     }
 
     public override Particle Create(float angle)
@@ -37,7 +31,7 @@ public class SpriteParticleDefinition : ParticleDefinition
 
         SpriteParticle spriteParticle = (SpriteParticle)particle;
 
-        spriteParticle.Sprite = _sprite;
+        spriteParticle.Sprite = Sprite;
         spriteParticle.Rotation = angle;
     }
 

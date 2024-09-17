@@ -1,13 +1,12 @@
 using System.Xml;
 using XNALibrary.Animation;
-using XNALibrary.Collision;
 
 namespace XNALibrary.ParticleEngine.Particles;
 
 public class AnimationParticleDefinition(int id, Animation.Animation animation, IAnimationManager animationManager)
     : ParticleDefinition(id)
 {
-    private readonly List<Animation.Animation> _createdAnimations = new();
+    private readonly List<Animation.Animation> _createdAnimations = [];
 
     public ObjectType DamageObjects { get; set; }
 

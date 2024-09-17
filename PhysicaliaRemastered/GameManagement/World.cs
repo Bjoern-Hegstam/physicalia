@@ -58,7 +58,7 @@ public class World
 
         _settings = (ISettings)_game.Services.GetService(typeof(ISettings));
 
-        _levels = new List<Level>();
+        _levels = [];
         _levelIndex = -1;
 
         _nextState = State = WorldState.Start;
@@ -71,10 +71,12 @@ public class World
 
     public void LoadXml(string path, ITileLibrary tileLibrary, ISpriteLibrary spriteLibrary)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings();
-        readerSettings.IgnoreComments = true;
-        readerSettings.IgnoreProcessingInstructions = true;
-        readerSettings.IgnoreWhitespace = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreProcessingInstructions = true,
+            IgnoreWhitespace = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader, tileLibrary, spriteLibrary);
@@ -112,7 +114,7 @@ public class World
 
                 // Get the quote
                 StringBuilder quoteBuilder = new StringBuilder();
-                List<string> quoteLines = new List<string>();
+                List<string> quoteLines = [];
 
                 // Read in any special characters
                 while (!(reader.NodeType == XmlNodeType.EndElement &&
@@ -253,18 +255,22 @@ public class World
                 // Write draw world index
                 string indexString = "World " + WorldIndex;
                 Vector2 indexStringSize = _settings.WorldIndexFont.MeasureString(indexString);
-                Vector2 indexPosition = new Vector2();
-                indexPosition.X = (_levels[0].ScreenSampler.Width - indexStringSize.X) / 2;
-                indexPosition.Y = _levels[0].ScreenSampler.Height / 4 - indexStringSize.Y / 2;
+                Vector2 indexPosition = new Vector2
+                {
+                    X = (_levels[0].ScreenSampler.Width - indexStringSize.X) / 2,
+                    Y = _levels[0].ScreenSampler.Height / 4 - indexStringSize.Y / 2
+                };
                 spriteBatch.DrawString(_settings.WorldIndexFont, indexString, indexPosition, _worldIndexColor);
 
                 // Draw quote
                 if (_worldQuoteLines != null)
                 {
                     float quoteHeight = _settings.WorldQuoteFont.MeasureString("W").Y;
-                    Vector2 quoteStartPos = new Vector2();
-                    quoteStartPos.Y = _levels[0].ScreenSampler.Height * 3 / 4 -
-                                      quoteHeight * _worldQuoteLines.Length / 2;
+                    Vector2 quoteStartPos = new Vector2
+                    {
+                        Y = _levels[0].ScreenSampler.Height * 3 / 4 -
+                            quoteHeight * _worldQuoteLines.Length / 2
+                    };
 
                     for (int i = 0; i < _worldQuoteLines.Length; i++)
                     {
@@ -281,9 +287,11 @@ public class World
                 }
 
                 // Draw World Sprite
-                Vector2 spritePos = new Vector2();
-                spritePos.X = (_levels[0].ScreenSampler.Width - _worldSprite.SourceRectangle.Width) / 2;
-                spritePos.Y = (_levels[0].ScreenSampler.Height - _worldSprite.SourceRectangle.Height) / 2;
+                Vector2 spritePos = new Vector2
+                {
+                    X = (_levels[0].ScreenSampler.Width - _worldSprite.SourceRectangle.Width) / 2,
+                    Y = (_levels[0].ScreenSampler.Height - _worldSprite.SourceRectangle.Height) / 2
+                };
 
                 spriteBatch.Draw(_worldSprite.Texture,
                     spritePos,

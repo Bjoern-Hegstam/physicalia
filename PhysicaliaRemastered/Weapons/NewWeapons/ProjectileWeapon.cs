@@ -98,7 +98,6 @@ public class ProjectileWeapon : Weapon
             {
                 // Stop the weapon
                 Stop();
-                return;
             }
         }
         else if (_fireMode == FireMode.MultiShot)
@@ -179,16 +178,14 @@ public class ProjectileWeapon : Weapon
         {
             return angleSide;
         }
-        else
-        {
-            float angleStep = _spread / (_projectilesPerShot - 1);
 
-            float angle = _spread / 2;
-            angle += angleSide;
-            angle -= projNum * angleStep;
+        float angleStep = _spread / (_projectilesPerShot - 1);
 
-            return angle;
-        }
+        float angle = _spread / 2;
+        angle += angleSide;
+        angle -= projNum * angleStep;
+
+        return angle;
     }
 
     public override void LoadXml(XmlReader reader)

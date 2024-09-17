@@ -18,97 +18,32 @@ public enum ParticleLifeMode
     /// <summary>
     /// Life decreases upon collision.
     /// </summary>
-    Damage,
-
-    /// <summary>
-    /// Particle is unaffected by both time and damage.
-    /// </summary>
-    None
+    Damage
 }
 
 public abstract class Particle : ICollisionObject
 {
     private const float DefaultLife = 5F;
 
-    // Movement
-    protected Vector2 position;
-    protected Vector2 velocity;
-    protected Vector2 acceleration;
+    public Vector2 Position { get; set; }
 
-    // Collision
-    private CollisionMode _collisionMode;
-    private float _radius;
+    public Vector2 Velocity { get; set; }
 
-    // Life
-    private ParticleLifeMode _lifeMode;
-    private float _life;
-    private bool _active;
+    public Vector2 Acceleration { get; set; }
 
-    // Definition id
-    private ParticleDefinition _definition;
+    public CollisionMode CollisionMode { get; set; }
 
-    // Particle engine
-    private IParticleEngine _particleEngine;
+    public float Radius { get; set; }
 
-    public Vector2 Position
-    {
-        get => position;
-        set => position = value;
-    }
+    public ParticleLifeMode LifeMode { get; set; }
 
-    public Vector2 Velocity
-    {
-        get => velocity;
-        set => velocity = value;
-    }
+    public float Life { get; set; }
 
-    public Vector2 Acceleration
-    {
-        get => acceleration;
-        set => acceleration = value;
-    }
+    public bool IsActive { get; set; }
 
-    public CollisionMode CollisionMode
-    {
-        get => _collisionMode;
-        set => _collisionMode = value;
-    }
+    public ParticleDefinition? Definition { get; set; }
 
-    public float Radius
-    {
-        get => _radius;
-        set => _radius = value;
-    }
-
-    public ParticleLifeMode LifeMode
-    {
-        get => _lifeMode;
-        set => _lifeMode = value;
-    }
-
-    public float Life
-    {
-        get => _life;
-        set => _life = value;
-    }
-
-    public bool IsActive
-    {
-        get => _active;
-        set => _active = value;
-    }
-
-    public ParticleDefinition Definition
-    {
-        get => _definition;
-        set => _definition = value;
-    }
-
-    public IParticleEngine ParticleEngine
-    {
-        get => _particleEngine;
-        set => _particleEngine = value;
-    }
+    public IParticleEngine ParticleEngine { get; set; }
 
     public Particle()
         : this(Vector2.Zero)
@@ -117,30 +52,30 @@ public abstract class Particle : ICollisionObject
 
     public Particle(Vector2 position)
     {
-        this.position = position;
-        acceleration = velocity = Vector2.Zero;
-        _definition = null;
-        _life = DefaultLife;
-        _lifeMode = ParticleLifeMode.Time;
-        _active = true;
+        Position = position;
+        Acceleration = Velocity = Vector2.Zero;
+        Definition = null;
+        Life = DefaultLife;
+        LifeMode = ParticleLifeMode.Time;
+        IsActive = true;
     }
 
     public virtual void Update(GameTime gameTime)
     {
         // Update position
-        position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        Velocity += Acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         // Update life
-        if (_lifeMode == ParticleLifeMode.Time)
+        if (LifeMode == ParticleLifeMode.Time)
         {
-            _life -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Life -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         // Dead?
-        if (_life <= 0)
+        if (Life <= 0)
         {
-            _active = false;
+            IsActive = false;
         }
     }
 
@@ -164,40 +99,28 @@ public abstract class Particle : ICollisionObject
 
     public ObjectType Type => ObjectType.Particle;
 
-    private bool _canTakeDamage;
+    public bool CanTakeDamage { get; set; }
 
-    public bool CanTakeDamage
-    {
-        get => _canTakeDamage;
-        set => _canTakeDamage = value;
-    }
-
-    private bool _canCollide;
-
-    public bool CanCollide
-    {
-        get => _canCollide;
-        set => _canCollide = value;
-    }
+    public bool CanCollide { get; set; }
 
     public virtual void OnCollision(ICollisionObject collisionObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
-        if (_canCollide)
+        if (CanCollide)
         {
-            this.position = position;
-            this.velocity = velocity;
+            Position = position;
+            Velocity = velocity;
         }
     }
 
     public void TakeDamage(float damage)
     {
-        if (_lifeMode == ParticleLifeMode.Damage)
+        if (LifeMode == ParticleLifeMode.Damage)
         {
-            _life -= damage;
-            if (_life <= 0)
+            Life -= damage;
+            if (Life <= 0)
             {
-                _active = false;
+                IsActive = false;
             }
         }
     }

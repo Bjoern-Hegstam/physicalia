@@ -1,25 +1,13 @@
 using System.Xml;
-using XNALibrary.Collision;
 using XNALibrary.Sprites;
 
 namespace XNALibrary.ParticleEngine.Particles;
 
 public class ProjectileDefinition : SpriteParticleDefinition
 {
-    private ObjectType _damageObjects;
-    private float _damageAmount;
+    public ObjectType DamageObjects { get; set; }
 
-    public ObjectType DamageObjects
-    {
-        get => _damageObjects;
-        set => _damageObjects = value;
-    }
-
-    public float DamageAmount
-    {
-        get => _damageAmount;
-        set => _damageAmount = value;
-    }
+    public float DamageAmount { get; set; }
 
     public ProjectileDefinition(int id, Sprite sprite)
         : base(id, sprite)
@@ -39,8 +27,8 @@ public class ProjectileDefinition : SpriteParticleDefinition
         base.SetupParticle(particle, angle);
 
         Projectile projectile = (Projectile)particle;
-        projectile.DamageObjects = _damageObjects;
-        projectile.DamageAmount = _damageAmount;
+        projectile.DamageObjects = DamageObjects;
+        projectile.DamageAmount = DamageAmount;
         projectile.CanCollide = true;
     }
 
@@ -49,7 +37,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
         if (reader.NodeType == XmlNodeType.Element &&
             reader.LocalName == "Damage")
         {
-            _damageAmount = int.Parse(reader.GetAttribute("amount"));
+            DamageAmount = int.Parse(reader.GetAttribute("amount"));
         }
 
         if (reader.NodeType == XmlNodeType.Element &&
@@ -62,7 +50,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
                 for (int i = 0; i < objects.Length; i++)
                 {
                     ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
-                    _damageObjects |= objectType;
+                    DamageObjects |= objectType;
                 }
             }
         }

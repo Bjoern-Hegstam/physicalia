@@ -36,10 +36,12 @@ public class TextureLibrary : ITextureLibrary
 
     public void LoadXml(string path, GraphicsDevice graphics)
     {
-        XmlReaderSettings readerSettings = new XmlReaderSettings();
-        readerSettings.IgnoreComments = true;
-        readerSettings.IgnoreProcessingInstructions = true;
-        readerSettings.IgnoreWhitespace = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreProcessingInstructions = true,
+            IgnoreWhitespace = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, readerSettings);
         LoadXml(reader, graphics);

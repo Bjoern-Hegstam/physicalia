@@ -98,15 +98,17 @@ public class GameSession
     public GameSession()
     {
         WeaponSaves = new Dictionary<int, WeaponSave>();
-        LevelModifiers = new List<ModifierSave>();
+        LevelModifiers = [];
         ActivatedObjects = new Dictionary<int, ActiveObjectSave>();
         SavedEnemies = new Dictionary<int, EnemySave>();
     }
 
     public void SaveToXml(string path)
     {
-        XmlWriterSettings writerSettings = new XmlWriterSettings();
-        writerSettings.Encoding = Encoding.UTF8;
+        XmlWriterSettings writerSettings = new XmlWriterSettings
+        {
+            Encoding = Encoding.UTF8
+        };
 
         using XmlWriter writer = XmlWriter.Create(path, writerSettings);
         writer.WriteStartDocument();
@@ -232,10 +234,12 @@ public class GameSession
     {
         GameSession session = new GameSession();
 
-        XmlReaderSettings readerSettings = new XmlReaderSettings();
-        readerSettings.IgnoreComments = true;
-        readerSettings.IgnoreProcessingInstructions = true;
-        readerSettings.IgnoreWhitespace = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings
+        {
+            IgnoreComments = true,
+            IgnoreProcessingInstructions = true,
+            IgnoreWhitespace = true
+        };
 
         using XmlReader reader = XmlReader.Create(path, readerSettings);
         reader.ReadToFollowing("WorldIndex");
@@ -268,10 +272,8 @@ public class GameSession
                 {
                     return;
                 }
-                else
-                {
-                    session.SelectedWeapon = int.Parse(reader.GetAttribute("selected"));
-                }
+
+                session.SelectedWeapon = int.Parse(reader.GetAttribute("selected"));
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
