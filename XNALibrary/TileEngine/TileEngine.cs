@@ -70,9 +70,13 @@ public class TileEngine
         {
             if (x >= 0 && x < _width &&
                 y >= 0 && y < _height)
+            {
                 return _tileMap[x, y];
+            }
             else
+            {
                 throw new ArgumentException("One or more arguments are invalid!");
+            }
         }
 
         set
@@ -80,9 +84,13 @@ public class TileEngine
             if (_tileLibrary.ContainsKey(value) &&
                 x >= 0 && x < _width &&
                 y >= 0 && y < _height)
+            {
                 _tileMap[x, y] = value;
+            }
             else
+            {
                 throw new ArgumentException("One or more arguments are invalid!");
+            }
         }
     }
 
@@ -116,7 +124,9 @@ public class TileEngine
         set
         {
             if (value <= 0)
+            {
                 throw new ArgumentException("Value cannot be 0!");
+            }
 
             _tileWidth = _tileHeight = value;
         }
@@ -131,7 +141,9 @@ public class TileEngine
         set
         {
             if (value <= 0)
+            {
                 throw new ArgumentException("Value cannot be 0!");
+            }
 
             _tileWidth = value;
         }
@@ -146,7 +158,9 @@ public class TileEngine
         set
         {
             if (value <= 0)
+            {
                 throw new ArgumentException("Value cannot be 0!");
+            }
 
             _tileHeight = value;
         }
@@ -219,7 +233,9 @@ public class TileEngine
     {
         // Make sure a tile map exist
         if (_tileMap == null)
+        {
             return;
+        }
 
         // Create a new temporary map
         int[,] newMap = new int[width, _height];
@@ -230,10 +246,14 @@ public class TileEngine
             {
                 // Copy all old values over to the new map
                 if (x < _width)
+                {
                     newMap[x, y] = _tileMap[x, y];
+                }
                 // The new tile cells are filled with the default value
                 else
+                {
                     newMap[x, y] = DefaultTileValue;
+                }
             }
         }
 
@@ -252,7 +272,9 @@ public class TileEngine
     {
         // Make sure a tile map exist
         if (_tileMap == null)
+        {
             return;
+        }
 
         // Create a new temporary map
         int[,] newMap = new int[_width, height];
@@ -263,10 +285,14 @@ public class TileEngine
             {
                 // Copy all old values over to the new map
                 if (y < _height)
+                {
                     newMap[x, y] = _tileMap[x, y];
+                }
                 // The new tile cells are filled with the default value
                 else
+                {
                     newMap[x, y] = DefaultTileValue;
+                }
             }
         }
 
@@ -332,10 +358,14 @@ public class TileEngine
     public void LoadXml(String path)
     {
         if (path == null)
+        {
             throw new ArgumentNullException("Path to Xml file cannot be null!");
+        }
 
         if (path.Length < 5 || path.Substring(path.Length - 3, 3).ToLower() != "xml")
+        {
             throw new ArgumentException("File is not of type '.xml'");
+        }
 
         XmlReaderSettings settings = new XmlReaderSettings();
         settings.CloseInput = true;
@@ -394,11 +424,25 @@ public class TileEngine
         Tile tile = null;
 
         // Make sure all numbers are within the bounds of the map
-        if (xMin < 0) xMin = 0;
-        if (xMax >= _tileMap.GetLength(0)) xMax = _tileMap.GetLength(0) - 1;
+        if (xMin < 0)
+        {
+            xMin = 0;
+        }
 
-        if (yMin < 0) yMin = 0;
-        if (yMax >= _tileMap.GetLength(1)) yMax = _tileMap.GetLength(1) - 1;
+        if (xMax >= _tileMap.GetLength(0))
+        {
+            xMax = _tileMap.GetLength(0) - 1;
+        }
+
+        if (yMin < 0)
+        {
+            yMin = 0;
+        }
+
+        if (yMax >= _tileMap.GetLength(1))
+        {
+            yMax = _tileMap.GetLength(1) - 1;
+        }
 
         for (int x = xMin; x <= xMax; x++)
         {
@@ -406,7 +450,9 @@ public class TileEngine
             {
                 // No Tile at position?
                 if (_tileMap[x, y] == DefaultTileValue)
+                {
                     continue;
+                }
 
                 tile = _tileLibrary.GetTile(_tileMap[x, y]);
                 //tile = this.tiles[this.tileMap[x, y]];
@@ -414,7 +460,9 @@ public class TileEngine
                 // Don't check the tile if it can't give damage or
                 // be collided with
                 if (tile.CollisionSides == 0 && !tile.GivesDamage)
+                {
                     continue;
+                }
 
                 // Check the tiles' collision sides for collisions
                 Vector2 position = collObject.Position - collObject.Origin;
@@ -432,25 +480,33 @@ public class TileEngine
                     position.X + collBox.X + collBox.Width >= (x * _tileWidth + tile.CollisionBox.X) &&
                     position.X + collBox.X + collBox.Width <=
                     (x * _tileWidth + tile.CollisionBox.X + _collisionThreshold))
+                {
                     collisions |= BoxSide.Left;
+                }
 
                 if (velocity.Y > 0 &&
                     position.Y + collBox.Y + collBox.Height >= (y * _tileHeight + tile.CollisionBox.Y) &&
                     position.Y + collBox.Y + collBox.Height <=
                     (y * _tileHeight + tile.CollisionBox.Y + _collisionThreshold))
+                {
                     collisions |= BoxSide.Top;
+                }
 
                 if (velocity.X < 0 &&
                     position.X + collBox.X <= (x * _tileWidth + tile.CollisionBox.X + tile.CollisionBox.Width) &&
                     position.X + collBox.X >= (x * _tileWidth + tile.CollisionBox.X + tile.CollisionBox.Width -
                                                _collisionThreshold))
+                {
                     collisions |= BoxSide.Right;
+                }
 
                 if (velocity.Y < 0 &&
                     position.Y + collBox.Y <= (y * _tileHeight + tile.CollisionBox.Y + tile.CollisionBox.Height) &&
                     position.Y + collBox.Y >= (y * _tileHeight + tile.CollisionBox.Y + tile.CollisionBox.Height -
                                                _collisionThreshold))
+                {
                     collisions |= BoxSide.Bottom;
+                }
 
 
                 // Check that the object is within the area where
@@ -470,7 +526,9 @@ public class TileEngine
                         velocity.X = 0;
                     }
                     else
+                    {
                         collisions -= BoxSide.Left;
+                    }
                 }
 
                 // Top
@@ -485,7 +543,9 @@ public class TileEngine
                         velocity.Y = 0;
                     }
                     else
+                    {
                         collisions -= BoxSide.Top;
+                    }
                 }
 
                 // Right
@@ -500,7 +560,9 @@ public class TileEngine
                         velocity.X = 0;
                     }
                     else
+                    {
                         collisions -= BoxSide.Right;
+                    }
                 }
 
                 // Bottom
@@ -515,7 +577,9 @@ public class TileEngine
                         velocity.Y = 0;
                     }
                     else
+                    {
                         collisions -= BoxSide.Bottom;
+                    }
                 }
 
                 // Were there any collisions?
@@ -523,18 +587,37 @@ public class TileEngine
                 {
                     // See which sides of the object that collided
                     BoxSide objectSides = 0;
-                    if ((collisions & BoxSide.Left) != 0) objectSides |= BoxSide.Right;
-                    if ((collisions & BoxSide.Right) != 0) objectSides |= BoxSide.Left;
-                    if ((collisions & BoxSide.Top) != 0) objectSides |= BoxSide.Bottom;
-                    if ((collisions & BoxSide.Bottom) != 0) objectSides |= BoxSide.Top;
+                    if ((collisions & BoxSide.Left) != 0)
+                    {
+                        objectSides |= BoxSide.Right;
+                    }
+
+                    if ((collisions & BoxSide.Right) != 0)
+                    {
+                        objectSides |= BoxSide.Left;
+                    }
+
+                    if ((collisions & BoxSide.Top) != 0)
+                    {
+                        objectSides |= BoxSide.Bottom;
+                    }
+
+                    if ((collisions & BoxSide.Bottom) != 0)
+                    {
+                        objectSides |= BoxSide.Top;
+                    }
 
                     // Allert object of the collision
                     if (collObject.CanCollide)
+                    {
                         collObject.OnCollision(tile, objectSides, position + collObject.Origin, velocity);
+                    }
 
                     // Damage the object if it can take damage
                     if (collObject.CanTakeDamage && tile.GivesDamage)
+                    {
                         collObject.TakeDamage(tile.DamageLevel);
+                    }
                 }
             }
         }
@@ -560,7 +643,9 @@ public class TileEngine
             for (int xi = xBase; xi < _width; xi++)
             {
                 if (_tileMap[xi, yi] == DefaultTileValue)
+                {
                     continue;
+                }
 
                 // Get tile and sprite
                 tile = _tileLibrary.GetTile(_tileMap[xi, yi]);

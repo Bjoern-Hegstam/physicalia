@@ -54,7 +54,9 @@ public class Enemy : Actor
             Enabled = Visible = value;
 
             if (value)
+            {
                 CurrentAnimationType = CurrentAnimationType;
+            }
         }
     }
 
@@ -103,7 +105,9 @@ public class Enemy : Actor
 
             // TODO: Remove temp code and make better!
             if (!WithinArea(this, _patrolArea))
+            {
                 MoveToArea();
+            }
         }
         else
         {
@@ -111,7 +115,9 @@ public class Enemy : Actor
 
             // Start blinking after a set time
             if (_blinkDelay > 0)
+            {
                 _blinkDelay -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
             else if (_blinkCount > 0)
             {
                 // Count down to the next blink
@@ -125,7 +131,9 @@ public class Enemy : Actor
 
                     // Decrease the number of blinks to do
                     if (!Visible)
+                    {
                         _blinkCount--;
+                    }
                 }
 
                 // Make sure we're not visible if we're done blinking
@@ -141,7 +149,9 @@ public class Enemy : Actor
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         if (Visible)
+        {
             base.Draw(spriteBatch, offsetPosition);
+        }
     }
 
     /// <summary>
@@ -270,6 +280,8 @@ public class Enemy : Actor
             Velocity = velocity;
         }
         else if (collidedObject.Type == ObjectType.Player)
+        {
             collidedObject.TakeDamage(Damage);
+        }
     }
 }

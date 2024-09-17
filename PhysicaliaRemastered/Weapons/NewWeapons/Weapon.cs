@@ -176,7 +176,9 @@ public abstract class Weapon
 
             // Start playing warmup animation if needed otherwise start 
             if (WeaponWarmUp > 0)
+            {
                 WarmupAnimation.Play();
+            }
             else
             {
                 WeaponFireAnimation.Play();
@@ -314,19 +316,29 @@ public abstract class Weapon
             origin.X -= _playerOffset.X;
         }
         else
+        {
             origin.X += _playerOffset.X;
+        }
 
         if ((spriteEffects & SpriteEffects.FlipVertically) != 0)
+        {
             origin.Y -= _playerOffset.Y;
+        }
         else
+        {
             origin.Y += _playerOffset.Y;
+        }
 
         Animation weaponAnim = null;
 
         if (_timeTillWeaponStart > 0)
+        {
             weaponAnim = WarmupAnimation;
+        }
         else
+        {
             weaponAnim = WeaponFireAnimation;
+        }
 
         spriteBatch.Draw(weaponAnim.Texture,
             position - positionOffset,

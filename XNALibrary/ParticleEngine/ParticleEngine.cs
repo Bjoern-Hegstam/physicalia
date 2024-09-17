@@ -89,7 +89,9 @@ public class ParticleEngine : IParticleEngine
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "ParticleDefinitions")
+            {
                 return;
+            }
         }
     }
 
@@ -115,11 +117,15 @@ public class ParticleEngine : IParticleEngine
         {
             for (int i = 0; i < _activeParticles.Count; i++)
                 if (_activeParticles[i].Definition.Id == definitionId)
+                {
                     _activeParticles.RemoveAt(i);
+                }
 
             for (int i = 0; i < _particleBuffer.Count; i++)
                 if (_particleBuffer[i].Definition.Id == definitionId)
+                {
                     _particleBuffer.RemoveAt(i);
+                }
         }
     }
 
@@ -139,7 +145,9 @@ public class ParticleEngine : IParticleEngine
 
         // Is the key valid?
         if (!_definitions.ContainsKey(typeId))
+        {
             throw new ArgumentException("Invalid type id: " + typeId);
+        }
 
         Particle particle = null;
 
@@ -187,7 +195,9 @@ public class ParticleEngine : IParticleEngine
         foreach (ICollisionObject collObj in collObjects)
         {
             if (collObj.CanCollide || collObj.CanTakeDamage)
+            {
                 CheckCollisions(collObj);
+            }
         }
     }
 
@@ -209,7 +219,9 @@ public class ParticleEngine : IParticleEngine
 
             // Don't bother if the particle can't collide with anything
             if (!particle.CanCollide)
+            {
                 continue;
+            }
 
             particleRect = particle.CollisionBox;
             boxPos = particle.Position - particle.Origin;
@@ -217,8 +229,10 @@ public class ParticleEngine : IParticleEngine
             particleRect.Y += (int)boxPos.Y;
 
             if (collObjRect.Intersects(particleRect))
+            {
                 particle.OnCollision(collObject, BoxSide.Bottom | BoxSide.Left | BoxSide.Right | BoxSide.Top,
                     Vector2.Zero, Vector2.Zero);
+            }
         }
     }
 

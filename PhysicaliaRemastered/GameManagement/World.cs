@@ -99,7 +99,9 @@ public class World
 
                 // Must have all needed value (rgba)
                 if (colorValues.Length < 4)
+                {
                     continue;
+                }
 
                 byte r = byte.Parse(colorValues[0]);
                 byte g = byte.Parse(colorValues[1]);
@@ -131,14 +133,21 @@ public class World
                         quoteBuilder.Append(character);
                     }
                     else if (reader.NodeType == XmlNodeType.Text)
+                    {
                         quoteBuilder.Append(reader.ReadString());
+                    }
                     else
+                    {
                         reader.Read();
+                    }
                 }
 
                 // Store parsed quote
                 if (quoteBuilder.Length > 0)
+                {
                     quoteLines.Add(quoteBuilder.ToString());
+                }
+
                 _worldQuoteLines = quoteLines.ToArray();
             }
 
@@ -174,7 +183,9 @@ public class World
 
         // Set the index of the current level
         if (_levels.Count > 0)
+        {
             _levelIndex = 0;
+        }
     }
 
     public void Update(GameTime gameTime)
@@ -183,7 +194,10 @@ public class World
         {
             case WorldState.Start:
                 if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+                {
                     _nextState = WorldState.PlayingLevel;
+                }
+
                 break;
             case WorldState.PlayingLevel:
                 if (_levels[_levelIndex].State == LevelState.Finished)
@@ -197,10 +211,14 @@ public class World
 
                         // World is finished if there are no more levels
                         if (_levelIndex >= _levels.Count)
+                        {
                             _nextState = WorldState.Finished;
+                        }
                         else
                             // Reset the next level
+                        {
                             _levels[_levelIndex].Reset();
+                        }
                     }
                 }
                 else if (_levels[_levelIndex].State == LevelState.Dead)
@@ -208,11 +226,15 @@ public class World
                     _levels[_levelIndex].Update(gameTime);
 
                     if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+                    {
                         _levels[_levelIndex].Reset();
+                    }
                 }
                 else
                     // Update the current level
+                {
                     _levels[_levelIndex].Update(gameTime);
+                }
 
                 break;
             case WorldState.Finished:
@@ -285,9 +307,14 @@ public class World
                 break;
             case WorldState.PlayingLevel:
                 if (_levels.Count == 0)
+                {
                     _nextState = WorldState.Finished;
+                }
                 else
+                {
                     _levels[_levelIndex].Reset();
+                }
+
                 break;
             case WorldState.Finished:
                 break;
@@ -299,7 +326,9 @@ public class World
     public void ResetLevel()
     {
         if (_levelIndex < _levels.Count)
+        {
             _levels[_levelIndex].Reset();
+        }
     }
 
     public void NewSession()

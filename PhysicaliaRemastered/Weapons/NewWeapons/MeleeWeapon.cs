@@ -70,7 +70,9 @@ public class MeleeWeapon : Weapon
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "WeaponData")
+            {
                 return;
+            }
         }
     }
 }

@@ -33,7 +33,9 @@ public class Settings : ISettings
             // Change current input map if needed
             if (InputMap == _keyboardMap &&
                 _inputType == InputType.Gamepad)
+            {
                 InputMap = _gamePadMap;
+            }
         }
     }
 
@@ -114,11 +116,15 @@ public class Settings : ISettings
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "KeyboardMap")
+            {
                 _keyboardMap.LoadXml(reader.ReadString());
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "GamepadMap")
+            {
                 _gamePadMap.LoadXml(reader.ReadString());
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "UI")
@@ -134,7 +140,9 @@ public class Settings : ISettings
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Settings")
+            {
                 break;
+            }
         }
     }
 }

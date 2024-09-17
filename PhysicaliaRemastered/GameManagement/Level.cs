@@ -121,7 +121,10 @@ public class Level
         {
             case LevelState.Start:
                 if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+                {
                     NextState = LevelState.Playing;
+                }
+
                 break;
             case LevelState.Playing:
                 UpdateLevel(gameTime);
@@ -182,7 +185,9 @@ public class Level
 
                     // Set velocity to zero if it's very close
                     if (Player.Velocity.X > -1 && Player.Velocity.X < 1)
+                    {
                         Player.Velocity *= Vector2.UnitY;
+                    }
                 }
 
                 UpdateLevel(gameTime);
@@ -193,7 +198,9 @@ public class Level
 
         // Should the state be changed?
         if (NextState != State)
+        {
             ChangeState();
+        }
     }
 
     public void LoadXml(string path, ITileLibrary tileLibrary)
@@ -218,15 +225,21 @@ public class Level
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "PlayerStart")
+            {
                 _playerStartValues = ActorStartValues.FromXml(reader, "PlayerStart");
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Enemies")
+            {
                 LoadEnemies(reader);
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "ActiveObjects")
+            {
                 LoadActiveObjects(reader);
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Background")
@@ -305,7 +318,9 @@ public class Level
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Enemies")
+            {
                 return;
+            }
         }
     }
 
@@ -321,7 +336,9 @@ public class Level
                 reader.LocalName == "Weapons")
             {
                 if (reader.IsEmptyElement)
+                {
                     continue;
+                }
 
                 LoadWeapons(reader);
             }
@@ -330,7 +347,9 @@ public class Level
                 reader.LocalName == "Pickups")
             {
                 if (reader.IsEmptyElement)
+                {
                     continue;
+                }
 
                 LoadPickups(reader);
             }
@@ -356,7 +375,9 @@ public class Level
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "ActiveObjects")
+            {
                 return;
+            }
         }
     }
 
@@ -390,7 +411,9 @@ public class Level
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Weapons")
+            {
                 return;
+            }
         }
     }
 
@@ -417,7 +440,9 @@ public class Level
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Pickups")
+            {
                 return;
+            }
         }
     }
 
@@ -584,7 +609,10 @@ public class Level
             case LevelState.Playing:
                 if (Player.CurrentWeapon != null &&
                     Player.CurrentWeapon.IsFiring)
+                {
                     Player.CurrentWeapon.Stop();
+                }
+
                 break;
             case LevelState.Dead:
                 break;
@@ -644,12 +672,18 @@ public class Level
             // The player can only fall outside the level in Y
             if (playerRect.Bottom <= levelRect.Top &&
                 Player.Acceleration.Y > 0)
+            {
                 result = false;
+            }
             else if (playerRect.Top >= levelRect.Bottom &&
                      Player.Acceleration.Y < 0)
+            {
                 result = false;
+            }
             else
+            {
                 result = true;
+            }
         }
 
 
@@ -697,7 +731,9 @@ public class Level
 
             // Remove modifier if it's gone inactive
             if (!_modifiers[i].IsActive)
+            {
                 _modifiers.RemoveAt(i);
+            }
         }
 
         // Active ActiveObjects that are close to the screen.
@@ -809,7 +845,9 @@ public class Level
     {
         // Only update the player's animation if the game is being played
         if (State == LevelState.Playing)
+        {
             Player.UpdateAnimation();
+        }
 
         EnemyManager.UpdateAnimations();
     }
@@ -890,9 +928,13 @@ public class Level
 
             string ammoString;
             if (playerWeapon.InfiniteAmmo)
+            {
                 ammoString = "Inf";
+            }
             else
+            {
                 ammoString = playerWeapon.AmmoCount + " / " + playerWeapon.MaxAmmo;
+            }
 
             Vector2 ammoStringSize = Settings.LevelIndexFont.MeasureString(ammoString);
             ammoPos.X -= ammoStringSize.X;
@@ -974,7 +1016,9 @@ public class Level
                 // with a soft reset, there could be active objects that where
                 // activated that should inactive. Therefore all ActiveObjects
                 // not affected by the new session are reset
+            {
                 _inactiveObjects[i].Reset();
+            }
         }
 
         EnemyManager.LoadSession(session);

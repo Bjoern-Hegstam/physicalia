@@ -67,7 +67,9 @@ public class EnemyBank : IEnemyBank
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "EnemyBank")
+            {
                 return;
+            }
         }
     }
 
@@ -91,7 +93,9 @@ public class EnemyBank : IEnemyBank
     {
         // Make sure the type has been defined
         if (!_enemyBank.ContainsKey(typeId))
+        {
             return null;
+        }
 
         // Get a copy of the type
         Enemy enemy = _enemyBank[typeId].Copy(startValues);
@@ -112,7 +116,9 @@ public class EnemyBank : IEnemyBank
     public void SetupEnemy(Enemy enemy)
     {
         if (_enemyBank.ContainsKey(enemy.TypeId))
+        {
             _enemyBank[enemy.TypeId].Copy(enemy);
+        }
     }
 
     /// <summary>
@@ -139,7 +145,9 @@ public class EnemyBank : IEnemyBank
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "CollisionBox")
+            {
                 enemy.CollisionBox = ReadRectangle(reader);
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "PatrolArea")
@@ -149,7 +157,9 @@ public class EnemyBank : IEnemyBank
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Setup")
+            {
                 return;
+            }
         }
     }
 
@@ -182,7 +192,9 @@ public class EnemyBank : IEnemyBank
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Setup")
+            {
                 return;
+            }
         }
     }
 

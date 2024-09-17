@@ -50,7 +50,9 @@ public class AnimationParticle(Animation.Animation animation) : Particle
         if ((DamageObjects & collisionObject.Type) != 0)
         {
             if (collisionObject.CanTakeDamage)
+            {
                 collisionObject.TakeDamage(DamageAmount);
+            }
         }
     }
 
@@ -68,6 +70,7 @@ public class AnimationParticle(Animation.Animation animation) : Particle
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         if (Animation.IsActive)
+        {
             spriteBatch.Draw(Animation.Texture,
                 position - offsetPosition,
                 Animation.SourceRectangle,
@@ -77,5 +80,6 @@ public class AnimationParticle(Animation.Animation animation) : Particle
                 1.0F,
                 SpriteEffects.None,
                 1.0F);
+        }
     }
 }

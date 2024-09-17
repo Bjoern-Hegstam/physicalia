@@ -58,11 +58,13 @@ public class ProjectileDefinition : SpriteParticleDefinition
             String[] objects = reader.ReadElementContentAsString().Split(' ');
 
             if (objects.Length > 0 && objects[0] != "")
+            {
                 for (int i = 0; i < objects.Length; i++)
                 {
                     ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
                     _damageObjects |= objectType;
                 }
+            }
         }
     }
 }

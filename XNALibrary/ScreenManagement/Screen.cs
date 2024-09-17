@@ -39,19 +39,17 @@ public class Screen
     /// </summary>
     public IInputHandler InputHandler => _inputHandler;
 
-    private readonly ScreenManager _manager;
-
     /// <summary>
     /// Gets the ScreenManager that's managing the Screen.
     /// </summary>
-    public ScreenManager ScreenManager => _manager;
+    public ScreenManager ScreenManager { get; }
 
     public Screen(Game game, ScreenManager manager)
     {
         _buttons = new List<ScreenButton>();
 
         _game = game;
-        _manager = manager;
+        ScreenManager = manager;
     }
 
     /// <summary>
@@ -105,7 +103,9 @@ public class Screen
 
         // Draw background if one has been set
         if (_background != null)
+        {
             spriteBatch.Draw(_background, Vector2.Zero, Color.White);
+        }
 
         // Draw content before buttons
         OnDrawBefore(spriteBatch);
@@ -141,9 +141,13 @@ public class Screen
             if (button.IsPressed)
             {
                 if (button.ScreenLink != null)
+                {
                     ScreenManager.TransitionTo(button.ScreenLink);
+                }
                 else
+                {
                     ScreenManager.TransitionBack();
+                }
 
                 // Don't check any more buttons
                 return;

@@ -33,19 +33,27 @@ public struct ActorStartValues
         {
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Position")
+            {
                 startValues.Position = ReadVector2(reader);
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Velocity")
+            {
                 startValues.Velocity = ReadVector2(reader);
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Acceleration")
+            {
                 startValues.Acceleration = ReadVector2(reader);
+            }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == endElement)
+            {
                 return startValues;
+            }
         }
 
         return startValues;

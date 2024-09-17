@@ -265,9 +265,13 @@ public class GameSession
                 reader.LocalName == "Weapons")
             {
                 if (reader.IsEmptyElement)
+                {
                     return;
+                }
                 else
+                {
                     session.SelectedWeapon = int.Parse(reader.GetAttribute("selected"));
+                }
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
@@ -282,7 +286,9 @@ public class GameSession
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Weapons")
+            {
                 break;
+            }
         }
     }
 
@@ -293,7 +299,9 @@ public class GameSession
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Modifiers" &&
                 reader.IsEmptyElement)
+            {
                 return;
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Modifier")
@@ -306,7 +314,9 @@ public class GameSession
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Modifiers")
+            {
                 return;
+            }
         }
     }
 
@@ -317,7 +327,9 @@ public class GameSession
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "ActiveObjects" &&
                 reader.IsEmptyElement)
+            {
                 return;
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "ActiveObject")
@@ -335,7 +347,9 @@ public class GameSession
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "ActiveObjects")
+            {
                 return;
+            }
         }
     }
 
@@ -346,7 +360,9 @@ public class GameSession
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Enemies" &&
                 reader.IsEmptyElement)
+            {
                 return;
+            }
 
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "Enemy")
@@ -370,7 +386,9 @@ public class GameSession
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Enemies")
+            {
                 return;
+            }
         }
     }
 }

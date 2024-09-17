@@ -66,7 +66,9 @@ public class GameScreen : Screen
     protected override void OnUpdate(GameTime gameTime)
     {
         if (GameManager.State == GameState.Paused)
+        {
             HandlePauseMenu();
+        }
 
         // Always update the game
         GameManager.Update(gameTime);
@@ -79,7 +81,9 @@ public class GameScreen : Screen
         GameManager.Draw(spriteBatch);
 
         if (GameManager.State == GameState.Paused)
+        {
             DrawPauseMenu(spriteBatch);
+        }
 
         spriteBatch.End();
     }
@@ -94,7 +98,9 @@ public class GameScreen : Screen
             _pauseMenuIndex--;
 
             if (_pauseMenuIndex < 0)
+            {
                 _pauseMenuIndex = 0;
+            }
         }
 
         if (_settings.InputMap.IsPressed(InputAction.MenuDown))
@@ -102,7 +108,9 @@ public class GameScreen : Screen
             _pauseMenuIndex++;
 
             if (_pauseMenuIndex >= _pauseMenuOptions.Length)
+            {
                 _pauseMenuIndex = _pauseMenuOptions.Length - 1;
+            }
         }
 
         // Check if MenuStart is pressed and take appropriate action
@@ -162,7 +170,9 @@ public class GameScreen : Screen
 
         // Draw texture overlay over world to fade it out a bit
         if (_pauseOverlayTexture != null)
+        {
             spriteBatch.Draw(_pauseOverlayTexture, _pauseOverlayArea, Color.White);
+        }
 
         // Draw pause menu base
 

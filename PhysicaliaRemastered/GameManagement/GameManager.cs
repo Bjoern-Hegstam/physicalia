@@ -311,7 +311,9 @@ public class GameManager
 
         // Set a valid index if one or more worlds has been added
         if (_worlds.Count > 0)
+        {
             _worldIndex = 0;
+        }
     }
 
     /// <summary>
@@ -366,7 +368,9 @@ public class GameManager
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Player")
+            {
                 return;
+            }
         }
     }
 
@@ -386,7 +390,10 @@ public class GameManager
         {
             case GameState.Start:
                 if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+                {
                     NextState = GameState.Playing;
+                }
+
                 break;
             case GameState.Playing:
                 // Has the Player finished the game?
@@ -409,9 +416,13 @@ public class GameManager
                 {
                     if (_worlds[_worldIndex].LevelState == LevelState.Start ||
                         _worlds[_worldIndex].LevelState == LevelState.Dead)
+                    {
                         _pausePressedCount = 0;
+                    }
                     else
+                    {
                         _pausePressedCount = 1;
+                    }
 
                     // Pause if start is pressed
                     // pausePressedCount is used as a workaround the fact that
@@ -421,7 +432,9 @@ public class GameManager
                     if (_worlds[_worldIndex].LevelState == LevelState.Playing &&
                         Settings.InputMap.IsPressed(InputAction.MenuStart) &&
                         _pausePressedCount == 1)
+                    {
                         NextState = GameState.Paused;
+                    }
 
                     _worlds[_worldIndex].Update(gameTime);
                 }
@@ -430,7 +443,10 @@ public class GameManager
             case GameState.Paused:
                 // Continue playing if the player wants to go back
                 if (Settings.InputMap.IsPressed(InputAction.MenuBack))
+                {
                     NextState = GameState.Playing;
+                }
+
                 break;
             case GameState.End:
                 break;

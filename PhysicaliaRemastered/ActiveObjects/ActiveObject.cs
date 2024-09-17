@@ -131,6 +131,7 @@ public abstract class ActiveObject : ICollisionObject
     public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         if (Visible && _spriteLibrary != null)
+        {
             spriteBatch.Draw(_sprite.Texture,
                 _position - offsetPosition,
                 _sprite.SourceRectangle,
@@ -140,5 +141,6 @@ public abstract class ActiveObject : ICollisionObject
                 1.0F,
                 SpriteEffects.None,
                 0.8F);
+        }
     }
 }

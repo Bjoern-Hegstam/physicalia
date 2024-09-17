@@ -190,7 +190,9 @@ public abstract class Actor : ICollisionObject
             _velocity.Y / _acceleration.Y < 0)
         {
             if (_currentAnimType != (int)ActorAnimation.Jump)
+            {
                 CurrentAnimationType = (int)ActorAnimation.Jump;
+            }
 
             return;
         }
@@ -199,7 +201,9 @@ public abstract class Actor : ICollisionObject
             _velocity.Y / _acceleration.Y > 0)
         {
             if (_currentAnimType != (int)ActorAnimation.Fall)
+            {
                 CurrentAnimationType = (int)ActorAnimation.Fall;
+            }
 
             return;
         }
@@ -208,7 +212,9 @@ public abstract class Actor : ICollisionObject
             _velocity.X != 0)
         {
             if (_currentAnimType != (int)ActorAnimation.Walk)
+            {
                 CurrentAnimationType = (int)ActorAnimation.Walk;
+            }
 
             return;
         }
@@ -217,7 +223,9 @@ public abstract class Actor : ICollisionObject
             _health <= 0)
         {
             if (_currentAnimType != (int)ActorAnimation.Die)
+            {
                 CurrentAnimationType = (int)ActorAnimation.Die;
+            }
 
             return;
         }
@@ -226,7 +234,9 @@ public abstract class Actor : ICollisionObject
             _velocity.X == 0)
         {
             if (_currentAnimType != (int)ActorAnimation.Rest)
+            {
                 CurrentAnimationType = (int)ActorAnimation.Rest;
+            }
 
             return;
         }
@@ -240,12 +250,16 @@ public abstract class Actor : ICollisionObject
     private void SetAnimation(int animationKey)
     {
         if (Animations.ContainsKey(_currentAnimType))
+        {
             CurrentAnimation.Stop();
+        }
 
         _currentAnimType = animationKey;
 
         if (Animations.ContainsKey(_currentAnimType))
+        {
             CurrentAnimation.Play();
+        }
     }
 
     /// <summary>
@@ -306,7 +320,9 @@ public abstract class Actor : ICollisionObject
         // Cap off velocity in Y
         float quota = _velocity.Y / MaxVerticalVelocity;
         if (quota >= 1 || quota <= -1)
+        {
             _velocity.Y = MaxVerticalVelocity * Math.Sign(_velocity.Y);
+        }
 
         Position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
     }

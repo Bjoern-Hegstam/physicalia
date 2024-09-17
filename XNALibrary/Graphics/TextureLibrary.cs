@@ -5,24 +5,13 @@ namespace XNALibrary.Graphics;
 
 public class TextureLibrary : ITextureLibrary
 {
-    private readonly Dictionary<int, Texture2D> _textureLibrary;
+    private readonly Dictionary<int, Texture2D> _textureLibrary = new();
 
     public Texture2D this[int key] => GetTexture(key);
 
-    public TextureLibrary()
-    {
-        _textureLibrary = new Dictionary<int, Texture2D>();
-    }
-
     public bool AddTexture(int key, Texture2D texture)
     {
-        if (!_textureLibrary.ContainsKey(key))
-        {
-            _textureLibrary.Add(key, texture);
-            return true;
-        }
-
-        return false;
+        return _textureLibrary.TryAdd(key, texture);
     }
 
     public bool RemoveTexture(int key)
@@ -32,10 +21,7 @@ public class TextureLibrary : ITextureLibrary
 
     public Texture2D GetTexture(int key)
     {
-        if (_textureLibrary.ContainsKey(key))
-            return _textureLibrary[key];
-
-        return null;
+        return _textureLibrary.TryGetValue(key, out var texture) ? texture : throw new MissingTextureException();
     }
 
     public bool ContainsKey(int key)
@@ -74,7 +60,9 @@ public class TextureLibrary : ITextureLibrary
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "TextureLibrary")
+            {
                 return;
+            }
         }
     }
 }

@@ -65,7 +65,9 @@ public class Player : Actor
         get
         {
             if (_weapons.ContainsKey(_currentWeapon))
+            {
                 return _weapons[_currentWeapon];
+            }
 
             return null;
         }
@@ -96,27 +98,37 @@ public class Player : Actor
         float moveSpeed = WalkSpeed;
         if (CurrentAnimationType == (int)ActorAnimation.Fall ||
             CurrentAnimationType == (int)ActorAnimation.Jump)
+        {
             moveSpeed = FallMovementSpeed;
+        }
 
         // Walk
         if (Settings.InputMap.IsHolding(InputAction.WalkLeft))
+        {
             velocity.X = -moveSpeed;
+        }
 
         if (Settings.InputMap.IsHolding(InputAction.WalkRight))
+        {
             velocity.X = moveSpeed;
+        }
 
         // Jump
         if (Settings.InputMap.IsPressed(InputAction.Jump) &&
             CurrentAnimationType != (int)ActorAnimation.Jump &&
             CurrentAnimationType != (int)ActorAnimation.Fall)
+        {
             velocity.Y = JumpMagnitude * (Acceleration.Y > 0 ? 1 : -1);
+        }
 
         Velocity = velocity;
 
         // Weapon controls
         // Only check if the player has a weapon
         if (_weapons.Count == 0)
+        {
             return;
+        }
 
         // Should the weapons be switched?
         if (Settings.InputMap.IsPressed(InputAction.NextWeapon))
@@ -141,9 +153,13 @@ public class Player : Actor
                 foreach (int key in _weapons.Keys)
                 {
                     if (key < _currentWeapon)
+                    {
                         _currentWeapon = key;
+                    }
                     else
+                    {
                         break;
+                    }
                 }
             }
 
@@ -166,7 +182,9 @@ public class Player : Actor
                     nextWeapon = key;
                 }
                 else
+                {
                     break;
+                }
             }
 
             // Was the previous weapon the first one?
@@ -196,11 +214,15 @@ public class Player : Actor
         // Should the weapon be firing or stopped firing
         if (Settings.InputMap.IsPressed(InputAction.Shoot) &&
             !_weapons[_currentWeapon].IsFiring)
+        {
             _weapons[_currentWeapon].Start();
+        }
 
         if (Settings.InputMap.IsReleased(InputAction.Shoot) &&
             _weapons[_currentWeapon].IsFiring)
+        {
             _weapons[_currentWeapon].Stop();
+        }
     }
 
     /// <summary>
@@ -220,19 +242,24 @@ public class Player : Actor
     {
         // First weapon
         if (_weapons.Count == 0)
+        {
             _currentWeapon = weapon.WeaponId;
+        }
 
         // Keep only the ammo if the player already has a weapon of the same type
-        if (_weapons.ContainsKey(weapon.WeaponId))
+        if (!_weapons.TryAdd(weapon.WeaponId, weapon))
+        {
             _weapons[weapon.WeaponId].AmmoCount += weapon.AmmoCount;
+        }
         else
         {
-            _weapons.Add(weapon.WeaponId, weapon);
             weapon.Player = this;
 
             // Switch to weapon if it's better than the current one
             if (weapon.WeaponId > _currentWeapon)
+            {
                 _currentWeapon = weapon.WeaponId;
+            }
         }
     }
 
@@ -256,11 +283,13 @@ public class Player : Actor
             // If the removed weapon was the currently selected one a new key
             // must be found
             if (_currentWeapon == weaponId)
+            {
                 foreach (int weapon in _weapons.Keys)
                 {
                     _currentWeapon = weapon;
                     break;
                 }
+            }
         }
     }
 
@@ -275,7 +304,9 @@ public class Player : Actor
             _flickerInterval -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (_invincibleTime < 0)
+            {
                 _visible = true;
+            }
             else if (_flickerInterval <= 0)
             {
                 if (_invincibleTime > 0)
@@ -284,12 +315,16 @@ public class Player : Actor
                     _flickerInterval = DefaultFlickerInterval;
                 }
                 else
+                {
                     _visible = true;
+                }
             }
         }
 
         if (_weapons.ContainsKey(_currentWeapon))
+        {
             _weapons[_currentWeapon].Update(gameTime);
+        }
     }
 
     public void StoreWeaponAmmoCount()
@@ -307,7 +342,9 @@ public class Player : Actor
     public void Kill()
     {
         if (!_visible)
+        {
             _visible = true;
+        }
 
         // Stop the player's motion in X
         Velocity *= Vector2.UnitY;
@@ -315,7 +352,9 @@ public class Player : Actor
         // Stop firing if needed
         if (_weapons.ContainsKey(_currentWeapon) &&
             _weapons[_currentWeapon].IsFiring)
+        {
             _weapons[_currentWeapon].Stop();
+        }
     }
 
     public override ObjectType Type => ObjectType.Player;
@@ -324,7 +363,9 @@ public class Player : Actor
     {
         // Invincible?
         if (_invincibleTime > 0)
+        {
             return;
+        }
 
         // Decreaes health
         Health -= damageLevel;
@@ -335,7 +376,9 @@ public class Player : Actor
             Kill();
         }
         else
+        {
             _invincibleTime = DefaultInvincibleTime;
+        }
     }
 
     public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
@@ -353,7 +396,9 @@ public class Player : Actor
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         if (!_visible)
+        {
             return;
+        }
 
         // Draw player
         base.Draw(spriteBatch, offsetPosition);
@@ -363,7 +408,9 @@ public class Player : Actor
             _weapons.ContainsKey(_currentWeapon) &&
             CurrentAnimationType != (int)ActorAnimation.Die &&
             CurrentAnimationType != (int)ActorAnimation.Win)
+        {
             _weapons[_currentWeapon].Draw(spriteBatch, offsetPosition, SpriteFlip);
+        }
     }
 
     public void NewSession()
@@ -392,7 +439,9 @@ public class Player : Actor
 
         // Clear previous weapons
         if (_weapons.Count > 0)
+        {
             _weapons.Clear();
+        }
 
         // Set the current weapon
         _currentWeapon = session.SelectedWeapon;

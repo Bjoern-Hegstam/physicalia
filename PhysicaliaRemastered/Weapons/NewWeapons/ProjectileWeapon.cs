@@ -78,7 +78,9 @@ public class ProjectileWeapon : Weapon
         // Coninuous fire means the vibration only needs to be started once
         // when the weapon starts firing
         if (_fireMode == FireMode.Continuous)
+        {
             GamePad.SetVibration(PlayerIndex.One, _fireVibration.X, _fireVibration.Y);
+        }
     }
 
     protected override void FireWeapon()
@@ -109,13 +111,17 @@ public class ProjectileWeapon : Weapon
             }
             else
                 // Stop vibration and dont fire any shots
+            {
                 GamePad.SetVibration(PlayerIndex.One, 0F, 0F);
+            }
 
             // Increase so the other action will be taken next time
             _shotsFired++;
         }
         else
+        {
             FireShot();
+        }
     }
 
     private void FireShot()
@@ -144,10 +150,14 @@ public class ProjectileWeapon : Weapon
         // Adjust muzzle position to accomodate for any SpriteEffects applied
         // to the player.
         if ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
+        {
             muzzle.X = WeaponFireAnimation.SourceRectangle.Width - _muzzlePosition.X - Player.CollisionBox.Width;
+        }
 
         if ((Player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
+        {
             muzzle.Y = WeaponFireAnimation.SourceRectangle.Height - _muzzlePosition.Y;
+        }
 
         // Adjust to world coordinates
         Vector2 playerTopLeft =
@@ -166,7 +176,9 @@ public class ProjectileWeapon : Weapon
         float angleSide = MathHelper.Pi * ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0 ? 1 : 0);
 
         if (_projectilesPerShot == 1)
+        {
             return angleSide;
+        }
         else
         {
             float angleStep = _spread / (_projectilesPerShot - 1);
@@ -229,7 +241,9 @@ public class ProjectileWeapon : Weapon
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "WeaponData")
+            {
                 return;
+            }
         }
     }
 }

@@ -126,10 +126,14 @@ public class ScreenButton
                 // Button pressed?
                 if (_inputHandler.CurrentMouseState.LeftButton == ButtonState.Pressed &&
                     _inputHandler.OldMouseState.LeftButton == ButtonState.Released)
+                {
                     _pressed = true;
+                }
             }
             else
+            {
                 _isSelected = false;
+            }
         }
     }
 
@@ -150,9 +154,13 @@ public class ScreenButton
         if (_texture != null)
         {
             if (_isSelected)
+            {
                 spriteBatch.Draw(_texture, _position, _sourceRectangle, _selectedColor);
+            }
             else
+            {
                 spriteBatch.Draw(_texture, _position, _sourceRectangle, Color.White);
+            }
         }
     }
 }

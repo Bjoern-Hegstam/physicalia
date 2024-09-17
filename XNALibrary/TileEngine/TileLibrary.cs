@@ -22,9 +22,8 @@ public class TileLibrary : ITileLibrary
     /// <returns>True if the Tile was succesfully added; false otherwise.</returns>
     public bool AddTile(int key, Tile tile)
     {
-        if (!_tileLibrary.ContainsKey(key))
+        if (_tileLibrary.TryAdd(key, tile))
         {
-            _tileLibrary.Add(key, tile);
             return true;
         }
 
@@ -41,32 +40,21 @@ public class TileLibrary : ITileLibrary
         return _tileLibrary.Remove(key);
     }
 
-    /// <summary>
-    /// Gets the Tile with the specified key.
-    /// </summary>
-    /// <param name="key">The key to the Tile to get.</param>
-    /// <returns>The wanted Tile or null if no matching Tile was found.</returns>
     public Tile GetTile(int key)
     {
-        if (_tileLibrary.ContainsKey(key))
-            return _tileLibrary[key];
+        if (_tileLibrary.TryGetValue(key, out var tile))
+        {
+            return tile;
+        }
 
-        return null;
+        throw new MissingTileException(); 
     }
 
-    /// <summary>
-    /// Checks whether the TileLibrary contains the specified key.
-    /// </summary>
-    /// <param name="key">The key to check.</param>
-    /// <returns>True if the TileLibrary contains the specified key; false otherwise.</returns>
     public bool ContainsKey(int key)
     {
         return _tileLibrary.ContainsKey(key);
     }
 
-    /// <summary>
-    /// Removes all keys and Tiles from the TileLibrary.
-    /// </summary>
     public void Clear()
     {
         _tileLibrary.Clear();
@@ -109,7 +97,7 @@ public class TileLibrary : ITileLibrary
                     tile = new SpriteTile(sprite);
                 }
 
-                // Get the Tile's collisionbox
+                // Get the Tile's collision box
                 reader.ReadToFollowing("CollisionBox");
 
                 int x = int.Parse(reader.GetAttribute("x"));
@@ -125,11 +113,13 @@ public class TileLibrary : ITileLibrary
                 String[] sides = reader.ReadElementContentAsString().Split(' ');
 
                 if (sides.Length > 0 && sides[0] != "")
+                {
                     for (int i = 0; i < sides.Length; i++)
                     {
                         BoxSide side = (BoxSide)Enum.Parse(typeof(BoxSide), sides[i]);
                         tile.CollisionSides |= side;
                     }
+                }
 
                 // Store the Tile
                 _tileLibrary.Add(id, tile);
@@ -137,7 +127,9 @@ public class TileLibrary : ITileLibrary
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "TileLibrary")
+            {
                 return;
+            }
         }
     }
 }

@@ -84,10 +84,12 @@ public abstract class ModifierPickup : Pickup
     public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
         if (!PickedUp)
+        {
             spriteBatch.Draw(Sprite.Texture,
                 positionOffset,
                 Sprite.SourceRectangle,
                 Color.White);
+        }
     }
 
     /// <summary>
@@ -109,14 +111,18 @@ public abstract class ModifierPickup : Pickup
         TimeSpan time = TimeSpan.FromSeconds(TimeRemaining);
 
         if (time.Minutes < 10)
+        {
             timeText += '0';
+        }
 
         timeText += time.Minutes.ToString();
 
         timeText += ':';
 
         if (time.Seconds < 10)
+        {
             timeText += '0';
+        }
 
         timeText += time.Seconds.ToString();
 

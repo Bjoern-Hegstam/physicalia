@@ -9,7 +9,7 @@ public interface ITextureLibrary
 
     bool AddTexture(int key, Texture2D texture);
     bool RemoveTexture(int key);
-    Texture2D GetTexture(int key);
+    Texture2D? GetTexture(int key);
 
     bool ContainsKey(int key);
     void Clear();

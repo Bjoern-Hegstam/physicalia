@@ -70,7 +70,9 @@ public class MovingObject : ActiveObject
     public override void Update(GameTime gametime)
     {
         if (!IsActive)
+        {
             return;
+        }
 
         // Update the curve position
         _curvePosition += Velocity * (float)gametime.ElapsedGameTime.TotalSeconds;

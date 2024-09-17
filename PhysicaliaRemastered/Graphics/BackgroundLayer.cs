@@ -60,11 +60,15 @@ public class BackgroundLayer
         // Don't draw anything if the background isn't visible
         if (!LoopX &&
             screenSampler.Position.X * Depth > _backgroundSprite.SourceRectangle.Width)
+        {
             return;
+        }
 
         if (!LoopY &&
             screenSampler.Position.Y * Depth > _backgroundSprite.SourceRectangle.Height)
+        {
             return;
+        }
 
         // Do a simple draw if no looping is used
         if (!LoopX && !LoopY)
@@ -95,20 +99,29 @@ public class BackgroundLayer
                     Color.White);
 
                 if (!LoopX)
+                {
                     break;
+                }
             }
 
             if (!LoopY)
+            {
                 break;
+            }
         }
     }
 
     public static int Compare(BackgroundLayer x, BackgroundLayer y)
     {
         if (x.Depth > y.Depth)
+        {
             return 1;
+        }
         else if (x.Depth < y.Depth)
+        {
             return -1;
+        }
+
         return 0;
     }
 }

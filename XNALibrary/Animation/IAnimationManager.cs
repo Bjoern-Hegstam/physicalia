@@ -11,7 +11,7 @@ public interface IAnimationManager
     Animation GetBankAnimation(int key);
 
     void ClearPlaybackAnimations();
-    bool AddPlaybackAnimation(Animation animation);
+    void AddPlaybackAnimation(Animation animation);
     Animation AddPlaybackAnimation(int bankKey);
 
     bool HasBankAnimation(int bankKey);

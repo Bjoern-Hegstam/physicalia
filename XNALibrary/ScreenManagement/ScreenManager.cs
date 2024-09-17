@@ -22,10 +22,14 @@ public class ScreenManager : DrawableGameComponent
         set
         {
             if (value == null)
+            {
                 throw new ArgumentNullException("value", "BaseScreen cannot be null!");
+            }
 
             if (_screenStack.Count > 0)
+            {
                 _screenStack.Clear();
+            }
 
             _screenStack.Push(value);
         }
@@ -62,9 +66,13 @@ public class ScreenManager : DrawableGameComponent
         set
         {
             if (value <= 0)
+            {
                 throw new ArgumentException("Transition speed must be greater than zero!");
+            }
             else
+            {
                 _transitionSpeed = value;
+            }
         }
     }
 
@@ -81,10 +89,6 @@ public class ScreenManager : DrawableGameComponent
     private RenderTarget2D _renderTarget;
 
 
-    /// <summary>
-    /// Creates a new ScreenManager.
-    /// </summary>
-    /// <param name="game">The game using the manager.</param>
     public ScreenManager(Game game)
         : base(game)
     {
@@ -111,10 +115,14 @@ public class ScreenManager : DrawableGameComponent
     public bool TransitionTo(Type screenType)
     {
         if (screenType == null)
+        {
             throw new ArgumentNullException("screenType cannot be null!");
+        }
 
         if (Transitioning)
+        {
             return false;
+        }
 
         // Go through every available screen
         foreach (Screen screen in _screens)
@@ -159,7 +167,9 @@ public class ScreenManager : DrawableGameComponent
         // Set needed variables to start the transítion
         _transitionAmount = 0F;
         if (_transitionSpeed < 0)
+        {
             _transitionSpeed = Math.Abs(_transitionSpeed);
+        }
 
         // Notify the current screen that it's Transitioning away
         // and the next screen that it's Transitioning in
@@ -194,7 +204,9 @@ public class ScreenManager : DrawableGameComponent
 
         // Push the new screen on the stack if we transitioned forward
         if (_transitionState == ScreenTransitionState.Forward)
+        {
             _screenStack.Push(_transitionScreen);
+        }
 
         // Do needed cleanup
         _transitionScreen = null;
@@ -239,7 +251,9 @@ public class ScreenManager : DrawableGameComponent
 
         // Don't update if no Screens are in the stack
         if (_screenStack.Count == 0)
+        {
             return;
+        }
 
         // Are we transitioning between screens
         if (Transitioning)
@@ -253,7 +267,9 @@ public class ScreenManager : DrawableGameComponent
 
             // Has the transition come to its end?
             if (_transitionAmount >= 1.0F)
+            {
                 EndTransition();
+            }
         }
         // if not just update the current Screen
         else
@@ -266,7 +282,9 @@ public class ScreenManager : DrawableGameComponent
     {
         // Don't draw if no Screens are on the stack
         if (_screenStack.Count == 0)
+        {
             return;
+        }
 
         // Are we transitioning between Screens?
         if (Transitioning && _transitionEffect != null)
@@ -279,18 +297,26 @@ public class ScreenManager : DrawableGameComponent
 
             // Draw the next screen to the render target
             if (_transitionState == ScreenTransitionState.Forward)
+            {
                 _transitionScreen.Draw(_spriteBatch);
+            }
             else
+            {
                 _screenStack.Peek().Draw(_spriteBatch);
+            }
 
             // Change the render target back
             GraphicsDevice.SetRenderTarget(null);
 
             // Draw current Screen
             if (_transitionState == ScreenTransitionState.Forward)
+            {
                 _screenStack.Peek().Draw(_spriteBatch);
+            }
             else
+            {
                 _transitionScreen.Draw(_spriteBatch);
+            }
 
             // Begin draw call
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
@@ -317,10 +343,14 @@ public class ScreenManager : DrawableGameComponent
 
             // Calculate an overlay color for the transition
             if (_transitionAmount < 0.5F)
+            {
                 overlay = Vector3.Lerp(Color.White.ToVector3(), Color.Black.ToVector3(), _transitionAmount * 2);
+            }
             else
+            {
                 overlay = Vector3.Lerp(Color.Black.ToVector3(), Color.White.ToVector3(),
                     (_transitionAmount - 0.5F) * 2);
+            }
 
             // Set rendertarget and clear device
             GraphicsDevice.SetRenderTarget(_renderTarget);
@@ -330,16 +360,24 @@ public class ScreenManager : DrawableGameComponent
             if (_transitionState == ScreenTransitionState.Forward)
             {
                 if (_transitionAmount < 0.5F)
+                {
                     _screenStack.Peek().Draw(_spriteBatch);
+                }
                 else
+                {
                     _transitionScreen.Draw(_spriteBatch);
+                }
             }
             else
             {
                 if (_transitionAmount < 0.5F)
+                {
                     _transitionScreen.Draw(_spriteBatch);
+                }
                 else
+                {
                     _screenStack.Peek().Draw(_spriteBatch);
+                }
             }
 
             // Reset the device
@@ -355,6 +393,8 @@ public class ScreenManager : DrawableGameComponent
         }
         else
             // Draw current Screen
+        {
             _screenStack.Peek().Draw(_spriteBatch);
+        }
     }
 }

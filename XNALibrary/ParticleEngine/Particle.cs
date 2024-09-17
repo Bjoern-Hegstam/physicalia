@@ -133,11 +133,15 @@ public abstract class Particle : ICollisionObject
 
         // Update life
         if (_lifeMode == ParticleLifeMode.Time)
+        {
             _life -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
 
         // Dead?
         if (_life <= 0)
+        {
             _active = false;
+        }
     }
 
     public virtual void Draw(SpriteBatch spriteBatch)
@@ -192,7 +196,9 @@ public abstract class Particle : ICollisionObject
         {
             _life -= damage;
             if (_life <= 0)
+            {
                 _active = false;
+            }
         }
     }
 }

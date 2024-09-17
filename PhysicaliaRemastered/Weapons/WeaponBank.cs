@@ -43,7 +43,9 @@ public class WeaponBank : IWeaponBank
     public void AddWeapon(Weapon weapon)
     {
         if (!_weaponBank.ContainsValue(weapon))
+        {
             _weaponBank.Add(weapon.WeaponId, weapon);
+        }
     }
 
     /// <summary>
@@ -53,7 +55,9 @@ public class WeaponBank : IWeaponBank
     public void RemoveWeapon(int weaponId)
     {
         if (_weaponBank.ContainsKey(weaponId))
+        {
             _weaponBank.Remove(weaponId);
+        }
     }
 
     /// <summary>
@@ -65,7 +69,9 @@ public class WeaponBank : IWeaponBank
     public Weapon GetWeapon(int weaponId)
     {
         if (_weaponBank.ContainsKey(weaponId))
+        {
             return _weaponBank[weaponId];
+        }
 
         return null;
     }
@@ -113,7 +119,9 @@ public class WeaponBank : IWeaponBank
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "WeaponBank")
+            {
                 return;
+            }
         }
     }
 
@@ -164,7 +172,9 @@ public class WeaponBank : IWeaponBank
 
                 // Don't read anymore collision data if the weapon can't collide
                 if (!weapon.CanCollide)
+                {
                     continue;
+                }
 
                 weapon.CollisionDamage = int.Parse(reader.GetAttribute("collisionDamage"));
 
@@ -182,12 +192,16 @@ public class WeaponBank : IWeaponBank
                 reader.LocalName == "WeaponData")
             {
                 if (!reader.IsEmptyElement)
+                {
                     weapon.LoadXml(reader);
+                }
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Weapon")
+            {
                 return;
+            }
         }
     }
 }

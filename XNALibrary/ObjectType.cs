@@ -1,5 +1,6 @@
 namespace XNALibrary;
 
+[Flags]
 public enum ObjectType
 {
     Particle,

@@ -59,7 +59,9 @@ public class Projectile : SpriteParticle
         if ((_damageObjects & collidedObject.Type) != 0)
         {
             if (collidedObject.CanTakeDamage)
+            {
                 collidedObject.TakeDamage(_damageAmount);
+            }
 
             // Go inactive if we collided with the object
             if (collidedObject.CanCollide)
@@ -68,7 +70,9 @@ public class Projectile : SpriteParticle
 
                 // See if a new particle should be fired on collision
                 if (_spawnOnImpact)
+                {
                     ParticleEngine.Add(_collisionProjectileId, 1, this.position);
+                }
             }
         }
     }

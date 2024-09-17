@@ -39,7 +39,9 @@ public class WeaponPickup : Pickup
     {
         // Remove the weapon from the player if we've been picked up
         if (PickedUp)
+        {
             Level.Player.RemoveWeapon(_weapon.WeaponId, _weapon.AmmoCount);
+        }
 
         base.Reset();
     }

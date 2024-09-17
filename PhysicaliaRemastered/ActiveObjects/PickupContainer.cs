@@ -37,15 +37,21 @@ public class PickupContainer : ActiveObject
     {
         // Only check for collision if we're still active
         if (!IsActive)
+        {
             return;
+        }
 
         // Can only be picked up by player
         if (collObject.Type != ObjectType.Player)
+        {
             return;
+        }
 
         // Check to see if the Container is colliding with the Player
         if (CollisionHelper.IsColliding(this, collObject))
+        {
             Pickup();
+        }
     }
 
     public override void Reset()
@@ -56,7 +62,9 @@ public class PickupContainer : ActiveObject
     public override void Update(GameTime gametime)
     {
         if (Enabled)
+        {
             PickupObject.Update(gametime);
+        }
     }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
@@ -64,6 +72,8 @@ public class PickupContainer : ActiveObject
         // Only draw if we're still active
         if (Visible)
             // The pickup is drawn at the upper-left corner of the container
+        {
             PickupObject.Draw(spriteBatch, Position - Origin - offsetPosition);
+        }
     }
 }

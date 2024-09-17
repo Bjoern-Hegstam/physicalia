@@ -94,7 +94,9 @@ public class EnemyManager
         // Update the activated Enemies that are still active
         foreach (Enemy enemy in _activatedEnemies)
             if (enemy.IsActive)
+            {
                 enemy.Update(gameTime, player);
+            }
     }
 
     /// <summary>
@@ -105,7 +107,9 @@ public class EnemyManager
     {
         // Only do checks if the player can collide and take damage
         if (!player.CanCollide || !player.CanTakeDamage)
+        {
             return;
+        }
 
         // Calculate the position of the collision box
         Rectangle playerBox = player.CollisionBox;
@@ -134,7 +138,9 @@ public class EnemyManager
 
             if ((player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
                 // TODO: Fix box position in Y
+            {
                 weaponBox.Y += (int)weapon.PlayerOffset.Y;
+            }
             else
             {
                 weaponBox.Y -= (int)weapon.PlayerOffset.Y;
@@ -145,7 +151,9 @@ public class EnemyManager
         foreach (Enemy enemy in _activatedEnemies)
         {
             if (!enemy.CanCollide)
+            {
                 continue;
+            }
 
             Rectangle enemyBox = enemy.CollisionBox;
             Vector2 enemyPos = enemy.Position - enemy.Origin;
@@ -153,13 +161,17 @@ public class EnemyManager
             enemyBox.Y += (int)enemyPos.Y;
 
             if (playerBox.Intersects(enemyBox))
+            {
                 enemy.OnCollision(player, BoxSide.Bottom | BoxSide.Left | BoxSide.Right | BoxSide.Top, Vector2.Zero,
                     Vector2.Zero);
+            }
 
             // Check to see whether the player's weapon is damaging the enemy
             if (weapon != null && weapon.WeaponFired &&
                 enemyBox.Intersects(weaponBox))
+            {
                 enemy.TakeDamage(weapon.CollisionDamage);
+            }
         }
     }
 
@@ -219,7 +231,9 @@ public class EnemyManager
     {
         foreach (Enemy enemy in _activatedEnemies)
             if (enemy.IsActive)
+            {
                 enemy.UpdateAnimation();
+            }
     }
 
     /// <summary>
@@ -268,7 +282,9 @@ public class EnemyManager
                     enemy.CanTakeDamage = false;
                 }
                 else
+                {
                     enemy.IsActive = save.IsActive;
+                }
             }
         }
     }

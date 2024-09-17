@@ -32,13 +32,17 @@ public class PickupLibrary : IPickupLibrary
     public void RemovePickup(int key)
     {
         if (_modifierLib.ContainsKey(key))
+        {
             _modifierLib.Remove(key);
+        }
     }
 
     public Pickup GetPickup(int key)
     {
         if (_modifierLib.ContainsKey(key))
+        {
             return _modifierLib[key].Copy();
+        }
 
         return null;
     }
@@ -84,7 +88,9 @@ public class PickupLibrary : IPickupLibrary
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "Pickups")
+            {
                 return;
+            }
         }
     }
 }

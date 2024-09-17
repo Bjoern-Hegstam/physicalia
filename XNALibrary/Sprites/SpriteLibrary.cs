@@ -50,7 +50,9 @@ public class SpriteLibrary : ISpriteLibrary
     public void RemoveSprite(int key)
     {
         if (_sprites.ContainsKey(key))
+        {
             _sprites.Remove(key);
+        }
     }
 
     /// <summary>
@@ -70,10 +72,14 @@ public class SpriteLibrary : ISpriteLibrary
     public void LoadXml(String path)
     {
         if (path == null)
+        {
             throw new ArgumentNullException("Path to Xml file cannot be null!");
+        }
 
         if (path.Length < 5 || path.Substring(path.Length - 3, 3).ToLower() != "xml")
+        {
             throw new ArgumentException("File is not of type '.xml'");
+        }
 
         XmlReaderSettings settings = new XmlReaderSettings();
         settings.IgnoreComments = true;

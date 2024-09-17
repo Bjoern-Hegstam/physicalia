@@ -15,16 +15,13 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
 
     public override Particle Create(float angle)
     {
-        Animation.Animation particleAnimation = null;
+        Animation.Animation? particleAnimation = null;
 
         // See if a reusable animations has already been created
-        for (int i = 0; i < _createdAnimations.Count; i++)
+        foreach (Animation.Animation anim in _createdAnimations.Where(anim => !anim.IsActive))
         {
-            if (_createdAnimations[i].IsActive == false)
-            {
-                _createdAnimations[i].FrameIndex = 0;
-                particleAnimation = _createdAnimations[i];
-            }
+            anim.FrameIndex = 0;
+            particleAnimation = anim;
         }
 
         // Create a new animation if none could be reused
@@ -58,20 +55,25 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
         if (reader.NodeType == XmlNodeType.Element &&
             reader.LocalName == "Damage")
         {
-            DamageAmount = int.Parse(reader.GetAttribute("amount"));
+            DamageAmount = int.Parse(reader.GetAttribute("amount") ?? throw new ResourceLoadException());
         }
 
-        if (reader.NodeType == XmlNodeType.Element &&
-            reader.LocalName == "DamageObjects")
+        if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "DamageObjects")
         {
-            String[] objects = reader.ReadElementContentAsString().Split(' ');
+            return;
+        }
 
-            if (objects.Length > 0 && objects[0] != "")
-                for (int i = 0; i < objects.Length; i++)
-                {
-                    ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
-                    DamageObjects |= objectType;
-                }
+        string[] objects = reader.ReadElementContentAsString().Split(' ');
+
+        if (objects.Length <= 0 || objects[0] == "")
+        {
+            return;
+        }
+
+        foreach (string obj in objects)
+        {
+            var objectType = (ObjectType)Enum.Parse(typeof(ObjectType), obj);
+            DamageObjects |= objectType;
         }
     }
 }

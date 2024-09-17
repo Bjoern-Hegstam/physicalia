@@ -65,7 +65,9 @@ public class MenuScreen : Screen
             _menuIndex++;
 
             if (_menuIndex >= _menuItems.Length)
+            {
                 _menuIndex = _menuItems.Length - 1;
+            }
         }
 
         if (_settings.InputMap.IsPressed(InputAction.MenuUp))
@@ -73,7 +75,9 @@ public class MenuScreen : Screen
             _menuIndex--;
 
             if (_menuIndex < 0)
+            {
                 _menuIndex = 0;
+            }
         }
 
         if (_settings.InputMap.IsPressed(InputAction.MenuStart))

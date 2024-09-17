@@ -176,7 +176,9 @@ public abstract class ParticleDefinition
 
             if (reader.NodeType == XmlNodeType.EndElement &&
                 reader.LocalName == "ParticleDefinition")
+            {
                 return;
+            }
         }
     }
 
