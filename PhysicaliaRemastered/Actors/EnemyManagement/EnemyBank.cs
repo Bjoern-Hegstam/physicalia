@@ -76,12 +76,8 @@ public class EnemyBank
     public Enemy CreateEnemy(int typeId, ActorStartValues startValues)
     {
         // Make sure the type has been defined
-        if (!_enemyBank.TryGetValue(typeId, out Enemy? value))
-        {
-            throw new InvalidGameStateException($"Unknown enemy type id {typeId}"); 
-        }
-
-        Enemy enemy = value.Copy(startValues);
+        _enemyBank.TryGetValue(typeId, out Enemy? value);
+        Enemy enemy = value?.Copy(startValues) ?? throw new InvalidGameStateException($"Unknown enemy type id {typeId}");
 
         SetPlaybackKeys(typeId, enemy);
 

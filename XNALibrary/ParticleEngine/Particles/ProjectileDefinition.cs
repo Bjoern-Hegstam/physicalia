@@ -3,16 +3,11 @@ using XNALibrary.Sprites;
 
 namespace XNALibrary.ParticleEngine.Particles;
 
-public class ProjectileDefinition : SpriteParticleDefinition
+public class ProjectileDefinition(int id, Sprite sprite) : SpriteParticleDefinition(id, sprite)
 {
     public ObjectType DamageObjects { get; set; }
 
     public float DamageAmount { get; set; }
-
-    public ProjectileDefinition(int id, Sprite sprite)
-        : base(id, sprite)
-    {
-    }
 
     public override Particle Create(float angle)
     {
@@ -36,20 +31,22 @@ public class ProjectileDefinition : SpriteParticleDefinition
     {
         if (reader is { NodeType: XmlNodeType.Element, LocalName: "Damage" })
         {
-            DamageAmount = int.Parse(reader.GetAttribute("amount"));
+            DamageAmount = int.Parse(reader.GetAttribute("amount") ?? throw new ResourceLoadException());
         }
 
         if (reader is { NodeType: XmlNodeType.Element, LocalName: "DamageObjects" })
         {
             string[] objects = reader.ReadElementContentAsString().Split(' ');
 
-            if (objects.Length > 0 && objects[0] != "")
+            if (objects.Length <= 0 || objects[0] == "")
             {
-                for (var i = 0; i < objects.Length; i++)
-                {
-                    var objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
-                    DamageObjects |= objectType;
-                }
+                return;
+            }
+
+            foreach (string objString in objects)
+            {
+                var objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objString);
+                DamageObjects |= objectType;
             }
         }
     }

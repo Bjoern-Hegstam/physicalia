@@ -65,7 +65,7 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
     /// Makes the ScreenManager start the transition to a new Screen.
     /// </summary>
     /// <param name="screenType">The type of Screen to transition to.</param>
-    /// <returns>True if the transition was succesfully initialized; false otherwise.</returns>
+    /// <returns>True if the transition was successfully initialized; false otherwise.</returns>
     public bool TransitionTo(Type screenType)
     {
         if (screenType == null)
@@ -99,7 +99,7 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
     /// <summary>
     /// Tells the ScreenManager to transition back to the previous screen.
     /// </summary>
-    /// <returns>True if the transition was succesfully initialized; false otherwise.</returns>
+    /// <returns>True if the transition was successfully initialized; false otherwise.</returns>
     public bool TransitionBack()
     {
         if (_screenStack.Count > 1 && !Transitioning)

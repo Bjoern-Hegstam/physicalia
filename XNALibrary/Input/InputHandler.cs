@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using XNALibrary.Interfaces;
 
 namespace XNALibrary.Input;
 
@@ -8,7 +7,7 @@ namespace XNALibrary.Input;
 /// The InputHandler updates all available input devices and provides
 /// properties and methods for checking the devices current state.
 /// </summary>
-public class InputHandler : GameComponent, IInputHandler
+public class InputHandler : GameComponent
 {
     private KeyboardState _oldKeyboardState;
     private KeyboardState _currentKeyboardState;
@@ -17,18 +16,7 @@ public class InputHandler : GameComponent, IInputHandler
     private MouseState _currentMouseState;
 
     private readonly GamePadState[] _currentGamePadState = new GamePadState[4];
-    
-    public KeyboardState OldKeyBoardState => _oldKeyboardState;
-
-    public KeyboardState CurrentKeyBoardState => _currentKeyboardState;
-
-    public MouseState OldMouseState => _oldMouseState;
-
-    public MouseState CurrentMouseState => _currentMouseState;
-
-    public GamePadState[] OldGamePadState { get; } = new GamePadState[4];
-
-    public GamePadState[] CurrentGamePadState => _currentGamePadState;
+    private readonly GamePadState[] _oldGamePadState = new GamePadState[4];
 
     /// <summary>
     /// Creates a new InputHandler. The instance is automatically added
@@ -39,7 +27,7 @@ public class InputHandler : GameComponent, IInputHandler
         : base(game)
     {
         // Add the InputHandler to the game's collection of Services
-        game.Services.AddService(typeof(IInputHandler), this);
+        game.Services.AddService(typeof(InputHandler), this);
     }
 
     /// <summary>
@@ -61,7 +49,7 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>True if the button has been pressed; false otherwise.</returns>
     public bool IsPressed(PlayerIndex playerIndex, Buttons button)
     {
-        return OldGamePadState[(int)playerIndex].IsButtonUp(button) &&
+        return _oldGamePadState[(int)playerIndex].IsButtonUp(button) &&
                _currentGamePadState[(int)playerIndex].IsButtonDown(button);
     }
 
@@ -84,7 +72,7 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>True if the button has been released; false otherwise.</returns>
     public bool IsReleased(PlayerIndex playerIndex, Buttons button)
     {
-        return OldGamePadState[(int)playerIndex].IsButtonDown(button) &&
+        return _oldGamePadState[(int)playerIndex].IsButtonDown(button) &&
                _currentGamePadState[(int)playerIndex].IsButtonUp(button);
     }
 
@@ -102,11 +90,10 @@ public class InputHandler : GameComponent, IInputHandler
     /// <summary>
     /// Checks if a button is being held down.
     /// </summary>
-    /// <param name="key">Button to evaluate.</param>
     /// <returns>True if the button is being held down; false otherwise.</returns>
     public bool IsHolding(PlayerIndex playerIndex, Buttons button)
     {
-        return OldGamePadState[(int)playerIndex].IsButtonDown(button) &&
+        return _oldGamePadState[(int)playerIndex].IsButtonDown(button) &&
                _currentGamePadState[(int)playerIndex].IsButtonDown(button);
     }
 
@@ -165,7 +152,7 @@ public class InputHandler : GameComponent, IInputHandler
         foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
         {
             var i = (int)index;
-            OldGamePadState[i] = _currentGamePadState[i] = GamePad.GetState(index);
+            _oldGamePadState[i] = _currentGamePadState[i] = GamePad.GetState(index);
         }
 
         base.Initialize();
@@ -187,7 +174,7 @@ public class InputHandler : GameComponent, IInputHandler
         foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
         {
             var i = (int)index;
-            OldGamePadState[i] = _currentGamePadState[i];
+            _oldGamePadState[i] = _currentGamePadState[i];
             _currentGamePadState[i] = GamePad.GetState(index);
         }
     }

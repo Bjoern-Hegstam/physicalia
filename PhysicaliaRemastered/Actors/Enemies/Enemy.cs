@@ -146,7 +146,7 @@ public class Enemy : Actor
         }
     }
 
-    public override void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         if (Visible)
         {

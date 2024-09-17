@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Input;
 using XNALibrary;
-using XNALibrary.Interfaces;
+using XNALibrary.Input;
 using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.GameManagement;
@@ -61,7 +61,7 @@ public class Settings
         Random = new Random();
     }
 
-    public Settings(IInputHandler inputHandler)
+    public Settings(InputHandler inputHandler)
     {
         _gamePadMap = new GamePadInputMap
         {

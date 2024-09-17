@@ -76,7 +76,7 @@ public class GameScreen : Screen
         GameManager.Update(gameTime);
     }
 
-    public override void Draw(SpriteBatch? spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Begin();
 

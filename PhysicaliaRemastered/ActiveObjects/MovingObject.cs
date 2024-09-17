@@ -82,7 +82,7 @@ public class MovingObject : ActiveObject
             _curveY.Evaluate(_curvePosition.Y) * _curveScale.Y);
     }
 
-    public override void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         base.Draw(spriteBatch, offsetPosition + _positionOffset);
     }

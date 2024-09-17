@@ -295,7 +295,7 @@ public abstract class Weapon
     /// <param name="positionOffset">The position of the screen.</param>
     /// <param name="spriteEffects">Effects to apply to the weapon in order
     /// for it to correspond with the player.</param>
-    public void Draw(SpriteBatch? spriteBatch, Vector2 positionOffset, SpriteEffects spriteEffects)
+    public void Draw(SpriteBatch spriteBatch, Vector2 positionOffset, SpriteEffects spriteEffects)
     {
         // TODO: Methods only works for animations with width 64px
 

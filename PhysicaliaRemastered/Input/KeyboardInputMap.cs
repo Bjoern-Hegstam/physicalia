@@ -33,12 +33,12 @@ internal class KeyboardInputMap : InputMap
         return InputHandler.IsReleased(_keys[action]);
     }
 
-    public override void SetButton(InputAction action, int button)
+    public virtual void SetButton(InputAction action, int button)
     {
         _keys[action] = (Keys)button;
     }
 
-    public override void LoadXml(string path)
+    public virtual void LoadXml(string path)
     {
         var readerSettings = new XmlReaderSettings
         {

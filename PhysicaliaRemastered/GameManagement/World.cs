@@ -71,7 +71,7 @@ public class World
         _worldQuoteColor = Color.White;
     }
 
-    public void LoadXml(string path, ITileLibrary tileLibrary, SpriteLibrary spriteLibrary)
+    public void LoadXml(string path, TileLibrary tileLibrary, SpriteLibrary spriteLibrary)
     {
         var readerSettings = new XmlReaderSettings
         {
@@ -84,7 +84,7 @@ public class World
         LoadXml(reader, tileLibrary, spriteLibrary);
     }
 
-    public void LoadXml(XmlReader reader, ITileLibrary tileLibrary, SpriteLibrary spriteLibrary)
+    public void LoadXml(XmlReader reader, TileLibrary tileLibrary, SpriteLibrary spriteLibrary)
     {
         while (reader.Read())
         {
@@ -244,7 +244,7 @@ public class World
             ChangeState();
     }
 
-    public void Draw(SpriteBatch? spriteBatch)
+    public void Draw(SpriteBatch spriteBatch)
     {
         switch (State)
         {

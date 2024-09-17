@@ -5,59 +5,18 @@ using XNALibrary.Sprites;
 
 namespace XNALibrary.TileEngine;
 
-public class TileLibrary : ITileLibrary
+public class TileLibrary
 {
-    private readonly Dictionary<int, Tile> _tileLibrary;
-
-    public TileLibrary()
-    {
-        _tileLibrary = new Dictionary<int, Tile>();
-    }
-
-    /// <summary>
-    /// Adds the specified key and Tile to the TileLibrary.
-    /// </summary>
-    /// <param name="key">The key to the Tile to add.</param>
-    /// <param name="tile">The Tile to add.</param>
-    /// <returns>True if the Tile was succesfully added; false otherwise.</returns>
-    public bool AddTile(int key, Tile tile)
-    {
-        if (_tileLibrary.TryAdd(key, tile))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Removes the Tile with the specified key.
-    /// </summary>
-    /// <param name="key">The key to the Tile to remove.</param>
-    /// <returns>True if the Tile was succesfully removed; false otherwise.</returns>
-    public bool RemoveTile(int key)
-    {
-        return _tileLibrary.Remove(key);
-    }
+    private readonly Dictionary<int, Tile> _tileLibrary = new();
 
     public Tile GetTile(int key)
     {
-        if (_tileLibrary.TryGetValue(key, out var tile))
-        {
-            return tile;
-        }
-
-        throw new MissingTileException(); 
+        return _tileLibrary[key];
     }
 
     public bool ContainsKey(int key)
     {
         return _tileLibrary.ContainsKey(key);
-    }
-
-    public void Clear()
-    {
-        _tileLibrary.Clear();
     }
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
@@ -115,9 +74,9 @@ public class TileLibrary : ITileLibrary
 
                 if (sides.Length > 0 && sides[0] != "")
                 {
-                    for (var i = 0; i < sides.Length; i++)
+                    foreach (string sideString in sides)
                     {
-                        var side = (BoxSide)Enum.Parse(typeof(BoxSide), sides[i]);
+                        var side = (BoxSide)Enum.Parse(typeof(BoxSide), sideString);
                         tile.CollisionSides |= side;
                     }
                 }

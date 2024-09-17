@@ -325,12 +325,12 @@ public abstract class Actor : ICollisionObject
         Position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
     }
 
-    public virtual void Draw(SpriteBatch? spriteBatch)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
         Draw(spriteBatch, Vector2.Zero);
     }
 
-    public virtual void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         // Only draw if a valid animation is set
         if (Animations.ContainsKey(_currentAnimType))

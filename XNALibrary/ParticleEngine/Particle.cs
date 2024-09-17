@@ -43,7 +43,7 @@ public abstract class Particle : ICollisionObject
 
     public ParticleDefinition? Definition { get; set; }
 
-    public IParticleEngine ParticleEngine { get; set; }
+    public IParticleEngine? ParticleEngine { get; set; }
 
     public Particle()
         : this(Vector2.Zero)
@@ -79,11 +79,7 @@ public abstract class Particle : ICollisionObject
         }
     }
 
-    public virtual void Draw(SpriteBatch? spriteBatch)
-    {
-    }
-
-    public virtual void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
     }
 

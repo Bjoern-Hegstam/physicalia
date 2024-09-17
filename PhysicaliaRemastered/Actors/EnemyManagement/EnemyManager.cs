@@ -241,7 +241,7 @@ public class EnemyManager
     /// </summary>
     /// <param name="spriteBatch">SpriteBatch to draw with.</param>
     /// <param name="offsetPosition">Position of the top-left corner of the screen.</param>
-    public void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
+    public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         foreach (Enemy enemy in _activatedEnemies)
         {

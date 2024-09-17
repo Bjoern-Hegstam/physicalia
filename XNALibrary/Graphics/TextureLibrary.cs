@@ -16,7 +16,7 @@ public class TextureLibrary
 
     public Texture2D GetTexture(int key)
     {
-        return _textureLibrary.TryGetValue(key, out var texture) ? texture : throw new MissingTextureException();
+        return _textureLibrary[key];
     }
 
     public void LoadXml(string path, GraphicsDevice graphics)

@@ -15,16 +15,11 @@ namespace PhysicaliaRemastered.Weapons;
 /// </summary>
 public class WeaponBank(IParticleEngine particleEngine, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
 {
-    private readonly Dictionary<int, Weapon?> _weaponBank = new();
+    private readonly Dictionary<int, Weapon> _weaponBank = new();
 
     public Weapon GetWeapon(int weaponId)
     {
-        if (_weaponBank.TryGetValue(weaponId, out Weapon? weapon))
-        {
-            return weapon;
-        }
-
-        throw new MissingWeaponException();
+        return _weaponBank[weaponId];
     }
 
     public void LoadXml(string path)
@@ -100,7 +95,8 @@ public class WeaponBank(IParticleEngine particleEngine, SpriteLibrary spriteLibr
             {
                 // Parse fire data
                 weapon.WeaponWarmUp = int.Parse(reader.GetAttribute("warmupTime") ?? throw new ResourceLoadException());
-                weapon.ShotsPerSecond = int.Parse(reader.GetAttribute("shotsPerSecond") ?? throw new ResourceLoadException());
+                weapon.ShotsPerSecond =
+                    int.Parse(reader.GetAttribute("shotsPerSecond") ?? throw new ResourceLoadException());
 
                 // Get particle id
                 reader.ReadToFollowing("Particle");
@@ -117,7 +113,8 @@ public class WeaponBank(IParticleEngine particleEngine, SpriteLibrary spriteLibr
                     continue;
                 }
 
-                weapon.CollisionDamage = int.Parse(reader.GetAttribute("collisionDamage") ?? throw new ResourceLoadException());
+                weapon.CollisionDamage =
+                    int.Parse(reader.GetAttribute("collisionDamage") ?? throw new ResourceLoadException());
 
                 // Parse collision box
                 reader.ReadToFollowing("CollisionBox");

@@ -291,12 +291,12 @@ public class ParticleEngine : IParticleEngine
         }
     }
 
-    public void Draw(SpriteBatch? spriteBatch)
+    public void Draw(SpriteBatch spriteBatch)
     {
         Draw(spriteBatch, Vector2.Zero);
     }
 
-    public void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
+    public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         for (var i = 0; i < _activeParticles.Count; i++)
         {

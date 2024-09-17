@@ -11,7 +11,7 @@ using PhysicaliaRemastered.Weapons;
 using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.Graphics;
-using XNALibrary.Interfaces;
+using XNALibrary.Input;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 using XNALibrary.TileEngine;
@@ -67,7 +67,7 @@ public class GameManager
         _game = game;
 
         // Create and add needed services
-        var input = (IInputHandler)_game.Services.GetService(typeof(IInputHandler));
+        var input = (InputHandler)_game.Services.GetService(typeof(InputHandler));
         Settings = new Settings(input);
         _game.Services.AddService(typeof(Settings), Settings);
 
@@ -82,7 +82,7 @@ public class GameManager
         _game.Components.Add(_animationManager);
 
         _tileLibrary = new TileLibrary();
-        _game.Services.AddService(typeof(ITileLibrary), _tileLibrary);
+        _game.Services.AddService(typeof(TileLibrary), _tileLibrary);
 
         _particleEngine = new ParticleEngine();
         _game.Services.AddService(typeof(IParticleEngine), _particleEngine);
@@ -434,7 +434,7 @@ public class GameManager
         }
     }
 
-    public void Draw(SpriteBatch? spriteBatch)
+    public void Draw(SpriteBatch spriteBatch)
     {
         switch (State)
         {

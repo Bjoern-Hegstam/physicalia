@@ -112,7 +112,7 @@ public class MenuScreen : Screen
         }
     }
 
-    protected override void OnDraw(SpriteBatch? spriteBatch)
+    protected override void OnDraw(SpriteBatch spriteBatch)
     {
         // Draw backgrounds
         spriteBatch.Draw(_backLevelTexture, Vector2.Zero, Color.White);

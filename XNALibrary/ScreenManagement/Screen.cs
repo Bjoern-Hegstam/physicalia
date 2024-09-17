@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Interfaces;
+using XNALibrary.Input;
 
 namespace XNALibrary.ScreenManagement;
 
@@ -11,7 +11,7 @@ public class Screen(Game game, ScreenManager manager)
 
     public Game Game => game;
 
-    public IInputHandler? InputHandler { get; private set; }
+    public InputHandler? InputHandler { get; private set; }
 
     public ScreenManager ScreenManager { get; } = manager;
 
@@ -21,7 +21,7 @@ public class Screen(Game game, ScreenManager manager)
     /// </summary>
     public virtual void Initialize()
     {
-        InputHandler = (IInputHandler)game.Services.GetService(typeof(IInputHandler));
+        InputHandler = game.Services.GetService(typeof(InputHandler)) as InputHandler ?? throw new ResourceLoadException();
     }
 
     public virtual void LoadContent(ContentManager contentManager)
@@ -45,7 +45,7 @@ public class Screen(Game game, ScreenManager manager)
     /// and SpriteBatch.End() must be made.
     /// </summary>
     /// <param name="spriteBatch">SpriteBatch used for drawing.</param>
-    public virtual void Draw(SpriteBatch? spriteBatch)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Begin();
 
@@ -72,7 +72,7 @@ public class Screen(Game game, ScreenManager manager)
     /// Override this method to draw any special content before the buttons are drawn.
     /// </summary>
     /// <param name="spriteBatch">Initialized SpriteBatch to use for drawing content.</param>
-    protected virtual void OnDraw(SpriteBatch? spriteBatch)
+    protected virtual void OnDraw(SpriteBatch spriteBatch)
     {
     }
 

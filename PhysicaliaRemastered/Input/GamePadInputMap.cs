@@ -31,12 +31,12 @@ internal class GamePadInputMap : InputMap
         return InputHandler.IsReleased(PlayerIndex.One, _buttons[action]);
     }
 
-    public override void SetButton(InputAction action, int button)
+    public virtual void SetButton(InputAction action, int button)
     {
         _buttons[action] = (Buttons)button;
     }
 
-    public override void LoadXml(string path)
+    public virtual void LoadXml(string path)
     {
         var readerSettings = new XmlReaderSettings
         {

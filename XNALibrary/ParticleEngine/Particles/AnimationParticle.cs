@@ -67,7 +67,7 @@ public class AnimationParticle(Animation.Animation animation) : Particle
         }
     }
 
-    public override void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         if (Animation.IsActive)
         {

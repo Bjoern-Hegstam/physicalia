@@ -14,7 +14,7 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
     /// </summary>
     /// <param name="key">Key to use for identifying the animation.</param>
     /// <param name="animation">Animation to add.</param>
-    /// <returns>True if the animation was succesfully added.</returns>
+    /// <returns>True if the animation was successfully added.</returns>
     public bool AddBankAnimation(int key, Animation animation)
     {
         return _animationBank.TryAdd(key, animation);
@@ -29,7 +29,7 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
     /// <param name="rows">The number of rows making up the animation.</param>
     /// <param name="framerate">Framerate of the animation, measured in frames per seconds.</param>
     /// <param name="textureKey">Key of the texture used by the animation.</param>
-    /// <returns>True if the animation was succesfully added; false otherwise</returns>
+    /// <returns>True if the animation was successfully added; false otherwise</returns>
     public bool AddBankAnimation(int key, Rectangle startFrame, int columns, int rows, float framerate, int textureKey)
     {
         if (_animationBank.ContainsKey(key))
@@ -50,17 +50,7 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
 
     public Animation GetBankAnimation(int key)
     {
-        if (_animationBank.TryGetValue(key, out var animation))
-        {
-            return animation;
-        }
-
-        throw new MissingAnimationException();
-    }
-
-    public void ClearAnimationBank()
-    {
-        _animationBank.Clear();
+        return _animationBank[key];
     }
 
     public void ClearPlaybackAnimations()
@@ -82,12 +72,7 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
     /// contain an animation with the specified key.</returns>
     public Animation AddPlaybackAnimation(int bankKey)
     {
-        if (!_animationBank.TryGetValue(bankKey, out var value))
-        {
-            throw new MissingAnimationException();
-        }
-
-        Animation animation = value.Copy();
+        Animation animation = _animationBank[bankKey].Copy();
         _playbackAnims.Add(animation);
         return animation;
 

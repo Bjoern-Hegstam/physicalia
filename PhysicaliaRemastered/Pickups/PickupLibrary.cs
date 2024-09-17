@@ -12,12 +12,7 @@ public class PickupLibrary
 
     public Pickup GetPickup(int key)
     {
-        if (_modifierLib.TryGetValue(key, out Pickup? value))
-        {
-            return value.Copy();
-        }
-
-        throw new MissingPickupException();
+        return _modifierLib[key];
     }
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary)

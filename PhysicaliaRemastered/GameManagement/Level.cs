@@ -204,13 +204,13 @@ public class Level
         }
     }
 
-    public void LoadXml(string path, ITileLibrary tileLibrary)
+    public void LoadXml(string path, TileLibrary tileLibrary)
     {
         using var reader = XmlReader.Create(path);
         LoadXml(reader, tileLibrary);
     }
 
-    public void LoadXml(XmlReader reader, ITileLibrary tileLibrary)
+    public void LoadXml(XmlReader reader, TileLibrary tileLibrary)
     {
         while (reader.Read())
         {
@@ -545,7 +545,7 @@ public class Level
     /// Draws the level.
     /// </summary>
     /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
-    public void Draw(SpriteBatch? spriteBatch)
+    public void Draw(SpriteBatch spriteBatch)
     {
         switch (State)
         {

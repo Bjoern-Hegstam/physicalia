@@ -123,12 +123,12 @@ public abstract class ActiveObject : ICollisionObject
 
     public abstract void Update(GameTime gametime);
 
-    public virtual void Draw(SpriteBatch? spriteBatch)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
         Draw(spriteBatch, Vector2.Zero);
     }
 
-    public virtual void Draw(SpriteBatch? spriteBatch, Vector2 offsetPosition)
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
         if (Visible && _spriteLibrary != null)
         {
