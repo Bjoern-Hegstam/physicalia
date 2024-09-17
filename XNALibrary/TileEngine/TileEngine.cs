@@ -113,50 +113,35 @@ public class TileEngine
     public void CheckCollision(ICollisionObject collObject)
     {
         // Get the positions of the Tiles to check
-        var xMin = (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X) / _tileWidthPx);
-        var xMax = (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X +
-                          collObject.CollisionBox.Width) / _tileWidthPx);
+        var xMin = Math.Max(
+            (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X) / _tileWidthPx),
+            0
+        );
+        var xMax = Math.Min(
+            (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X +
+                   collObject.CollisionBox.Width) / _tileWidthPx),
+            Width - 1);
 
-        var yMin = (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y) / _tileHeightPx);
-        var yMax = (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y +
-                          collObject.CollisionBox.Height) / _tileHeightPx);
-
-        // Loop through the Tiles
-        Tile tile;
-
-        // Make sure all numbers are within the bounds of the map
-        if (xMin < 0)
-        {
-            xMin = 0;
-        }
-
-        if (xMax >= _tileMap.GetLength(0))
-        {
-            xMax = _tileMap.GetLength(0) - 1;
-        }
-
-        if (yMin < 0)
-        {
-            yMin = 0;
-        }
-
-        if (yMax >= _tileMap.GetLength(1))
-        {
-            yMax = _tileMap.GetLength(1) - 1;
-        }
-
+        var yMin = Math.Max(
+            (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y) / _tileHeightPx),
+            0
+        );
+        var yMax = Math.Min(
+            (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y +
+                   collObject.CollisionBox.Height) / _tileHeightPx),
+            Height - 1
+        );
+        
         for (int x = xMin; x <= xMax; x++)
         {
             for (int y = yMin; y <= yMax; y++)
             {
-                // No Tile at position?
                 if (_tileMap[x, y] == EmptyTile)
                 {
                     continue;
                 }
 
-                tile = _tileLibrary.GetTile(_tileMap[x, y]);
-                //tile = this.tiles[this.tileMap[x, y]];
+                Tile tile = _tileLibrary.GetTile(_tileMap[x, y]);
 
                 // Don't check the tile if it can't give damage or
                 // be collided with
@@ -204,7 +189,6 @@ public class TileEngine
                 {
                     collisions |= BoxSide.Bottom;
                 }
-
 
                 // Check that the object is within the area where
                 // it can collide with the side
@@ -279,10 +263,8 @@ public class TileEngine
                     }
                 }
 
-                // Were there any collisions?
                 if (collisions != 0)
                 {
-                    // See which sides of the object that collided
                     BoxSide objectSides = 0;
                     if ((collisions & BoxSide.Left) != 0)
                     {
@@ -304,13 +286,11 @@ public class TileEngine
                         objectSides |= BoxSide.Top;
                     }
 
-                    // Allert object of the collision
                     if (collObject.CanCollide)
                     {
                         collObject.OnCollision(tile, objectSides, position + collObject.Origin, velocity);
                     }
 
-                    // Damage the object if it can take damage
                     if (collObject.CanTakeDamage && tile.GivesDamage)
                     {
                         collObject.TakeDamage(tile.DamageLevel);
