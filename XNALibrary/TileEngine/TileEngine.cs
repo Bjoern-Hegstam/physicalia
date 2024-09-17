@@ -9,51 +9,58 @@ public class TileEngine
 {
     private const int DefaultTileSidePx = 32;
     private const int EmptyTile = -1;
-    private const int CollisionThresholdPx = 10;
 
     private readonly TileLibrary _tileLibrary;
+
+    private int[,] _tileMap;
 
     private readonly int _tileWidthPx;
     private readonly int _tileHeightPx;
 
-    private int[,] _tileMap;
-    private int Width => _tileMap.GetLength(0);
-    private int Height => _tileMap.GetLength(1);
+    private const int CollisionThresholdPx = 10;
+
+    public int Width => _tileMap.GetLength(0);
+    public int Height => _tileMap.GetLength(1);
 
     public TileEngine(TileLibrary tileLibrary, int width, int height)
     {
         _tileLibrary = tileLibrary;
-        _tileMap = new int[width, height];
-
         _tileWidthPx = _tileHeightPx = DefaultTileSidePx;
 
-        ResetTileMap();
+        _tileMap = new int[width, height];
+        ClearTileMap();
     }
 
-    private void ResetTileMap()
+    private void ClearTileMap()
     {
-        for (var y = 0; y < Height; y++)
+        for (var x = 0; x < Width; x++)
         {
-            for (var x = 0; x < Width; x++)
+            for (var y = 0; y < Height; y++)
             {
                 _tileMap[x, y] = EmptyTile;
             }
         }
     }
 
+    /// <summary>
+    /// Loads the Tiles and the tile map to be used from an Xml file.
+    /// </summary>
+    /// <param name="reader">XmlReader connected to the file to read from.</param>
     public void LoadXml(XmlReader reader)
     {
         while (reader.Read())
         {
+            // TileMap node ?
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileMap" })
-            { 
-                int width = int.Parse(reader.GetAttribute(0));
-                int height = int.Parse(reader.GetAttribute(1));
+            {
+                var width = int.Parse(reader.GetAttribute(0));
+                var height = int.Parse(reader.GetAttribute(1));
 
                 _tileMap = new int[width, height];
-                ResetTileMap();
+                ClearTileMap();
             }
 
+            // (Map) Tile node ?
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
             {
                 int x = int.Parse(reader.GetAttribute(0));
@@ -63,6 +70,7 @@ public class TileEngine
                 _tileMap[x, y] = tileKey;
             }
 
+            // End node?
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TileEngine" })
             {
                 return;
@@ -70,14 +78,38 @@ public class TileEngine
         }
     }
 
+    /// <summary>
+    /// Checks whether a collision has occured between a ICollisionObject and
+    /// a Tile, and takes correct measurements if so has happened. For effiency
+    /// only the tiles overlapping with the object are examined.
+    /// </summary>
+    /// <param name="collisionObjects">The objects to check.</param>
     public void CheckCollisions(ICollisionObject[] collisionObjects)
     {
+        // See if the object can take damage
+        // Only examine tiles overlapping with the object
+        // Control whether a collision has occured based on the objects velocity
+        // and the collisionThreshold
+
+        // Call the object's OnCollision method
+        // Damage the object if the colliding tile says so
+        // Correct the position of the colliding object
+
+        // Set the object's velocity to zero on collision
+
+        // Loop through the passed in collision objects
         foreach (ICollisionObject collObj in collisionObjects)
         {
             CheckCollision(collObj);
         }
     }
 
+    /// <summary>
+    /// Checks whether a collision has occured between a ICollisionObject and
+    /// a Tile, and takes correct measurements if so has happened. For effiency
+    /// only the tiles overlapping with the object are examined.
+    /// </summary>
+    /// <param name="collObject">The object to check.</param>
     public void CheckCollision(ICollisionObject collObject)
     {
         // Get the positions of the Tiles to check
@@ -90,6 +122,7 @@ public class TileEngine
                           collObject.CollisionBox.Height) / _tileHeightPx);
 
         // Loop through the Tiles
+        Tile tile;
 
         // Make sure all numbers are within the bounds of the map
         if (xMin < 0)
@@ -122,11 +155,12 @@ public class TileEngine
                     continue;
                 }
 
-                Tile tile = _tileLibrary.GetTile(_tileMap[x, y]);
+                tile = _tileLibrary.GetTile(_tileMap[x, y]);
+                //tile = this.tiles[this.tileMap[x, y]];
 
                 // Don't check the tile if it can't give damage or
                 // be collided with
-                if (tile is { GivesDamage: false } or { CollisionSides: 0 })
+                if (tile is { CollisionSides: 0, GivesDamage: false })
                 {
                     continue;
                 }
@@ -286,12 +320,19 @@ public class TileEngine
         }
     }
 
+    /// <summary>
+    /// Draws the currently visible tiles on screen.
+    /// </summary>
+    /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
+    /// <param name="positionOffset">The positional offset to use for
+    /// drawing the correct tiles.</param>
     public void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
         // Calculate the unit position if the top left corner
         var xBase = (int)(positionOffset.X / _tileWidthPx);
         var yBase = (int)(positionOffset.Y / _tileHeightPx);
 
+        Tile tile;
         var position = new Vector2();
 
         for (int yi = yBase; yi < Height; yi++)
@@ -303,12 +344,14 @@ public class TileEngine
                     continue;
                 }
 
-                Tile tile = _tileLibrary.GetTile(_tileMap[xi, yi]);
-                
+                // Get tile and sprite
+                tile = _tileLibrary.GetTile(_tileMap[xi, yi]);
+                // Calculate position
                 position.X = xi * _tileWidthPx - positionOffset.X;
                 position.Y = yi * _tileHeightPx - positionOffset.Y;
 
                 // Draw the tile
+                //spriteBatch.Draw(this.spriteLibrary.Textures[sprite.TextureKey],
                 spriteBatch.Draw(tile.Texture,
                     position,
                     tile.SourceRectangle,
