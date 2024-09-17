@@ -94,7 +94,7 @@ public class GameManager
         _game.Services.AddService(typeof(WeaponBank), _weaponBank);
 
         _modifierLibrary = new PickupLibrary();
-        _game.Services.AddService(typeof(IPickupLibrary), _modifierLibrary);
+        _game.Services.AddService(typeof(PickupLibrary), _modifierLibrary);
 
         _worlds = [];
         _worldIndex = -1;

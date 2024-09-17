@@ -43,7 +43,7 @@ public abstract class ModifierPickup : Pickup
         _icon = icon;
     }
 
-    public sealed override void DoPickup()
+    public sealed override void OnPickedUp()
     {
         // Add self to Level's collection of Modifiers
         Level.AddModifier(this);

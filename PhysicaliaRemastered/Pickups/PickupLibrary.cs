@@ -6,46 +6,18 @@ using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Pickups;
 
-public interface IPickupLibrary
+public class PickupLibrary
 {
-    void AddPickup(int key, Pickup modifier);
-    void RemovePickup(int key);
-    Pickup GetPickup(int key);
-
-    void LoadXml(string path, SpriteLibrary spriteLibrary);
-    void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary);
-}
-
-public class PickupLibrary : IPickupLibrary
-{
-    private readonly Dictionary<int, Pickup> _modifierLib;
-
-    public PickupLibrary()
-    {
-        _modifierLib = new Dictionary<int, Pickup>();
-    }
-
-    public void AddPickup(int key, Pickup modifier)
-    {
-        _modifierLib[key] = modifier;
-    }
-
-    public void RemovePickup(int key)
-    {
-        if (_modifierLib.ContainsKey(key))
-        {
-            _modifierLib.Remove(key);
-        }
-    }
+    private readonly Dictionary<int, Pickup> _modifierLib = new();
 
     public Pickup GetPickup(int key)
     {
-        if (_modifierLib.ContainsKey(key))
+        if (_modifierLib.TryGetValue(key, out Pickup? value))
         {
-            return _modifierLib[key].Copy();
+            return value.Copy();
         }
 
-        return null;
+        throw new MissingPickupException();
     }
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary)
@@ -67,25 +39,18 @@ public class PickupLibrary : IPickupLibrary
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Pickup" })
             {
-                string type = reader.GetAttribute("type");
+                string type = reader.GetAttribute("type") ?? throw new ResourceLoadException();
                 int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
 
-                Pickup pickup = null;
-                switch (type)
+                Pickup pickup = type switch
                 {
-                    case "GravityReverser":
-                        pickup = GravityReverser.CreateFromXml(reader, spriteLibrary);
-                        break;
-                    case "HealthPickup":
-                        pickup = HealthPickup.CreateFromXml(reader, spriteLibrary);
-                        break;
-                }
+                    "GravityReverser" => GravityReverser.CreateFromXml(reader, spriteLibrary),
+                    "HealthPickup" => HealthPickup.CreateFromXml(reader, spriteLibrary),
+                    _ => throw new InvalidGameStateException($"Unknown pickup type {type}")
+                };
 
-                if (pickup != null)
-                {
-                    pickup.Id = key;
-                    _modifierLib.Add(key, pickup);
-                }
+                pickup.Id = key;
+                _modifierLib.Add(key, pickup);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Pickups" })

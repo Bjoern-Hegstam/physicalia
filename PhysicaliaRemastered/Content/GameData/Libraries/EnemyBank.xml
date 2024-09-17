@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <EnemyBank>
-    <Enemy type="Enemy" typeID="0">
+    <Enemy typeID="0">
         <Setup>
             <Intelligence>Savant</Intelligence>
             <Life>100</Life>

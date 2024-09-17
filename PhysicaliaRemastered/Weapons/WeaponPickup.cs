@@ -24,7 +24,7 @@ public class WeaponPickup : Pickup
         _weapon = weapon;
     }
 
-    public override void DoPickup()
+    public override void OnPickedUp()
     {
         if (!PickedUp)
         {
@@ -46,7 +46,7 @@ public class WeaponPickup : Pickup
         base.Reset();
     }
 
-    public override void Draw(SpriteBatch? spriteBatch, Vector2 positionOffset)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
         spriteBatch.Draw(_weapon.WeaponSprite.Texture,
             positionOffset,

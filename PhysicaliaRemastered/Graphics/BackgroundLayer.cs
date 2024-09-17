@@ -13,12 +13,6 @@ public class BackgroundLayer
 {
     private Sprite _backgroundSprite;
 
-    public Sprite Background
-    {
-        get => _backgroundSprite;
-        set => _backgroundSprite = value;
-    }
-
     /// <summary>
     /// Gets or sets the layer's depth value. A value of zero means that the
     /// layer will not move at all, while a value of one has the layer moving
@@ -47,7 +41,7 @@ public class BackgroundLayer
         Position += positionDelta * Depth;
     }
 
-    public void Draw(SpriteBatch? spriteBatch)
+    public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(_backgroundSprite.Texture,
             Position,
@@ -55,7 +49,7 @@ public class BackgroundLayer
             Color.White);
     }
 
-    public void Draw(SpriteBatch? spriteBatch, ScreenSampler screenSampler)
+    public void Draw(SpriteBatch spriteBatch, ScreenSampler screenSampler)
     {
         // Don't draw anything if the background isn't visible
         if (!LoopX &&

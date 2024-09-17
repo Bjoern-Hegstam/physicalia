@@ -5,27 +5,19 @@ using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Pickups;
 
-public abstract class Pickup
+public abstract class Pickup(Level level)
 {
     public bool PickedUp { get; set; }
 
-    public Level Level { get; set; }
+    public Level Level { get; set; } = level;
 
     public Sprite Sprite { get; set; }
 
     public int Id { get; set; }
 
-    public Pickup(Level level)
-    {
-        Level = level;
-        PickedUp = false;
-    }
-
     public Pickup Copy()
     {
-        var pickup = MemberwiseClone() as Pickup;
-
-        return pickup;
+        return MemberwiseClone() as Pickup;
     }
 
     public virtual void Update(GameTime gameTime)
@@ -36,7 +28,7 @@ public abstract class Pickup
     /// When overriden in a derived class, takes actions needed when being
     /// picked up.
     /// </summary>
-    public abstract void DoPickup();
+    public abstract void OnPickedUp();
 
     /// <summary>
     /// When overriden in a derived class, resets the state of the Pickup.
@@ -46,7 +38,7 @@ public abstract class Pickup
         PickedUp = false;
     }
 
-    public virtual void Draw(SpriteBatch? spriteBatch, Vector2 positionOffset)
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
         spriteBatch.Draw(Sprite.Texture, positionOffset, Sprite.SourceRectangle, Color.White);
     }

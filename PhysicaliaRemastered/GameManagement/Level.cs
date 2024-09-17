@@ -62,7 +62,7 @@ public class Level
     private readonly List<TileEngine> _tileEngines;
     private ActorStartValues _playerStartValues;
     private readonly WeaponBank _weaponBank;
-    private readonly IPickupLibrary _modifierLibrary;
+    private readonly PickupLibrary _modifierLibrary;
 
     // ActiveObjects
 
@@ -100,7 +100,7 @@ public class Level
         SpriteLibrary = (SpriteLibrary)game.Services.GetService(typeof(SpriteLibrary));
         EnemyManager = new EnemyManager((EnemyBank)_game.Services.GetService(typeof(EnemyBank)));
         _weaponBank = (WeaponBank)_game.Services.GetService(typeof(WeaponBank));
-        _modifierLibrary = (IPickupLibrary)_game.Services.GetService(typeof(IPickupLibrary));
+        _modifierLibrary = (PickupLibrary)_game.Services.GetService(typeof(PickupLibrary));
 
         Player = player;
         _playerStartValues = new ActorStartValues();
@@ -845,7 +845,7 @@ public class Level
         EnemyManager.UpdateAnimations();
     }
 
-    private void DrawLevel(SpriteBatch? spriteBatch)
+    private void DrawLevel(SpriteBatch spriteBatch)
     {
         // Background
         int backgroundIndex;
@@ -879,7 +879,7 @@ public class Level
         DrawUi(spriteBatch);
     }
 
-    private void DrawUi(SpriteBatch? spriteBatch)
+    private void DrawUi(SpriteBatch spriteBatch)
     {
         // HEALTH BAR
 
@@ -1018,7 +1018,7 @@ public class Level
 
         EnemyManager.LoadSession(session);
 
-        // Have the screensampler move to the players position
+        // Have the screen sampler move to the players position
         UpdateScreenSampler();
 
         // Update animations so that they reflect the state of the player and enemies

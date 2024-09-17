@@ -10,30 +10,22 @@ namespace PhysicaliaRemastered.ActiveObjects;
 /// When an EndLevelTrigger is touched by the player it sets the state of the
 /// associated Level to LevelState.Finished.
 /// </summary>
-public class EndLevelTrigger : Pickup
+public class EndLevelTrigger(Level level, Sprite sprite) : Pickup(level)
 {
-    private Sprite _sprite;
-
-    public EndLevelTrigger(Level level, Sprite sprite)
-        : base(level)
-    {
-        _sprite = sprite;
-    }
-
     public override void Update(GameTime gametime)
     {
     }
 
-    public override void DoPickup()
+    public override void OnPickedUp()
     {
         Level.NextState = LevelState.Finished;
     }
 
-    public override void Draw(SpriteBatch? spriteBatch, Vector2 positionOffset)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-        spriteBatch.Draw(_sprite.Texture,
+        spriteBatch.Draw(sprite.Texture,
             positionOffset,
-            _sprite.SourceRectangle,
+            sprite.SourceRectangle,
             Color.White);
     }
 }

@@ -53,10 +53,9 @@ public class EnemyBank
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Enemy" })
             {
-                string typeName = reader.GetAttribute("type");
                 int typeId = int.Parse(reader.GetAttribute("typeID") ?? throw new ResourceLoadException());
-
-                Enemy enemy = CreateBaseEnemy(typeName);
+                
+                Enemy enemy = new Enemy(new ActorStartValues());
 
                 SetupEnemy(reader, enemy);
                 LoadAnimations(reader, enemy);
@@ -77,19 +76,15 @@ public class EnemyBank
     public Enemy CreateEnemy(int typeId, ActorStartValues startValues)
     {
         // Make sure the type has been defined
-        if (!_enemyBank.ContainsKey(typeId))
+        if (!_enemyBank.TryGetValue(typeId, out Enemy? value))
         {
-            return null;
+            throw new InvalidGameStateException($"Unknown enemy type id {typeId}"); 
         }
 
-        // Get a copy of the type
-        Enemy enemy = _enemyBank[typeId].Copy(startValues);
+        Enemy enemy = value.Copy(startValues);
 
-        // Set the enemies animation keys
         SetPlaybackKeys(typeId, enemy);
 
-        // Return the result
-        // ^ That's a very excessive comment. <- (So is that...and this)
         return enemy;
     }
 
@@ -99,7 +94,7 @@ public class EnemyBank
     /// </summary>
     public void SetupEnemy(Enemy enemy)
     {
-        if (_enemyBank.TryGetValue(enemy.TypeId, out Enemy value))
+        if (_enemyBank.TryGetValue(enemy.TypeId, out Enemy? value))
         {
             value.Copy(enemy);
         }
@@ -182,23 +177,6 @@ public class EnemyBank
         int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
 
         return new Rectangle(x, y, width, height);
-    }
-
-    /// <summary>
-    /// Creates an Enemy which class name is that of the passed in string.
-    /// </summary>
-    /// <param name="typeName">Name of the enemy class.</param>
-    /// <returns>The created Enemy or null if no type mathes the string.</returns>
-    private static Enemy? CreateBaseEnemy(string typeName)
-    {
-        // Create the correct enemy based on the type name
-        switch (typeName)
-        {
-            case "Enemy":
-                return new Enemy(new ActorStartValues());
-        }
-
-        return null;
     }
 
     /// <summary>

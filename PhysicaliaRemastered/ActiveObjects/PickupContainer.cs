@@ -11,16 +11,11 @@ namespace PhysicaliaRemastered.ActiveObjects;
 /// responsible for checking if the contained object should be picked up, as well
 /// as drawing the sprite representation of the pickup.
 /// </summary>
-public class PickupContainer : ActiveObject
+public class PickupContainer(Pickup pickup) : ActiveObject
 {
     public override ObjectType Type => ObjectType.Pickup;
 
-    public PickupContainer(Pickup pickup)
-    {
-        PickupObject = pickup;
-    }
-
-    public Pickup PickupObject { get; set; }
+    public Pickup PickupObject { get; set; } = pickup;
 
     private void Pickup()
     {
@@ -30,7 +25,7 @@ public class PickupContainer : ActiveObject
         CanTakeDamage = false;
 
         // Call the pickup to tell it to do its thing
-        PickupObject.DoPickup();
+        PickupObject.OnPickedUp();
     }
 
     public override void CheckCollision(ICollisionObject collObject)

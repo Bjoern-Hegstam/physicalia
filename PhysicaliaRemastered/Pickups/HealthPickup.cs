@@ -16,7 +16,7 @@ public class HealthPickup : Pickup
         Sprite = sprite;
     }
 
-    public override void DoPickup()
+    public override void OnPickedUp()
     {
         Level.Player.Health += _health;
     }

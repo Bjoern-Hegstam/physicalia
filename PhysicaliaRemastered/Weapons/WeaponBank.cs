@@ -47,27 +47,18 @@ public class WeaponBank(IParticleEngine particleEngine, SpriteLibrary spriteLibr
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapon" })
             {
                 // Get the type of weapon to add
-                string weaponType = reader.GetAttribute("type");
+                string weaponType = reader.GetAttribute("type") ?? throw new ResourceLoadException();
                 int weaponId = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
-                Weapon? weapon = null;
-                
-                switch (weaponType)
+                Weapon weapon = weaponType switch
                 {
-                    case "Melee":
-                        weapon = new MeleeWeapon(weaponId, particleEngine);
-                        break;
-                    case "Projectile":
-                        weapon = new ProjectileWeapon(weaponId, particleEngine);
-                        break;
-                    default:
-                        throw new InvalidGameStateException($"Unknown weapon type {weaponType}");
-                }
+                    "Melee" => new MeleeWeapon(weaponId, particleEngine),
+                    "Projectile" => new ProjectileWeapon(weaponId, particleEngine),
+                    _ => throw new InvalidGameStateException($"Unknown weapon type {weaponType}")
+                };
 
-                // Parse the weapon data
                 ParseWeaponData(reader, weapon);
 
-                // Add the weapon to the bank
                 _weaponBank.Add(weapon.WeaponId, weapon);
             }
 
@@ -78,7 +69,7 @@ public class WeaponBank(IParticleEngine particleEngine, SpriteLibrary spriteLibr
         }
     }
 
-    private void ParseWeaponData(XmlReader reader, Weapon? weapon)
+    private void ParseWeaponData(XmlReader reader, Weapon weapon)
     {
         // Parse xml data
         while (reader.Read())
