@@ -4,16 +4,6 @@ using XNALibrary.Graphics.TileEngine;
 
 namespace XNALibrary.Interfaces;
 
-public enum ObjectType
-{
-    Particle,
-    Player,
-    Enemy,
-    Tile,
-    ActiveObject,
-    Pickup
-}
-
 public interface ICollisionObject
 {
     /// <summary>
