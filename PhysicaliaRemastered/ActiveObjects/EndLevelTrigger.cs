@@ -12,7 +12,7 @@ namespace PhysicaliaRemastered.ActiveObjects;
 /// </summary>
 public class EndLevelTrigger(Level level, Sprite sprite) : Pickup(level)
 {
-    public override void Update(GameTime gametime)
+    public override void Update(GameTime gameTime)
     {
     }
 

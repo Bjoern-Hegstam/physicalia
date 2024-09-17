@@ -60,18 +60,7 @@ public class Player : Actor
     private readonly Dictionary<int, Weapon> _weapons;
     private int _currentWeapon;
 
-    public Weapon CurrentWeapon
-    {
-        get
-        {
-            if (_weapons.ContainsKey(_currentWeapon))
-            {
-                return _weapons[_currentWeapon];
-            }
-
-            return null;
-        }
-    }
+    public Weapon? CurrentWeapon => _weapons.GetValueOrDefault(_currentWeapon);
 
     public Player(Settings settings)
     {

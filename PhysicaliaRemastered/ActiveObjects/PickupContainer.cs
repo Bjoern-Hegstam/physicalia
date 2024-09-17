@@ -54,20 +54,19 @@ public class PickupContainer(Pickup pickup) : ActiveObject
         PickupObject.Reset();
     }
 
-    public override void Update(GameTime gametime)
+    public override void Update(GameTime gameTime)
     {
         if (Enabled)
         {
-            PickupObject.Update(gametime);
+            PickupObject.Update(gameTime);
         }
     }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-        // Only draw if we're still active
         if (Visible)
-            // The pickup is drawn at the upper-left corner of the container
         {
+            // The pickup is drawn in the upper-left corner of the container
             PickupObject.Draw(spriteBatch, Position - Origin - offsetPosition);
         }
     }

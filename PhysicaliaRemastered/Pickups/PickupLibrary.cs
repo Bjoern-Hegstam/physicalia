@@ -12,7 +12,7 @@ public class PickupLibrary
 
     public Pickup GetPickup(int key)
     {
-        return _modifierLib[key];
+        return _modifierLib[key].Copy();
     }
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary)

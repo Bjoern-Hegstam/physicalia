@@ -121,7 +121,7 @@ public abstract class ActiveObject : ICollisionObject
     {
     }
 
-    public abstract void Update(GameTime gametime);
+    public abstract void Update(GameTime gameTime);
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {

@@ -319,7 +319,7 @@ public class Level
     }
 
     /// <summary>
-    /// Loads in ActiveObjects as specfied by the xml read by the XmlReader.
+    /// Loads in ActiveObjects as specified by the xml read by the XmlReader.
     /// </summary>
     /// <param name="reader"></param>
     private void LoadActiveObjects(XmlReader reader)
@@ -882,7 +882,6 @@ public class Level
     private void DrawUi(SpriteBatch spriteBatch)
     {
         // HEALTH BAR
-
         float playerHealthPercentage = Player.Health / Settings.PlayerStartHealth;
         Rectangle fullHealthSource = Settings.FullHealthUi.SourceRectangle;
         // 48 is the start of the health indicator in x
@@ -901,7 +900,6 @@ public class Level
             fullHealthSource,
             Color.White);
 
-
         // WORLD AND LEVEL NUMBERS
         string indexString = WorldIndex + " - " + LevelIndex;
         Vector2 indexSize = Settings.LevelIndexFont.MeasureString(indexString);
@@ -913,8 +911,8 @@ public class Level
 
         spriteBatch.DrawString(Settings.LevelIndexFont, indexString, indexPos, Color.White);
 
-        // CURRENT WEAPON AND AMMONUTION COUNT
-        Weapon playerWeapon = Player.CurrentWeapon;
+        // CURRENT WEAPON AND AMMUNITION COUNT
+        Weapon? playerWeapon = Player.CurrentWeapon;
 
         if (playerWeapon != null)
         {

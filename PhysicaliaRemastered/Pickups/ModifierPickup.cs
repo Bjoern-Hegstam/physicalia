@@ -58,7 +58,7 @@ public abstract class ModifierPickup : Pickup
     {
         if (IsActive)
         {
-            // Decrease the time remaning
+            // Decrease the time remaining
             TimeRemaining -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Should the modifier be deactivated
@@ -92,13 +92,7 @@ public abstract class ModifierPickup : Pickup
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
-    /// <param name="position">Position of the upper-left corner of the modifier.</param>
-    /// <param name="font">SpriteFont to use when drawing the time left</param>
-    public void DrawTimer(SpriteBatch? spriteBatch, Vector2 position, SpriteFont font)
+    public void DrawTimer(SpriteBatch spriteBatch, Vector2 position, SpriteFont font)
     {
         // Draw icon
         spriteBatch.Draw(_icon.Texture,
