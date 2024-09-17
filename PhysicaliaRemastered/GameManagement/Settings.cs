@@ -19,99 +19,73 @@ public enum InputType
 /// </summary>
 public class Settings : ISettings
 {
-    private InputType inputType;
-    private InputMap inputMap;
-    private KeyboardInputMap keyboardMap;
-    private GamePadInputMap gamePadMap;
+    private InputType _inputType;
+    private readonly KeyboardInputMap _keyboardMap;
+    private readonly GamePadInputMap _gamePadMap;
 
     public InputType InputType
     {
-        get { return inputType; }
+        get => _inputType;
         set
         {
-            inputType = value;
+            _inputType = value;
 
             // Change current input map if needed
-            if (inputMap == keyboardMap &&
-                inputType == InputType.Gamepad)
-                inputMap = gamePadMap;
+            if (InputMap == _keyboardMap &&
+                _inputType == InputType.Gamepad)
+                InputMap = _gamePadMap;
         }
     }
 
-    public InputMap InputMap
-    {
-        get { return inputMap; }
-    }
+    public InputMap InputMap { get; private set; }
 
-    private static Random random;
+    public static Random Random { get; }
 
-    public static Random Random
-    {
-        get { return random; }
-    }
+    public float PlayerStartHealth { get; set; }
 
-    private float playerStartHealth;
+    public SpriteFont WorldQuoteFont { get; private set; }
 
-    public float PlayerStartHealth
-    {
-        get { return playerStartHealth; }
-        set { playerStartHealth = value; }
-    }
+    public SpriteFont WorldIndexFont { get; private set; }
 
-    private SpriteFont worldQuoteFont;
-    private SpriteFont worldIndexFont;
-    private SpriteFont levelIndexFont;
-    private SpriteFont playerDeadFont;
-    private SpriteFont weaponAmmoFont;
-    private SpriteFont pauseMenuFont;
+    public SpriteFont LevelIndexFont { get; private set; }
 
-    public SpriteFont WorldQuoteFont { get { return worldQuoteFont; } }
-    public SpriteFont WorldIndexFont { get { return worldIndexFont; } }
-    public SpriteFont LevelIndexFont { get { return levelIndexFont; } }
-    public SpriteFont PlayerDeadFont { get { return playerDeadFont; } }
-    public SpriteFont WeaponAmmoFont { get { return weaponAmmoFont; } }
-    public SpriteFont PauseMenuFont { get { return pauseMenuFont; } }
+    public SpriteFont PlayerDeadFont { get; private set; }
 
-    private Sprite fullHealthUI;
-    private Sprite emptyHealthUI;
+    public SpriteFont WeaponAmmoFont { get; private set; }
 
-    public Sprite FullHealthUI
-    {
-        get { return fullHealthUI; }
-    }
+    public SpriteFont PauseMenuFont { get; private set; }
 
-    public Sprite EmptyHealthUI
-    {
-        get { return emptyHealthUI; }
-    }
+    public Sprite FullHealthUi { get; private set; }
+
+    public Sprite EmptyHealthUi { get; private set; }
 
     static Settings()
     {
-        random = new Random();
+        Random = new Random();
     }
 
     public Settings(IInputHandler inputHandler)
     {
         IInputHandler input = inputHandler;
-            
-        gamePadMap = new GamePadInputMap();
-        gamePadMap.InputHandler = input;
 
-        keyboardMap = new KeyboardInputMap();
-        keyboardMap.InputHandler = input;
+        _gamePadMap = new GamePadInputMap();
+        _gamePadMap.InputHandler = input;
 
-        inputMap = keyboardMap;
-        inputType = InputType.Keyboard;
+        _keyboardMap = new KeyboardInputMap();
+        _keyboardMap.InputHandler = input;
+
+        InputMap = _keyboardMap;
+        _inputType = InputType.Keyboard;
     }
 
     public void LoadContent(ContentManager contentManager)
     {
-        worldQuoteFont = contentManager.Load<SpriteFont>(@"Fonts\WorldQuoteFont");
-        worldIndexFont = contentManager.Load<SpriteFont>(@"Fonts\WorldIndexFont");
-        levelIndexFont = contentManager.Load<SpriteFont>(@"Fonts\LevelIndexFont");
-        playerDeadFont = contentManager.Load<SpriteFont>(@"Fonts\PlayerDeadFont");
-        weaponAmmoFont = contentManager.Load<SpriteFont>(@"Fonts\WeaponAmmoFont");
-        pauseMenuFont = contentManager.Load<SpriteFont>(@"Fonts\PauseMenuFont");
+        WorldQuoteFont = contentManager.Load<SpriteFont>(@"Fonts\WorldQuoteFont");
+        WorldIndexFont = contentManager.Load<SpriteFont>(@"Fonts\WorldIndexFont");
+        LevelIndexFont = contentManager.Load<SpriteFont>(@"Fonts\LevelIndexFont");
+        PlayerDeadFont = contentManager.Load<SpriteFont>(@"Fonts\PlayerDeadFont");
+        WeaponAmmoFont = contentManager.Load<SpriteFont>(@"Fonts\WeaponAmmoFont");
+        PauseMenuFont = contentManager.Load<SpriteFont>(@"Fonts\PauseMenuFont");
     }
 
     public void LoadXml(string path, ISpriteLibrary spriteLibrary)
@@ -121,52 +95,50 @@ public class Settings : ISettings
         readerSettings.IgnoreWhitespace = true;
         readerSettings.IgnoreProcessingInstructions = true;
 
-        using (XmlReader reader = XmlReader.Create(path, readerSettings))
+        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        while (reader.Read())
         {
-            while (reader.Read())
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "InputType")
             {
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "InputType")
-                {
-                    InputType input = (InputType)Enum.Parse(typeof(InputType), reader.ReadString());
-                    InputType = input;
-                }
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "PlayerHealth")
-                {
-                    int health = int.Parse(reader.ReadString());
-                    playerStartHealth = health;
-                }
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "KeyboardMap")
-                    keyboardMap.LoadXml(reader.ReadString());
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "GamepadMap")
-                    gamePadMap.LoadXml(reader.ReadString());
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "UI")
-                {
-                    reader.ReadToFollowing("FullHealthBar");
-                    int spriteKey = int.Parse(reader.GetAttribute("key"));
-                    fullHealthUI = spriteLibrary.GetSprite(spriteKey);
-
-                    reader.ReadToFollowing("EmptyHealthBar");
-                    spriteKey = int.Parse(reader.GetAttribute("key"));
-                    emptyHealthUI = spriteLibrary.GetSprite(spriteKey);
-                }
-
-                if (reader.NodeType == XmlNodeType.EndElement &&
-                    reader.LocalName == "Settings")
-                    break;
+                InputType input = (InputType)Enum.Parse(typeof(InputType), reader.ReadString());
+                InputType = input;
             }
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "PlayerHealth")
+            {
+                int health = int.Parse(reader.ReadString());
+                PlayerStartHealth = health;
+            }
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "KeyboardMap")
+                _keyboardMap.LoadXml(reader.ReadString());
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "GamepadMap")
+                _gamePadMap.LoadXml(reader.ReadString());
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "UI")
+            {
+                reader.ReadToFollowing("FullHealthBar");
+                int spriteKey = int.Parse(reader.GetAttribute("key"));
+                FullHealthUi = spriteLibrary.GetSprite(spriteKey);
+
+                reader.ReadToFollowing("EmptyHealthBar");
+                spriteKey = int.Parse(reader.GetAttribute("key"));
+                EmptyHealthUi = spriteLibrary.GetSprite(spriteKey);
+            }
+
+            if (reader.NodeType == XmlNodeType.EndElement &&
+                reader.LocalName == "Settings")
+                break;
         }
     }
 }
-    
+
 // Interface for providing the Settings as a service that can be accessed via the Game.
 public interface ISettings
 {
@@ -182,8 +154,8 @@ public interface ISettings
     SpriteFont WeaponAmmoFont { get; }
     SpriteFont PauseMenuFont { get; }
 
-    Sprite FullHealthUI { get; }
-    Sprite EmptyHealthUI { get; }
+    Sprite FullHealthUi { get; }
+    Sprite EmptyHealthUi { get; }
 
     void LoadContent(ContentManager contentManager);
     void LoadXml(string path, ISpriteLibrary spriteLibrary);

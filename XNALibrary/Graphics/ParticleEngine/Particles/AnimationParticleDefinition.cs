@@ -3,53 +3,26 @@ using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.ParticleEngine.Particles;
 
-public class AnimationParticleDefinition : ParticleDefinition
+public class AnimationParticleDefinition(int id, Animation.Animation animation, IAnimationManager animationManager)
+    : ParticleDefinition(id)
 {
-    private Animation.Animation animation;
-    private IAnimationManager animationManager;
-    private ObjectType damageObjects;
-    private float damageAmount;
+    private readonly List<Animation.Animation> _createdAnimations = new();
 
-    private List<Animation.Animation> createdAnimations;
+    public ObjectType DamageObjects { get; set; }
 
-    public Animation.Animation Animation
-    {
-        get { return animation; }
-        set { animation = value; }
-    }
-
-    public ObjectType DamageObjects
-    {
-        get { return damageObjects; }
-        set { damageObjects = value; }
-    }
-
-    public float DamageAmount
-    {
-        get { return damageAmount; }
-        set { damageAmount = value; }
-    }
-
-    public AnimationParticleDefinition(int id, Animation.Animation animation, IAnimationManager animationManager)
-        : base(id)
-    {
-        this.animation = animation;
-        this.animationManager = animationManager;
-
-        createdAnimations = new List<Animation.Animation>();
-    }
+    public float DamageAmount { get; set; }
 
     public override Particle Create(float angle)
     {
         Animation.Animation particleAnimation = null;
 
         // See if a reusable animations has already been created
-        for (int i = 0; i < createdAnimations.Count; i++)
+        for (int i = 0; i < _createdAnimations.Count; i++)
         {
-            if (createdAnimations[i].IsActive == false)
+            if (_createdAnimations[i].IsActive == false)
             {
-                createdAnimations[i].FrameIndex = 0;
-                particleAnimation = createdAnimations[i];
+                _createdAnimations[i].FrameIndex = 0;
+                particleAnimation = _createdAnimations[i];
             }
         }
 
@@ -58,11 +31,11 @@ public class AnimationParticleDefinition : ParticleDefinition
         {
             particleAnimation = animation.Copy();
             animationManager.AddPlaybackAnimation(particleAnimation);
-            createdAnimations.Add(particleAnimation);
+            _createdAnimations.Add(particleAnimation);
         }
 
         AnimationParticle particle = new AnimationParticle(particleAnimation);
-        this.SetupParticle(particle, angle);
+        SetupParticle(particle, angle);
 
         return particle;
     }
@@ -72,8 +45,8 @@ public class AnimationParticleDefinition : ParticleDefinition
         base.SetupParticle(particle, angle);
 
         AnimationParticle animParticle = (AnimationParticle)particle;
-        animParticle.DamageAmount = damageAmount;
-        animParticle.DamageObjects = damageObjects;
+        animParticle.DamageAmount = DamageAmount;
+        animParticle.DamageObjects = DamageObjects;
         animParticle.CanCollide = true;
         animParticle.IsActive = true;
         animParticle.Animation.Play();
@@ -84,7 +57,7 @@ public class AnimationParticleDefinition : ParticleDefinition
         if (reader.NodeType == XmlNodeType.Element &&
             reader.LocalName == "Damage")
         {
-            damageAmount = int.Parse(reader.GetAttribute("amount"));
+            DamageAmount = int.Parse(reader.GetAttribute("amount"));
         }
 
         if (reader.NodeType == XmlNodeType.Element &&
@@ -96,7 +69,7 @@ public class AnimationParticleDefinition : ParticleDefinition
                 for (int i = 0; i < objects.Length; i++)
                 {
                     ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
-                    damageObjects |= objectType;
+                    DamageObjects |= objectType;
                 }
         }
     }

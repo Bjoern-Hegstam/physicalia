@@ -11,51 +11,51 @@ public enum CollisionMode
 
 public abstract class ParticleDefinition
 {
-    private const float DEFAULT_LIFE_TIME = 5F;
-    private const float DEFAULT_VELOCITY_SCALE = 1F;
-    private const float DEFAULT_RADIUS = 10F;
+    private const float DefaultLifeTime = 5F;
+    private const float DefaultVelocityScale = 1F;
+    private const float DefaultRadius = 10F;
 
     // Movement
-    private float velocityScale;
-    private Vector2 acceleration;
-    private float startAngle;
+    private float _velocityScale;
+    private Vector2 _acceleration;
+    private float _startAngle;
 
     // Collision
-    private CollisionMode collisionMode;
-    private float radius;
+    private CollisionMode _collisionMode;
+    private float _radius;
 
     // Life
-    private float lifeTime;
-    private ParticleLifeMode lifeMode;
+    private float _lifeTime;
+    private ParticleLifeMode _lifeMode;
 
     // Id
-    private int id;
+    private readonly int _id;
 
     /// <summary>
     /// Scale of the Particle's initial velocity.
     /// </summary>
     public float VelocityScale
     {
-        get { return velocityScale; }
-        set { velocityScale = value; }
+        get => _velocityScale;
+        set => _velocityScale = value;
     }
 
     public Vector2 Acceleration
     {
-        get { return acceleration; }
-        set { acceleration = value; }
+        get => _acceleration;
+        set => _acceleration = value;
     }
 
     public CollisionMode CollisionMode
     {
-        get { return collisionMode; }
-        set { collisionMode = value; }
+        get => _collisionMode;
+        set => _collisionMode = value;
     }
 
     public float Radius
     {
-        get { return radius; }
-        set { radius = value; }
+        get => _radius;
+        set => _radius = value;
     }
 
     /// <summary>
@@ -63,8 +63,8 @@ public abstract class ParticleDefinition
     /// </summary>
     public float StartAngle
     {
-        get { return startAngle; }
-        set { startAngle = value; }
+        get => _startAngle;
+        set => _startAngle = value;
     }
 
     /// <summary>
@@ -72,33 +72,30 @@ public abstract class ParticleDefinition
     /// </summary>
     public float LifeTime
     {
-        get { return lifeTime; }
-        set { lifeTime = value; }
+        get => _lifeTime;
+        set => _lifeTime = value;
     }
 
     public ParticleLifeMode LifeMode
     {
-        get { return lifeMode; }
-        set { lifeMode = value; }
+        get => _lifeMode;
+        set => _lifeMode = value;
     }
 
-    public int Id
-    {
-        get { return id; }
-    }
+    public int Id => _id;
 
     public ParticleDefinition(int id)
     {
-            this.id = id;
-            velocityScale = DEFAULT_VELOCITY_SCALE;
-            acceleration = Vector2.Zero;
-            lifeTime = DEFAULT_LIFE_TIME;
-            lifeMode = ParticleLifeMode.Time;
+        _id = id;
+        _velocityScale = DefaultVelocityScale;
+        _acceleration = Vector2.Zero;
+        _lifeTime = DefaultLifeTime;
+        _lifeMode = ParticleLifeMode.Time;
 
-            // By default a particle acts as a circle
-            collisionMode = CollisionMode.Circle;
-            radius = DEFAULT_RADIUS;
-        }
+        // By default a particle acts as a circle
+        _collisionMode = CollisionMode.Circle;
+        _radius = DefaultRadius;
+    }
 
     /// <summary>
     /// Creates a new Particle according to the definition.
@@ -107,8 +104,8 @@ public abstract class ParticleDefinition
     /// the definition.</returns>
     public Particle Create()
     {
-            return Create(startAngle);
-        }
+        return Create(_startAngle);
+    }
 
     /// <summary>
     /// Creates a new Particle according to the definition.
@@ -120,66 +117,68 @@ public abstract class ParticleDefinition
 
     public virtual void SetupParticle(Particle particle, float angle)
     {
-            // Id of definition
-            particle.Definition = this;
+        // Id of definition
+        particle.Definition = this;
 
-            // Movement
-            particle.Acceleration = acceleration;
+        // Movement
+        particle.Acceleration = _acceleration;
 
-            float velocityX = angle != 0 ? (float)Math.Cos(angle) : 1F;
-            float velocityY = angle != 0 ? -(float)Math.Sin(angle) : 0F;
+        float velocityX = angle != 0 ? (float)Math.Cos(angle) : 1F;
+        float velocityY = angle != 0 ? -(float)Math.Sin(angle) : 0F;
 
-            particle.Velocity = new Vector2(velocityX, velocityY) * velocityScale;
+        particle.Velocity = new Vector2(velocityX, velocityY) * _velocityScale;
 
-            // Life
-            particle.Life = lifeTime;
-            particle.LifeMode = lifeMode;
+        // Life
+        particle.Life = _lifeTime;
+        particle.LifeMode = _lifeMode;
 
-            // Collision settings
-            particle.CollisionMode = collisionMode;
-            particle.Radius = radius;
-        }
+        // Collision settings
+        particle.CollisionMode = _collisionMode;
+        particle.Radius = _radius;
+    }
 
     public void LoadXml(XmlReader reader)
     {
-            while (reader.Read())
+        while (reader.Read())
+        {
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Life")
             {
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Life")
-                {
-                    ParticleLifeMode mode = (ParticleLifeMode)Enum.Parse(typeof(ParticleLifeMode), reader.GetAttribute("mode"));
-                    float value = float.Parse(reader.GetAttribute("value"));
+                ParticleLifeMode mode =
+                    (ParticleLifeMode)Enum.Parse(typeof(ParticleLifeMode), reader.GetAttribute("mode"));
+                float value = float.Parse(reader.GetAttribute("value"));
 
-                    lifeMode = mode;
-                    lifeTime = value;
-                }
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Movement")
-                {
-                    reader.ReadToFollowing("VelocityScale");
-                    velocityScale = int.Parse(reader.ReadElementContentAsString());
-
-                    int x = int.Parse(reader.GetAttribute("x")); int y = int.Parse(reader.GetAttribute("y"));
-                    acceleration = new Vector2(x, y);
-                }
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Collision")
-                {
-                    CollisionMode mode = (CollisionMode)Enum.Parse(typeof(CollisionMode), reader.GetAttribute("mode"));
-
-                    collisionMode = mode;
-                }
-
-                // Let derived classes process the input as well
-                OnLoadXml(reader);
-
-                if (reader.NodeType == XmlNodeType.EndElement &&
-                    reader.LocalName == "ParticleDefinition")
-                    return;
+                _lifeMode = mode;
+                _lifeTime = value;
             }
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Movement")
+            {
+                reader.ReadToFollowing("VelocityScale");
+                _velocityScale = int.Parse(reader.ReadElementContentAsString());
+
+                int x = int.Parse(reader.GetAttribute("x"));
+                int y = int.Parse(reader.GetAttribute("y"));
+                _acceleration = new Vector2(x, y);
+            }
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Collision")
+            {
+                CollisionMode mode = (CollisionMode)Enum.Parse(typeof(CollisionMode), reader.GetAttribute("mode"));
+
+                _collisionMode = mode;
+            }
+
+            // Let derived classes process the input as well
+            OnLoadXml(reader);
+
+            if (reader.NodeType == XmlNodeType.EndElement &&
+                reader.LocalName == "ParticleDefinition")
+                return;
         }
+    }
 
     protected abstract void OnLoadXml(XmlReader reader);
 }

@@ -9,35 +9,35 @@ public abstract class Tile : ICollisionObject
     /// <summary>
     /// The collision of the Tile.
     /// </summary>
-    private BoxSide collisionSides;
+    private BoxSide _collisionSides;
 
     /// <summary>
     /// Collision box of the Tile.
     /// </summary>
-    private Rectangle collisionBox;
+    private Rectangle _collisionBox;
 
     /// <summary>
     /// Indicates whether the Tile can give damage.
     /// </summary>
-    private bool givesDamage;
-        
+    private bool _givesDamage;
+
     /// <summary>
     /// The damage level of the Tile in procetual damage in decimal form.
     /// </summary>
-    private float damageLevel;
+    private float _damageLevel;
 
     /// <summary>
     /// The sides of the Tile that can give damage.
     /// </summary>
-    private BoxSide damageSides;
+    private BoxSide _damageSides;
 
     /// <summary>
     /// Gets and Sets the collision box of the Tile.
     /// </summary>
     public Rectangle CollisionBox
     {
-        get { return collisionBox; }
-        set { collisionBox = value; }
+        get => _collisionBox;
+        set => _collisionBox = value;
     }
 
     /// <summary>
@@ -45,8 +45,8 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public BoxSide CollisionSides
     {
-        get { return collisionSides; }
-        set { collisionSides = value; }
+        get => _collisionSides;
+        set => _collisionSides = value;
     }
 
     /// <summary>
@@ -54,8 +54,8 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public bool GivesDamage
     {
-        get { return givesDamage; }
-        set { givesDamage = value; }
+        get => _givesDamage;
+        set => _givesDamage = value;
     }
 
     /// <summary>
@@ -64,8 +64,8 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public float DamageLevel
     {
-        get { return damageLevel; }
-        set { damageLevel = (float)MathHelper.Clamp(value, 0, 1); }
+        get => _damageLevel;
+        set => _damageLevel = (float)MathHelper.Clamp(value, 0, 1);
     }
 
     /// <summary>
@@ -73,14 +73,16 @@ public abstract class Tile : ICollisionObject
     /// </summary>
     public BoxSide DamageSides
     {
-        get { return damageSides; }
-        set { damageSides = value; }
+        get => _damageSides;
+        set => _damageSides = value;
     }
 
     /// <summary>
     /// Creates a new Tile.
     /// </summary>
-    public Tile() : this(Rectangle.Empty, 0) { }
+    public Tile() : this(Rectangle.Empty, 0)
+    {
+    }
 
     /// <summary>
     /// Creates a new tile.
@@ -88,89 +90,56 @@ public abstract class Tile : ICollisionObject
     /// <param name="collisionSides">Collision sides of the tile.</param>
     public Tile(Rectangle collisionBox, BoxSide collisionSides)
     {
-        this.collisionBox = collisionBox;
-        this.collisionSides = collisionSides;
-        givesDamage = false;
-        damageLevel = 0;
-        damageSides = 0;
+        _collisionBox = collisionBox;
+        _collisionSides = collisionSides;
+        _givesDamage = false;
+        _damageLevel = 0;
+        _damageSides = 0;
     }
 
     // ICollisionObject is only implemented for consistency and only provides
     // support for the Type propery. In the future other parts may be
     // implemented.
 
-    public ObjectType Type
-    {
-        get { return ObjectType.Tile; }
-    }
+    public ObjectType Type => ObjectType.Tile;
 
     public Vector2 Position
     {
-        get
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-        set
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
+        get => throw new Exception("The method or operation is not implemented.");
+        set => throw new Exception("The method or operation is not implemented.");
     }
 
-    public Vector2 Origin
-    {
-        get { throw new Exception("The method or operation is not implemented."); }
-    }
+    public Vector2 Origin => throw new Exception("The method or operation is not implemented.");
 
     public Vector2 Velocity
     {
-        get
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-        set
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
+        get => throw new Exception("The method or operation is not implemented.");
+        set => throw new Exception("The method or operation is not implemented.");
     }
 
     public int Width
     {
-        get
-        {
-            return collisionBox.Width;
-        }
-        set
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
+        get => _collisionBox.Width;
+        set => throw new Exception("The method or operation is not implemented.");
     }
 
     public int Height
     {
-        get
-        {
-            return collisionBox.Height;
-        }
-        set
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
+        get => _collisionBox.Height;
+        set => throw new Exception("The method or operation is not implemented.");
     }
 
     public abstract Rectangle SourceRectangle { get; }
     public abstract Texture2D Texture { get; }
 
-    public bool CanCollide
-    {
-        get { return collisionSides != 0; }
-    }
+    public bool CanCollide => _collisionSides != 0;
 
-    public bool CanTakeDamage
-    {
-        get { return false; }
-    }
+    public bool CanTakeDamage => false;
 
-    public virtual void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity) { }
+    public virtual void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
+        Vector2 velocity)
+    {
+    }
 
     public virtual void TakeDamage(float damageLevel)
     {

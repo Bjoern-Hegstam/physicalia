@@ -1,118 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:include schemaLocation="schema_dataTypes.xsd" />
-  <xs:element name="Level">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="PlayerStart" type="ActorStartValues" />
-        <xs:element minOccurs="0" name="Enemies">
-          <xs:complexType>
+    <xs:include schemaLocation="schema_dataTypes.xsd" />
+    <xs:element name="Level">
+        <xs:complexType>
             <xs:sequence>
-              <xs:element minOccurs="0" maxOccurs="unbounded" name="Enemy">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="StartValues" type="ActorStartValues" />
-                    <xs:element name="PatrolArea" type="Rectangle" />
-                  </xs:sequence>
-                  <xs:attribute name="type" type="xs:int" />
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element minOccurs="0" name="ActiveObjects">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element minOccurs="0" name="Weapons">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element minOccurs="0" maxOccurs="unbounded" name="Weapon">
-                      <xs:complexType>
+                <xs:element name="PlayerStart" type="ActorStartValues" />
+                <xs:element minOccurs="0" name="Enemies">
+                    <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="Position" type="PointF" />
-                          <xs:element name="CollisionBox" type="Rectangle" />
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="Enemy">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="StartValues" type="ActorStartValues" />
+                                        <xs:element name="PatrolArea" type="Rectangle" />
+                                    </xs:sequence>
+                                    <xs:attribute name="type" type="xs:int" />
+                                </xs:complexType>
+                            </xs:element>
                         </xs:sequence>
-                        <xs:attribute name="key" type="xs:int" />
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element minOccurs="0" name="Modifiers">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element minOccurs="0" maxOccurs="unbounded" name="Modifier">
-                      <xs:complexType>
-                        <xs:attribute name="key" type="xs:int" />
-                        <xs:attribute name="x" type="xs:int" />
-                        <xs:attribute name="y" type="xs:int" />
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element minOccurs="0" maxOccurs="unbounded" name="LevelFinishTrigger" type="Rectangle" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element minOccurs="0" name="Backgrounds">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element minOccurs="0" maxOccurs="unbounded" name="Background">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element minOccurs="0" name="Position" type="PointF" />
-                  </xs:sequence>
-                  <xs:attribute name="spriteKey" type="xs:int" />
-                  <xs:attribute name="depth" type="xs:string" />
-                  <xs:attribute name="loop" type="BackgroundLoop" />
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="TileEngines">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element minOccurs="1" maxOccurs="unbounded" name="TileEngine">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element minOccurs="1" maxOccurs="1" name="TileMap">
-                      <xs:complexType>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="ActiveObjects">
+                    <xs:complexType>
                         <xs:sequence>
-                          <xs:element minOccurs="0" maxOccurs="unbounded" name="Tile">
-                            <xs:complexType>
-                              <xs:attribute name="x" type="xs:int" />
-                              <xs:attribute name="y" type="xs:int" />
-                              <xs:attribute name="tileKey" type="xs:int" />
-                            </xs:complexType>
-                          </xs:element>
+                            <xs:element minOccurs="0" name="Weapons">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Weapon">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="Position" type="PointF" />
+                                                    <xs:element name="CollisionBox" type="Rectangle" />
+                                                </xs:sequence>
+                                                <xs:attribute name="key" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="Modifiers">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Modifier">
+                                            <xs:complexType>
+                                                <xs:attribute name="key" type="xs:int" />
+                                                <xs:attribute name="x" type="xs:int" />
+                                                <xs:attribute name="y" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="LevelFinishTrigger" type="Rectangle" />
                         </xs:sequence>
-                        <xs:attribute name="width" type="xs:int" />
-                        <xs:attribute name="height" type="xs:int" />
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="Backgrounds">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="Background">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element minOccurs="0" name="Position" type="PointF" />
+                                    </xs:sequence>
+                                    <xs:attribute name="spriteKey" type="xs:int" />
+                                    <xs:attribute name="depth" type="xs:string" />
+                                    <xs:attribute name="loop" type="BackgroundLoop" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="TileEngines">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="1" maxOccurs="unbounded" name="TileEngine">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element minOccurs="1" maxOccurs="1" name="TileMap">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element minOccurs="0" maxOccurs="unbounded" name="Tile">
+                                                        <xs:complexType>
+                                                            <xs:attribute name="x" type="xs:int" />
+                                                            <xs:attribute name="y" type="xs:int" />
+                                                            <xs:attribute name="tileKey" type="xs:int" />
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                                <xs:attribute name="width" type="xs:int" />
+                                                <xs:attribute name="height" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="count" type="xs:int" />
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
-            <xs:attribute name="count" type="xs:int" />
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-      <xs:attribute name="width" type="xs:int" />
-      <xs:attribute name="height" type="xs:int" />
-    </xs:complexType>
-  </xs:element>
-  <xs:simpleType name="BackgroundLoop">
-    <xs:list>
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="x" />
-          <xs:enumeration value="y" />
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:list>
-  </xs:simpleType>
+            <xs:attribute name="width" type="xs:int" />
+            <xs:attribute name="height" type="xs:int" />
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="BackgroundLoop">
+        <xs:list>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="x" />
+                    <xs:enumeration value="y" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:list>
+    </xs:simpleType>
 </xs:schema>

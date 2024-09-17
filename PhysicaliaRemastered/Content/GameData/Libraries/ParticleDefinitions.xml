@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ParticleDefinitions>
-	<ParticleDefinition type="SpriteParticle" id="0">
-		<Sprite key="0" />
-		<Life mode="Time" value="1" />
-		<Movement>
-			<VelocityScale>40</VelocityScale>
-			<Acceleration x="0" y="10" />
-		</Movement>
-		<Collision mode="Rectangle" />
-		<!-- <Collision mode="Circle">5</Collision> //Radius as content-->
-	</ParticleDefinition>
-	
-	<!-- Projectile -->
-	<ParticleDefinition type="Projectile" id="1">
-		<Sprite key="200" />
-		<Life mode="Time" value="1" />
-		<Movement>
-			<VelocityScale>800</VelocityScale>
-			<Acceleration x="0" y="10" />
-		</Movement>
-		<Collision mode="Rectangle" />
-		<Damage amount="10" />
-		<DamageObjects>Enemy</DamageObjects>
-	</ParticleDefinition>
-	
-	<!-- Explosion -->
-	<ParticleDefinition type="AnimationParticle" id="2">
-		<Animation key="42" />
-		<Life mode="Time" value="20" />
-		<Movement>
-			<VelocityScale>0</VelocityScale>
-			<Acceleration x="0" y="0" />
-		</Movement>
-		<Collision mode="Rectangle" />
-		<Damage amount="10" />
-		<DamageObjects>Enemy</DamageObjects>
-	</ParticleDefinition>
+    <ParticleDefinition type="SpriteParticle" id="0">
+        <Sprite key="0" />
+        <Life mode="Time" value="1" />
+        <Movement>
+            <VelocityScale>40</VelocityScale>
+            <Acceleration x="0" y="10" />
+        </Movement>
+        <Collision mode="Rectangle" />
+        <!-- <Collision mode="Circle">5</Collision> //Radius as content-->
+    </ParticleDefinition>
+
+    <!-- Projectile -->
+    <ParticleDefinition type="Projectile" id="1">
+        <Sprite key="200" />
+        <Life mode="Time" value="1" />
+        <Movement>
+            <VelocityScale>800</VelocityScale>
+            <Acceleration x="0" y="10" />
+        </Movement>
+        <Collision mode="Rectangle" />
+        <Damage amount="10" />
+        <DamageObjects>Enemy</DamageObjects>
+    </ParticleDefinition>
+
+    <!-- Explosion -->
+    <ParticleDefinition type="AnimationParticle" id="2">
+        <Animation key="42" />
+        <Life mode="Time" value="20" />
+        <Movement>
+            <VelocityScale>0</VelocityScale>
+            <Acceleration x="0" y="0" />
+        </Movement>
+        <Collision mode="Rectangle" />
+        <Damage amount="10" />
+        <DamageObjects>Enemy</DamageObjects>
+    </ParticleDefinition>
 </ParticleDefinitions>

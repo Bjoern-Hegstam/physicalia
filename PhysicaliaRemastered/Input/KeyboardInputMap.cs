@@ -10,53 +10,51 @@ namespace PhysicaliaRemastered.Input;
 /// </summary>
 internal class KeyboardInputMap : InputMap
 {
-    private Dictionary<InputAction, Keys> keys;
+    private readonly Dictionary<InputAction, Keys> _keys;
 
     public KeyboardInputMap()
     {
-            keys = new Dictionary<InputAction, Keys>();
-        }
+        _keys = new Dictionary<InputAction, Keys>();
+    }
 
     public override bool IsPressed(InputAction action)
     {
-            return InputHandler.IsPressed(keys[action]);
-        }
+        return InputHandler.IsPressed(_keys[action]);
+    }
 
     public override bool IsHolding(InputAction action)
     {
-            return InputHandler.IsHolding(keys[action]);
-        }
+        return InputHandler.IsHolding(_keys[action]);
+    }
 
     public override bool IsReleased(InputAction action)
     {
-            return InputHandler.IsReleased(keys[action]);
-        }
+        return InputHandler.IsReleased(_keys[action]);
+    }
 
     public override void SetButton(InputAction action, int button)
     {
-            keys[action] = (Keys)button;
-        }
+        _keys[action] = (Keys)button;
+    }
 
     public override void LoadXml(string path)
     {
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-            readerSettings.IgnoreWhitespace = true;
-            readerSettings.IgnoreProcessingInstructions = true;
-            
-            using (XmlReader reader = XmlReader.Create(path, readerSettings))
-            {
-                while (reader.Read())
-                {
-                    if (reader.NodeType == XmlNodeType.Element &&
-                        reader.LocalName == "Key")
-                    {
-                        InputAction action = (InputAction)Enum.Parse(typeof(InputAction), reader.GetAttribute("action"));
-                        Keys key = (Keys)Enum.Parse(typeof(Keys), reader.GetAttribute("value"));
+        XmlReaderSettings readerSettings = new XmlReaderSettings();
+        readerSettings.IgnoreComments = true;
+        readerSettings.IgnoreWhitespace = true;
+        readerSettings.IgnoreProcessingInstructions = true;
 
-                        keys[action] = key;
-                    }
-                }
+        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        while (reader.Read())
+        {
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Key")
+            {
+                InputAction action = (InputAction)Enum.Parse(typeof(InputAction), reader.GetAttribute("action"));
+                Keys key = (Keys)Enum.Parse(typeof(Keys), reader.GetAttribute("value"));
+
+                _keys[action] = key;
             }
         }
+    }
 }

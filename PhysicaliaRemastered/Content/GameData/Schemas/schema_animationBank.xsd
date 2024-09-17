@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:include schemaLocation="schema_dataTypes.xsd" />
-  <xs:element name="AnimationBank">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="1" maxOccurs="1" name="Animations">
-          <xs:complexType>
+    <xs:include schemaLocation="schema_dataTypes.xsd" />
+    <xs:element name="AnimationBank">
+        <xs:complexType>
             <xs:sequence>
-              <xs:element minOccurs="1" maxOccurs="unbounded" name="Animation">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="TextureKey" type="xs:int" />
-                    <xs:element name="StartFrame" type="Rectangle" />
-                    <xs:element name="Dimensions">
-                      <xs:complexType>
-                        <xs:attribute name="columns" type="xs:int" />
-                        <xs:attribute name="rows" type="xs:int" />
-                      </xs:complexType>
-                    </xs:element>
-                    <xs:element name="FrameRate" type="xs:int" />
-                    <xs:element name="Loop" type="xs:boolean" />
-                  </xs:sequence>
-                  <xs:attribute name="id" type="xs:int" />
-                </xs:complexType>
-              </xs:element>
+                <xs:element minOccurs="1" maxOccurs="1" name="Animations">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="1" maxOccurs="unbounded" name="Animation">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="TextureKey" type="xs:int" />
+                                        <xs:element name="StartFrame" type="Rectangle" />
+                                        <xs:element name="Dimensions">
+                                            <xs:complexType>
+                                                <xs:attribute name="columns" type="xs:int" />
+                                                <xs:attribute name="rows" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="FrameRate" type="xs:int" />
+                                        <xs:element name="Loop" type="xs:boolean" />
+                                    </xs:sequence>
+                                    <xs:attribute name="id" type="xs:int" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

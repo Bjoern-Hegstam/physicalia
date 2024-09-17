@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="SpriteLibrary">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="1" maxOccurs="1" name="Sprites">
-          <xs:complexType>
+    <xs:element name="SpriteLibrary">
+        <xs:complexType>
             <xs:sequence>
-              <xs:element minOccurs="0" maxOccurs="unbounded" name="Sprite">
-                <xs:complexType>
-                  <xs:attribute name="id" type="xs:int" />
-                  <xs:attribute name="textureKey" type="xs:int" />
-                  <xs:attribute name="x" type="xs:int" />
-                  <xs:attribute name="y" type="xs:int" />
-                  <xs:attribute name="width" type="xs:int" />
-                  <xs:attribute name="height" type="xs:int" />
-                </xs:complexType>
-              </xs:element>
+                <xs:element minOccurs="1" maxOccurs="1" name="Sprites">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="Sprite">
+                                <xs:complexType>
+                                    <xs:attribute name="id" type="xs:int" />
+                                    <xs:attribute name="textureKey" type="xs:int" />
+                                    <xs:attribute name="x" type="xs:int" />
+                                    <xs:attribute name="y" type="xs:int" />
+                                    <xs:attribute name="width" type="xs:int" />
+                                    <xs:attribute name="height" type="xs:int" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

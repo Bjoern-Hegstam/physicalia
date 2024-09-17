@@ -1,188 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
 <World>
-	<Level>
-		<TileEngines count="1">
-			<TileEngine>
-				<Tiles>
-					<!-- Standard Tiles -->
-					<Tile id="0" spriteKey="0">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Left Top</CollisionSides>
-					</Tile>
-					<Tile id="1" spriteKey="1">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Top</CollisionSides>
-					</Tile>
-					<Tile id="2" spriteKey="2">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Top Right</CollisionSides>
-					</Tile>
-					<Tile id="3" spriteKey="3">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Left</CollisionSides>
-					</Tile>
-					<Tile id="4" spriteKey="4">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides />
-					</Tile>
-					<Tile id="5" spriteKey="5">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Right</CollisionSides>
-					</Tile>
-					<Tile id="6" spriteKey="6">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides />
-					</Tile>
-					<Tile id="7" spriteKey="7">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides />
-					</Tile>
-					<Tile id="8" spriteKey="8">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides />
-					</Tile>
-					<Tile id="9" spriteKey="1">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Bottom</CollisionSides>
-					</Tile>
-					<!-- Special Tiles -->
-					<Tile id="10" spriteKey="0">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Top</CollisionSides>
-					</Tile>
-					<Tile id="11" spriteKey="1">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Top</CollisionSides>
-					</Tile>
-					<Tile id="12" spriteKey="2">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Top</CollisionSides>
-					</Tile>
-					<Tile id="13" spriteKey="3">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>
-						</CollisionSides>
-					</Tile>
-					<Tile id="14" spriteKey="4">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>
-						</CollisionSides>
-					</Tile>
-					<Tile id="15" spriteKey="5">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>
-						</CollisionSides>
-					</Tile>
-					<Tile id="16" spriteKey="6">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>
-						</CollisionSides>
-					</Tile>
-					<Tile id="17" spriteKey="7">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>
-						</CollisionSides>
-					</Tile>
-					<Tile id="18" spriteKey="8">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>
-						</CollisionSides>
-					</Tile>
-					<Tile id="19" spriteKey="1">
-						<CollisionBox x="0" y="0" width="32" height="32" />
-						<CollisionSides>Bottom</CollisionSides>
-					</Tile>
-				</Tiles>
-				<TileMap width="27" height="18">
-					<!-- Top -->
-					<Tile x="0" y="0" tileKey="9" />
-					<Tile x="1" y="0" tileKey="9" />
-					<Tile x="2" y="0" tileKey="9" />
-					<Tile x="3" y="0" tileKey="9" />
-					<Tile x="4" y="0" tileKey="9" />
-					<Tile x="5" y="0" tileKey="9" />
-					<Tile x="6" y="0" tileKey="9" />
-					<Tile x="7" y="0" tileKey="9" />
-					<Tile x="8" y="0" tileKey="9" />
-					<Tile x="9" y="0" tileKey="9" />
-					<Tile x="10" y="0" tileKey="9" />
-					<Tile x="11" y="0" tileKey="9" />
-					<Tile x="12" y="0" tileKey="9" />
-					<Tile x="13" y="0" tileKey="9" />
-					<Tile x="14" y="0" tileKey="9" />
-					<!-- Bottom Height 1-->
-					<Tile x="0" y="15" tileKey="1" />
-					<Tile x="1" y="15" tileKey="1" />
-					<Tile x="2" y="15" tileKey="1" />
-					<Tile x="3" y="15" tileKey="1" />
-					<Tile x="4" y="15" tileKey="1" />
-					<Tile x="5" y="15" tileKey="1" />
-					<Tile x="6" y="15" tileKey="1" />
-					<!-- Start Plateau -->
-					<Tile x="2" y="14" tileKey="13" />
-					<Tile x="2" y="13" tileKey="10" />
-					<Tile x="3" y="13" tileKey="11" />
-					<Tile x="4" y="13" tileKey="11" />
-					<Tile x="5" y="13" tileKey="12" />
-					<Tile x="5" y="14" tileKey="15" />
-					<!-- Plateau filler-->
-					<Tile x="3" y="14" tileKey="14" />
-					<Tile x="4" y="14" tileKey="14" />
-					<!-- Step Up -->
-					<Tile x="7" y="15" tileKey="6" />
-					<Tile x="7" y="14" tileKey="0" />
-					<!-- Bottom Height 2-->
-					<Tile x="8" y="14" tileKey="1" />
-					<!-- Platforms -->
-					<Tile x="5" y="11" tileKey="1" />
-					<Tile x="6" y="11" tileKey="1" />
-					<Tile x="5" y="9" tileKey="1" />
-					<Tile x="6" y="9" tileKey="1" />
-					<!-- Pillar -->
-					<Tile x="9" y="14" tileKey="2" />
-					<Tile x="9" y="13" tileKey="3" />
-					<Tile x="9" y="12" tileKey="3" />
-					<Tile x="9" y="11" tileKey="3" />
-					<Tile x="9" y="10" tileKey="3" />
-					<Tile x="9" y="9" tileKey="3" />
-					<Tile x="9" y="8" tileKey="0" />
-					<Tile x="10" y="8" tileKey="2" />
-					<Tile x="10" y="9" tileKey="5" />
-					<Tile x="10" y="10" tileKey="5" />
-					<Tile x="10" y="11" tileKey="5" />
-					<Tile x="10" y="12" tileKey="5" />
-					<Tile x="10" y="13" tileKey="8" />
-					<!-- End Area (Not Really)-->
-					<Tile x="11" y="13" tileKey="1" />
-					<Tile x="12" y="13" tileKey="1" />
-					<Tile x="13" y="13" tileKey="1" />
-					<Tile x="14" y="13" tileKey="1" />
-					<Tile x="15" y="13" tileKey="1" />
-					<!-- Start Front Walk -->
-					<Tile x="9" y="15" tileKey="8" />
-					<Tile x="10" y="15" tileKey="1" />
-					<Tile x="11" y="15" tileKey="1" />
-					<Tile x="12" y="15" tileKey="1" />
-					<Tile x="13" y="15" tileKey="1" />
-					<Tile x="14" y="15" tileKey="1" />
-					<Tile x="15" y="15" tileKey="1" />
-					<Tile x="16" y="15" tileKey="1" />
-					<!-- Second Area -->
-					<Tile x="16" y="14" tileKey="1" />
-					<Tile x="17" y="14" tileKey="12" />
-					<Tile x="17" y="15" tileKey="1" />
-					<Tile x="18" y="15" tileKey="1" />
-					<Tile x="19" y="15" tileKey="1" />
-					<Tile x="20" y="15" tileKey="1" />
-					<!-- Pit -->
-					<Tile x="21" y="15" tileKey="2" />
-					<Tile x="21" y="16" tileKey="5" />
-					<Tile x="21" y="17" tileKey="18" />
-					<Tile x="22" y="17" tileKey="1" />
-					<Tile x="22" y="17" tileKey="1" />
-				</TileMap>
-			</TileEngine>
-		</TileEngines>
-	</Level>
+    <Level>
+        <TileEngines count="1">
+            <TileEngine>
+                <Tiles>
+                    <!-- Standard Tiles -->
+                    <Tile id="0" spriteKey="0">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Left Top</CollisionSides>
+                    </Tile>
+                    <Tile id="1" spriteKey="1">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Top</CollisionSides>
+                    </Tile>
+                    <Tile id="2" spriteKey="2">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Top Right</CollisionSides>
+                    </Tile>
+                    <Tile id="3" spriteKey="3">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Left</CollisionSides>
+                    </Tile>
+                    <Tile id="4" spriteKey="4">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides />
+                    </Tile>
+                    <Tile id="5" spriteKey="5">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Right</CollisionSides>
+                    </Tile>
+                    <Tile id="6" spriteKey="6">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides />
+                    </Tile>
+                    <Tile id="7" spriteKey="7">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides />
+                    </Tile>
+                    <Tile id="8" spriteKey="8">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides />
+                    </Tile>
+                    <Tile id="9" spriteKey="1">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Bottom</CollisionSides>
+                    </Tile>
+                    <!-- Special Tiles -->
+                    <Tile id="10" spriteKey="0">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Top</CollisionSides>
+                    </Tile>
+                    <Tile id="11" spriteKey="1">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Top</CollisionSides>
+                    </Tile>
+                    <Tile id="12" spriteKey="2">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Top</CollisionSides>
+                    </Tile>
+                    <Tile id="13" spriteKey="3">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>
+                        </CollisionSides>
+                    </Tile>
+                    <Tile id="14" spriteKey="4">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>
+                        </CollisionSides>
+                    </Tile>
+                    <Tile id="15" spriteKey="5">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>
+                        </CollisionSides>
+                    </Tile>
+                    <Tile id="16" spriteKey="6">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>
+                        </CollisionSides>
+                    </Tile>
+                    <Tile id="17" spriteKey="7">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>
+                        </CollisionSides>
+                    </Tile>
+                    <Tile id="18" spriteKey="8">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>
+                        </CollisionSides>
+                    </Tile>
+                    <Tile id="19" spriteKey="1">
+                        <CollisionBox x="0" y="0" width="32" height="32" />
+                        <CollisionSides>Bottom</CollisionSides>
+                    </Tile>
+                </Tiles>
+                <TileMap width="27" height="18">
+                    <!-- Top -->
+                    <Tile x="0" y="0" tileKey="9" />
+                    <Tile x="1" y="0" tileKey="9" />
+                    <Tile x="2" y="0" tileKey="9" />
+                    <Tile x="3" y="0" tileKey="9" />
+                    <Tile x="4" y="0" tileKey="9" />
+                    <Tile x="5" y="0" tileKey="9" />
+                    <Tile x="6" y="0" tileKey="9" />
+                    <Tile x="7" y="0" tileKey="9" />
+                    <Tile x="8" y="0" tileKey="9" />
+                    <Tile x="9" y="0" tileKey="9" />
+                    <Tile x="10" y="0" tileKey="9" />
+                    <Tile x="11" y="0" tileKey="9" />
+                    <Tile x="12" y="0" tileKey="9" />
+                    <Tile x="13" y="0" tileKey="9" />
+                    <Tile x="14" y="0" tileKey="9" />
+                    <!-- Bottom Height 1-->
+                    <Tile x="0" y="15" tileKey="1" />
+                    <Tile x="1" y="15" tileKey="1" />
+                    <Tile x="2" y="15" tileKey="1" />
+                    <Tile x="3" y="15" tileKey="1" />
+                    <Tile x="4" y="15" tileKey="1" />
+                    <Tile x="5" y="15" tileKey="1" />
+                    <Tile x="6" y="15" tileKey="1" />
+                    <!-- Start Plateau -->
+                    <Tile x="2" y="14" tileKey="13" />
+                    <Tile x="2" y="13" tileKey="10" />
+                    <Tile x="3" y="13" tileKey="11" />
+                    <Tile x="4" y="13" tileKey="11" />
+                    <Tile x="5" y="13" tileKey="12" />
+                    <Tile x="5" y="14" tileKey="15" />
+                    <!-- Plateau filler-->
+                    <Tile x="3" y="14" tileKey="14" />
+                    <Tile x="4" y="14" tileKey="14" />
+                    <!-- Step Up -->
+                    <Tile x="7" y="15" tileKey="6" />
+                    <Tile x="7" y="14" tileKey="0" />
+                    <!-- Bottom Height 2-->
+                    <Tile x="8" y="14" tileKey="1" />
+                    <!-- Platforms -->
+                    <Tile x="5" y="11" tileKey="1" />
+                    <Tile x="6" y="11" tileKey="1" />
+                    <Tile x="5" y="9" tileKey="1" />
+                    <Tile x="6" y="9" tileKey="1" />
+                    <!-- Pillar -->
+                    <Tile x="9" y="14" tileKey="2" />
+                    <Tile x="9" y="13" tileKey="3" />
+                    <Tile x="9" y="12" tileKey="3" />
+                    <Tile x="9" y="11" tileKey="3" />
+                    <Tile x="9" y="10" tileKey="3" />
+                    <Tile x="9" y="9" tileKey="3" />
+                    <Tile x="9" y="8" tileKey="0" />
+                    <Tile x="10" y="8" tileKey="2" />
+                    <Tile x="10" y="9" tileKey="5" />
+                    <Tile x="10" y="10" tileKey="5" />
+                    <Tile x="10" y="11" tileKey="5" />
+                    <Tile x="10" y="12" tileKey="5" />
+                    <Tile x="10" y="13" tileKey="8" />
+                    <!-- End Area (Not Really)-->
+                    <Tile x="11" y="13" tileKey="1" />
+                    <Tile x="12" y="13" tileKey="1" />
+                    <Tile x="13" y="13" tileKey="1" />
+                    <Tile x="14" y="13" tileKey="1" />
+                    <Tile x="15" y="13" tileKey="1" />
+                    <!-- Start Front Walk -->
+                    <Tile x="9" y="15" tileKey="8" />
+                    <Tile x="10" y="15" tileKey="1" />
+                    <Tile x="11" y="15" tileKey="1" />
+                    <Tile x="12" y="15" tileKey="1" />
+                    <Tile x="13" y="15" tileKey="1" />
+                    <Tile x="14" y="15" tileKey="1" />
+                    <Tile x="15" y="15" tileKey="1" />
+                    <Tile x="16" y="15" tileKey="1" />
+                    <!-- Second Area -->
+                    <Tile x="16" y="14" tileKey="1" />
+                    <Tile x="17" y="14" tileKey="12" />
+                    <Tile x="17" y="15" tileKey="1" />
+                    <Tile x="18" y="15" tileKey="1" />
+                    <Tile x="19" y="15" tileKey="1" />
+                    <Tile x="20" y="15" tileKey="1" />
+                    <!-- Pit -->
+                    <Tile x="21" y="15" tileKey="2" />
+                    <Tile x="21" y="16" tileKey="5" />
+                    <Tile x="21" y="17" tileKey="18" />
+                    <Tile x="22" y="17" tileKey="1" />
+                    <Tile x="22" y="17" tileKey="1" />
+                </TileMap>
+            </TileEngine>
+        </TileEngines>
+    </Level>
 </World>

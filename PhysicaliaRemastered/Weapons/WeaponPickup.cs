@@ -15,39 +15,39 @@ namespace PhysicaliaRemastered.Weapons;
 /// </summary>
 public class WeaponPickup : Pickup
 {
-    private NewWeapons.Weapon weapon;
+    private readonly NewWeapons.Weapon _weapon;
 
     public WeaponPickup(Level level, NewWeapons.Weapon weapon)
         : base(level)
     {
-            this.weapon = weapon;
-        }
+        _weapon = weapon;
+    }
 
     public override void DoPickup()
     {
-            if (!PickedUp)
-            {
-                PickedUp = true;
-                NewWeapons.Weapon weaponCopy = weapon.Copy();
-                Level.Player.AddWeapon(weaponCopy);
-                weaponCopy.Player = Level.Player;
-            }
+        if (!PickedUp)
+        {
+            PickedUp = true;
+            NewWeapons.Weapon weaponCopy = _weapon.Copy();
+            Level.Player.AddWeapon(weaponCopy);
+            weaponCopy.Player = Level.Player;
         }
+    }
 
     public override void Reset()
     {
-            // Remove the weapon from the player if we've been picked up
-            if (PickedUp)
-                Level.Player.RemoveWeapon(weapon.WeaponID, weapon.AmmoCount);
+        // Remove the weapon from the player if we've been picked up
+        if (PickedUp)
+            Level.Player.RemoveWeapon(_weapon.WeaponId, _weapon.AmmoCount);
 
-            base.Reset();
-        }
+        base.Reset();
+    }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-            spriteBatch.Draw(weapon.WeaponSprite.Texture,
-                             positionOffset,
-                             weapon.WeaponSprite.SourceRectangle,
-                             Color.White);
-        }
+        spriteBatch.Draw(_weapon.WeaponSprite.Texture,
+            positionOffset,
+            _weapon.WeaponSprite.SourceRectangle,
+            Color.White);
+    }
 }

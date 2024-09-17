@@ -8,12 +8,12 @@ namespace PhysicaliaRemastered.GameManagement;
 
 public struct ModifierSave
 {
-    public int ID;
+    public int Id;
     public float TimeLeft;
 
     public ModifierSave(int id, float timeLeft)
     {
-        ID = id;
+        Id = id;
         TimeLeft = timeLeft;
     }
 }
@@ -66,78 +66,41 @@ public struct WeaponSave
 /// </summary>
 public class GameSession
 {
-    private int worldIndex;
-    private int levelIndex;
-
     // Player
-    private ActorStartValues playerValues;
-    private float playerHealth;
-    private int selectedWeapon;
-    private Dictionary<int, WeaponSave> weaponSaves;
+    private ActorStartValues _playerValues;
 
     // Level
-    private List<ModifierSave> levelModifiers;
-    private Dictionary<int, ActiveObjectSave> activatedObjects;
 
     // EnemyManager
-    private Dictionary<int, EnemySave> enemySaves;
 
-    public int WorldIndex
-    {
-        get { return worldIndex; }
-        set { worldIndex = value; }
-    }
+    public int WorldIndex { get; set; }
 
-    public int LevelIndex
-    {
-        get { return levelIndex; }
-        set { levelIndex = value; }
-    }
+    public int LevelIndex { get; set; }
 
     public ActorStartValues PlayerValues
     {
-        get { return playerValues; }
-        set { playerValues = value; }
+        get => _playerValues;
+        set => _playerValues = value;
     }
 
-    public float PlayerHealth
-    {
-        get { return playerHealth; }
-        set { playerHealth = value; }
-    }
+    public float PlayerHealth { get; set; }
 
-    public int SelectedWeapon
-    {
-        get { return selectedWeapon; }
-        set { selectedWeapon = value; }
-    }
+    public int SelectedWeapon { get; set; }
 
-    public Dictionary<int, WeaponSave> WeaponSaves
-    {
-        get { return weaponSaves; }
-    }
+    public Dictionary<int, WeaponSave> WeaponSaves { get; }
 
-    public List<ModifierSave> LevelModifiers
-    {
-        get { return levelModifiers; }
-    }
+    public List<ModifierSave> LevelModifiers { get; }
 
-    public Dictionary<int, ActiveObjectSave> ActivatedObjects
-    {
-        get { return activatedObjects; }
-    }
+    public Dictionary<int, ActiveObjectSave> ActivatedObjects { get; }
 
-    public Dictionary<int, EnemySave> SavedEnemies
-    {
-        get { return enemySaves; }
-    }
+    public Dictionary<int, EnemySave> SavedEnemies { get; }
 
     public GameSession()
     {
-        this.weaponSaves = new Dictionary<int, WeaponSave>();
-        this.levelModifiers = new List<ModifierSave>();
-        this.activatedObjects = new Dictionary<int, ActiveObjectSave>();
-        this.enemySaves = new Dictionary<int, EnemySave>();
+        WeaponSaves = new Dictionary<int, WeaponSave>();
+        LevelModifiers = new List<ModifierSave>();
+        ActivatedObjects = new Dictionary<int, ActiveObjectSave>();
+        SavedEnemies = new Dictionary<int, EnemySave>();
     }
 
     public void SaveToXml(string path)
@@ -145,61 +108,59 @@ public class GameSession
         XmlWriterSettings writerSettings = new XmlWriterSettings();
         writerSettings.Encoding = Encoding.UTF8;
 
-        using (XmlWriter writer = XmlWriter.Create(path, writerSettings))
+        using XmlWriter writer = XmlWriter.Create(path, writerSettings);
+        writer.WriteStartDocument();
+
+        writer.WriteStartElement("GameSession");
+
+        writer.WriteStartElement("WorldIndex");
+        writer.WriteAttributeString("value", WorldIndex.ToString());
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("LevelIndex");
+        writer.WriteAttributeString("value", LevelIndex.ToString());
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("Player");
+        writer.WriteAttributeString("health", PlayerHealth.ToString());
+
+        // Player values
+        writer.WriteStartElement("PlayerValues");
+        WriteVector2(writer, "Position", _playerValues.Position);
+        WriteVector2(writer, "Velocity", _playerValues.Velocity);
+        WriteVector2(writer, "Acceleration", _playerValues.Acceleration);
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("Weapons");
+        writer.WriteAttributeString("selected", SelectedWeapon.ToString());
+
+        foreach (int weaponId in WeaponSaves.Keys)
         {
-            writer.WriteStartDocument();
+            WeaponSave weaponSave = WeaponSaves[weaponId];
 
-            writer.WriteStartElement("GameSession");
-
-            writer.WriteStartElement("WorldIndex");
-            writer.WriteAttributeString("value", this.worldIndex.ToString());
+            writer.WriteStartElement("Weapon");
+            writer.WriteAttributeString("id", weaponId.ToString());
+            writer.WriteAttributeString("ammoCount", weaponSave.AmmoCount.ToString());
+            writer.WriteAttributeString("storedAmmo", weaponSave.StoredAmmo.ToString());
             writer.WriteEndElement();
-
-            writer.WriteStartElement("LevelIndex");
-            writer.WriteAttributeString("value", this.levelIndex.ToString());
-            writer.WriteEndElement();
-
-            writer.WriteStartElement("Player");
-            writer.WriteAttributeString("health", this.playerHealth.ToString());
-
-            // Player values
-            writer.WriteStartElement("PlayerValues");
-            this.WriteVector2(writer, "Position", this.playerValues.Position);
-            this.WriteVector2(writer, "Velocity", this.playerValues.Velocity);
-            this.WriteVector2(writer, "Acceleration", this.playerValues.Acceleration);
-            writer.WriteEndElement();
-
-            writer.WriteStartElement("Weapons");
-            writer.WriteAttributeString("selected", this.selectedWeapon.ToString());
-
-            foreach (int weaponID in this.weaponSaves.Keys)
-            {
-                WeaponSave weaponSave = this.weaponSaves[weaponID];
-
-                writer.WriteStartElement("Weapon");
-                writer.WriteAttributeString("id", weaponID.ToString());
-                writer.WriteAttributeString("ammoCount", weaponSave.AmmoCount.ToString());
-                writer.WriteAttributeString("storedAmmo", weaponSave.StoredAmmo.ToString());
-                writer.WriteEndElement();
-            }
-
-            // End of weapons
-            writer.WriteEndElement();
-
-            // End of player
-            writer.WriteEndElement();
-
-            // Modifers
-            this.WriteModifiers(writer);
-
-            // Activated objects
-            this.WriteActiveObjects(writer);
-
-            // Activated enemies
-            this.WriteEnemies(writer);
-
-            writer.WriteEndDocument();
         }
+
+        // End of weapons
+        writer.WriteEndElement();
+
+        // End of player
+        writer.WriteEndElement();
+
+        // Modifers
+        WriteModifiers(writer);
+
+        // Activated objects
+        WriteActiveObjects(writer);
+
+        // Activated enemies
+        WriteEnemies(writer);
+
+        writer.WriteEndDocument();
     }
 
     private void WriteVector2(XmlWriter writer, string elementName, Vector2 value)
@@ -214,10 +175,10 @@ public class GameSession
     {
         writer.WriteStartElement("Modifiers");
 
-        foreach (ModifierSave modifier in this.levelModifiers)
+        foreach (ModifierSave modifier in LevelModifiers)
         {
             writer.WriteStartElement("Modifier");
-            writer.WriteAttributeString("id", modifier.ID.ToString());
+            writer.WriteAttributeString("id", modifier.Id.ToString());
             writer.WriteAttributeString("timeLeft", modifier.TimeLeft.ToString());
             writer.WriteEndElement();
         }
@@ -229,15 +190,15 @@ public class GameSession
     {
         writer.WriteStartElement("ActiveObjects");
 
-        foreach (int key in this.activatedObjects.Keys)
+        foreach (int key in ActivatedObjects.Keys)
         {
-            ActiveObjectSave save = this.activatedObjects[key];
+            ActiveObjectSave save = ActivatedObjects[key];
 
             writer.WriteStartElement("ActiveObject");
             writer.WriteAttributeString("key", key.ToString());
             writer.WriteAttributeString("active", save.IsActive.ToString());
 
-            this.WriteVector2(writer, "Position", save.Position);
+            WriteVector2(writer, "Position", save.Position);
 
             writer.WriteEndElement();
         }
@@ -249,17 +210,17 @@ public class GameSession
     {
         writer.WriteStartElement("Enemies");
 
-        foreach (int key in this.enemySaves.Keys)
+        foreach (int key in SavedEnemies.Keys)
         {
-            EnemySave save = this.enemySaves[key];
+            EnemySave save = SavedEnemies[key];
 
             writer.WriteStartElement("Enemy");
             writer.WriteAttributeString("key", key.ToString());
             writer.WriteAttributeString("health", save.Health.ToString());
             writer.WriteAttributeString("active", save.IsActive.ToString());
 
-            this.WriteVector2(writer, "Position", save.Position);
-            this.WriteVector2(writer, "Velocity", save.Velocity);
+            WriteVector2(writer, "Position", save.Position);
+            WriteVector2(writer, "Velocity", save.Velocity);
 
             writer.WriteEndElement();
         }
@@ -276,24 +237,22 @@ public class GameSession
         readerSettings.IgnoreProcessingInstructions = true;
         readerSettings.IgnoreWhitespace = true;
 
-        using (XmlReader reader = XmlReader.Create(path, readerSettings))
-        {
-            reader.ReadToFollowing("WorldIndex");
-            session.worldIndex = int.Parse(reader.GetAttribute("value"));
+        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        reader.ReadToFollowing("WorldIndex");
+        session.WorldIndex = int.Parse(reader.GetAttribute("value"));
 
-            reader.ReadToFollowing("LevelIndex");
-            session.levelIndex = int.Parse(reader.GetAttribute("value"));
+        reader.ReadToFollowing("LevelIndex");
+        session.LevelIndex = int.Parse(reader.GetAttribute("value"));
 
-            reader.ReadToFollowing("Player");
-            session.playerHealth = float.Parse(reader.GetAttribute("health"));
+        reader.ReadToFollowing("Player");
+        session.PlayerHealth = float.Parse(reader.GetAttribute("health"));
 
-            session.playerValues = ActorStartValues.FromXml(reader, "PlayerValues");
+        session._playerValues = ActorStartValues.FromXml(reader, "PlayerValues");
 
-            LoadWeapons(reader, session);
-            LoadModifiers(reader, session);
-            LoadActiveObjects(reader, session);
-            LoadEnemies(reader, session);
-        }
+        LoadWeapons(reader, session);
+        LoadModifiers(reader, session);
+        LoadActiveObjects(reader, session);
+        LoadEnemies(reader, session);
 
         return session;
     }
@@ -308,7 +267,7 @@ public class GameSession
                 if (reader.IsEmptyElement)
                     return;
                 else
-                    session.selectedWeapon = int.Parse(reader.GetAttribute("selected"));
+                    session.SelectedWeapon = int.Parse(reader.GetAttribute("selected"));
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
@@ -318,7 +277,7 @@ public class GameSession
                 int ammoCount = int.Parse(reader.GetAttribute("ammoCount"));
                 int storedAmmo = int.Parse(reader.GetAttribute("storedAmmo"));
 
-                session.weaponSaves.Add(id, new WeaponSave(ammoCount, storedAmmo));
+                session.WeaponSaves.Add(id, new WeaponSave(ammoCount, storedAmmo));
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -342,7 +301,7 @@ public class GameSession
                 int id = int.Parse(reader.GetAttribute("id"));
                 float timeLeft = float.Parse(reader.GetAttribute("timeLeft"));
 
-                session.levelModifiers.Add(new ModifierSave(id, timeLeft));
+                session.LevelModifiers.Add(new ModifierSave(id, timeLeft));
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -371,7 +330,7 @@ public class GameSession
                 float y = float.Parse(reader.GetAttribute("y"));
                 Vector2 position = new Vector2(x, y);
 
-                session.activatedObjects.Add(key, new ActiveObjectSave(position, active));
+                session.ActivatedObjects.Add(key, new ActiveObjectSave(position, active));
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -406,7 +365,7 @@ public class GameSession
                 float velY = float.Parse(reader.GetAttribute("y"));
                 Vector2 velocity = new Vector2(velX, velY);
 
-                session.enemySaves.Add(key, new EnemySave(position, velocity, health, active));
+                session.SavedEnemies.Add(key, new EnemySave(position, velocity, health, active));
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&

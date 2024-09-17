@@ -12,17 +12,17 @@ public struct Sprite
     /// <summary>
     /// Texture used by the sprite
     /// </summary>
-    private Texture2D texture;
+    private Texture2D _texture;
 
     /// <summary>
     /// The location and size of the sprite on the texture.
     /// </summary>
-    private Rectangle sourceRectangle;
+    private Rectangle _sourceRectangle;
 
     public Texture2D Texture
     {
-        get { return texture; }
-        set { texture = value; }
+        get => _texture;
+        set => _texture = value;
     }
 
     /// <summary>
@@ -30,8 +30,8 @@ public struct Sprite
     /// </summary>
     public Rectangle SourceRectangle
     {
-        get { return sourceRectangle; }
-        set { sourceRectangle = value; }
+        get => _sourceRectangle;
+        set => _sourceRectangle = value;
     }
 
     /// <summary>
@@ -41,8 +41,8 @@ public struct Sprite
     /// <param name="sourceRect">The part of the texture that is the Sprite.</param>
     public Sprite(Texture2D texture, Rectangle sourceRect)
     {
-        this.texture = texture;
-        sourceRectangle = sourceRect;
+        _texture = texture;
+        _sourceRectangle = sourceRect;
     }
 
     /// <summary>
@@ -54,5 +54,7 @@ public struct Sprite
     /// <param name="width"></param>
     /// <param name="height"></param>
     public Sprite(Texture2D texture, int x, int y, int width, int height)
-        : this(texture, new Rectangle(x, y, width, height)) { }
+        : this(texture, new Rectangle(x, y, width, height))
+    {
+    }
 }

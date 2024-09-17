@@ -1,73 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
 <WeaponBank>
-	<!-- Player arms -->
-	<Weapon type="Melee" id="-1" >
-		<Graphics>
-			<Sprite key="100" />
-			<Animations>
-				<Warmup key="21" />
-				<Fire key="21" />
-			</Animations>
-			<PlayerOffset x="-8" y="-3" />
-		</Graphics>
-		<FireData warmupTime="0" shotsPerSecond="0">
-			<Particle id="-1" />
-		</FireData>
-		<Collision canCollide="false" collisionDamage="10">
-			<CollisionBox x="0" y="0" width="0" height="0" />
-		</Collision>
-		<WeaponData />
-	</Weapon>
-	
-	<!-- Chainsaw -->
-	<Weapon type="Melee" id="0" >
-		<Graphics>
-			<Sprite key="101" />
-			<Animations>
-				<Warmup key="8" />
-				<Fire key="8" />
-			</Animations>
-			<PlayerOffset x="16" y="0" />
-		</Graphics>
-		<FireData warmupTime="0" shotsPerSecond="10">
-			<Particle id="-1" />
-		</FireData>
-		<Collision canCollide="true" collisionDamage="10">
-			<CollisionBox x="49" y="22" width="12" height="6" />
-		</Collision>
-		<WeaponData>
-			<Vibration>
-				<Warmup low="0" high="0" />
-				<Fire low="0,1" high="0,4" />
-			</Vibration>
-		</WeaponData>
-	</Weapon>
-	
-	<!-- Minigun -->
-	<Weapon type="Projectile" id="1" >
-		<Graphics>
-			<Sprite key="102" />
-			<Animations>
-				<Warmup key="7" />
-				<Fire key="9" />
-			</Animations>
-			<PlayerOffset x="-3" y="0" />
-		</Graphics>
-		<FireData warmupTime="1" shotsPerSecond="20">
-			<Particle id="1" />
-		</FireData>
-		<Collision canCollide="false" collisionDamage="10">
-			<CollisionBox x="0" y="0" width="0" height="0" />
-		</Collision>
-		<WeaponData>
-			<FireMode>Continuous</FireMode>
-			<Vibration>
-				<Warmup low="0,2" high="0,1" />
-				<Fire low="0,1" high="0,4" />
-			</Vibration>
-			<MuzzlePosition x="56" y="36" maxDeviation="2" />
-			<Ammunition count="250" max="500" projectilesPerShot="1" spread="0,5" />
-		</WeaponData>
-	</Weapon>
+    <!-- Player arms -->
+    <Weapon type="Melee" id="-1">
+        <Graphics>
+            <Sprite key="100" />
+            <Animations>
+                <Warmup key="21" />
+                <Fire key="21" />
+            </Animations>
+            <PlayerOffset x="-8" y="-3" />
+        </Graphics>
+        <FireData warmupTime="0" shotsPerSecond="0">
+            <Particle id="-1" />
+        </FireData>
+        <Collision canCollide="false" collisionDamage="10">
+            <CollisionBox x="0" y="0" width="0" height="0" />
+        </Collision>
+        <WeaponData />
+    </Weapon>
+
+    <!-- Chainsaw -->
+    <Weapon type="Melee" id="0">
+        <Graphics>
+            <Sprite key="101" />
+            <Animations>
+                <Warmup key="8" />
+                <Fire key="8" />
+            </Animations>
+            <PlayerOffset x="16" y="0" />
+        </Graphics>
+        <FireData warmupTime="0" shotsPerSecond="10">
+            <Particle id="-1" />
+        </FireData>
+        <Collision canCollide="true" collisionDamage="10">
+            <CollisionBox x="49" y="22" width="12" height="6" />
+        </Collision>
+        <WeaponData>
+            <Vibration>
+                <Warmup low="0" high="0" />
+                <Fire low="0,1" high="0,4" />
+            </Vibration>
+        </WeaponData>
+    </Weapon>
+
+    <!-- Minigun -->
+    <Weapon type="Projectile" id="1">
+        <Graphics>
+            <Sprite key="102" />
+            <Animations>
+                <Warmup key="7" />
+                <Fire key="9" />
+            </Animations>
+            <PlayerOffset x="-3" y="0" />
+        </Graphics>
+        <FireData warmupTime="1" shotsPerSecond="20">
+            <Particle id="1" />
+        </FireData>
+        <Collision canCollide="false" collisionDamage="10">
+            <CollisionBox x="0" y="0" width="0" height="0" />
+        </Collision>
+        <WeaponData>
+            <FireMode>Continuous</FireMode>
+            <Vibration>
+                <Warmup low="0,2" high="0,1" />
+                <Fire low="0,1" high="0,4" />
+            </Vibration>
+            <MuzzlePosition x="56" y="36" maxDeviation="2" />
+            <Ammunition count="250" max="500" projectilesPerShot="1" spread="0,5" />
+        </WeaponData>
+    </Weapon>
 </WeaponBank>

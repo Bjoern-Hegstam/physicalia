@@ -8,77 +8,77 @@ public class Animation
     /// <summary>
     /// First frame of the animation.
     /// </summary>
-    private Rectangle baseFrame;
+    private readonly Rectangle _baseFrame;
 
     /// <summary>
     /// The number of columns in the animation.
     /// </summary>
-    private int columnCount;
+    private int _columnCount;
 
     /// <summary>
     /// The number of rows in the animation.
     /// </summary>
-    private int rowCount;
+    private int _rowCount;
 
     /// <summary>
     /// The framerate measured in frames per second.
     /// </summary>
-    private float framerate;
+    private float _framerate;
 
     /// <summary>
     /// Index of the current frame.
     /// </summary>
-    private int index = 0;
+    private int _index;
 
     /// <summary>
     /// Row of the current frame.
     /// </summary>
-    private int row = 0;
+    private int _row;
 
     /// <summary>
     /// Column of the current frame.
     /// </summary>
-    private int column = 0;
+    private int _column;
 
     /// <summary>
     /// Rectangle representing the part of the texture that maps to the
     /// current frame.
     /// </summary>
-    private Rectangle sourceRectangle;
+    private Rectangle _sourceRectangle;
 
     /// <summary>
     /// Denotes whether the animation is currently active.
     /// </summary>
-    private bool active = false;
+    private bool _active;
 
     /// <summary>
     /// Boolean indictaing whether the current animation will loop when
     /// the last frame has been reached.
     /// </summary>
-    private bool loop = false;
+    private bool _loop;
 
     /// <summary>
     /// The time in seconds left until the next frame.
     /// </summary>
-    private float timeTillFrameChange;
+    private float _timeTillFrameChange;
 
     /// <summary>
     /// Texture used.
     /// </summary>
-    private Texture2D texture;
+    private Texture2D _texture;
 
     /// <summary>
     /// Gets and sets the number of columns.
     /// </summary>
     public int Columns
     {
-        get { return columnCount; }
+        get => _columnCount;
         set
         {
-            columnCount = value;
-            if (column >= columnCount)
+            _columnCount = value;
+            if (_column >= _columnCount)
             {
-                column = columnCount - 1;
+                _column = _columnCount - 1;
                 UpdateSourceRectangle();
             }
         }
@@ -89,13 +89,13 @@ public class Animation
     /// </summary>
     public int Rows
     {
-        get { return rowCount; }
+        get => _rowCount;
         set
         {
-            rowCount = value;
-            if (row >= rowCount)
+            _rowCount = value;
+            if (_row >= _rowCount)
             {
-                row = rowCount - 1;
+                _row = _rowCount - 1;
                 UpdateSourceRectangle();
             }
         }
@@ -106,8 +106,8 @@ public class Animation
     /// </summary>
     public float Framerate
     {
-        get { return framerate; }
-        set { framerate = value; }
+        get => _framerate;
+        set => _framerate = value;
     }
 
     /// <summary>
@@ -115,23 +115,23 @@ public class Animation
     /// </summary>
     public int FrameIndex
     {
-        get { return index; }
+        get => _index;
         set
         {
             // See if it's time to loop around
-            if (loop && value >= (rowCount * columnCount))
+            if (_loop && value >= (_rowCount * _columnCount))
             {
-                row = column = index = 0;
+                _row = _column = _index = 0;
                 UpdateSourceRectangle();
                 return;
             }
 
             // Make sure the index is within the allowed range
-            value = (int)MathHelper.Clamp(value, 0, rowCount * columnCount);
-                
-            index = value;
-            row = index / columnCount;
-            column = index % columnCount;
+            value = (int)MathHelper.Clamp(value, 0, _rowCount * _columnCount);
+
+            _index = value;
+            _row = _index / _columnCount;
+            _column = _index % _columnCount;
             UpdateSourceRectangle();
         }
     }
@@ -141,8 +141,8 @@ public class Animation
     /// </summary>
     public bool IsActive
     {
-        get { return active; }
-        set { active = value; }
+        get => _active;
+        set => _active = value;
     }
 
     /// <summary>
@@ -150,8 +150,8 @@ public class Animation
     /// </summary>
     public bool Loop
     {
-        get { return loop; }
-        set { loop = value; }
+        get => _loop;
+        set => _loop = value;
     }
 
     /// <summary>
@@ -160,25 +160,22 @@ public class Animation
     /// </summary>
     public float TimeTillNextFrame
     {
-        get { return timeTillFrameChange; }
-        set { timeTillFrameChange = value; }
+        get => _timeTillFrameChange;
+        set => _timeTillFrameChange = value;
     }
 
     /// <summary>
     /// Gets the source rectangle of the current frame.
     /// </summary>
-    public Rectangle SourceRectangle
-    {
-        get { return sourceRectangle; }
-    }
+    public Rectangle SourceRectangle => _sourceRectangle;
 
     /// <summary>
     /// Gets or sets the texture used by the animation
     /// </summary>
     public Texture2D Texture
     {
-        get { return texture; }
-        set { texture = value; }
+        get => _texture;
+        set => _texture = value;
     }
 
     /// <summary>
@@ -191,14 +188,14 @@ public class Animation
     /// <param name="texture">The texture used by the animation.</param>
     public Animation(Rectangle startFrame, int columns, int rows, float framerate, Texture2D texture)
     {
-        active = false;
-        sourceRectangle = baseFrame = startFrame;
-        columnCount = columns;
-        rowCount = rows;
-        this.framerate = framerate;
-        timeTillFrameChange = 1 / this.framerate;
-        row = column = index = 0;
-        this.texture = texture;
+        _active = false;
+        _sourceRectangle = _baseFrame = startFrame;
+        _columnCount = columns;
+        _rowCount = rows;
+        _framerate = framerate;
+        _timeTillFrameChange = 1 / _framerate;
+        _row = _column = _index = 0;
+        _texture = texture;
         UpdateSourceRectangle();
     }
 
@@ -207,7 +204,7 @@ public class Animation
     /// </summary>
     public void Play()
     {
-        active = true;
+        _active = true;
     }
 
     /// <summary>
@@ -215,7 +212,7 @@ public class Animation
     /// </summary>
     public void Pause()
     {
-        active = false;
+        _active = false;
     }
 
     /// <summary>
@@ -223,9 +220,9 @@ public class Animation
     /// </summary>
     public void Stop()
     {
-        active = false;
+        _active = false;
         FrameIndex = 0;
-        timeTillFrameChange = 1 / framerate;
+        _timeTillFrameChange = 1 / _framerate;
     }
 
     /// <summary>
@@ -234,8 +231,8 @@ public class Animation
     /// </summary>
     private void UpdateSourceRectangle()
     {
-        sourceRectangle.X = baseFrame.X + column * baseFrame.Width;
-        sourceRectangle.Y = baseFrame.Y + row * baseFrame.Height;
+        _sourceRectangle.X = _baseFrame.X + _column * _baseFrame.Width;
+        _sourceRectangle.Y = _baseFrame.Y + _row * _baseFrame.Height;
     }
 
     /// <summary>
@@ -244,12 +241,12 @@ public class Animation
     /// <returns>A new Animation that is a copy of the current animation.</returns>
     public Animation Copy()
     {
-        Animation animation = new Animation(baseFrame,
-            columnCount,
-            rowCount,
-            framerate,
-            texture);
-        animation.loop = loop;
+        Animation animation = new Animation(_baseFrame,
+            _columnCount,
+            _rowCount,
+            _framerate,
+            _texture);
+        animation._loop = _loop;
         return animation;
     }
 }

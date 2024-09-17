@@ -12,26 +12,28 @@ namespace PhysicaliaRemastered.ActiveObjects;
 /// </summary>
 public class EndLevelTrigger : Pickup
 {
-    private Sprite sprite;
+    private Sprite _sprite;
 
     public EndLevelTrigger(Level level, Sprite sprite)
         : base(level)
     {
-            this.sprite = sprite;
-        }
+        _sprite = sprite;
+    }
 
-    public override void Update(GameTime gametime) { }
+    public override void Update(GameTime gametime)
+    {
+    }
 
     public override void DoPickup()
     {
-            Level.NextState = LevelState.Finished;
-        }
+        Level.NextState = LevelState.Finished;
+    }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-            spriteBatch.Draw(sprite.Texture,
-                            positionOffset,
-                            sprite.SourceRectangle,
-                            Color.White);
-        }
+        spriteBatch.Draw(_sprite.Texture,
+            positionOffset,
+            _sprite.SourceRectangle,
+            Color.White);
+    }
 }

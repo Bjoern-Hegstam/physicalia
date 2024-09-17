@@ -10,56 +10,38 @@ namespace XNALibrary.Input;
 /// </summary>
 public class InputHandler : GameComponent, IInputHandler
 {
-    private KeyboardState oldKeyboardState;
-    private KeyboardState currentKeyboardState;
+    private KeyboardState _oldKeyboardState;
+    private KeyboardState _currentKeyboardState;
 
-    private MouseState oldMouseState;
-    private MouseState currentMouseState;
+    private MouseState _oldMouseState;
+    private MouseState _currentMouseState;
 
-    private GamePadState[] oldGamePadState = new GamePadState[4];
-    private GamePadState[] currentGamePadState = new GamePadState[4];
+    private readonly GamePadState[] _oldGamePadState = new GamePadState[4];
+    private readonly GamePadState[] _currentGamePadState = new GamePadState[4];
 
     /// <summary>
     /// Gets the old state of the keyboard.
     /// </summary>
-    public KeyboardState OldKeyBoardState
-    {
-        get { return oldKeyboardState; }
-    }
+    public KeyboardState OldKeyBoardState => _oldKeyboardState;
 
     /// <summary>
     /// Gets the current state of the keyboard.
     /// </summary>
-    public KeyboardState CurrentKeyBoardState
-    {
-        get { return currentKeyboardState; }
-    }
+    public KeyboardState CurrentKeyBoardState => _currentKeyboardState;
 
     /// <summary>
     /// Gets the old state of the mouse.
     /// </summary>
-    public MouseState OldMouseState
-    {
-        get { return oldMouseState; }
-    }
+    public MouseState OldMouseState => _oldMouseState;
 
     /// <summary>
     /// Gets the current state of the mouse.
     /// </summary>
-    public MouseState CurrentMouseState
-    {
-        get { return currentMouseState; }
-    }
+    public MouseState CurrentMouseState => _currentMouseState;
 
-    public GamePadState[] OldGamePadState
-    {
-        get { return oldGamePadState; }
-    }
+    public GamePadState[] OldGamePadState => _oldGamePadState;
 
-    public GamePadState[] CurrentGamePadState
-    {
-        get { return currentGamePadState; }
-    }
+    public GamePadState[] CurrentGamePadState => _currentGamePadState;
 
     /// <summary>
     /// Creates a new InputHandler. The instance is automatically added
@@ -80,8 +62,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>True if the key has been pressed; false otherwise.</returns>
     public bool IsPressed(Keys key)
     {
-        return oldKeyboardState.IsKeyUp(key) &&
-               currentKeyboardState.IsKeyDown(key);
+        return _oldKeyboardState.IsKeyUp(key) &&
+               _currentKeyboardState.IsKeyDown(key);
     }
 
     /// <summary>
@@ -92,8 +74,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>True if the button has been pressed; false otherwise.</returns>
     public bool IsPressed(PlayerIndex playerIndex, Buttons button)
     {
-        return oldGamePadState[(int)playerIndex].IsButtonUp(button) &&
-               currentGamePadState[(int)playerIndex].IsButtonDown(button);
+        return _oldGamePadState[(int)playerIndex].IsButtonUp(button) &&
+               _currentGamePadState[(int)playerIndex].IsButtonDown(button);
     }
 
     /// <summary>
@@ -103,8 +85,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>True if the key has been released; false otherwise.</returns>
     public bool IsReleased(Keys key)
     {
-        return oldKeyboardState.IsKeyDown(key) &&
-               currentKeyboardState.IsKeyUp(key);
+        return _oldKeyboardState.IsKeyDown(key) &&
+               _currentKeyboardState.IsKeyUp(key);
     }
 
     /// <summary>
@@ -115,8 +97,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>True if the button has been released; false otherwise.</returns>
     public bool IsReleased(PlayerIndex playerIndex, Buttons button)
     {
-        return oldGamePadState[(int)playerIndex].IsButtonDown(button) &&
-               currentGamePadState[(int)playerIndex].IsButtonUp(button);
+        return _oldGamePadState[(int)playerIndex].IsButtonDown(button) &&
+               _currentGamePadState[(int)playerIndex].IsButtonUp(button);
     }
 
     /// <summary>
@@ -126,8 +108,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>True if the key is being held down; false otherwise.</returns>
     public bool IsHolding(Keys key)
     {
-        return oldKeyboardState.IsKeyDown(key) &&
-               currentKeyboardState.IsKeyDown(key);
+        return _oldKeyboardState.IsKeyDown(key) &&
+               _currentKeyboardState.IsKeyDown(key);
     }
 
     /// <summary>
@@ -137,8 +119,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>True if the button is being held down; false otherwise.</returns>
     public bool IsHolding(PlayerIndex playerIndex, Buttons button)
     {
-        return oldGamePadState[(int)playerIndex].IsButtonDown(button) &&
-               currentGamePadState[(int)playerIndex].IsButtonDown(button);
+        return _oldGamePadState[(int)playerIndex].IsButtonDown(button) &&
+               _currentGamePadState[(int)playerIndex].IsButtonDown(button);
     }
 
     /// <summary>
@@ -147,8 +129,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>The moved distance as a Vector2.</returns>
     public Vector2 GetMouseMove()
     {
-        Vector2 distance = new Vector2(currentMouseState.X - oldMouseState.X,
-            currentMouseState.Y - oldMouseState.Y);
+        Vector2 distance = new Vector2(_currentMouseState.X - _oldMouseState.X,
+            _currentMouseState.Y - _oldMouseState.Y);
 
         return distance;
     }
@@ -159,8 +141,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <param name="distance">Vector2 to store the result in.</param>
     public void GetMouseMove(out Vector2 distance)
     {
-        distance = new Vector2(currentMouseState.X - oldMouseState.X,
-            currentMouseState.Y - oldMouseState.Y);
+        distance = new Vector2(_currentMouseState.X - _oldMouseState.X,
+            _currentMouseState.Y - _oldMouseState.Y);
     }
 
     /// <summary>
@@ -169,8 +151,8 @@ public class InputHandler : GameComponent, IInputHandler
     /// <returns>The moved distance as a normalized Vector2.</returns>
     public Vector2 GetNormalizedMouseMove()
     {
-        Vector2 distance = new Vector2(currentMouseState.X - oldMouseState.X,
-            currentMouseState.Y - oldMouseState.Y);
+        Vector2 distance = new Vector2(_currentMouseState.X - _oldMouseState.X,
+            _currentMouseState.Y - _oldMouseState.Y);
 
         distance.Normalize();
         return distance;
@@ -182,21 +164,21 @@ public class InputHandler : GameComponent, IInputHandler
     /// <param name="distance">Vector2 to store the normalized result in.</param>
     public void GetNormalizedMouseMove(out Vector2 distance)
     {
-        distance = new Vector2(currentMouseState.X - oldMouseState.X,
-            currentMouseState.Y - oldMouseState.Y);
+        distance = new Vector2(_currentMouseState.X - _oldMouseState.X,
+            _currentMouseState.Y - _oldMouseState.Y);
         distance.Normalize();
     }
 
     public override void Initialize()
     {
         // Set the initial states of all state members
-        oldMouseState = currentMouseState = Mouse.GetState();
-        oldKeyboardState = currentKeyboardState = Keyboard.GetState();
+        _oldMouseState = _currentMouseState = Mouse.GetState();
+        _oldKeyboardState = _currentKeyboardState = Keyboard.GetState();
 
         foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
         {
             int i = (int)index;
-            oldGamePadState[i] = currentGamePadState[i] = GamePad.GetState(index);
+            _oldGamePadState[i] = _currentGamePadState[i] = GamePad.GetState(index);
         }
 
         base.Initialize();
@@ -211,19 +193,19 @@ public class InputHandler : GameComponent, IInputHandler
         base.Update(gameTime);
 
         // Keyboard
-        oldKeyboardState = currentKeyboardState;
-        currentKeyboardState = Keyboard.GetState();
+        _oldKeyboardState = _currentKeyboardState;
+        _currentKeyboardState = Keyboard.GetState();
 
         // Mouse
-        oldMouseState = currentMouseState;
-        currentMouseState = Mouse.GetState();
+        _oldMouseState = _currentMouseState;
+        _currentMouseState = Mouse.GetState();
 
         // Gamepads
         foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
         {
             int i = (int)index;
-            oldGamePadState[i] = currentGamePadState[i];
-            currentGamePadState[i] = GamePad.GetState(index);
+            _oldGamePadState[i] = _currentGamePadState[i];
+            _currentGamePadState[i] = GamePad.GetState(index);
         }
     }
 }

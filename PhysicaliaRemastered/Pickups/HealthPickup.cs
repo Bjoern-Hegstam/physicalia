@@ -7,28 +7,28 @@ namespace PhysicaliaRemastered.Pickups;
 
 public class HealthPickup : Pickup
 {
-    private float health;
+    private readonly float _health;
 
     public HealthPickup(Level level, float health, Sprite sprite)
         : base(level)
     {
-            this.health = health;
-            Sprite = sprite;
-        }
+        _health = health;
+        Sprite = sprite;
+    }
 
     public override void DoPickup()
     {
-            Level.Player.Health += health;
-        }
+        Level.Player.Health += _health;
+    }
 
     public static HealthPickup CreateFromXml(XmlReader reader, ISpriteLibrary spriteLibrary)
     {
-            reader.ReadToFollowing("Sprite");
-            int spriteKey = int.Parse(reader.GetAttribute("key"));
+        reader.ReadToFollowing("Sprite");
+        int spriteKey = int.Parse(reader.GetAttribute("key"));
 
-            reader.ReadToFollowing("Health");
-            int health = int.Parse(reader.GetAttribute("value"));
+        reader.ReadToFollowing("Health");
+        int health = int.Parse(reader.GetAttribute("value"));
 
-            return new HealthPickup(null, health, spriteLibrary.GetSprite(spriteKey));
-        }
+        return new HealthPickup(null, health, spriteLibrary.GetSprite(spriteKey));
+    }
 }

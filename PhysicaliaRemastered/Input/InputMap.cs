@@ -27,13 +27,7 @@ public enum InputAction
 /// </summary>
 public abstract class InputMap
 {
-    private IInputHandler inputHandler;
-
-    public IInputHandler InputHandler
-    {
-        get => inputHandler;
-        set => inputHandler = value;
-    }
+    public IInputHandler InputHandler { get; set; }
 
     public abstract bool IsPressed(InputAction action);
     public abstract bool IsHolding(InputAction action);

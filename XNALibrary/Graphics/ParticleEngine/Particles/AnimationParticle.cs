@@ -5,92 +5,52 @@ using XNALibrary.Interfaces;
 
 namespace XNALibrary.Graphics.ParticleEngine.Particles;
 
-public class AnimationParticle : Particle
+public class AnimationParticle(Animation.Animation animation) : Particle
 {
-    private Animation.Animation animation;
-    private ObjectType damageObjects;
-    private float damageAmount;
-
     /// <summary>
     /// Gets or sets the animation used by the particle
     /// </summary>
-    public Animation.Animation Animation
-    {
-        get { return animation; }
-        set { animation = value; }
-    }
+    public Animation.Animation Animation { get; set; } = animation;
 
     /// <summary>
     /// Gets or sets a bitflagged enum denoting which objects the particle
     /// can damage.
     /// </summary>
-    public ObjectType DamageObjects
-    {
-        get { return damageObjects; }
-        set { damageObjects = value; }
-    }
+    public ObjectType DamageObjects { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets the amount of damage caused by the particle
     /// </summary>
-    public float DamageAmount
-    {
-        get { return damageAmount; }
-        set { damageAmount = value; }
-    }
+    public float DamageAmount { get; set; } = 0F;
 
-    public AnimationParticle(Animation.Animation animation)
-    {
-        this.animation = animation;
-        damageObjects = 0;
-        damageAmount = 0F;
-    }
-
-    public override Vector2 Origin
-    {
-        get { return new Vector2(animation.SourceRectangle.Width / 2, animation.SourceRectangle.Height / 2); }
-    }
+    public override Vector2 Origin => new(Animation.SourceRectangle.Width / 2f, Animation.SourceRectangle.Height / 2f);
 
     public override int Width
     {
-        get { return animation.SourceRectangle.Width; }
-        set
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
+        get => Animation.SourceRectangle.Width;
+        set => throw new Exception("The method or operation is not implemented.");
     }
 
     public override int Height
     {
-        get { return animation.SourceRectangle.Height; }
-        set
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
+        get => Animation.SourceRectangle.Height;
+        set => throw new Exception("The method or operation is not implemented.");
     }
 
-    public override Rectangle SourceRectangle
-    {
-        get { return animation.SourceRectangle; }
-    }
+    public override Rectangle SourceRectangle => Animation.SourceRectangle;
 
-    public override Texture2D Texture
-    {
-        get { return animation.Texture; }
-    }
+    public override Texture2D Texture => Animation.Texture;
 
-    public override Rectangle CollisionBox
-    {
-        get { return new Rectangle(0, 0, Width, Height); }
-    }
+    public override Rectangle CollisionBox => new(0, 0, Width, Height);
 
-    public override void OnCollision(ICollisionObject collisionObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
+    public override void OnCollision(ICollisionObject collisionObject, BoxSide collisionSides, Vector2 position,
+        Vector2 velocity)
     {
         // Damage the object if possible
-        if ((damageObjects & collisionObject.Type) != 0)
+        if ((DamageObjects & collisionObject.Type) != 0)
         {
             if (collisionObject.CanTakeDamage)
-                collisionObject.TakeDamage(damageAmount);
+                collisionObject.TakeDamage(DamageAmount);
         }
     }
 
@@ -98,19 +58,19 @@ public class AnimationParticle : Particle
     {
         base.Update(gameTime);
 
-        if (!animation.IsActive)
+        if (!Animation.IsActive)
         {
-            animation.Stop();
-            this.IsActive = false;
+            Animation.Stop();
+            IsActive = false;
         }
     }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-        if (animation.IsActive)
-            spriteBatch.Draw(animation.Texture,
-                this.position - offsetPosition,
-                animation.SourceRectangle,
+        if (Animation.IsActive)
+            spriteBatch.Draw(Animation.Texture,
+                position - offsetPosition,
+                Animation.SourceRectangle,
                 Color.White,
                 0F,
                 Origin,

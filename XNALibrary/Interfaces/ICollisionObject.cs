@@ -19,89 +19,52 @@ public interface ICollisionObject
     /// <summary>
     /// Gets the ICollisionObject's ObjectType.
     /// </summary>
-    ObjectType Type
-    {
-        get;
-    }
+    ObjectType Type { get; }
 
     /// <summary>
     /// Gets & Sets the position of the object.
     /// </summary>
-    Vector2 Position
-    {
-        get;
-        set;
-    }
+    Vector2 Position { get; set; }
 
     /// <summary>
     /// Gets the origin of the object. The origin is equivalent to the
     /// center of the object.
     /// </summary>
-    Vector2 Origin
-    {
-        get;
-    }
+    Vector2 Origin { get; }
 
     /// <summary>
     /// Gets & Sets the velocity of the object, measured in units.
     /// </summary>
-    Vector2 Velocity
-    {
-        get;
-        set;
-    }
+    Vector2 Velocity { get; set; }
 
     /// <summary>
     /// Gets & Sets the width of the object in pixels.
     /// </summary>
-    int Width
-    {
-        get;
-        set;
-    }
+    int Width { get; set; }
 
     /// <summary>
     /// Gets & Sets the height of the object in pixels.
     /// </summary>
-    int Height
-    {
-        get;
-        set;
-    }
+    int Height { get; set; }
 
-    Rectangle SourceRectangle
-    {
-        get;
-    }
+    Rectangle SourceRectangle { get; }
 
-    Texture2D Texture
-    {
-        get;
-    }
+    Texture2D Texture { get; }
 
     /// <summary>
     /// Gets a value indicating whether the object is in a collisionable state.
     /// </summary>
-    bool CanCollide
-    {
-        get;
-    }
+    bool CanCollide { get; }
 
     /// <summary>
     /// Gets the collisions box of the collision object.
     /// </summary>
-    Rectangle CollisionBox
-    {
-        get;
-    }
+    Rectangle CollisionBox { get; }
 
     /// <summary>
     /// Gets a value indicating wether the object can take damage.
     /// </summary>
-    bool CanTakeDamage
-    {
-        get;
-    }
+    bool CanTakeDamage { get; }
 
     /// <summary>
     /// Called when a collision occured.
@@ -142,7 +105,7 @@ public static class CollisionHelper
 
         rectB.X += (int)(collB.Position.X - collB.Origin.X);
         rectB.Y += (int)(collB.Position.Y - collB.Origin.Y);
-            
+
         return rectA.Intersects(rectB);
     }
 

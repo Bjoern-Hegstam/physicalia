@@ -4,8 +4,8 @@ namespace PhysicaliaRemastered.Actors.EnemyManagement;
 
 public interface IEnemyBank
 {
-    Enemy CreateEnemy(int typeID, ActorStartValues startValues);
+    Enemy CreateEnemy(int typeId, ActorStartValues startValues);
 
-    void AddBaseEnemy(int typeID, Enemy enemy);
+    void AddBaseEnemy(int typeId, Enemy enemy);
     void SetupEnemy(Enemy enemy);
 }

@@ -7,7 +7,7 @@ namespace XNALibrary.Graphics.ScreenManagement;
 
 public class ScreenButton
 {
-    private Type screenTypeLink;
+    private Type _screenTypeLink;
 
     /// <summary>
     /// The type of Screen linked to by the ScreenButton. A link set to null means the button links
@@ -15,93 +15,90 @@ public class ScreenButton
     /// </summary>
     public Type ScreenLink
     {
-        get { return screenTypeLink; }
-        set { screenTypeLink = value; }
+        get => _screenTypeLink;
+        set => _screenTypeLink = value;
     }
 
-    private Texture2D texture;
+    private Texture2D _texture;
 
     /// <summary>
     /// Gets and Sets the texture. Set to null for no texture.
     /// </summary>
     public Texture2D Texture
     {
-        get { return texture; }
-        set { texture = value; }
+        get => _texture;
+        set => _texture = value;
     }
 
-    private Rectangle sourceRectangle;
+    private Rectangle _sourceRectangle;
 
     /// <summary>
     /// Gets and Setst the source are of the texture used when drawing the button.
     /// </summary>
     public Rectangle SourceRectangle
     {
-        get { return sourceRectangle; }
-        set { sourceRectangle = value; }
+        get => _sourceRectangle;
+        set => _sourceRectangle = value;
     }
 
-    private Color selectedColor = Color.White;
+    private Color _selectedColor = Color.White;
 
     /// <summary>
     /// Gets and Sets the tint color used when the button is selected. By default set to Color.White.
     /// </summary>
     public Color SelectedColor
     {
-        get { return selectedColor; }
-        set { selectedColor = value; }
+        get => _selectedColor;
+        set => _selectedColor = value;
     }
 
-    private Vector2 position;
+    private Vector2 _position;
 
     /// <summary>
     /// Gets and Sets the position of the ScreenButton's top-left corner.
     /// </summary>
     public Vector2 Position
     {
-        get { return position; }
-        set { position = value; }
+        get => _position;
+        set => _position = value;
     }
 
-    private IInputHandler inputHandler;
+    private readonly IInputHandler _inputHandler;
 
-    private bool pressed = false;
+    private bool _pressed;
 
     /// <summary>
     /// Gets a boolean value indicating whether the ScreenButton has been pressed.
     /// </summary>
-    public bool IsPressed
-    {
-        get { return pressed; }
-    }
+    public bool IsPressed => _pressed;
 
-    private bool isSelected = false;
+    private bool _isSelected;
 
     /// <summary>
     /// Gets and Sets whether the ScreenButton is selected or not.
     /// </summary>
     public bool IsSelected
     {
-        get { return isSelected; }
-        set { isSelected = value; }
+        get => _isSelected;
+        set => _isSelected = value;
     }
 
-    private bool readMouse = false;
+    private bool _readMouse;
 
     /// <summary>
     /// Gets and Sets whether the ScreenButton should react to mouse input. Set to false by default.
     /// </summary>
     public bool ReadMouseInput
     {
-        get { return readMouse; }
-        set { readMouse = value; }
+        get => _readMouse;
+        set => _readMouse = value;
     }
 
     public ScreenButton(IInputHandler inputHandler, Texture2D texture)
     {
-        this.inputHandler = inputHandler;
-        sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
-        this.texture = texture;
+        _inputHandler = inputHandler;
+        _sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+        _texture = texture;
     }
 
     /// <summary>
@@ -113,26 +110,26 @@ public class ScreenButton
     public virtual void HandleInput()
     {
         // Read mouse input?
-        if (readMouse)
+        if (_readMouse)
         {
             // Button is always not pressed until proven otherwise
-            pressed = false;
+            _pressed = false;
 
             // Button pressed and mouse in correct area?
-            if (inputHandler.CurrentMouseState.X > position.X &&
-                inputHandler.CurrentMouseState.X < position.X + texture.Width &&
-                inputHandler.CurrentMouseState.Y > position.Y &&
-                inputHandler.CurrentMouseState.Y < position.Y + texture.Height)
+            if (_inputHandler.CurrentMouseState.X > _position.X &&
+                _inputHandler.CurrentMouseState.X < _position.X + _texture.Width &&
+                _inputHandler.CurrentMouseState.Y > _position.Y &&
+                _inputHandler.CurrentMouseState.Y < _position.Y + _texture.Height)
             {
-                isSelected = true;
+                _isSelected = true;
 
                 // Button pressed?
-                if (inputHandler.CurrentMouseState.LeftButton == ButtonState.Pressed &&
-                    inputHandler.OldMouseState.LeftButton == ButtonState.Released)
-                    pressed = true;
+                if (_inputHandler.CurrentMouseState.LeftButton == ButtonState.Pressed &&
+                    _inputHandler.OldMouseState.LeftButton == ButtonState.Released)
+                    _pressed = true;
             }
             else
-                isSelected = false;
+                _isSelected = false;
         }
     }
 
@@ -140,7 +137,9 @@ public class ScreenButton
     /// Override this method to perform any update logic.
     /// </summary>
     /// <param name="gameTime"></param>
-    public virtual void Update(GameTime gameTime) { }
+    public virtual void Update(GameTime gameTime)
+    {
+    }
 
     /// <summary>
     /// Called when the ScreenButton needs to draw itself.
@@ -148,12 +147,12 @@ public class ScreenButton
     /// <param name="spriteBatch"></param>
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        if (texture != null)
+        if (_texture != null)
         {
-            if (isSelected)
-                spriteBatch.Draw(texture, position, sourceRectangle, selectedColor);
+            if (_isSelected)
+                spriteBatch.Draw(_texture, _position, _sourceRectangle, _selectedColor);
             else
-                spriteBatch.Draw(texture, position, sourceRectangle, Color.White);
+                spriteBatch.Draw(_texture, _position, _sourceRectangle, Color.White);
         }
     }
 }

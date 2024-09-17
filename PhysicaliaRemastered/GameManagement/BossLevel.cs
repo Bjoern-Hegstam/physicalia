@@ -16,6 +16,5 @@ public class BossLevel : Level
     public BossLevel(Game game, Player player)
         : base(game, player)
     {
-
     }
 }

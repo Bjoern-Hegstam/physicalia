@@ -7,63 +7,51 @@ namespace XNALibrary.Graphics.ScreenManagement;
 
 public class Screen
 {
-    private List<ScreenButton> buttons;
+    private readonly List<ScreenButton> _buttons;
 
     /// <summary>
     /// Gets the Screen's collection of buttons.
     /// </summary>
-    public List<ScreenButton> Buttons
-    {
-        get { return buttons; }
-    }
+    public List<ScreenButton> Buttons => _buttons;
 
-    private Texture2D background;
+    private Texture2D _background;
 
     /// <summary>
     /// Gets and Sets the backgroundimage. Set to null for no background.
     /// </summary>
     public Texture2D Background
     {
-        get { return background; }
-        set { background = value; }
+        get => _background;
+        set => _background = value;
     }
 
-    private Game game;
+    private readonly Game _game;
 
     /// <summary>
     /// Gets the game using the Screen.
     /// </summary>
-    public Game Game
-    {
-        get { return game; }
-    }
+    public Game Game => _game;
 
-    private IInputHandler inputHandler;
+    private IInputHandler _inputHandler;
 
     /// <summary>
     /// Gets the IInputHandler.
     /// </summary>
-    public IInputHandler InputHandler
-    {
-        get { return inputHandler; }
-    }
+    public IInputHandler InputHandler => _inputHandler;
 
-    private ScreenManager manager;
+    private readonly ScreenManager _manager;
 
     /// <summary>
     /// Gets the ScreenManager that's managing the Screen.
     /// </summary>
-    public ScreenManager ScreenManager
-    {
-        get { return manager; }
-    }
+    public ScreenManager ScreenManager => _manager;
 
     public Screen(Game game, ScreenManager manager)
     {
-        buttons = new List<ScreenButton>();
+        _buttons = new List<ScreenButton>();
 
-        this.game = game;
-        this.manager = manager;
+        _game = game;
+        _manager = manager;
     }
 
     /// <summary>
@@ -72,12 +60,16 @@ public class Screen
     /// </summary>
     public virtual void Initialize()
     {
-        inputHandler = (IInputHandler)game.Services.GetService(typeof(IInputHandler));
+        _inputHandler = (IInputHandler)_game.Services.GetService(typeof(IInputHandler));
     }
 
-    public virtual void LoadContent(ContentManager contentManager) { }
+    public virtual void LoadContent(ContentManager contentManager)
+    {
+    }
 
-    public virtual void UnloadContent() { }
+    public virtual void UnloadContent()
+    {
+    }
 
     /// <summary>
     /// Updates the Screen.
@@ -112,14 +104,14 @@ public class Screen
         spriteBatch.Begin();
 
         // Draw background if one has been set
-        if (background != null)
-            spriteBatch.Draw(background, Vector2.Zero, Color.White);
+        if (_background != null)
+            spriteBatch.Draw(_background, Vector2.Zero, Color.White);
 
         // Draw content before buttons
         OnDrawBefore(spriteBatch);
 
         // Draw all buttons
-        foreach (ScreenButton button in buttons)
+        foreach (ScreenButton button in _buttons)
             button.Draw(spriteBatch);
 
         // Draw content after buttons
@@ -130,7 +122,7 @@ public class Screen
 
     private void UpdateButtons(GameTime gameTime)
     {
-        foreach (ScreenButton button in buttons)
+        foreach (ScreenButton button in _buttons)
         {
             button.Update(gameTime);
         }
@@ -141,7 +133,7 @@ public class Screen
     /// </summary>
     private void HandleInput()
     {
-        foreach (ScreenButton button in buttons)
+        foreach (ScreenButton button in _buttons)
         {
             button.HandleInput();
 
@@ -163,35 +155,47 @@ public class Screen
     /// Overruide method to handle input. Methods is not called by the ScreenManager
     /// if a transition is taking place.
     /// </summary>
-    protected virtual void OnHandleInput() { }
+    protected virtual void OnHandleInput()
+    {
+    }
 
     /// <summary>
     /// Override this method to draw any special content before the buttons are drawn.
     /// </summary>
     /// <param name="spriteBatch">Initialized SpriteBatch to use for drawing content.</param>
-    protected virtual void OnDrawBefore(SpriteBatch spriteBatch) { }
+    protected virtual void OnDrawBefore(SpriteBatch spriteBatch)
+    {
+    }
 
     /// <summary>
     /// Override this method to draw any special content before the buttons are drawn.
     /// </summary>
     /// <param name="spriteBatch">Initialized SpriteBatch to use for drawing content.</param>
-    protected virtual void OnDrawAfter(SpriteBatch spriteBatch) { }
+    protected virtual void OnDrawAfter(SpriteBatch spriteBatch)
+    {
+    }
 
     /// <summary>
     /// Called when the Screen is updated. Override this method to perform any update code.
     /// </summary>
     /// <param name="gameTime"></param>
-    protected virtual void OnUpdate(GameTime gameTime) { }
+    protected virtual void OnUpdate(GameTime gameTime)
+    {
+    }
 
     /// <summary>
     /// Called when the Screen is transitioning in.
     /// </summary>
     /// <param name="finished">True if the transition has finished; false otherwise</param>
-    public virtual void OnTransitionIn(bool finished) { }
+    public virtual void OnTransitionIn(bool finished)
+    {
+    }
 
     /// <summary>
     /// Called when the Screen is transitioning out.
     /// </summary>
     /// <param name="finished">True if the Screen has finished its part of the transition; false otherwise</param>
-    public virtual void OnTransitionOut(bool finished) { }
+    public virtual void OnTransitionOut(bool finished)
+    {
+    }
 }

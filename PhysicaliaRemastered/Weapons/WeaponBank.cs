@@ -8,9 +8,9 @@ namespace PhysicaliaRemastered.Weapons;
 
 public interface IWeaponBank
 {
-    void AddWeapon(NewWeapons.Weapon weapon);
-    void RemoveWeapon(int weaponID);
-    NewWeapons.Weapon GetWeapon(int weaponID);
+    void AddWeapon(Weapon weapon);
+    void RemoveWeapon(int weaponId);
+    Weapon GetWeapon(int weaponId);
 }
 
 /// <summary>
@@ -19,51 +19,51 @@ public interface IWeaponBank
 /// </summary>
 public class WeaponBank : IWeaponBank
 {
-    private Dictionary<int, NewWeapons.Weapon> weaponBank;
+    private readonly Dictionary<int, Weapon> _weaponBank;
 
-    private IParticleEngine particleEngine;
-    private ISpriteLibrary spriteLibrary;
-    private IAnimationManager animationManager;
+    private readonly IParticleEngine _particleEngine;
+    private readonly ISpriteLibrary _spriteLibrary;
+    private readonly IAnimationManager _animationManager;
 
     public WeaponBank(IParticleEngine particleEngine, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
     {
-        this.particleEngine = particleEngine;
-        this.spriteLibrary = spriteLibrary;
-        this.animationManager = animationManager;
+        _particleEngine = particleEngine;
+        _spriteLibrary = spriteLibrary;
+        _animationManager = animationManager;
 
-        weaponBank = new Dictionary<int, NewWeapons.Weapon>();
+        _weaponBank = new Dictionary<int, Weapon>();
     }
 
     /// <summary>
     /// Adds the passed in Weapon to the bank.
     /// </summary>
     /// <param name="weapon">Weapon to add to the bank.</param>
-    public void AddWeapon(NewWeapons.Weapon weapon)
+    public void AddWeapon(Weapon weapon)
     {
-        if (!weaponBank.ContainsValue(weapon))
-            weaponBank.Add(weapon.WeaponID, weapon);
+        if (!_weaponBank.ContainsValue(weapon))
+            _weaponBank.Add(weapon.WeaponId, weapon);
     }
 
     /// <summary>
     /// Removes the weapon with the specified id form the bank.
     /// </summary>
-    /// <param name="weaponID">Id of the weapon to remove.</param>
-    public void RemoveWeapon(int weaponID)
+    /// <param name="weaponId">Id of the weapon to remove.</param>
+    public void RemoveWeapon(int weaponId)
     {
-        if (weaponBank.ContainsKey(weaponID))
-            weaponBank.Remove(weaponID);
+        if (_weaponBank.ContainsKey(weaponId))
+            _weaponBank.Remove(weaponId);
     }
 
     /// <summary>
     /// Gets the weapon with the specified id.
     /// </summary>
-    /// <param name="weaponID">Id of the weapon to get.</param>
+    /// <param name="weaponId">Id of the weapon to get.</param>
     /// <returns>The weapon with the specified id or null if no match
     /// was found.</returns>
-    public NewWeapons.Weapon GetWeapon(int weaponID)
+    public Weapon GetWeapon(int weaponId)
     {
-        if (weaponBank.ContainsKey(weaponID))
-            return weaponBank[weaponID];
+        if (_weaponBank.ContainsKey(weaponId))
+            return _weaponBank[weaponId];
 
         return null;
     }
@@ -75,10 +75,8 @@ public class WeaponBank : IWeaponBank
         readerSettings.IgnoreWhitespace = true;
         readerSettings.IgnoreProcessingInstructions = true;
 
-        using (XmlReader reader = XmlReader.Create(path, readerSettings))
-        {
-            LoadXml(reader);
-        }
+        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        LoadXml(reader);
     }
 
     public void LoadXml(XmlReader reader)
@@ -90,17 +88,17 @@ public class WeaponBank : IWeaponBank
             {
                 // Get the type of weapon to add
                 string weaponType = reader.GetAttribute("type");
-                int weaponID = int.Parse(reader.GetAttribute("id"));
+                int weaponId = int.Parse(reader.GetAttribute("id"));
 
-                NewWeapons.Weapon weapon = null;
+                Weapon weapon = null;
                 // Create an instance of the wanted type
                 switch (weaponType)
                 {
                     case "Melee":
-                        weapon = new MeleeWeapon(weaponID, particleEngine);
+                        weapon = new MeleeWeapon(weaponId, _particleEngine);
                         break;
                     case "Projectile":
-                        weapon = new ProjectileWeapon(weaponID, particleEngine);
+                        weapon = new ProjectileWeapon(weaponId, _particleEngine);
                         break;
                 }
 
@@ -108,7 +106,7 @@ public class WeaponBank : IWeaponBank
                 ParseWeaponData(reader, weapon);
 
                 // Add the weapon to the bank
-                weaponBank.Add(weapon.WeaponID, weapon);
+                _weaponBank.Add(weapon.WeaponId, weapon);
             }
 
             if (reader.NodeType == XmlNodeType.EndElement &&
@@ -117,7 +115,7 @@ public class WeaponBank : IWeaponBank
         }
     }
 
-    private void ParseWeaponData(XmlReader reader, NewWeapons.Weapon weapon)
+    private void ParseWeaponData(XmlReader reader, Weapon weapon)
     {
         // Parse xml data
         while (reader.Read())
@@ -128,16 +126,16 @@ public class WeaponBank : IWeaponBank
                 // Get sprite
                 reader.ReadToFollowing("Sprite");
                 int spriteKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WeaponSprite = spriteLibrary.GetSprite(spriteKey);
+                weapon.WeaponSprite = _spriteLibrary.GetSprite(spriteKey);
 
                 // Get animations
                 reader.ReadToFollowing("Warmup");
                 int warmUpKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WarmupAnimation = animationManager.AddPlaybackAnimation(warmUpKey);
+                weapon.WarmupAnimation = _animationManager.AddPlaybackAnimation(warmUpKey);
 
                 reader.ReadToFollowing("Fire");
                 int fireKey = int.Parse(reader.GetAttribute("key"));
-                weapon.WeaponFireAnimation = animationManager.AddPlaybackAnimation(fireKey);
+                weapon.WeaponFireAnimation = _animationManager.AddPlaybackAnimation(fireKey);
 
                 reader.ReadToFollowing("PlayerOffset");
                 float x = float.Parse(reader.GetAttribute("x"));
@@ -154,7 +152,7 @@ public class WeaponBank : IWeaponBank
 
                 // Get particle id
                 reader.ReadToFollowing("Particle");
-                weapon.ParticleID = int.Parse(reader.GetAttribute("id"));
+                weapon.ParticleId = int.Parse(reader.GetAttribute("id"));
             }
 
             if (reader.NodeType == XmlNodeType.Element &&

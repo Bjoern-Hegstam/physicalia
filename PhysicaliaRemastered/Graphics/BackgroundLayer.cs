@@ -11,17 +11,12 @@ namespace PhysicaliaRemastered.Graphics;
 /// </summary>
 public class BackgroundLayer
 {
-    private Sprite backgroundSprite;
-    private float depthValue;
-    private Vector2 position;
-    private Vector2 startPosition;
-
-    private bool loopX, loopY;
+    private Sprite _backgroundSprite;
 
     public Sprite Background
     {
-        get => backgroundSprite;
-        set => backgroundSprite = value;
+        get => _backgroundSprite;
+        set => _backgroundSprite = value;
     }
 
     /// <summary>
@@ -29,108 +24,91 @@ public class BackgroundLayer
     /// layer will not move at all, while a value of one has the layer moving
     /// at the same velocity as the player.
     /// </summary>
-    public float Depth
-    {
-        get => depthValue;
-        set => depthValue = value;
-    }
+    public float Depth { get; set; }
 
-    public bool LoopX
-    {
-        get => loopX;
-        set => loopX = value;
-    }
+    public bool LoopX { get; set; }
 
-    public bool LoopY
-    {
-        get => loopY;
-        set => loopY = value;
-    }
+    public bool LoopY { get; set; }
 
-    public Vector2 Position
-    {
-        get => position;
-        set => position = value;
-    }
+    public Vector2 Position { get; set; }
 
-    public Vector2 StartPosition
-    {
-        get => startPosition;
-        set => startPosition = value;
-    }
+    public Vector2 StartPosition { get; set; }
 
     public BackgroundLayer(Sprite background, float depthValue)
     {
-            backgroundSprite = background;
-            this.depthValue = depthValue;
-            startPosition = position = Vector2.Zero;
-            loopX = loopY = false;
-        }
+        _backgroundSprite = background;
+        Depth = depthValue;
+        StartPosition = Position = Vector2.Zero;
+        LoopX = LoopY = false;
+    }
 
     public void Update(Vector2 positionDelta)
     {
-            position += positionDelta * depthValue;
-        }
+        Position += positionDelta * Depth;
+    }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-            spriteBatch.Draw(backgroundSprite.Texture,
-                             position,
-                             backgroundSprite.SourceRectangle,
-                             Color.White);
-        }
+        spriteBatch.Draw(_backgroundSprite.Texture,
+            Position,
+            _backgroundSprite.SourceRectangle,
+            Color.White);
+    }
 
     public void Draw(SpriteBatch spriteBatch, ScreenSampler screenSampler)
     {
-            // Don't draw anything if the background isn't visible
-            if (!LoopX &&
-                screenSampler.Position.X * depthValue > backgroundSprite.SourceRectangle.Width)
-                return;
+        // Don't draw anything if the background isn't visible
+        if (!LoopX &&
+            screenSampler.Position.X * Depth > _backgroundSprite.SourceRectangle.Width)
+            return;
 
-            if (!LoopY &&
-                 screenSampler.Position.Y * depthValue > backgroundSprite.SourceRectangle.Height)
-                return;
+        if (!LoopY &&
+            screenSampler.Position.Y * Depth > _backgroundSprite.SourceRectangle.Height)
+            return;
 
-            // Do a simple draw if no looping is used
-            if (!loopX && !loopY)
+        // Do a simple draw if no looping is used
+        if (!LoopX && !LoopY)
+        {
+            Draw(spriteBatch);
+            return;
+        }
+
+        Vector2 startPos = Position;
+
+        while (startPos.X < -_backgroundSprite.SourceRectangle.Width)
+            startPos.X += _backgroundSprite.SourceRectangle.Width;
+
+        while (startPos.Y < -_backgroundSprite.SourceRectangle.Height)
+            startPos.Y += _backgroundSprite.SourceRectangle.Height;
+
+        for (float y = startPos.Y;
+             y < screenSampler.Position.Y + screenSampler.Height;
+             y += _backgroundSprite.SourceRectangle.Height)
+        {
+            for (float x = startPos.X;
+                 x < screenSampler.Position.X + screenSampler.Width;
+                 x += _backgroundSprite.SourceRectangle.Width)
             {
-                Draw(spriteBatch);
-                return;
-            }
+                spriteBatch.Draw(_backgroundSprite.Texture,
+                    new Vector2(x, y),
+                    _backgroundSprite.SourceRectangle,
+                    Color.White);
 
-            Vector2 startPos = position;
-
-            while (startPos.X < -backgroundSprite.SourceRectangle.Width)
-                startPos.X += backgroundSprite.SourceRectangle.Width;
-
-            while (startPos.Y < -backgroundSprite.SourceRectangle.Height)
-                startPos.Y += backgroundSprite.SourceRectangle.Height;
-
-            for (float y = startPos.Y; y < screenSampler.Position.Y + screenSampler.Height; y += backgroundSprite.SourceRectangle.Height)
-            {
-                for (float x = startPos.X; x < screenSampler.Position.X + screenSampler.Width; x += backgroundSprite.SourceRectangle.Width)
-                {
-                    spriteBatch.Draw(backgroundSprite.Texture,
-                         new Vector2(x, y),
-                         backgroundSprite.SourceRectangle,
-                         Color.White);
-
-                    if (!loopX)
-                        break;
-                }
-
-                if (!loopY)
+                if (!LoopX)
                     break;
             }
 
+            if (!LoopY)
+                break;
         }
+    }
 
     public static int Compare(BackgroundLayer x, BackgroundLayer y)
     {
-            if (x.Depth > y.Depth)
-                return 1;
-            else if (x.Depth < y.Depth)
-                return -1;
-            return 0;
-        }
+        if (x.Depth > y.Depth)
+            return 1;
+        else if (x.Depth < y.Depth)
+            return -1;
+        return 0;
+    }
 }

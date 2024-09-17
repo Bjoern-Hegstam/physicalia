@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <GamepadMap>
-	<Button action="MenuUp" value="DPadUp" />
-	<Button action="MenuDown" value="DPadDown" />
-	<Button action="MenuLeft" value="DPadLeft" />
-	<Button action="MenuRight" value="DPadRight" />
-	<Button action="MenuStart" value="Start" />
-	<Button action="MenuBack" value="Back" />
-	<Button action="NextWeapon" value="RightShoulder" />
-	<Button action="PreviousWeapon" value="LeftShoulder" />
-	<Button action="WalkLeft" value="LeftThumbstickLeft" />
-	<Button action="WalkRight" value="LeftThumbstickRight" />
-	<Button action="Jump" value="A" />
-	<Button action="Shoot" value="RightTrigger" />
+    <Button action="MenuUp" value="DPadUp" />
+    <Button action="MenuDown" value="DPadDown" />
+    <Button action="MenuLeft" value="DPadLeft" />
+    <Button action="MenuRight" value="DPadRight" />
+    <Button action="MenuStart" value="Start" />
+    <Button action="MenuBack" value="Back" />
+    <Button action="NextWeapon" value="RightShoulder" />
+    <Button action="PreviousWeapon" value="LeftShoulder" />
+    <Button action="WalkLeft" value="LeftThumbstickLeft" />
+    <Button action="WalkRight" value="LeftThumbstickRight" />
+    <Button action="Jump" value="A" />
+    <Button action="Shoot" value="RightTrigger" />
 </GamepadMap>

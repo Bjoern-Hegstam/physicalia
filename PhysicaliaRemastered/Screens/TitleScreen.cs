@@ -8,27 +8,26 @@ namespace PhysicaliaRemastered.Screens;
 
 public class TitleScreen : Screen
 {
-    private ISettings settings;
+    private ISettings _settings;
 
     public ISettings Settings
     {
-        set => settings = value;
+        set => _settings = value;
     }
 
     public TitleScreen(Game game, ScreenManager screenManager)
         : base(game, screenManager)
     {
-
-        }
+    }
 
     public override void LoadContent(ContentManager contentManager)
     {
-            // TODO: Load Background
-        }
+        // TODO: Load Background
+    }
 
     protected override void OnHandleInput()
     {
-            if (settings.InputMap.IsPressed(InputAction.MenuStart))
-                this.ScreenManager.TransitionTo(typeof(MenuScreen));
-        }
+        if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+            ScreenManager.TransitionTo(typeof(MenuScreen));
+    }
 }

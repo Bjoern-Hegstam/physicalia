@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <KeyboardMap>
-	<Key action="MenuUp" value="Up" />
-	<Key action="MenuDown" value="Down" />
-	<Key action="MenuLeft" value="Left" />
-	<Key action="MenuRight" value="Right" />
-	<Key action="MenuStart" value="Enter" />
-	<Key action="MenuBack" value="Back" />
-	<Key action="NextWeapon" value="X" />
-	<Key action="PreviousWeapon" value="Z" />
-	<Key action="WalkLeft" value="Left" />
-	<Key action="WalkRight" value="Right" />
-	<Key action="Jump" value="Space" />
-	<Key action="Shoot" value="LeftControl" />
+    <Key action="MenuUp" value="Up" />
+    <Key action="MenuDown" value="Down" />
+    <Key action="MenuLeft" value="Left" />
+    <Key action="MenuRight" value="Right" />
+    <Key action="MenuStart" value="Enter" />
+    <Key action="MenuBack" value="Back" />
+    <Key action="NextWeapon" value="X" />
+    <Key action="PreviousWeapon" value="Z" />
+    <Key action="WalkLeft" value="Left" />
+    <Key action="WalkRight" value="Right" />
+    <Key action="Jump" value="Space" />
+    <Key action="Shoot" value="LeftControl" />
 </KeyboardMap>

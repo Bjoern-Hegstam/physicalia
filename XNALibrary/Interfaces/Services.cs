@@ -81,13 +81,13 @@ public interface ISpriteLibrary
 
 public interface IScreenSampler
 {
-    Vector2 Position { get; set;}
+    Vector2 Position { get; set; }
 
-    int MaxWidth { get;  set;}
-    int MaxHeight { get; set;}
+    int MaxWidth { get; set; }
+    int MaxHeight { get; set; }
 
-    int Width { get; set;}
-    int Height { get; set;}
+    int Width { get; set; }
+    int Height { get; set; }
 
     bool IsOnScreen(Rectangle boundingBox);
     bool IsOnScreen(int x, int y, int width, int height);
@@ -119,7 +119,6 @@ public interface IInputHandler
     void GetMouseMove(out Vector2 distance);
     void GetNormalizedMouseMove(out Vector2 distance);
 }
-
 
 public interface IAnimationManager
 {

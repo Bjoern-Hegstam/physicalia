@@ -6,74 +6,81 @@ namespace PhysicaliaRemastered.ActiveObjects;
 
 public class MovingObject : ActiveObject
 {
-    private Curve curveX, curveY;
-    private Vector2 curveScale;
-    private Vector2 curvePosition;
-    private Vector2 positionOffset;
+    private readonly Curve _curveX;
+    private readonly Curve _curveY;
+    private Vector2 _curveScale;
+    private Vector2 _curvePosition;
+    private Vector2 _positionOffset;
 
     public Vector2 Scale
     {
-        get => curveScale;
-        set => curveScale = value;
+        get => _curveScale;
+        set => _curveScale = value;
     }
 
     public float ScaleX
     {
-        get => curveScale.X;
-        set => curveScale.X = value;
+        get => _curveScale.X;
+        set => _curveScale.X = value;
     }
 
     public float ScaleY
     {
-        get => curveScale.Y;
-        set => curveScale.Y = value;
+        get => _curveScale.Y;
+        set => _curveScale.Y = value;
     }
 
     public override Vector2 Position
     {
-        get => base.Position - positionOffset;
+        get => base.Position - _positionOffset;
         set => base.Position = value;
     }
 
     public MovingObject(ISpriteLibrary spriteLibrary, int spriteKey)
-        : this( spriteLibrary, spriteKey, new Curve()) { }
+        : this(spriteLibrary, spriteKey, new Curve())
+    {
+    }
 
     public MovingObject(ISpriteLibrary spriteLibrary, int spriteKey, Curve curve)
-        : this( spriteLibrary, spriteKey, curve, curve) { }
+        : this(spriteLibrary, spriteKey, curve, curve)
+    {
+    }
 
     public MovingObject(ISpriteLibrary spriteLibrary, int spriteKey, Curve curveX, Curve curveY)
         : base(spriteLibrary, spriteKey)
     {
-            this.curveX = curveX;
-            this.curveY = curveY;
-            curvePosition = Vector2.Zero;
-            curveScale = new Vector2(1F);
-        }
+        _curveX = curveX;
+        _curveY = curveY;
+        _curvePosition = Vector2.Zero;
+        _curveScale = new Vector2(1F);
+    }
 
-    public override void CheckCollision(ICollisionObject collObject) { }
+    public override void CheckCollision(ICollisionObject collObject)
+    {
+    }
 
     public override void Reset()
     {
-            curvePosition = Vector2.Zero;
-            positionOffset.X = curveX.Evaluate(curvePosition.X);
-            positionOffset.Y = curveY.Evaluate(curvePosition.Y);
-        }
+        _curvePosition = Vector2.Zero;
+        _positionOffset.X = _curveX.Evaluate(_curvePosition.X);
+        _positionOffset.Y = _curveY.Evaluate(_curvePosition.Y);
+    }
 
     public override void Update(GameTime gametime)
     {
-            if (!IsActive)
-                return;
+        if (!IsActive)
+            return;
 
-            // Update the curve position
-            curvePosition += Velocity * (float)gametime.ElapsedGameTime.TotalSeconds;
+        // Update the curve position
+        _curvePosition += Velocity * (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            // Update position when we're sure our curve position is valid
-            positionOffset = new Vector2(curveX.Evaluate(curvePosition.X) * curveScale.X,
-                                             curveY.Evaluate(curvePosition.Y) * curveScale.Y);
-        }
+        // Update position when we're sure our curve position is valid
+        _positionOffset = new Vector2(_curveX.Evaluate(_curvePosition.X) * _curveScale.X,
+            _curveY.Evaluate(_curvePosition.Y) * _curveScale.Y);
+    }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-            base.Draw(spriteBatch, offsetPosition + positionOffset);
-        }
+        base.Draw(spriteBatch, offsetPosition + _positionOffset);
+    }
 }

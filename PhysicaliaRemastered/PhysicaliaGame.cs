@@ -13,7 +13,7 @@ namespace PhysicaliaRemastered;
 /// </summary>
 public class PhysicaliaGame : Game
 {
-    private GraphicsDeviceManager _graphics;
+    private readonly GraphicsDeviceManager _graphics;
 
     private InputHandler _inputHandler;
 
@@ -50,7 +50,7 @@ public class PhysicaliaGame : Game
 
         _menuScreen = new MenuScreen(this, _screenManager);
         _gameScreen = new GameScreen(this, _screenManager);
-            
+
         _screenManager.BaseScreen = _menuScreen;
 
         _screenManager.Screens.Add(_menuScreen);
@@ -73,7 +73,7 @@ public class PhysicaliaGame : Game
 
         // TODO: use this.Content to load your game content here
     }
-    
+
     /// <summary>
     /// This is called when the game should draw itself.
     /// </summary>

@@ -6,28 +6,30 @@ namespace XNALibrary.Graphics.ParticleEngine.Particles;
 
 public class ProjectileDefinition : SpriteParticleDefinition
 {
-    private ObjectType damageObjects;
-    private float damageAmount;
+    private ObjectType _damageObjects;
+    private float _damageAmount;
 
     public ObjectType DamageObjects
     {
-        get { return damageObjects; }
-        set { damageObjects = value; }
+        get => _damageObjects;
+        set => _damageObjects = value;
     }
 
     public float DamageAmount
     {
-        get { return damageAmount; }
-        set { damageAmount = value; }
+        get => _damageAmount;
+        set => _damageAmount = value;
     }
 
     public ProjectileDefinition(int id, Sprite sprite)
-        : base(id, sprite) { }
+        : base(id, sprite)
+    {
+    }
 
     public override Particle Create(float angle)
     {
         Projectile projectile = new Projectile(Sprite);
-        this.SetupParticle(projectile, angle);
+        SetupParticle(projectile, angle);
 
         return projectile;
     }
@@ -37,8 +39,8 @@ public class ProjectileDefinition : SpriteParticleDefinition
         base.SetupParticle(particle, angle);
 
         Projectile projectile = (Projectile)particle;
-        projectile.DamageObjects = damageObjects;
-        projectile.DamageAmount = damageAmount;
+        projectile.DamageObjects = _damageObjects;
+        projectile.DamageAmount = _damageAmount;
         projectile.CanCollide = true;
     }
 
@@ -47,7 +49,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
         if (reader.NodeType == XmlNodeType.Element &&
             reader.LocalName == "Damage")
         {
-            damageAmount = int.Parse(reader.GetAttribute("amount"));
+            _damageAmount = int.Parse(reader.GetAttribute("amount"));
         }
 
         if (reader.NodeType == XmlNodeType.Element &&
@@ -59,7 +61,7 @@ public class ProjectileDefinition : SpriteParticleDefinition
                 for (int i = 0; i < objects.Length; i++)
                 {
                     ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objects[i]);
-                    damageObjects |= objectType;
+                    _damageObjects |= objectType;
                 }
         }
     }

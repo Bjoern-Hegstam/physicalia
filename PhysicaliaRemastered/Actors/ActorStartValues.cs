@@ -14,10 +14,10 @@ public struct ActorStartValues
 
     public ActorStartValues(Vector2 position, Vector2 velocity, Vector2 acceleration)
     {
-            Position = position;
-            Velocity = velocity;
-            Acceleration = acceleration;
-        }
+        Position = position;
+        Velocity = velocity;
+        Acceleration = acceleration;
+    }
 
     /// <summary>
     /// 
@@ -27,40 +27,40 @@ public struct ActorStartValues
     /// <returns></returns>
     public static ActorStartValues FromXml(XmlReader reader, string endElement)
     {
-            ActorStartValues startValues = new ActorStartValues();
+        ActorStartValues startValues = new ActorStartValues();
 
-            while (reader.Read())
-            {
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Position")
-                    startValues.Position = ReadVector2(reader);
+        while (reader.Read())
+        {
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Position")
+                startValues.Position = ReadVector2(reader);
 
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Velocity")
-                    startValues.Velocity = ReadVector2(reader);
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Velocity")
+                startValues.Velocity = ReadVector2(reader);
 
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Acceleration")
-                    startValues.Acceleration = ReadVector2(reader);
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Acceleration")
+                startValues.Acceleration = ReadVector2(reader);
 
-                if (reader.NodeType == XmlNodeType.EndElement &&
-                    reader.LocalName == endElement)
-                    return startValues;
-            }
-
-            return startValues;
+            if (reader.NodeType == XmlNodeType.EndElement &&
+                reader.LocalName == endElement)
+                return startValues;
         }
+
+        return startValues;
+    }
 
     public static ActorStartValues FromXml(XmlReader reader)
     {
-            return FromXml(reader, "ActorStartValues");
-        }
+        return FromXml(reader, "ActorStartValues");
+    }
 
     private static Vector2 ReadVector2(XmlReader reader)
     {
-            float x = float.Parse(reader.GetAttribute("x"));
-            float y = float.Parse(reader.GetAttribute("y"));
+        float x = float.Parse(reader.GetAttribute("x"));
+        float y = float.Parse(reader.GetAttribute("y"));
 
-            return new Vector2(x, y);
-        }
+        return new Vector2(x, y);
+    }
 }

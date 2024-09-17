@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextureLibrary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../Schemas/schema_textureLibrary.xsd">
-	<Textures>
-		<!-- Tiles 0x -->
-		<Texture id="0">Content/GameData/Graphics/tiles_Grass_Earth.png</Texture>
-		<Texture id="1">Content/GameData/Graphics/tiles_mechanical.png</Texture>
-		<Texture id="2">Content/GameData/Graphics/tiles_schoolSet.png</Texture>
-		
-		<!-- Weapons 1x -->
-		<Texture id="10">Content/GameData/Graphics/weaponSheet.png</Texture>
-		<Texture id="11">Content/GameData/Graphics/Weapon_chainsaw.png</Texture>
-		<Texture id="12">Content/GameData/Graphics/Weapon_minigun.png</Texture>
-		
-		<!-- Player sprites and UI 2x -->
-		<Texture id="20">Content/GameData/Graphics/player_spritesheet.png</Texture>
-		<Texture id="21">Content/GameData/Graphics/ui_healthBars.png</Texture>
-		
-		<!-- Enemies 3x -->
-		<Texture id="30">Content/GameData/Graphics/enemy_passare.png</Texture>
-		
-		<!-- Pickups 1xx -->
-		<Texture id="100">Content/GameData/Graphics/pickupSheet.png</Texture>
-		
-		<!-- Particles 2xx -->
-		<Texture id="200">Content/GameData/Graphics/explode_1.png</Texture>
-		
-		<!-- Backgrounds 3xx -->
-		<Texture id="300">Content/GameData/Graphics/background_sky.png</Texture>
-		<Texture id="301">Content/GameData/Graphics/background_mountains.png</Texture>
-		<Texture id="302">Content/GameData/Graphics/background_houses.png</Texture>
-		<Texture id="303">Content/GameData/Graphics/level2-1_back_1.png</Texture>
-		<Texture id="304">Content/GameData/Graphics/level2-1_back_2.png</Texture>
-	</Textures>
+
+<TextureLibrary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="../Schemas/schema_textureLibrary.xsd">
+    <Textures>
+        <!-- Tiles 0x -->
+        <Texture id="0">Content/GameData/Graphics/tiles_Grass_Earth.png</Texture>
+        <Texture id="1">Content/GameData/Graphics/tiles_mechanical.png</Texture>
+        <Texture id="2">Content/GameData/Graphics/tiles_schoolSet.png</Texture>
+
+        <!-- Weapons 1x -->
+        <Texture id="10">Content/GameData/Graphics/weaponSheet.png</Texture>
+        <Texture id="11">Content/GameData/Graphics/Weapon_chainsaw.png</Texture>
+        <Texture id="12">Content/GameData/Graphics/Weapon_minigun.png</Texture>
+
+        <!-- Player sprites and UI 2x -->
+        <Texture id="20">Content/GameData/Graphics/player_spritesheet.png</Texture>
+        <Texture id="21">Content/GameData/Graphics/ui_healthBars.png</Texture>
+
+        <!-- Enemies 3x -->
+        <Texture id="30">Content/GameData/Graphics/enemy_passare.png</Texture>
+
+        <!-- Pickups 1xx -->
+        <Texture id="100">Content/GameData/Graphics/pickupSheet.png</Texture>
+
+        <!-- Particles 2xx -->
+        <Texture id="200">Content/GameData/Graphics/explode_1.png</Texture>
+
+        <!-- Backgrounds 3xx -->
+        <Texture id="300">Content/GameData/Graphics/background_sky.png</Texture>
+        <Texture id="301">Content/GameData/Graphics/background_mountains.png</Texture>
+        <Texture id="302">Content/GameData/Graphics/background_houses.png</Texture>
+        <Texture id="303">Content/GameData/Graphics/level2-1_back_1.png</Texture>
+        <Texture id="304">Content/GameData/Graphics/level2-1_back_2.png</Texture>
+    </Textures>
 </TextureLibrary>

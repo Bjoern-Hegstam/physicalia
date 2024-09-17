@@ -12,164 +12,132 @@ namespace PhysicaliaRemastered.ActiveObjects;
 /// </summary>
 public abstract class ActiveObject : ICollisionObject
 {
-    private static int activeObjectCount = 0;
-    private int uniqueID;
+    private static int _activeObjectCount;
 
-    private Vector2 position;
-    private Vector2 velocity;
+    private Vector2 _position;
 
-    private ISpriteLibrary spriteLibrary;
-    private Sprite sprite;
+    private readonly ISpriteLibrary _spriteLibrary;
+    private Sprite _sprite;
 
     // Width and Height must not be the same dimensions as the Sprite.
-    private int width;
-    private int height;
 
-    private Rectangle collisionBox;
+    private Rectangle _collisionBox;
 
-    private bool canTakeDamage;
-    private bool canCollide;
-    private bool enabled;
-    private bool visible;
-
-    private List<ActiveObject> childObjects;
-
-    public int UniqueID => uniqueID;
+    public int UniqueId { get; }
 
     public bool IsActive
     {
-        get => enabled ||visible;
-        set => enabled = visible = value;
+        get => Enabled || Visible;
+        set => Enabled = Visible = value;
     }
 
-    public bool Enabled
-    {
-        get => enabled;
-        set => enabled = value;
-    }
+    public bool Enabled { get; set; }
 
-    public bool Visible
-    {
-        get => visible;
-        set => visible = value;
-    }
+    public bool Visible { get; set; }
 
-    public List<ActiveObject> Children => childObjects;
+    public List<ActiveObject> Children { get; }
 
     public virtual ObjectType Type => ObjectType.ActiveObject;
 
-    public virtual Rectangle SourceRectangle => sprite.SourceRectangle;
+    public virtual Rectangle SourceRectangle => _sprite.SourceRectangle;
 
-    public virtual Texture2D Texture => sprite.Texture;
+    public virtual Texture2D Texture => _sprite.Texture;
 
     public Rectangle CollisionBox
     {
-        get => collisionBox;
-        set => collisionBox = value;
+        get => _collisionBox;
+        set => _collisionBox = value;
     }
 
-    public bool CanCollide
-    {
-        get => canCollide;
-        set => canCollide = value;
-    }
+    public bool CanCollide { get; set; }
 
-    public bool CanTakeDamage
-    {
-        get => canTakeDamage;
-        set => canTakeDamage = value;
-    }
+    public bool CanTakeDamage { get; set; }
 
-    public int Width
-    {
-        get => width;
-        set => width = value;
-    }
+    public int Width { get; set; }
 
-    public int Height
-    {
-        get => height;
-        set => height = value;
-    }
+    public int Height { get; set; }
 
     public Vector2 Origin =>
-        new(collisionBox.Width / 2,
-            collisionBox.Height / 2);
+        new(_collisionBox.Width / 2f,
+            _collisionBox.Height / 2f);
 
     public virtual Vector2 Position
     {
-        get => position;
-        set => position = value;
+        get => _position;
+        set => _position = value;
     }
 
-    public Vector2 Velocity
+    public Vector2 Velocity { get; set; }
+
+    public virtual void TakeDamage(float damageLevel)
     {
-        get => velocity;
-        set => velocity = value;
     }
 
-    public virtual void TakeDamage(float damageLevel) { }
-    public virtual void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity) { }
+    public virtual void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
+        Vector2 velocity)
+    {
+    }
 
     public ActiveObject()
     {
-            uniqueID = activeObjectCount++;
+        UniqueId = _activeObjectCount++;
 
-            childObjects = new List<ActiveObject>();
-            width = sprite.SourceRectangle.Width;
-            height = sprite.SourceRectangle.Height;
+        Children = new List<ActiveObject>();
+        Width = _sprite.SourceRectangle.Width;
+        Height = _sprite.SourceRectangle.Height;
 
-            velocity = position = Vector2.Zero;
+        Velocity = _position = Vector2.Zero;
 
-            IsActive = false;
-            canCollide = true;
-            canTakeDamage = false;
-        }
+        IsActive = false;
+        CanCollide = true;
+        CanTakeDamage = false;
+    }
 
     public ActiveObject(ISpriteLibrary spriteLibrary, int spriteKey)
         : this()
     {
-            this.spriteLibrary = spriteLibrary;
-            sprite = this.spriteLibrary.GetSprite(spriteKey);
-
-        }
+        _spriteLibrary = spriteLibrary;
+        _sprite = _spriteLibrary.GetSprite(spriteKey);
+    }
 
     public void CheckCollisions(ICollisionObject[] collObjects)
     {
-            if (canCollide)
+        if (CanCollide)
+        {
+            for (int i = 0; i < collObjects.Length; i++)
             {
-                for (int i = 0; i < collObjects.Length; i++)
-                {
-                    CheckCollision(collObjects[i]);
-                }
+                CheckCollision(collObjects[i]);
             }
         }
+    }
 
     public abstract void CheckCollision(ICollisionObject collObject);
 
     /// <summary>
     /// When overriden in a derived class, resets the state of the ActiveObject.
     /// </summary>
-    public virtual void Reset() { }
+    public virtual void Reset()
+    {
+    }
 
     public abstract void Update(GameTime gametime);
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-            Draw(spriteBatch, Vector2.Zero);
-        }
+        Draw(spriteBatch, Vector2.Zero);
+    }
 
     public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-            if (visible && spriteLibrary != null)
-                spriteBatch.Draw(sprite.Texture,
-                                 position - offsetPosition,
-                                 sprite.SourceRectangle,
-                                 Color.White,
-                                 0F,
-                                 Origin,
-                                 1.0F,
-                                 SpriteEffects.None,
-                                 0.8F);
-        }
+        if (Visible && _spriteLibrary != null)
+            spriteBatch.Draw(_sprite.Texture,
+                _position - offsetPosition,
+                _sprite.SourceRectangle,
+                Color.White,
+                0F,
+                Origin,
+                1.0F,
+                SpriteEffects.None,
+                0.8F);
+    }
 }

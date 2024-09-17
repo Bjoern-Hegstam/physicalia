@@ -7,52 +7,30 @@ namespace PhysicaliaRemastered.Pickups;
 
 public abstract class Pickup
 {
-    private bool pickedUp;
+    public bool PickedUp { get; set; }
 
-    public bool PickedUp
-    {
-        get => pickedUp;
-        set => pickedUp = value;
-    }
+    public Level Level { get; set; }
 
-    private Level level;
+    public Sprite Sprite { get; set; }
 
-    public Level Level
-    {
-        get => level;
-        set => level = value;
-    }
-
-    private Sprite sprite;
-
-    public Sprite Sprite
-    {
-        get => sprite;
-        set => sprite = value;
-    }
-
-    private int id;
-
-    public int ID
-    {
-        get => id;
-        set => id = value;
-    }
+    public int Id { get; set; }
 
     public Pickup(Level level)
     {
-            this.level = level;
-            pickedUp = false;
-        }
+        Level = level;
+        PickedUp = false;
+    }
 
     public Pickup Copy()
     {
-            Pickup pickup = MemberwiseClone() as Pickup;
+        Pickup pickup = MemberwiseClone() as Pickup;
 
-            return pickup;
-        }
+        return pickup;
+    }
 
-    public virtual void Update(GameTime gameTime) { }
+    public virtual void Update(GameTime gameTime)
+    {
+    }
 
     /// <summary>
     /// When overriden in a derived class, takes actions needed when being
@@ -65,11 +43,11 @@ public abstract class Pickup
     /// </summary>
     public virtual void Reset()
     {
-            pickedUp = false;
-        }
+        PickedUp = false;
+    }
 
     public virtual void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-            spriteBatch.Draw(Sprite.Texture, positionOffset, Sprite.SourceRectangle, Color.White);
-        }
+        spriteBatch.Draw(Sprite.Texture, positionOffset, Sprite.SourceRectangle, Color.White);
+    }
 }

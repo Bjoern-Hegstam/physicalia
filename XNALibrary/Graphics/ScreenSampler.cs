@@ -8,35 +8,35 @@ public class ScreenSampler : IScreenSampler
     /// <summary>
     /// Current position of the sampler.
     /// </summary>
-    private Vector2 position;
+    private Vector2 _position;
 
     /// <summary>
     /// The maximum allowed with of the sampler.
     /// </summary>
-    private int maxWidth;
+    private int _maxWidth;
 
     /// <summary>
     /// The maximum allowed height of the sampler.
     /// </summary>
-    private int maxHeight;
+    private int _maxHeight;
 
     /// <summary>
     /// The screen rectangle.
     /// </summary>
-    private Rectangle screen;
+    private Rectangle _screen;
 
     /// <summary>
     /// Gets and Sets the position of the sampler.
     /// </summary>
     public Vector2 Position
     {
-        get { return position; }
+        get => _position;
         set
         {
-            position.X = MathHelper.Clamp(value.X, 0, maxWidth - screen.Width);
-            position.Y = MathHelper.Clamp(value.Y, 0, maxHeight - screen.Height);
-            screen.X = (int)position.X;
-            screen.Y = (int)position.Y;
+            _position.X = MathHelper.Clamp(value.X, 0, _maxWidth - _screen.Width);
+            _position.Y = MathHelper.Clamp(value.Y, 0, _maxHeight - _screen.Height);
+            _screen.X = (int)_position.X;
+            _screen.Y = (int)_position.Y;
         }
     }
 
@@ -45,8 +45,8 @@ public class ScreenSampler : IScreenSampler
     /// </summary>
     public int Width
     {
-        get { return screen.Width; }
-        set { screen.Width = (int)MathHelper.Clamp(value, 0, maxWidth); }
+        get => _screen.Width;
+        set => _screen.Width = (int)MathHelper.Clamp(value, 0, _maxWidth);
     }
 
     /// <summary>
@@ -54,22 +54,19 @@ public class ScreenSampler : IScreenSampler
     /// </summary>
     public int Height
     {
-        get { return screen.Height; }
-        set { screen.Height = (int)MathHelper.Clamp(value, 0, maxHeight); }
+        get => _screen.Height;
+        set => _screen.Height = (int)MathHelper.Clamp(value, 0, _maxHeight);
     }
 
-    public Rectangle ScreenRectangle
-    {
-        get { return screen; }
-    }
+    public Rectangle ScreenRectangle => _screen;
 
     /// <summary>
     /// Gets and Sets the maximal allowed width of the sampler.
     /// </summary>
     public int MaxWidth
     {
-        get { return maxWidth; }
-        set { maxWidth = value; }
+        get => _maxWidth;
+        set => _maxWidth = value;
     }
 
     /// <summary>
@@ -77,12 +74,14 @@ public class ScreenSampler : IScreenSampler
     /// </summary>
     public int MaxHeight
     {
-        get { return maxHeight; }
-        set { maxHeight = value; }
+        get => _maxHeight;
+        set => _maxHeight = value;
     }
 
     public ScreenSampler(Game game, int x, int y, int width, int height)
-        : this(game, new Rectangle(x, y, width, height)) { }
+        : this(game, new Rectangle(x, y, width, height))
+    {
+    }
 
     public ScreenSampler(Game game, Rectangle screenRectangle)
     {
@@ -90,19 +89,19 @@ public class ScreenSampler : IScreenSampler
         //game.Services.AddService(typeof(IScreenSampler), this);
         // TODO: Look over whether the sample should really be a service
         // Set the screen rectangle and the position of the sampler
-        screen = screenRectangle;
-        position = new Vector2(screen.X, screen.Y);
-        maxWidth = screen.Width;
-        maxHeight = screen.Height;
+        _screen = screenRectangle;
+        _position = new Vector2(_screen.X, _screen.Y);
+        _maxWidth = _screen.Width;
+        _maxHeight = _screen.Height;
     }
 
     public ScreenSampler(Rectangle screenRectangle)
     {
         // Set the screen rectangle and the position of the sampler
-        screen = screenRectangle;
-        position = new Vector2(screen.X, screen.Y);
-        maxWidth = screen.Width;
-        maxHeight = screen.Height;
+        _screen = screenRectangle;
+        _position = new Vector2(_screen.X, _screen.Y);
+        _maxWidth = _screen.Width;
+        _maxHeight = _screen.Height;
     }
 
     /// <summary>
@@ -112,7 +111,7 @@ public class ScreenSampler : IScreenSampler
     /// <returns>True if the rectangle is on screen; false otherwise.</returns>
     public bool IsOnScreen(Rectangle boundingBox)
     {
-        return screen.Intersects(boundingBox);
+        return _screen.Intersects(boundingBox);
     }
 
     /// <summary>
@@ -125,9 +124,9 @@ public class ScreenSampler : IScreenSampler
     /// <returns>True if the rectangle is on screen; false otherwise.</returns>
     public bool IsOnScreen(int x, int y, int width, int height)
     {
-        return x < screen.Right &&
-               y < screen.Bottom &&
-               (x + width) > screen.Left &&
-               (y + height) > screen.Top;
+        return x < _screen.Right &&
+               y < _screen.Bottom &&
+               (x + width) > _screen.Left &&
+               (y + height) > _screen.Top;
     }
 }

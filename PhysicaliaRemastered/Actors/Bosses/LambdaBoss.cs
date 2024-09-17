@@ -8,33 +8,28 @@ namespace PhysicaliaRemastered.Actors.Bosses;
 
 public class LambdaBoss : Boss
 {
-    private Sprite spriteBody;
-    private Sprite spriteArm;
-    private Sprite spriteRail;
-    private Sprite spriteShot;
+    private Sprite _spriteBody;
+    private Sprite _spriteArm;
+    private Sprite _spriteRail;
+    private Sprite _spriteShot;
 
     public LambdaBoss()
     {
-
-        }
+    }
 
     public override void LoadContent(ISpriteLibrary spriteLibrary)
     {
-
-        }
+    }
 
     public override void CheckCollisions(Player player, Particle[] particles)
     {
-
-        }
+    }
 
     public override void Update(GameTime gameTime)
     {
-
-        }
+    }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-
-        }
+    }
 }

@@ -25,60 +25,48 @@ public enum WorldState
 /// </summary>
 public class World
 {
-    private const string LEVEL_PATH = "Content/GameData/Worlds/Levels/";
+    private const string LevelPath = "Content/GameData/Worlds/Levels/";
 
-    private ISettings settings;
+    private readonly ISettings _settings;
 
-    private List<Level> levels;
-    private int levelIndex;
+    private readonly List<Level> _levels;
+    private int _levelIndex;
 
     // Presentation
-    private int worldIndex;
-    private string[] worldQuoteLines;
-    private Color worldIndexColor;
-    private Color worldQuoteColor;
-    private Sprite worldSprite;
+    private string[] _worldQuoteLines;
+    private readonly Color _worldIndexColor;
+    private Color _worldQuoteColor;
+    private Sprite _worldSprite;
 
     // TODO: Add fields for keeping the text to view when finished
 
-    private WorldState state;
-    private WorldState nextState;
+    private WorldState _nextState;
 
-    private Game game;
-    private Player player;
+    private readonly Game _game;
+    private readonly Player _player;
 
-    public int WorldIndex
-    {
-        get { return worldIndex; }
-        set { worldIndex = value; }
-    }
+    public int WorldIndex { get; set; }
 
-    public WorldState State
-    {
-        get { return state; }
-    }
+    public WorldState State { get; private set; }
 
-    public LevelState LevelState
-    {
-        get { return levels[levelIndex].State; }
-    }
+    public LevelState LevelState => _levels[_levelIndex].State;
 
     public World(Game game, Player player)
     {
-        this.game = game;
-        this.player = player;
+        _game = game;
+        _player = player;
 
-        settings = (ISettings)this.game.Services.GetService(typeof(ISettings));
+        _settings = (ISettings)_game.Services.GetService(typeof(ISettings));
 
-        levels = new List<Level>();
-        levelIndex = -1;
+        _levels = new List<Level>();
+        _levelIndex = -1;
 
-        nextState = state = WorldState.Start;
+        _nextState = State = WorldState.Start;
 
-        worldIndex = -1;
-        worldIndexColor = Color.White;
-        worldQuoteLines = null;
-        worldQuoteColor = Color.White;
+        WorldIndex = -1;
+        _worldIndexColor = Color.White;
+        _worldQuoteLines = null;
+        _worldQuoteColor = Color.White;
     }
 
     public void LoadXml(string path, ITileLibrary tileLibrary, ISpriteLibrary spriteLibrary)
@@ -88,8 +76,8 @@ public class World
         readerSettings.IgnoreProcessingInstructions = true;
         readerSettings.IgnoreWhitespace = true;
 
-        using (XmlReader reader = XmlReader.Create(path, readerSettings))
-            LoadXml(reader, tileLibrary, spriteLibrary);
+        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        LoadXml(reader, tileLibrary, spriteLibrary);
     }
 
     public void LoadXml(XmlReader reader, ITileLibrary tileLibrary, ISpriteLibrary spriteLibrary)
@@ -100,7 +88,7 @@ public class World
                 reader.LocalName == "StartSprite")
             {
                 int key = int.Parse(reader.GetAttribute("key"));
-                worldSprite = spriteLibrary.GetSprite(key);
+                _worldSprite = spriteLibrary.GetSprite(key);
             }
 
             if (reader.NodeType == XmlNodeType.Element &&
@@ -118,7 +106,7 @@ public class World
                 byte b = byte.Parse(colorValues[2]);
                 byte a = byte.Parse(colorValues[3]);
 
-                worldQuoteColor = new Color(r, b, g, a);
+                _worldQuoteColor = new Color(r, b, g, a);
 
                 // Get the quote
                 StringBuilder quoteBuilder = new StringBuilder();
@@ -146,13 +134,12 @@ public class World
                         quoteBuilder.Append(reader.ReadString());
                     else
                         reader.Read();
-
                 }
 
                 // Store parsed quote
                 if (quoteBuilder.Length > 0)
                     quoteLines.Add(quoteBuilder.ToString());
-                worldQuoteLines = quoteLines.ToArray();
+                _worldQuoteLines = quoteLines.ToArray();
             }
 
             // Read in Levels
@@ -160,110 +147,112 @@ public class World
                 reader.LocalName == "Level")
             {
                 // Create and initialize the new Level
-                Level level = new Level(game, player);
+                Level level = new Level(_game, _player);
 
-                using (XmlReader levelReader = XmlReader.Create(LEVEL_PATH + reader.ReadString(), reader.Settings))
+                using (XmlReader levelReader = XmlReader.Create(LevelPath + reader.ReadString(), reader.Settings))
                     level.LoadXml(levelReader, tileLibrary);
 
                 // Store the Level reference
-                levels.Add(level);
-                level.LevelIndex = levels.Count;
-                level.WorldIndex = worldIndex;
+                _levels.Add(level);
+                level.LevelIndex = _levels.Count;
+                level.WorldIndex = WorldIndex;
             }
 
             // Read in BossLevels
             if (reader.NodeType == XmlNodeType.Element &&
                 reader.LocalName == "BossLevel")
             {
-                BossLevel level = new BossLevel(game, player);
+                BossLevel level = new BossLevel(_game, _player);
 
                 using (XmlReader levelReader = XmlReader.Create(reader.ReadElementContentAsString()))
                     level.LoadXml(levelReader, tileLibrary);
 
-                levels.Add(level);
-                level.LevelIndex = levels.Count;
+                _levels.Add(level);
+                level.LevelIndex = _levels.Count;
             }
         }
 
         // Set the index of the current level
-        if (levels.Count > 0)
-            levelIndex = 0;
+        if (_levels.Count > 0)
+            _levelIndex = 0;
     }
 
     public void Update(GameTime gameTime)
     {
-        switch (state)
+        switch (State)
         {
             case WorldState.Start:
-                if (settings.InputMap.IsPressed(InputAction.MenuStart))
-                    nextState = WorldState.PlayingLevel;
+                if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+                    _nextState = WorldState.PlayingLevel;
                 break;
             case WorldState.PlayingLevel:
-                if (levels[levelIndex].State == LevelState.Finished)
+                if (_levels[_levelIndex].State == LevelState.Finished)
                 {
-                    levels[levelIndex].Update(gameTime);
+                    _levels[_levelIndex].Update(gameTime);
 
-                    if (settings.InputMap.IsPressed(InputAction.MenuStart))
+                    if (_settings.InputMap.IsPressed(InputAction.MenuStart))
                     {
                         // Go to next level
-                        levelIndex++;
+                        _levelIndex++;
 
                         // World is finished if there are no more levels
-                        if (levelIndex >= levels.Count)
-                            nextState = WorldState.Finished;
+                        if (_levelIndex >= _levels.Count)
+                            _nextState = WorldState.Finished;
                         else
                             // Reset the next level
-                            levels[levelIndex].Reset();
+                            _levels[_levelIndex].Reset();
                     }
                 }
-                else if (levels[levelIndex].State == LevelState.Dead)
+                else if (_levels[_levelIndex].State == LevelState.Dead)
                 {
-                    levels[levelIndex].Update(gameTime);
+                    _levels[_levelIndex].Update(gameTime);
 
-                    if (settings.InputMap.IsPressed(InputAction.MenuStart))
-                        levels[levelIndex].Reset();
+                    if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+                        _levels[_levelIndex].Reset();
                 }
                 else
                     // Update the current level
-                    levels[levelIndex].Update(gameTime);
+                    _levels[_levelIndex].Update(gameTime);
+
                 break;
             case WorldState.Finished:
                 break;
         }
 
-        while (nextState != state)
+        while (_nextState != State)
             ChangeState();
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        switch (state)
+        switch (State)
         {
             case WorldState.Start:
                 // Write draw world index
-                string indexString = "World " + worldIndex;
-                Vector2 indexStringSize = settings.WorldIndexFont.MeasureString(indexString);
+                string indexString = "World " + WorldIndex;
+                Vector2 indexStringSize = _settings.WorldIndexFont.MeasureString(indexString);
                 Vector2 indexPosition = new Vector2();
-                indexPosition.X = (levels[0].ScreenSampler.Width - indexStringSize.X) / 2;
-                indexPosition.Y = levels[0].ScreenSampler.Height / 4 - indexStringSize.Y / 2;
-                spriteBatch.DrawString(settings.WorldIndexFont, indexString, indexPosition, worldIndexColor);
+                indexPosition.X = (_levels[0].ScreenSampler.Width - indexStringSize.X) / 2;
+                indexPosition.Y = _levels[0].ScreenSampler.Height / 4 - indexStringSize.Y / 2;
+                spriteBatch.DrawString(_settings.WorldIndexFont, indexString, indexPosition, _worldIndexColor);
 
                 // Draw quote
-                if (worldQuoteLines != null)
+                if (_worldQuoteLines != null)
                 {
-                    float quoteHeight = settings.WorldQuoteFont.MeasureString("W").Y;
+                    float quoteHeight = _settings.WorldQuoteFont.MeasureString("W").Y;
                     Vector2 quoteStartPos = new Vector2();
-                    quoteStartPos.Y = levels[0].ScreenSampler.Height * 3 / 4 - quoteHeight * worldQuoteLines.Length / 2;
+                    quoteStartPos.Y = _levels[0].ScreenSampler.Height * 3 / 4 -
+                                      quoteHeight * _worldQuoteLines.Length / 2;
 
-                    for (int i = 0; i < worldQuoteLines.Length; i++)
+                    for (int i = 0; i < _worldQuoteLines.Length; i++)
                     {
-                        Vector2 quoteSize = settings.WorldQuoteFont.MeasureString(worldQuoteLines[i]);
-                        quoteStartPos.X = (levels[0].ScreenSampler.Width - quoteSize.X) / 2;
+                        Vector2 quoteSize = _settings.WorldQuoteFont.MeasureString(_worldQuoteLines[i]);
+                        quoteStartPos.X = (_levels[0].ScreenSampler.Width - quoteSize.X) / 2;
 
-                        spriteBatch.DrawString(settings.WorldQuoteFont,
-                            worldQuoteLines[i],
+                        spriteBatch.DrawString(_settings.WorldQuoteFont,
+                            _worldQuoteLines[i],
                             quoteStartPos,
-                            worldQuoteColor);
+                            _worldQuoteColor);
 
                         quoteStartPos.Y += quoteHeight;
                     }
@@ -271,67 +260,67 @@ public class World
 
                 // Draw World Sprite
                 Vector2 spritePos = new Vector2();
-                spritePos.X = (levels[0].ScreenSampler.Width - worldSprite.SourceRectangle.Width) / 2;
-                spritePos.Y = (levels[0].ScreenSampler.Height - worldSprite.SourceRectangle.Height) / 2;
+                spritePos.X = (_levels[0].ScreenSampler.Width - _worldSprite.SourceRectangle.Width) / 2;
+                spritePos.Y = (_levels[0].ScreenSampler.Height - _worldSprite.SourceRectangle.Height) / 2;
 
-                spriteBatch.Draw(worldSprite.Texture,
+                spriteBatch.Draw(_worldSprite.Texture,
                     spritePos,
-                    worldSprite.SourceRectangle,
+                    _worldSprite.SourceRectangle,
                     Color.White);
                 break;
             case WorldState.PlayingLevel:
-                levels[levelIndex].Draw(spriteBatch);
+                _levels[_levelIndex].Draw(spriteBatch);
                 break;
             case WorldState.Finished:
-                spriteBatch.DrawString(settings.WorldQuoteFont, "World Finished", new Vector2(160, 200), Color.White);
+                spriteBatch.DrawString(_settings.WorldQuoteFont, "World Finished", new Vector2(160, 200), Color.White);
                 break;
         }
     }
 
     private void ChangeState()
     {
-        switch (nextState)
+        switch (_nextState)
         {
             case WorldState.Start:
                 break;
             case WorldState.PlayingLevel:
-                if (levels.Count == 0)
-                    nextState = WorldState.Finished;
+                if (_levels.Count == 0)
+                    _nextState = WorldState.Finished;
                 else
-                    levels[levelIndex].Reset();
+                    _levels[_levelIndex].Reset();
                 break;
             case WorldState.Finished:
                 break;
         }
 
-        state = nextState;
+        State = _nextState;
     }
 
     public void ResetLevel()
     {
-        if (levelIndex < levels.Count)
-            levels[levelIndex].Reset();
+        if (_levelIndex < _levels.Count)
+            _levels[_levelIndex].Reset();
     }
 
     public void NewSession()
     {
-        levelIndex = 0;
-        levels[levelIndex].Reset();
+        _levelIndex = 0;
+        _levels[_levelIndex].Reset();
 
-        state = nextState = WorldState.Start;
+        State = _nextState = WorldState.Start;
     }
 
     public void LoadSession(GameSession session)
     {
-        levelIndex = session.LevelIndex;
-        levels[levelIndex].LoadSession(session);
+        _levelIndex = session.LevelIndex;
+        _levels[_levelIndex].LoadSession(session);
 
-        state = nextState = WorldState.PlayingLevel;
+        State = _nextState = WorldState.PlayingLevel;
     }
 
     public void SaveSession(GameSession session)
     {
-        session.LevelIndex = levelIndex;
-        levels[levelIndex].SaveSession(session);
+        session.LevelIndex = _levelIndex;
+        _levels[_levelIndex].SaveSession(session);
     }
 }

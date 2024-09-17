@@ -12,93 +12,83 @@ namespace PhysicaliaRemastered.Pickups;
 /// </summary>
 public abstract class ModifierPickup : Pickup
 {
-    private const float ICON_TIMER_SPACING = 5F;
-    private const float DEFAULT_DURATION = 5F;
+    private const float IconTimerSpacing = 5F;
+    private const float DefaultDuration = 5F;
 
-    private bool active;
-    private float duration;
-    private float timeRemaining;
+    private float _duration;
 
-    private Sprite icon;
+    private Sprite _icon;
 
-    public bool IsActive
-    {
-        get => active;
-        set => active = value;
-    }
+    public bool IsActive { get; set; }
 
     public float Duration
     {
-        get => duration;
-        set => timeRemaining = duration = value;
+        get => _duration;
+        set => TimeRemaining = _duration = value;
     }
 
-    public float TimeRemaining
-    {
-        get => timeRemaining;
-        set => timeRemaining = value;
-    }
+    public float TimeRemaining { get; set; }
 
     public Sprite Icon
     {
-        get => icon;
-        set => icon = value;
+        get => _icon;
+        set => _icon = value;
     }
 
     public ModifierPickup(Level level, Sprite icon, Sprite sprite, float duration)
         : base(level)
     {
-            timeRemaining = this.duration = duration;
-            Sprite = sprite;
-            this.icon = icon;
-        }
+        TimeRemaining = _duration = duration;
+        Sprite = sprite;
+        _icon = icon;
+    }
 
     public sealed override void DoPickup()
     {
-            // Add self to Level's collection of Modifiers
-            Level.AddModifier(this);
-            active = true;
-            PickedUp = true;
+        // Add self to Level's collection of Modifiers
+        Level.AddModifier(this);
+        IsActive = true;
+        PickedUp = true;
 
-            // Activate modifier
-            Activate();
-        }
+        // Activate modifier
+        Activate();
+    }
 
     public override void Update(GameTime gameTime)
     {
-            if (IsActive)
-            {
-                // Decrease the time remaning
-                timeRemaining -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (IsActive)
+        {
+            // Decrease the time remaning
+            TimeRemaining -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                // Should the modifier be deactivated
-                if (timeRemaining <= 0F)
-                {
-                    Deactivate();
-                    active = false;
-                }
+            // Should the modifier be deactivated
+            if (TimeRemaining <= 0F)
+            {
+                Deactivate();
+                IsActive = false;
             }
         }
+    }
 
     public override void Reset()
     {
-            timeRemaining = duration;
-            IsActive = false;
+        TimeRemaining = _duration;
+        IsActive = false;
 
-            base.Reset();
-        }
+        base.Reset();
+    }
 
     public abstract void Activate();
     public abstract void Deactivate();
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
     {
-            if (!PickedUp)
-                spriteBatch.Draw(Sprite.Texture,
-                                 positionOffset,
-                                 Sprite.SourceRectangle,
-                                 Color.White);
-        }
+        if (!PickedUp)
+            spriteBatch.Draw(Sprite.Texture,
+                positionOffset,
+                Sprite.SourceRectangle,
+                Color.White);
+    }
 
     /// <summary>
     /// 
@@ -108,36 +98,36 @@ public abstract class ModifierPickup : Pickup
     /// <param name="font">SpriteFont to use when drawing the time left</param>
     public void DrawTimer(SpriteBatch spriteBatch, Vector2 position, SpriteFont font)
     {
-            // Draw icon
-            spriteBatch.Draw(icon.Texture,
-                            position,
-                            icon.SourceRectangle,
-                            Color.White);
+        // Draw icon
+        spriteBatch.Draw(_icon.Texture,
+            position,
+            _icon.SourceRectangle,
+            Color.White);
 
-            // Build the time string
-            string timeText = "";
-            TimeSpan time = TimeSpan.FromSeconds(timeRemaining);
+        // Build the time string
+        string timeText = "";
+        TimeSpan time = TimeSpan.FromSeconds(TimeRemaining);
 
-            if (time.Minutes < 10)
-                timeText += '0';
+        if (time.Minutes < 10)
+            timeText += '0';
 
-            timeText += time.Minutes.ToString();
+        timeText += time.Minutes.ToString();
 
-            timeText += ':';
+        timeText += ':';
 
-            if (time.Seconds < 10)
-                timeText += '0';
+        if (time.Seconds < 10)
+            timeText += '0';
 
-            timeText += time.Seconds.ToString();
+        timeText += time.Seconds.ToString();
 
-            // Find the position of the time string
-            Vector2 timeStringSize = font.MeasureString(timeText);
-            // TODO: Use other font (ModifierFont)
+        // Find the position of the time string
+        Vector2 timeStringSize = font.MeasureString(timeText);
+        // TODO: Use other font (ModifierFont)
 
-            Vector2 textPos = position;
-            textPos.X += icon.SourceRectangle.Width + ICON_TIMER_SPACING;
-            textPos.Y += (icon.SourceRectangle.Height - timeStringSize.Y) / 2;
+        Vector2 textPos = position;
+        textPos.X += _icon.SourceRectangle.Width + IconTimerSpacing;
+        textPos.Y += (_icon.SourceRectangle.Height - timeStringSize.Y) / 2;
 
-            spriteBatch.DrawString(font, timeText, textPos, Color.White);
-        }
+        spriteBatch.DrawString(font, timeText, textPos, Color.White);
+    }
 }

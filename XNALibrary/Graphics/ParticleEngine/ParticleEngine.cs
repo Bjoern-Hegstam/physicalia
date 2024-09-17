@@ -12,18 +12,18 @@ namespace XNALibrary.Graphics.ParticleEngine;
 public class ParticleEngine : IParticleEngine
 {
     // Particle management
-    private Dictionary<int, ParticleDefinition> definitions;
-    private List<Particle> particleBuffer;
-    private List<Particle> activeParticles;
+    private readonly Dictionary<int, ParticleDefinition> _definitions;
+    private readonly List<Particle> _particleBuffer;
+    private readonly List<Particle> _activeParticles;
 
     /// <summary>
     /// Creates a new ParticleEngine.
     /// </summary>
     public ParticleEngine()
     {
-        definitions = new Dictionary<int, ParticleDefinition>();
-        particleBuffer = new List<Particle>();
-        activeParticles = new List<Particle>();
+        _definitions = new Dictionary<int, ParticleDefinition>();
+        _particleBuffer = new List<Particle>();
+        _activeParticles = new List<Particle>();
     }
 
     public void LoadXml(string path, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
@@ -33,10 +33,8 @@ public class ParticleEngine : IParticleEngine
         readerSettings.IgnoreWhitespace = true;
         readerSettings.IgnoreProcessingInstructions = true;
 
-        using (XmlReader reader = XmlReader.Create(path, readerSettings))
-        {
-            LoadXml(reader, spriteLibrary, animationManager);
-        }
+        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        LoadXml(reader, spriteLibrary, animationManager);
     }
 
     public void LoadXml(XmlReader reader, ISpriteLibrary spriteLibrary, IAnimationManager animationManager)
@@ -94,36 +92,33 @@ public class ParticleEngine : IParticleEngine
         }
     }
 
-    public Particle[] Particles
-    {
-        get { return activeParticles.ToArray(); }
-    }
+    public Particle[] Particles => _activeParticles.ToArray();
 
-    public bool HasDefinition(int definitionID)
+    public bool HasDefinition(int definitionId)
     {
-        return definitions.ContainsKey(definitionID);
+        return _definitions.ContainsKey(definitionId);
     }
 
     public void AddDefinition(ParticleDefinition definition)
     {
-        definitions.Add(definition.Id, definition);
+        _definitions.Add(definition.Id, definition);
     }
 
     public void RemoveDefinition(int definitionId, bool rinseBuffer)
     {
         // Remove definition
-        definitions.Remove(definitionId);
+        _definitions.Remove(definitionId);
 
         // Rinse the buffers?
         if (rinseBuffer)
         {
-            for (int i = 0; i < activeParticles.Count; i++)
-                if (activeParticles[i].Definition.Id == definitionId)
-                    activeParticles.RemoveAt(i);
+            for (int i = 0; i < _activeParticles.Count; i++)
+                if (_activeParticles[i].Definition.Id == definitionId)
+                    _activeParticles.RemoveAt(i);
 
-            for (int i = 0; i < particleBuffer.Count; i++)
-                if (particleBuffer[i].Definition.Id == definitionId)
-                    particleBuffer.RemoveAt(i);
+            for (int i = 0; i < _particleBuffer.Count; i++)
+                if (_particleBuffer[i].Definition.Id == definitionId)
+                    _particleBuffer.RemoveAt(i);
         }
     }
 
@@ -139,24 +134,24 @@ public class ParticleEngine : IParticleEngine
 
     public void Add(int typeId, int count, Vector2 position, float angle)
     {
-        Debug.WriteLine(activeParticles.Count.ToString() + " : " + particleBuffer.Count.ToString());
+        Debug.WriteLine(_activeParticles.Count.ToString() + " : " + _particleBuffer.Count.ToString());
 
         // Is the key valid?
-        if (!definitions.ContainsKey(typeId))
+        if (!_definitions.ContainsKey(typeId))
             throw new ArgumentException("Invalid type id: " + typeId);
 
         Particle particle = null;
 
-        for (int i = particleBuffer.Count - 1; i >= 0  && count > 0; i--)
+        for (int i = _particleBuffer.Count - 1; i >= 0 && count > 0; i--)
         {
-            if (particleBuffer[i].Definition.Id == typeId)
+            if (_particleBuffer[i].Definition.Id == typeId)
             {
                 // Get particle from the reserve
-                particle = particleBuffer[i];
-                particleBuffer.RemoveAt(i);
+                particle = _particleBuffer[i];
+                _particleBuffer.RemoveAt(i);
 
                 // Setup the particle
-                definitions[typeId].SetupParticle(particle, angle);
+                _definitions[typeId].SetupParticle(particle, angle);
 
                 particle.Position = position;
                 particle.IsActive = true;
@@ -165,7 +160,7 @@ public class ParticleEngine : IParticleEngine
                 particle.ParticleEngine = this;
 
                 // Add the particle to the active particles
-                activeParticles.Add(particle);
+                _activeParticles.Add(particle);
 
                 // Decrease the count
                 count--;
@@ -175,13 +170,13 @@ public class ParticleEngine : IParticleEngine
         // Add more particles if needed
         while (count > 0)
         {
-            particle = definitions[typeId].Create(angle);
+            particle = _definitions[typeId].Create(angle);
             particle.Position = position;
 
             // Add engine reference
             particle.ParticleEngine = this;
 
-            activeParticles.Add(particle);
+            _activeParticles.Add(particle);
             count--;
         }
     }
@@ -207,9 +202,9 @@ public class ParticleEngine : IParticleEngine
         collObjRect.X += (int)boxPos.X;
         collObjRect.Y += (int)boxPos.Y;
 
-        for (int i = 0; i < activeParticles.Count; i++)
+        for (int i = 0; i < _activeParticles.Count; i++)
         {
-            Particle particle = activeParticles[i];
+            Particle particle = _activeParticles[i];
 
             // Don't bother if the particle can't collide with anything
             if (!particle.CanCollide)
@@ -221,7 +216,8 @@ public class ParticleEngine : IParticleEngine
             particleRect.Y += (int)boxPos.Y;
 
             if (collObjRect.Intersects(particleRect))
-                particle.OnCollision(collObject, BoxSide.Bottom | BoxSide.Left | BoxSide.Right | BoxSide.Top, Vector2.Zero, Vector2.Zero);
+                particle.OnCollision(collObject, BoxSide.Bottom | BoxSide.Left | BoxSide.Right | BoxSide.Top,
+                    Vector2.Zero, Vector2.Zero);
         }
     }
 
@@ -230,10 +226,10 @@ public class ParticleEngine : IParticleEngine
     /// </summary>
     public void ClearActive()
     {
-        Particle[] particles = new Particle[activeParticles.Count];
-        activeParticles.CopyTo(particles);
-        activeParticles.Clear();
-        particleBuffer.AddRange(particles);
+        Particle[] particles = new Particle[_activeParticles.Count];
+        _activeParticles.CopyTo(particles);
+        _activeParticles.Clear();
+        _particleBuffer.AddRange(particles);
     }
 
     /// <summary>
@@ -241,7 +237,7 @@ public class ParticleEngine : IParticleEngine
     /// </summary>
     public void ClearBuffer()
     {
-        particleBuffer.Clear();
+        _particleBuffer.Clear();
     }
 
     /// <summary>
@@ -251,9 +247,9 @@ public class ParticleEngine : IParticleEngine
     public void Prepare()
     {
         // Fire a single particle to make the CLR JIT the ParticleEngine
-        if (definitions.Count > 0)
+        if (_definitions.Count > 0)
         {
-            foreach (int key in definitions.Keys)
+            foreach (int key in _definitions.Keys)
             {
                 Add(key, 1);
                 break;
@@ -266,16 +262,16 @@ public class ParticleEngine : IParticleEngine
 
     public void Update(GameTime gameTime)
     {
-        for (int i = activeParticles.Count - 1; i >= 0; i--)
+        for (int i = _activeParticles.Count - 1; i >= 0; i--)
         {
             // Update the particle
-            activeParticles[i].Update(gameTime);
+            _activeParticles[i].Update(gameTime);
 
             // Has the particle gone inactive?
-            if (!activeParticles[i].IsActive)
+            if (!_activeParticles[i].IsActive)
             {
-                particleBuffer.Add(activeParticles[i]);
-                activeParticles.RemoveAt(i);
+                _particleBuffer.Add(_activeParticles[i]);
+                _activeParticles.RemoveAt(i);
             }
         }
     }
@@ -287,9 +283,9 @@ public class ParticleEngine : IParticleEngine
 
     public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-        for (int i = 0; i < activeParticles.Count; i++)
+        for (int i = 0; i < _activeParticles.Count; i++)
         {
-            activeParticles[i].Draw(spriteBatch, offsetPosition);
+            _activeParticles[i].Draw(spriteBatch, offsetPosition);
         }
     }
 }

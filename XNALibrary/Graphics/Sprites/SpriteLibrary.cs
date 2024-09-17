@@ -12,26 +12,23 @@ public class SpriteLibrary : ISpriteLibrary
     /// <summary>
     /// The library's collection of sprites.
     /// </summary>
-    private Dictionary<int, Sprite> sprites;
+    private readonly Dictionary<int, Sprite> _sprites;
 
-    private ITextureLibrary textureLibrary;
+    private readonly ITextureLibrary _textureLibrary;
 
     /// <summary>
     /// Gets the library's collection of sprites.
     /// </summary>
-    public Dictionary<int, Sprite> Sprites
-    {
-        get { return sprites; }
-    }
+    public Dictionary<int, Sprite> Sprites => _sprites;
 
     /// <summary>
     /// Creates a new SpriteLibrary.
     /// </summary>
     public SpriteLibrary(ITextureLibrary textureLibrary)
     {
-        this.textureLibrary = textureLibrary;
+        _textureLibrary = textureLibrary;
 
-        sprites = new Dictionary<int, Sprite>();
+        _sprites = new Dictionary<int, Sprite>();
     }
 
     /// <summary>
@@ -43,7 +40,7 @@ public class SpriteLibrary : ISpriteLibrary
     /// <param name="sprite">Sprite to add.</param>
     public void AddSprite(int key, Sprite sprite)
     {
-        sprites.Add(key, sprite);
+        _sprites.Add(key, sprite);
     }
 
     /// <summary>
@@ -52,8 +49,8 @@ public class SpriteLibrary : ISpriteLibrary
     /// <param name="key"></param>
     public void RemoveSprite(int key)
     {
-        if (sprites.ContainsKey(key))
-            sprites.Remove(key);
+        if (_sprites.ContainsKey(key))
+            _sprites.Remove(key);
     }
 
     /// <summary>
@@ -63,7 +60,7 @@ public class SpriteLibrary : ISpriteLibrary
     /// <returns>The desired Sprite if it's found.</returns>
     public Sprite GetSprite(int key)
     {
-        return sprites[key];
+        return _sprites[key];
     }
 
     /// <summary>
@@ -82,10 +79,8 @@ public class SpriteLibrary : ISpriteLibrary
         settings.IgnoreComments = true;
         settings.IgnoreProcessingInstructions = true;
 
-        using (XmlReader reader = XmlReader.Create(path, settings))
-        {
-            LoadXml(reader);
-        }
+        using XmlReader reader = XmlReader.Create(path, settings);
+        LoadXml(reader);
     }
 
     public void LoadXml(XmlReader reader)
@@ -103,7 +98,7 @@ public class SpriteLibrary : ISpriteLibrary
                 int width = int.Parse(reader.GetAttribute(4));
                 int height = int.Parse(reader.GetAttribute(5));
 
-                sprites.Add(id, new Sprite(textureLibrary[textureKey], new Rectangle(x, y, width, height)));
+                _sprites.Add(id, new Sprite(_textureLibrary[textureKey], new Rectangle(x, y, width, height)));
             }
 
             // End of SpriteLibrary element

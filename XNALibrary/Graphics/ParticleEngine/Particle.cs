@@ -14,10 +14,12 @@ public enum ParticleLifeMode
     /// Life decreases each update.
     /// </summary>
     Time,
+
     /// <summary>
     /// Life decreases upon collision.
     /// </summary>
     Damage,
+
     /// <summary>
     /// Particle is unaffected by both time and damage.
     /// </summary>
@@ -26,7 +28,7 @@ public enum ParticleLifeMode
 
 public abstract class Particle : ICollisionObject
 {
-    private const float DEFAULT_LIFE = 5F;
+    private const float DefaultLife = 5F;
 
     // Movement
     protected Vector2 position;
@@ -34,91 +36,93 @@ public abstract class Particle : ICollisionObject
     protected Vector2 acceleration;
 
     // Collision
-    private CollisionMode collisionMode;
-    private float radius;
+    private CollisionMode _collisionMode;
+    private float _radius;
 
     // Life
-    private ParticleLifeMode lifeMode;
-    private float life;
-    private bool active;
+    private ParticleLifeMode _lifeMode;
+    private float _life;
+    private bool _active;
 
     // Definition id
-    private ParticleDefinition definition;
+    private ParticleDefinition _definition;
 
     // Particle engine
-    private IParticleEngine particleEngine;
+    private IParticleEngine _particleEngine;
 
     public Vector2 Position
     {
-        get { return position; }
-        set { position = value; }
+        get => position;
+        set => position = value;
     }
 
     public Vector2 Velocity
     {
-        get { return velocity; }
-        set { velocity = value; }
+        get => velocity;
+        set => velocity = value;
     }
 
     public Vector2 Acceleration
     {
-        get { return acceleration; }
-        set { acceleration = value; }
+        get => acceleration;
+        set => acceleration = value;
     }
 
     public CollisionMode CollisionMode
     {
-        get { return collisionMode; }
-        set { collisionMode = value; }
+        get => _collisionMode;
+        set => _collisionMode = value;
     }
 
     public float Radius
     {
-        get { return radius; }
-        set { radius = value; }
+        get => _radius;
+        set => _radius = value;
     }
 
     public ParticleLifeMode LifeMode
     {
-        get { return lifeMode; }
-        set { lifeMode = value; }
+        get => _lifeMode;
+        set => _lifeMode = value;
     }
 
     public float Life
     {
-        get { return life; }
-        set { life = value; }
+        get => _life;
+        set => _life = value;
     }
 
     public bool IsActive
     {
-        get { return active; }
-        set { active = value; }
+        get => _active;
+        set => _active = value;
     }
 
     public ParticleDefinition Definition
     {
-        get { return definition; }
-        set { definition = value; }
+        get => _definition;
+        set => _definition = value;
     }
 
     public IParticleEngine ParticleEngine
     {
-        get { return particleEngine; }
-        set { particleEngine = value; }
+        get => _particleEngine;
+        set => _particleEngine = value;
     }
 
     public Particle()
-        : this(Vector2.Zero) { }
+        : this(Vector2.Zero)
+    {
+    }
 
     public Particle(Vector2 position)
     {
         this.position = position;
         acceleration = velocity = Vector2.Zero;
-        definition = null;
-        life = DEFAULT_LIFE;
-        lifeMode = ParticleLifeMode.Time;
-        active = true;
+        _definition = null;
+        _life = DefaultLife;
+        _lifeMode = ParticleLifeMode.Time;
+        _active = true;
     }
 
     public virtual void Update(GameTime gameTime)
@@ -128,16 +132,21 @@ public abstract class Particle : ICollisionObject
         velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         // Update life
-        if (lifeMode == ParticleLifeMode.Time)
-            life -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (_lifeMode == ParticleLifeMode.Time)
+            _life -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         // Dead?
-        if (life <= 0)
-            active = false;
+        if (_life <= 0)
+            _active = false;
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch) { }
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition) { }
+    public virtual void Draw(SpriteBatch spriteBatch)
+    {
+    }
+
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    {
+    }
 
     public abstract Vector2 Origin { get; }
 
@@ -149,28 +158,28 @@ public abstract class Particle : ICollisionObject
 
     public abstract Rectangle CollisionBox { get; }
 
-    public ObjectType Type
-    {
-        get { return ObjectType.Particle; }
-    }
+    public ObjectType Type => ObjectType.Particle;
 
-    private bool canTakeDamage;
+    private bool _canTakeDamage;
+
     public bool CanTakeDamage
     {
-        get { return canTakeDamage; }
-        set { canTakeDamage = value; }
+        get => _canTakeDamage;
+        set => _canTakeDamage = value;
     }
 
-    private bool canCollide;
+    private bool _canCollide;
+
     public bool CanCollide
     {
-        get { return canCollide; }
-        set { canCollide = value; }
+        get => _canCollide;
+        set => _canCollide = value;
     }
 
-    public virtual void OnCollision(ICollisionObject collisionObject, BoxSide collisionSides, Vector2 position, Vector2 velocity)
+    public virtual void OnCollision(ICollisionObject collisionObject, BoxSide collisionSides, Vector2 position,
+        Vector2 velocity)
     {
-        if (canCollide)
+        if (_canCollide)
         {
             this.position = position;
             this.velocity = velocity;
@@ -179,11 +188,11 @@ public abstract class Particle : ICollisionObject
 
     public void TakeDamage(float damage)
     {
-        if (lifeMode == ParticleLifeMode.Damage)
+        if (_lifeMode == ParticleLifeMode.Damage)
         {
-            life -= damage;
-            if (life <= 0)
-                active = false;
+            _life -= damage;
+            if (_life <= 0)
+                _active = false;
         }
     }
 }

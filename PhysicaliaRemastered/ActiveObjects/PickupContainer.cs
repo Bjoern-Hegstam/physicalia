@@ -12,65 +12,57 @@ namespace PhysicaliaRemastered.ActiveObjects;
 /// </summary>
 public class PickupContainer : ActiveObject
 {
-    public override ObjectType Type
-    {
-        get { return ObjectType.Pickup; }
-    }
+    public override ObjectType Type => ObjectType.Pickup;
+
     public PickupContainer(Pickup pickup)
     {
-            this.pickup = pickup;
-        }
-
-    private Pickup pickup;
-
-    public Pickup PickupObject
-    {
-        get { return pickup; }
-        set { pickup = value; }
+        PickupObject = pickup;
     }
+
+    public Pickup PickupObject { get; set; }
 
     private void Pickup()
     {
-            // Deactivate the pickup
-            IsActive = false;
-            CanCollide = false;
-            CanTakeDamage = false;
+        // Deactivate the pickup
+        IsActive = false;
+        CanCollide = false;
+        CanTakeDamage = false;
 
-            // Call the pickup to tell it to do its thing
-            pickup.DoPickup();
-        }
+        // Call the pickup to tell it to do its thing
+        PickupObject.DoPickup();
+    }
 
     public override void CheckCollision(ICollisionObject collObject)
     {
-            // Only check for collision if we're still active
-            if (!IsActive)
-                return;
+        // Only check for collision if we're still active
+        if (!IsActive)
+            return;
 
-            // Can only be picked up by player
-            if (collObject.Type != ObjectType.Player)
-                return;
+        // Can only be picked up by player
+        if (collObject.Type != ObjectType.Player)
+            return;
 
-            // Check to see if the Container is colliding with the Player
-            if (CollisionHelper.IsColliding(this, collObject))
-                Pickup();
-        }
+        // Check to see if the Container is colliding with the Player
+        if (CollisionHelper.IsColliding(this, collObject))
+            Pickup();
+    }
 
     public override void Reset()
     {
-            pickup.Reset();
-        }
+        PickupObject.Reset();
+    }
 
     public override void Update(GameTime gametime)
     {
-            if (Enabled)
-                pickup.Update(gametime);
-        }
+        if (Enabled)
+            PickupObject.Update(gametime);
+    }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-            // Only draw if we're still active
-            if (Visible)
-                // The pickup is drawn at the upper-left corner of the container
-                pickup.Draw(spriteBatch, Position - Origin - offsetPosition);
-        }
+        // Only draw if we're still active
+        if (Visible)
+            // The pickup is drawn at the upper-left corner of the container
+            PickupObject.Draw(spriteBatch, Position - Origin - offsetPosition);
+    }
 }

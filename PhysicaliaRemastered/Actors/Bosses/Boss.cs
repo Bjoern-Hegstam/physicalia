@@ -7,18 +7,11 @@ namespace PhysicaliaRemastered.Actors.Bosses;
 
 public abstract class Boss
 {
-    private float health;
-
-    public float Health
-    {
-        get => health;
-        set => health = value;
-    }
+    public float Health { get; set; }
 
     public Boss()
     {
-
-        }
+    }
 
     public abstract void LoadContent(ISpriteLibrary spriteLibrary);
 

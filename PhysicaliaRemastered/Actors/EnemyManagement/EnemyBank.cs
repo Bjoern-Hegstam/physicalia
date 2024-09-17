@@ -14,9 +14,9 @@ public class EnemyBank : IEnemyBank
     /// The animation keys kept by the enemies are those going to the
     /// base animations.
     /// </summary>
-    private Dictionary<int, Enemy> enemyBank;
+    private readonly Dictionary<int, Enemy> _enemyBank;
 
-    private IAnimationManager animationManager;
+    private readonly IAnimationManager _animationManager;
 
     /// <summary>
     /// Creates a new EnemyBank instance and adds that instance as a service
@@ -27,23 +27,21 @@ public class EnemyBank : IEnemyBank
     /// when creating animations for new enemies.</param>
     public EnemyBank(IAnimationManager animationManager)
     {
-            this.animationManager = animationManager;
+        _animationManager = animationManager;
 
-            enemyBank = new Dictionary<int, Enemy>();
-        }
+        _enemyBank = new Dictionary<int, Enemy>();
+    }
 
     public void LoadXml(string path)
     {
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-            readerSettings.IgnoreWhitespace = true;
-            readerSettings.IgnoreProcessingInstructions = true;
+        XmlReaderSettings readerSettings = new XmlReaderSettings();
+        readerSettings.IgnoreComments = true;
+        readerSettings.IgnoreWhitespace = true;
+        readerSettings.IgnoreProcessingInstructions = true;
 
-            using (XmlReader reader = XmlReader.Create(path, readerSettings))
-            {
-                LoadXml(reader);
-            }
-        }
+        using XmlReader reader = XmlReader.Create(path, readerSettings);
+        LoadXml(reader);
+    }
 
     /// <summary>
     /// Loads in the Enemy definitions from the passed in XmlReader and stores
@@ -52,60 +50,60 @@ public class EnemyBank : IEnemyBank
     /// <param name="reader"></param>
     public void LoadXml(XmlReader reader)
     {
-            while (reader.Read())
+        while (reader.Read())
+        {
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Enemy")
             {
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Enemy")
-                {
-                    string typeName = reader.GetAttribute("type");
-                    int typeID = int.Parse(reader.GetAttribute("typeID"));
+                string typeName = reader.GetAttribute("type");
+                int typeId = int.Parse(reader.GetAttribute("typeID"));
 
-                    Enemy enemy = CreateBaseEnemy(typeName);
+                Enemy enemy = CreateBaseEnemy(typeName);
 
-                    SetupEnemy(reader, enemy);
-                    LoadAnimations(reader, enemy);
-                    
-                    enemyBank.Add(typeID, enemy);
-                }
+                SetupEnemy(reader, enemy);
+                LoadAnimations(reader, enemy);
 
-                if (reader.NodeType == XmlNodeType.EndElement &&
-                    reader.LocalName == "EnemyBank")
-                    return;
+                _enemyBank.Add(typeId, enemy);
             }
+
+            if (reader.NodeType == XmlNodeType.EndElement &&
+                reader.LocalName == "EnemyBank")
+                return;
         }
+    }
 
     /// <summary>
     /// Adds the enemy to the bank of base enemies.
     /// </summary>
-    /// <param name="typeID">ID of the enemies type.</param>
+    /// <param name="typeId">ID of the enemies type.</param>
     /// <param name="enemy">The enemy to add.</param>
-    public void AddBaseEnemy(int typeID, Enemy enemy)
+    public void AddBaseEnemy(int typeId, Enemy enemy)
     {
-            enemyBank.Add(typeID, enemy);
-        }
+        _enemyBank.Add(typeId, enemy);
+    }
 
     /// <summary>
     /// Creates a new Enemy based on the passed in type id.
     /// </summary>
-    /// <param name="typeID">Id of the type of Enemy to create.</param>
+    /// <param name="typeId">Id of the type of Enemy to create.</param>
     /// /// <param name="startValues">Start values to give the Enemy.</param>
     /// <returns>The created enemy or null if no type using the id has been stored.</returns>
-    public Enemy CreateEnemy(int typeID, ActorStartValues startValues)
+    public Enemy CreateEnemy(int typeId, ActorStartValues startValues)
     {
-            // Make sure the type has been defined
-            if (!enemyBank.ContainsKey(typeID))
-                return null;
+        // Make sure the type has been defined
+        if (!_enemyBank.ContainsKey(typeId))
+            return null;
 
-            // Get a copy of the type
-            Enemy enemy = enemyBank[typeID].Copy(startValues);
+        // Get a copy of the type
+        Enemy enemy = _enemyBank[typeId].Copy(startValues);
 
-            // Set the enemies animation keys
-            SetPlaybackKeys(typeID, enemy);
+        // Set the enemies animation keys
+        SetPlaybackKeys(typeId, enemy);
 
-            // Return the result
-            // ^ That's a very excessive comment. <- (So is that...and this)
-            return enemy;
-        }
+        // Return the result
+        // ^ That's a very excessive comment. <- (So is that...and this)
+        return enemy;
+    }
 
     /// <summary>
     /// Sets the values of the passed in enemy as specified by the base
@@ -114,9 +112,9 @@ public class EnemyBank : IEnemyBank
     /// <param name="enemy">Enemy to the set the values on.</param>
     public void SetupEnemy(Enemy enemy)
     {
-            if (enemyBank.ContainsKey(enemy.TypeID))
-                enemyBank[enemy.TypeID].Copy(enemy);
-        }
+        if (_enemyBank.ContainsKey(enemy.TypeId))
+            _enemyBank[enemy.TypeId].Copy(enemy);
+    }
 
     /// <summary>
     /// Sets up the passed in Enemy according to the xml data.
@@ -124,37 +122,37 @@ public class EnemyBank : IEnemyBank
     /// <param name="reader"></param>
     private void SetupEnemy(XmlReader reader, Enemy enemy)
     {
-            while (reader.Read())
+        while (reader.Read())
+        {
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Life")
             {
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Life")
-                {
-                    int health = int.Parse(reader.ReadString());
-                    enemy.Health = health;
-                }
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Damage")
-                {
-                    int damage = int.Parse(reader.ReadString());
-                    enemy.Damage = damage;
-                }
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "CollisionBox")
-                    enemy.CollisionBox = ReadRectangle(reader);
-
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "PatrolArea")
-                {
-                    enemy.PatrolArea = ReadRectangle(reader);
-                }
-
-                if (reader.NodeType == XmlNodeType.EndElement &&
-                    reader.LocalName == "Setup")
-                    return;
+                int health = int.Parse(reader.ReadString());
+                enemy.Health = health;
             }
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Damage")
+            {
+                int damage = int.Parse(reader.ReadString());
+                enemy.Damage = damage;
+            }
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "CollisionBox")
+                enemy.CollisionBox = ReadRectangle(reader);
+
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "PatrolArea")
+            {
+                enemy.PatrolArea = ReadRectangle(reader);
+            }
+
+            if (reader.NodeType == XmlNodeType.EndElement &&
+                reader.LocalName == "Setup")
+                return;
         }
+    }
 
     /// <summary>
     /// Loads the base animations for a type and stores them in the AnimationManagers
@@ -166,38 +164,38 @@ public class EnemyBank : IEnemyBank
     /// <param name="enemy">Enemy to give the keys to.</param>
     private void LoadAnimations(XmlReader reader, Enemy enemy)
     {
-            while (reader.Read())
+        while (reader.Read())
+        {
+            if (reader.NodeType == XmlNodeType.Element &&
+                reader.LocalName == "Animation")
             {
-                if (reader.NodeType == XmlNodeType.Element &&
-                    reader.LocalName == "Animation")
-                {
-                    int animKey = int.Parse(reader.GetAttribute("key"));
-                    int action = int.Parse(reader.GetAttribute("action"));
+                int animKey = int.Parse(reader.GetAttribute("key"));
+                int action = int.Parse(reader.GetAttribute("action"));
 
-                    Animation anim = animationManager.AddPlaybackAnimation(animKey);
+                Animation anim = _animationManager.AddPlaybackAnimation(animKey);
 
-                    // Add the animation to the Enemy
-                    enemy.AddAnimation(action, anim);
+                // Add the animation to the Enemy
+                enemy.AddAnimation(action, anim);
 
-                    // Make sure the Enemy always has a valid animation set
-                    enemy.CurrentAnimationType = action;
-                }
-
-                if (reader.NodeType == XmlNodeType.EndElement &&
-                    reader.LocalName == "Setup")
-                    return;
+                // Make sure the Enemy always has a valid animation set
+                enemy.CurrentAnimationType = action;
             }
+
+            if (reader.NodeType == XmlNodeType.EndElement &&
+                reader.LocalName == "Setup")
+                return;
         }
+    }
 
     private Rectangle ReadRectangle(XmlReader reader)
     {
-            int x = int.Parse(reader.GetAttribute("x"));
-            int y = int.Parse(reader.GetAttribute("y"));
-            int width = int.Parse(reader.GetAttribute("width"));
-            int height = int.Parse(reader.GetAttribute("height"));
+        int x = int.Parse(reader.GetAttribute("x"));
+        int y = int.Parse(reader.GetAttribute("y"));
+        int width = int.Parse(reader.GetAttribute("width"));
+        int height = int.Parse(reader.GetAttribute("height"));
 
-            return new Rectangle(x, y, width, height);
-        }
+        return new Rectangle(x, y, width, height);
+    }
 
     /// <summary>
     /// Creates an Enemy which class name is that of the passed in string.
@@ -206,42 +204,42 @@ public class EnemyBank : IEnemyBank
     /// <returns>The created Enemy or null if no type mathed the string.</returns>
     private Enemy CreateBaseEnemy(string typeName)
     {
-            // Create the correct enemy based on the type name
-            switch (typeName)
-            {
-                case "Enemy":
-                    return new Enemy(new ActorStartValues());
-            }
-
-            return null;
+        // Create the correct enemy based on the type name
+        switch (typeName)
+        {
+            case "Enemy":
+                return new Enemy(new ActorStartValues());
         }
+
+        return null;
+    }
 
     /// <summary>
     /// Sets the animation keys for the passed in Enemy as specified
     /// by the base Enemy mapped to the typeID key.
     /// </summary>
-    /// <param name="typeID">Key to the base Enemy from which to create the
+    /// <param name="typeId">Key to the base Enemy from which to create the
     /// playback animations</param>
     /// <param name="enemy">The Enemy to set the animationkeys on.</param>
     /// <returns></returns>
-    private void SetPlaybackKeys(int typeID, Enemy enemy)
+    private void SetPlaybackKeys(int typeId, Enemy enemy)
     {
-            // Get the types animation keys
-            Dictionary<int, Animation> bankAnimations = enemyBank[typeID].Animations;
+        // Get the types animation keys
+        Dictionary<int, Animation> bankAnimations = _enemyBank[typeId].Animations;
 
-            Animation anim;
-            
-            // For every animation type
-            foreach (int animType in bankAnimations.Keys)
-            {
-                // Get a copy of the base animation
-                anim = bankAnimations[animType].Copy();
-                
-                // Store the animation
-                animationManager.AddPlaybackAnimation(anim);
-                
-                // Give animation to the enemy
-                enemy.Animations.Add(animType, anim);
-            }
+        Animation anim;
+
+        // For every animation type
+        foreach (int animType in bankAnimations.Keys)
+        {
+            // Get a copy of the base animation
+            anim = bankAnimations[animType].Copy();
+
+            // Store the animation
+            _animationManager.AddPlaybackAnimation(anim);
+
+            // Give animation to the enemy
+            enemy.Animations.Add(animType, anim);
         }
+    }
 }

@@ -17,63 +17,33 @@ namespace PhysicaliaRemastered.Weapons.NewWeapons;
 /// </summary>
 public abstract class Weapon
 {
-    private int weaponID;
+    private Vector2 _playerOffset;
 
-    private Player player;
-    private IParticleEngine particleEngine;
-    private int particleID;
+    protected bool FiredOnUpdate;
 
-    private Sprite sprite;
-    private Animation warmupAnimation;
-    private Animation fireAnimation;
-    private Vector2 playerOffset;
+    private float _timeTillWeaponStart;
 
-    private bool firing;
-    protected bool firedOnUpdate;
-
-    private float weaponWarmupTime;
-    private float timeTillWeaponStart;
-
-    private float shotsPerSecond;
-    private float timeTillShot;
+    private float _timeTillShot;
 
 
-    private int ammoCount;
-    private int maxAmmo;
-    private int ammoMemory;
-    private bool infiniteAmmo;
+    private int _ammoCount;
 
     // Collision fields
-    private bool canCollide;
-    private Rectangle collisionBox;
-    private float collisionDamage;
 
     /// <summary>
     /// Gets a value denoting the weapon's type.
     /// </summary>
-    public int WeaponID
-    {
-        get => weaponID;
-        set => weaponID = value;
-    }
+    public int WeaponId { get; set; }
 
     /// <summary>
     /// Gets or sets a reference to the player who owns the weapon.
     /// </summary>
-    public Player Player
-    {
-        get => player;
-        set => player = value;
-    }
+    public Player Player { get; set; }
 
     /// <summary>
     /// Gets or sets the particleengine uesd by the weapon.
     /// </summary>
-    public IParticleEngine ParticleEngine
-    {
-        get => particleEngine;
-        set => particleEngine = value;
-    }
+    public IParticleEngine ParticleEngine { get; set; }
 
     /// <summary>
     /// Gets or sets the position of the player's origin relative to the
@@ -81,54 +51,34 @@ public abstract class Weapon
     /// </summary>
     public Vector2 PlayerOffset
     {
-        get => playerOffset;
-        set => playerOffset = value;
+        get => _playerOffset;
+        set => _playerOffset = value;
     }
 
     /// <summary>
     /// Gets or sets the id of the particle that the weapon can fire types of.
     /// </summary>
-    public int ParticleID
-    {
-        get => particleID;
-        set => particleID = value;
-    }
+    public int ParticleId { get; set; }
 
     /// <summary>
     /// Gets or sets the Sprite that should be used for drawing the weapon when
     /// it's not used by the player.
     /// </summary>
-    public Sprite WeaponSprite
-    {
-        get => sprite;
-        set => sprite = value;
-    }
+    public Sprite WeaponSprite { get; set; }
 
-    public Animation WarmupAnimation
-    {
-        get => warmupAnimation;
-        set => warmupAnimation = value;
-    }
+    public Animation WarmupAnimation { get; set; }
 
     /// <summary>
     /// Gets or sets the animation used by the weapon when it gets to
     /// draw itself.
     /// </summary>
-    public Animation WeaponFireAnimation
-    {
-        get => fireAnimation;
-        set => fireAnimation = value;
-    }
+    public Animation WeaponFireAnimation { get; set; }
 
     /// <summary>
     /// Gets a value denoting whether the weapon is currently firing. The property
     /// can also be set by inheriting classes.
     /// </summary>
-    public bool IsFiring
-    {
-        get => firing;
-        protected set => firing = value;
-    }
+    public bool IsFiring { get; protected set; }
 
     /// <summary>
     /// Gets a value indicating whether the weapon was fired during the last
@@ -136,8 +86,8 @@ public abstract class Weapon
     /// </summary>
     public bool WeaponFired
     {
-        get => firedOnUpdate;
-        protected set => firedOnUpdate = value;
+        get => FiredOnUpdate;
+        protected set => FiredOnUpdate = value;
     }
 
     /// <summary>
@@ -145,91 +95,59 @@ public abstract class Weapon
     /// </summary>
     public int AmmoCount
     {
-        get => ammoCount;
-        set => ammoCount = Math.Min(value, maxAmmo);
+        get => _ammoCount;
+        set => _ammoCount = Math.Min(value, MaxAmmo);
     }
 
     /// <summary>
     /// Gets or sets the maximum amount of ammunition that the weapons can have.
     /// </summary>
-    public int MaxAmmo
-    {
-        get => maxAmmo;
-        set => maxAmmo = value;
-    }
+    public int MaxAmmo { get; set; }
 
     /// <summary>
     /// Gets or sets a value denoting whether the weapon has an infinite supply
     /// of ammunition.
     /// </summary>
-    public bool InfiniteAmmo
-    {
-        get => infiniteAmmo;
-        set => infiniteAmmo = value;
-    }
+    public bool InfiniteAmmo { get; set; }
 
     /// <summary>
     /// Gets or sets the ammunition count previously stored in the weapon.
     /// </summary>
-    public int AmmoMemory
+    public int AmmoMemory { get; set; }
+
+    public Rectangle CollisionBox { get; set; }
+
+    public bool CanCollide { get; set; }
+
+    public float CollisionDamage { get; set; }
+
+    public float WeaponWarmUp { get; set; }
+
+    public float ShotsPerSecond { get; set; }
+
+    public Weapon(int weaponId, IParticleEngine particleEngine)
     {
-        get => ammoMemory;
-        set => ammoMemory = value;
-    }
+        WeaponId = weaponId;
 
-    public Rectangle CollisionBox
-    {
-        get => collisionBox;
-        set => collisionBox = value;
-    }
+        Player = null;
+        _playerOffset = Vector2.Zero;
+        ParticleEngine = particleEngine;
 
-    public bool CanCollide
-    {
-        get => canCollide;
-        set => canCollide = value;
-    }
+        WeaponSprite = new Sprite();
+        WeaponFireAnimation = null;
 
-    public float CollisionDamage
-    {
-        get => collisionDamage;
-        set => collisionDamage = value;
-    }
+        AmmoMemory = MaxAmmo = _ammoCount = 0;
+        InfiniteAmmo = false;
 
-    public float WeaponWarmUp
-    {
-        get => weaponWarmupTime;
-        set => weaponWarmupTime = value;
-    }
+        IsFiring = false;
+        FiredOnUpdate = false;
 
-    public float ShotsPerSecond
-    {
-        get => shotsPerSecond;
-        set => shotsPerSecond = value;
-    }
+        WeaponWarmUp = _timeTillWeaponStart = 5F;
+        ShotsPerSecond = _timeTillShot = 0F;
 
-    public Weapon(int weaponID, IParticleEngine particleEngine)
-    {
-        this.weaponID = weaponID;
-
-        player = null;
-        playerOffset = Vector2.Zero;
-        this.particleEngine = particleEngine;
-
-        sprite = new Sprite();
-        fireAnimation = null;
-
-        ammoMemory = maxAmmo = ammoCount = 0;
-        infiniteAmmo = false;
-
-        firing = false;
-        firedOnUpdate = false;
-
-        weaponWarmupTime = timeTillWeaponStart = 5F;
-        shotsPerSecond = timeTillShot = 0F;
-
-        canCollide = false;
-        collisionBox = Rectangle.Empty;
-        collisionDamage = 0F;
+        CanCollide = false;
+        CollisionBox = Rectangle.Empty;
+        CollisionDamage = 0F;
     }
 
     /// <summary>
@@ -247,42 +165,42 @@ public abstract class Weapon
 
     public virtual void Start()
     {
-        if (ammoCount > 0 || infiniteAmmo)
+        if (_ammoCount > 0 || InfiniteAmmo)
         {
             // Prepare weapon
-            timeTillWeaponStart = weaponWarmupTime;
-            timeTillShot = 0;
+            _timeTillWeaponStart = WeaponWarmUp;
+            _timeTillShot = 0;
 
             // Start animation and set the weapon's status to firing
-            firing = true;
+            IsFiring = true;
 
             // Start playing warmup animation if needed otherwise start 
-            if (weaponWarmupTime > 0)
-                warmupAnimation.Play();
+            if (WeaponWarmUp > 0)
+                WarmupAnimation.Play();
             else
             {
-                fireAnimation.Play();
+                WeaponFireAnimation.Play();
                 OnStartFire();
             }
         }
     }
-        
+
     public virtual void Stop()
     {
-        if (firing)
+        if (IsFiring)
         {
             // Leave the weapon in the same state as when we started
-            timeTillWeaponStart = weaponWarmupTime;
-            timeTillShot = 0;
+            _timeTillWeaponStart = WeaponWarmUp;
+            _timeTillShot = 0;
 
             // Stop any vibration
             GamePad.SetVibration(PlayerIndex.One, 0, 0);
 
             // Stop the warm up animation ot be on the safe side
-            warmupAnimation.Stop();
+            WarmupAnimation.Stop();
 
-            firing = false;
-            fireAnimation.Stop();
+            IsFiring = false;
+            WeaponFireAnimation.Stop();
         }
     }
 
@@ -291,7 +209,7 @@ public abstract class Weapon
     /// </summary>
     public void StoreAmmoCount()
     {
-        ammoMemory = ammoCount;
+        AmmoMemory = _ammoCount;
     }
 
     /// <summary>
@@ -299,7 +217,7 @@ public abstract class Weapon
     /// </summary>
     public void ApplyStoredAmmoCount()
     {
-        ammoCount = ammoMemory;
+        _ammoCount = AmmoMemory;
     }
 
     /// <summary>
@@ -320,28 +238,28 @@ public abstract class Weapon
     public void Update(GameTime gameTime)
     {
         // Start by assuming that the weapon hasn't been fired
-        firedOnUpdate = false;
+        FiredOnUpdate = false;
 
         // See if the weapon is firing
-        if (firing)
+        if (IsFiring)
         {
             // See if the weapon is warming up
-            if (timeTillWeaponStart > 0)
+            if (_timeTillWeaponStart > 0)
             {
-                timeTillWeaponStart -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _timeTillWeaponStart -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 // Go from warm up to firing if it's time
-                if (timeTillWeaponStart <= 0)
+                if (_timeTillWeaponStart <= 0)
                 {
-                    warmupAnimation.Stop();
-                    fireAnimation.Play();
+                    WarmupAnimation.Stop();
+                    WeaponFireAnimation.Play();
 
                     OnStartFire();
                 }
             }
-            else if (timeTillShot > 0)
+            else if (_timeTillShot > 0)
             {
-                timeTillShot -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _timeTillShot -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else
             {
@@ -349,14 +267,14 @@ public abstract class Weapon
                 FireWeapon();
 
                 // Let others know that the weapon was fired
-                firedOnUpdate = true;
+                FiredOnUpdate = true;
 
                 // Prepare for the next round if we're still firing
                 // and have the ammunition needed
-                if (firing && (ammoCount > 0 || infiniteAmmo))
+                if (IsFiring && (_ammoCount > 0 || InfiniteAmmo))
                 {
                     // Prepare weapon
-                    timeTillShot += 1 / shotsPerSecond;
+                    _timeTillShot += 1 / ShotsPerSecond;
                 }
                 else
                 {
@@ -382,33 +300,33 @@ public abstract class Weapon
         // Weapon origin is at the same position as the player's origin.
         // This makes it much easier to accurately position the weapon
         // when using SpriteEffects.
-        Vector2 origin = player.Origin + new Vector2(player.CollisionBox.X, player.CollisionBox.Y);
+        Vector2 origin = Player.Origin + new Vector2(Player.CollisionBox.X, Player.CollisionBox.Y);
 
         // Worldposition of the weapon
-        Vector2 position = player.Position;
+        Vector2 position = Player.Position;
 
         // If the player is flipped horizontally then we need to
         // subtract the width of its collisionbox to properly
         // place the weapon
         if ((spriteEffects & SpriteEffects.FlipHorizontally) != 0)
         {
-            position.X -= player.CollisionBox.Width;
-            origin.X -= playerOffset.X;
+            position.X -= Player.CollisionBox.Width;
+            origin.X -= _playerOffset.X;
         }
         else
-            origin.X += playerOffset.X;
+            origin.X += _playerOffset.X;
 
         if ((spriteEffects & SpriteEffects.FlipVertically) != 0)
-            origin.Y -= playerOffset.Y;
+            origin.Y -= _playerOffset.Y;
         else
-            origin.Y += playerOffset.Y;
+            origin.Y += _playerOffset.Y;
 
         Animation weaponAnim = null;
-            
-        if (timeTillWeaponStart > 0)
-            weaponAnim = warmupAnimation;
+
+        if (_timeTillWeaponStart > 0)
+            weaponAnim = WarmupAnimation;
         else
-            weaponAnim = fireAnimation;
+            weaponAnim = WeaponFireAnimation;
 
         spriteBatch.Draw(weaponAnim.Texture,
             position - positionOffset,

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <EnemyBank>
-	<Enemy type="Enemy" typeID="0">
-		<Setup>
-			<Intelligence>Savant</Intelligence>
-			<Life>100</Life>
-			<Damage>10</Damage>
-			<CollisionBox x="0" y="0" width="48" height="91" />
-		</Setup>
-		<Animations>
-			<Animation key="10" action="1" />
-			<Animation key="11" action="2" />
-			<Animation key="12" action="3" />
-			<Animation key="13" action="4" />
-		</Animations>
-	</Enemy>
+    <Enemy type="Enemy" typeID="0">
+        <Setup>
+            <Intelligence>Savant</Intelligence>
+            <Life>100</Life>
+            <Damage>10</Damage>
+            <CollisionBox x="0" y="0" width="48" height="91" />
+        </Setup>
+        <Animations>
+            <Animation key="10" action="1" />
+            <Animation key="11" action="2" />
+            <Animation key="12" action="3" />
+            <Animation key="13" action="4" />
+        </Animations>
+    </Enemy>
 </EnemyBank>

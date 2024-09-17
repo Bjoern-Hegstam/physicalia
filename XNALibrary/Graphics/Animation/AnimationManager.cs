@@ -9,22 +9,22 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <summary>
     /// The banks animations stored by the AnimationManager.
     /// </summary>
-    private Dictionary<int, Animation> animationBank;
+    private readonly Dictionary<int, Animation> _animationBank;
 
     /// <summary>
     /// The playback animations controlled by the AnimationManager.
     /// </summary>
-    private List<Animation> playbackAnims;
+    private readonly List<Animation> _playbackAnims;
 
-    private ITextureLibrary textureLibrary;
+    private readonly ITextureLibrary _textureLibrary;
 
     public AnimationManager(Game game, ITextureLibrary textureLibrary)
         : base(game)
     {
-        animationBank = new Dictionary<int, Animation>();
-        playbackAnims = new List<Animation>();
+        _animationBank = new Dictionary<int, Animation>();
+        _playbackAnims = new List<Animation>();
 
-        this.textureLibrary = textureLibrary;
+        _textureLibrary = textureLibrary;
     }
 
     /// <summary>
@@ -35,9 +35,9 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <returns>True if the animation was succesfully added.</returns>
     public bool AddBankAnimation(int key, Animation animation)
     {
-        if (!animationBank.ContainsKey(key))
+        if (!_animationBank.ContainsKey(key))
         {
-            animationBank.Add(key, animation);
+            _animationBank.Add(key, animation);
             return true;
         }
 
@@ -56,10 +56,10 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <returns>True if the animation was succesfully added; false otherwise</returns>
     public bool AddBankAnimation(int key, Rectangle startFrame, int columns, int rows, float framerate, int textureKey)
     {
-        if (!animationBank.ContainsKey(key))
+        if (!_animationBank.ContainsKey(key))
         {
-            Animation animation = new Animation(startFrame, columns, rows, framerate, textureLibrary[textureKey]);
-            animationBank.Add(key, animation);
+            Animation animation = new Animation(startFrame, columns, rows, framerate, _textureLibrary[textureKey]);
+            _animationBank.Add(key, animation);
             return true;
         }
 
@@ -72,8 +72,8 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <param name="storageKey">Key of the animation to remove.</param>
     public void RemoveBankAnimation(int key)
     {
-        if (animationBank.ContainsKey(key))
-            animationBank.Remove(key);
+        if (_animationBank.ContainsKey(key))
+            _animationBank.Remove(key);
     }
 
     /// <summary>
@@ -85,8 +85,8 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// no animation was found.</returns>
     public Animation GetBankAnimation(int key)
     {
-        if (animationBank.ContainsKey(key))
-            return animationBank[key];
+        if (_animationBank.ContainsKey(key))
+            return _animationBank[key];
 
         return null;
     }
@@ -96,7 +96,7 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// </summary>
     public void ClearAnimationBank()
     {
-        animationBank.Clear();
+        _animationBank.Clear();
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// </summary>
     public void ClearPlaybackAnimations()
     {
-        playbackAnims.Clear();
+        _playbackAnims.Clear();
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <returns>Always true.</returns>
     public bool AddPlaybackAnimation(Animation animation)
     {
-        playbackAnims.Add(animation);
+        _playbackAnims.Add(animation);
 
         return true;
     }
@@ -128,10 +128,10 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// contain an animation with the specified key.</returns>
     public Animation AddPlaybackAnimation(int bankKey)
     {
-        if (animationBank.ContainsKey(bankKey))
+        if (_animationBank.ContainsKey(bankKey))
         {
-            Animation animation = animationBank[bankKey].Copy();
-            playbackAnims.Add(animation);
+            Animation animation = _animationBank[bankKey].Copy();
+            _playbackAnims.Add(animation);
             return animation;
         }
 
@@ -146,7 +146,7 @@ public class AnimationManager : GameComponent, IAnimationManager
     /// <returns>True if an animation corresponding to the key was found; false otherwise.</returns>
     public bool HasBankAnimation(int bankKey)
     {
-        return animationBank.ContainsKey(bankKey);
+        return _animationBank.ContainsKey(bankKey);
     }
 
     /// <summary>
@@ -159,7 +159,7 @@ public class AnimationManager : GameComponent, IAnimationManager
         int indexIncrease = 0;
 
         // Go throught every active animation
-        foreach (Animation animation in playbackAnims)
+        foreach (Animation animation in _playbackAnims)
         {
             // Only update active animations
             if (!animation.IsActive)
@@ -182,7 +182,6 @@ public class AnimationManager : GameComponent, IAnimationManager
             {
                 animation.FrameIndex += indexIncrease;
                 indexIncrease = 0;
-
             }
 
             // See if the animation has come to its last frame and
@@ -201,10 +200,8 @@ public class AnimationManager : GameComponent, IAnimationManager
         readerSettings.IgnoreComments = true;
         readerSettings.IgnoreWhitespace = true;
 
-        using (XmlReader reader = XmlReader.Create(path))
-        {
-            LoadXml(reader);
-        }
+        using XmlReader reader = XmlReader.Create(path);
+        LoadXml(reader);
     }
 
     public void LoadXml(XmlReader reader)
@@ -217,7 +214,7 @@ public class AnimationManager : GameComponent, IAnimationManager
                 int id = int.Parse(reader.GetAttribute("id"));
                 Animation anim = LoadAnimationFromXml(reader);
 
-                animationBank.Add(id, anim);
+                _animationBank.Add(id, anim);
             }
         }
     }
@@ -231,8 +228,10 @@ public class AnimationManager : GameComponent, IAnimationManager
         textureKey = int.Parse(reader.ReadElementContentAsString());
 
         reader.ReadToFollowing("StartFrame");
-        x = int.Parse(reader.GetAttribute("x")); y = int.Parse(reader.GetAttribute("y"));
-        width = int.Parse(reader.GetAttribute("width")); height = int.Parse(reader.GetAttribute("height"));
+        x = int.Parse(reader.GetAttribute("x"));
+        y = int.Parse(reader.GetAttribute("y"));
+        width = int.Parse(reader.GetAttribute("width"));
+        height = int.Parse(reader.GetAttribute("height"));
 
         reader.ReadToFollowing("Dimensions");
         columns = int.Parse(reader.GetAttribute("columns"));
@@ -245,7 +244,7 @@ public class AnimationManager : GameComponent, IAnimationManager
         loop = bool.Parse(reader.ReadElementContentAsString());
 
         Rectangle startFrame = new Rectangle(x, y, width, height);
-        Animation anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureKey]);
+        Animation anim = new Animation(startFrame, columns, rows, frameRate, _textureLibrary[textureKey]);
         anim.Loop = loop;
 
         return anim;
