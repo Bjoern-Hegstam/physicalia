@@ -13,7 +13,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
     private const int TileWidthPx = DefaultTileSidePx;
     private const int TileHeightPx = DefaultTileSidePx;
 
-    private readonly Dictionary<Vector2, int> _tileMap = new();
+    private readonly Dictionary<Vector2, TileId> _tileMap = new();
     private int Width { get; set; } = width;
     private int Height { get; set; } = height;
 
@@ -33,9 +33,9 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
             {
                 int x = int.Parse(reader.GetAttribute(0));
                 int y = int.Parse(reader.GetAttribute(1));
-                int tileKey = int.Parse(reader.GetAttribute(2));
+                TileId tileId = new TileId(int.Parse(reader.GetAttribute(2)));
 
-                _tileMap[new Vector2(x, y)] = tileKey;
+                _tileMap[new Vector2(x, y)] = tileId;
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TileEngine" })
@@ -79,12 +79,12 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         {
             for (int y = yMin; y <= yMax; y++)
             {
-                if (!_tileMap.TryGetValue(new Vector2(x, y), out int tileKey))
+                if (!_tileMap.TryGetValue(new Vector2(x, y), out TileId tileId))
                 {
                     continue;
                 }
 
-                Tile tile = tileLibrary.GetTile(tileKey);
+                Tile tile = tileLibrary.GetTile(tileId);
 
                 if (tile is { CollisionSides: 0, GivesDamage: false })
                 {
@@ -250,12 +250,12 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         {
             for (int y = topLeftY; y < Height; y++)
             {
-                if (!_tileMap.TryGetValue(new Vector2(x, y), out int tileKey))
+                if (!_tileMap.TryGetValue(new Vector2(x, y), out TileId tileId))
                 {
                     continue;
                 }
 
-                Tile tile = tileLibrary.GetTile(tileKey);
+                Tile tile = tileLibrary.GetTile(tileId);
 
                 var position = new Vector2(
                     x * TileWidthPx - positionOffset.X,

@@ -7,16 +7,11 @@ namespace XNALibrary.TileEngine;
 
 public class TileLibrary
 {
-    private readonly Dictionary<int, Tile> _tileLibrary = new();
+    private readonly Dictionary<TileId, Tile> _tileLibrary = new();
 
-    public Tile GetTile(int key)
+    public Tile GetTile(TileId id)
     {
-        return _tileLibrary[key];
-    }
-
-    public bool ContainsKey(int key)
-    {
-        return _tileLibrary.ContainsKey(key);
+        return _tileLibrary[id];
     }
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary, AnimationManager animationManager)
@@ -39,9 +34,9 @@ public class TileLibrary
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
             {
-                Tile tile;
-                int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
+                var id = new TileId(int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException()));
 
+                Tile tile;
                 if (reader.GetAttribute("textureType") == "Animation")
                 {
                     int animationKey = int.Parse(reader.GetAttribute("textureKey") ?? throw new ResourceLoadException());
