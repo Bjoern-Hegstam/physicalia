@@ -9,11 +9,11 @@ namespace XNALibrary.Sprites;
 /// </summary>
 public class SpriteLibrary(TextureLibrary textureLibrary)
 {
-    private readonly Dictionary<int, Sprite> _sprites = new();
+    private readonly Dictionary<SpriteId, Sprite> _sprites = new();
 
-    public Sprite GetSprite(int key)
+    public Sprite GetSprite(SpriteId id)
     {
-        return _sprites[key];
+        return _sprites[id];
     }
 
     public void LoadXml(string path)
@@ -41,12 +41,12 @@ public class SpriteLibrary(TextureLibrary textureLibrary)
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Sprite" })
             {
-                var id = int.Parse(reader.GetAttribute(0));
+                var id = new SpriteId(int.Parse(reader.GetAttribute(0)));
                 var textureId = new TextureId(int.Parse(reader.GetAttribute(1)));
-                var x = int.Parse(reader.GetAttribute(2));
-                var y = int.Parse(reader.GetAttribute(3));
-                var width = int.Parse(reader.GetAttribute(4));
-                var height = int.Parse(reader.GetAttribute(5));
+                int x = int.Parse(reader.GetAttribute(2));
+                int y = int.Parse(reader.GetAttribute(3));
+                int width = int.Parse(reader.GetAttribute(4));
+                int height = int.Parse(reader.GetAttribute(5));
 
                 _sprites.Add(id, new Sprite(textureLibrary[textureId], new Rectangle(x, y, width, height)));
             }

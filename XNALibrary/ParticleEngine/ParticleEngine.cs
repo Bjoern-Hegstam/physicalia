@@ -12,20 +12,9 @@ namespace XNALibrary.ParticleEngine;
 
 public class ParticleEngine
 {
-    // Particle management
-    private readonly Dictionary<int, ParticleDefinition> _definitions;
-    private readonly List<Particle> _particleBuffer;
-    private readonly List<Particle> _activeParticles;
-
-    /// <summary>
-    /// Creates a new ParticleEngine.
-    /// </summary>
-    public ParticleEngine()
-    {
-        _definitions = new Dictionary<int, ParticleDefinition>();
-        _particleBuffer = [];
-        _activeParticles = [];
-    }
+    private readonly Dictionary<int, ParticleDefinition> _definitions = new();
+    private readonly List<Particle> _particleBuffer = [];
+    private readonly List<Particle> _activeParticles = [];
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary, AnimationManager animationManager)
     {
@@ -47,44 +36,46 @@ public class ParticleEngine
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "ParticleDefinition" })
             {
                 int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
-                string particleType = reader.GetAttribute("type");
-                ParticleDefinition particleDef = null;
-
-                int spriteKey;
-                Sprite sprite;
-
-                // Get the right ParticleDefinition
+                string particleType = reader.GetAttribute("type") ?? throw new ResourceLoadException();
+                ParticleDefinition particleDef;
+                
                 switch (particleType)
                 {
                     case "SpriteParticle":
+                    {
                         reader.ReadToFollowing("Sprite");
-                        spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                        sprite = spriteLibrary.GetSprite(spriteKey);
+                        SpriteId particleSpriteId =
+                            new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                        Sprite sprite = spriteLibrary.GetSprite(particleSpriteId);
 
                         particleDef = new SpriteParticleDefinition(id, sprite);
                         break;
+                    }
                     case "Projectile":
+                    {
                         reader.ReadToFollowing("Sprite");
-                        spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                        sprite = spriteLibrary.GetSprite(spriteKey);
+                        SpriteId projectileSpriteId =
+                            new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                        Sprite sprite = spriteLibrary.GetSprite(projectileSpriteId);
 
                         particleDef = new ProjectileDefinition(id, sprite);
                         break;
+                    }
                     case "AnimationParticle":
+                    {
                         reader.ReadToFollowing("Animation");
-                        spriteKey = int.Parse(reader.GetAttribute("key"));
-                        Animation.Animation animation = animationManager.AddPlaybackAnimation(spriteKey);
+                        int animationId = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                        Animation.Animation animation = animationManager.AddPlaybackAnimation(animationId);
 
                         particleDef = new AnimationParticleDefinition(id, animation, animationManager);
                         break;
+                    }
                     default:
                         throw new ArgumentException("Invalid Particle type: " + particleType);
                 }
 
-                // Have the definition setup itself
                 particleDef.LoadXml(reader);
 
-                // Store the definition
                 AddDefinition(particleDef);
             }
 
@@ -97,40 +88,9 @@ public class ParticleEngine
 
     public Particle[] Particles => _activeParticles.ToArray();
 
-    public bool HasDefinition(int definitionId)
-    {
-        return _definitions.ContainsKey(definitionId);
-    }
-
     public void AddDefinition(ParticleDefinition definition)
     {
         _definitions.Add(definition.Id, definition);
-    }
-
-    public void RemoveDefinition(int definitionId, bool rinseBuffer)
-    {
-        // Remove definition
-        _definitions.Remove(definitionId);
-
-        // Rinse the buffers?
-        if (rinseBuffer)
-        {
-            for (var i = 0; i < _activeParticles.Count; i++)
-            {
-                if (_activeParticles[i].Definition.Id == definitionId)
-                {
-                    _activeParticles.RemoveAt(i);
-                }
-            }
-
-            for (var i = 0; i < _particleBuffer.Count; i++)
-            {
-                if (_particleBuffer[i].Definition.Id == definitionId)
-                {
-                    _particleBuffer.RemoveAt(i);
-                }
-            }
-        }
     }
 
     public void Add(int typeId, int count)
@@ -252,16 +212,7 @@ public class ParticleEngine
     }
 
     /// <summary>
-    /// Clears the engines buffer of particles
-    /// </summary>
-    public void ClearBuffer()
-    {
-        _particleBuffer.Clear();
-    }
-
-    /// <summary>
-    /// Prepares the engine by having it use parts of its system of force
-    /// a JIT of its code.
+    /// Prepares the engine by having it use parts of its system to force a JIT of its code.
     /// </summary>
     public void Prepare()
     {
@@ -287,24 +238,21 @@ public class ParticleEngine
             _activeParticles[i].Update(gameTime);
 
             // Has the particle gone inactive?
-            if (!_activeParticles[i].IsActive)
+            if (_activeParticles[i].IsActive)
             {
-                _particleBuffer.Add(_activeParticles[i]);
-                _activeParticles.RemoveAt(i);
+                continue;
             }
-        }
-    }
 
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        Draw(spriteBatch, Vector2.Zero);
+            _particleBuffer.Add(_activeParticles[i]);
+            _activeParticles.RemoveAt(i);
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-        for (var i = 0; i < _activeParticles.Count; i++)
+        foreach (Particle particle in _activeParticles)
         {
-            _activeParticles[i].Draw(spriteBatch, offsetPosition);
+            particle.Draw(spriteBatch, offsetPosition);
         }
     }
 }

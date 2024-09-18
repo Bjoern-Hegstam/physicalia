@@ -46,8 +46,8 @@ public class TileLibrary
                 }
                 else
                 {
-                    int spriteKey = int.Parse(reader.GetAttribute("textureKey") ?? throw new ResourceLoadException());
-                    Sprite sprite = spriteLibrary.GetSprite(spriteKey);
+                    SpriteId spriteId = new SpriteId(int.Parse(reader.GetAttribute("textureKey") ?? throw new ResourceLoadException()));
+                    Sprite sprite = spriteLibrary.GetSprite(spriteId);
 
                     tile = new SpriteTile(sprite);
                 }
