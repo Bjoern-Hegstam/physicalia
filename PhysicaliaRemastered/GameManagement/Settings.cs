@@ -124,12 +124,12 @@ public class Settings
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "UI" })
             {
                 reader.ReadToFollowing("FullHealthBar");
-                int spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                FullHealthUi = spriteLibrary.GetSprite(spriteKey);
+                SpriteId fullBarSpriteId = new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                FullHealthUi = spriteLibrary.GetSprite(fullBarSpriteId);
 
                 reader.ReadToFollowing("EmptyHealthBar");
-                spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                EmptyHealthUi = spriteLibrary.GetSprite(spriteKey);
+                SpriteId emptyBarSpriteId = new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                EmptyHealthUi = spriteLibrary.GetSprite(emptyBarSpriteId);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Settings" })

@@ -15,68 +15,46 @@ namespace PhysicaliaRemastered.Weapons.NewWeapons;
 /// provides properties needed for managing over the weapon and methods for
 /// operating it.
 /// </summary>
-public abstract class Weapon
+public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 {
-    private Vector2 _playerOffset;
-
-    protected bool FiredOnUpdate;
-
-    private float _timeTillWeaponStart;
+    private float _timeTillWeaponStart = 5F;
 
     private float _timeTillShot;
-
-
+    
     private int _ammoCount;
 
     // Collision fields
 
-    /// <summary>
-    /// Gets a value denoting the weapon's type.
-    /// </summary>
-    public int WeaponId { get; set; }
+    public int WeaponId { get; set; } = weaponId;
+
+    public Player? Player { get; set; } = null;
+
+    public ParticleEngine ParticleEngine { get; set; } = particleEngine;
 
     /// <summary>
-    /// Gets or sets a reference to the player who owns the weapon.
+    /// Gets or sets the position of the player's origin relative to the weapon's origin.
     /// </summary>
-    public Player Player { get; set; }
-
-    /// <summary>
-    /// Gets or sets the particleengine uesd by the weapon.
-    /// </summary>
-    public ParticleEngine ParticleEngine { get; set; }
-
-    /// <summary>
-    /// Gets or sets the position of the player's origin relative to the
-    /// weapon's origin.
-    /// </summary>
-    public Vector2 PlayerOffset
-    {
-        get => _playerOffset;
-        set => _playerOffset = value;
-    }
+    public Vector2 PlayerOffset { get; set; } = Vector2.Zero;
 
     /// <summary>
     /// Gets or sets the id of the particle that the weapon can fire types of.
     /// </summary>
-    public int ParticleId { get; set; }
+    public int? ParticleId { get; set; }
 
     /// <summary>
-    /// Gets or sets the Sprite that should be used for drawing the weapon when
-    /// it's not used by the player.
+    /// Gets or sets the Sprite that should be used for drawing the weapon when it's not used by the player.
     /// </summary>
-    public Sprite WeaponSprite { get; set; }
+    public Sprite? WeaponSprite { get; set; } = null;
 
-    public Animation WarmupAnimation { get; set; }
+    public Animation? WarmupAnimation { get; set; }
 
     /// <summary>
-    /// Gets or sets the animation used by the weapon when it gets to
-    /// draw itself.
+    /// Gets or sets the animation used by the weapon when it gets to draw itself.
     /// </summary>
-    public Animation WeaponFireAnimation { get; set; }
+    public Animation? WeaponFireAnimation { get; set; } = null;
 
     /// <summary>
-    /// Gets a value denoting whether the weapon is currently firing. The property
-    /// can also be set by inheriting classes.
+    /// Gets a value denoting whether the weapon is currently firing. The property can also be set by inheriting classes.
     /// </summary>
     public bool IsFiring { get; protected set; }
 
@@ -84,11 +62,7 @@ public abstract class Weapon
     /// Gets a value indicating whether the weapon was fired during the last
     /// call to its Update method. Can be set by inheriting classes.
     /// </summary>
-    public bool WeaponFired
-    {
-        get => FiredOnUpdate;
-        protected set => FiredOnUpdate = value;
-    }
+    public bool WeaponFired { get; protected set; }
 
     /// <summary>
     /// Gets or sets the weapon's current amount of ammunition.
@@ -102,53 +76,28 @@ public abstract class Weapon
     /// <summary>
     /// Gets or sets the maximum amount of ammunition that the weapons can have.
     /// </summary>
-    public int MaxAmmo { get; set; }
+    public int MaxAmmo { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets a value denoting whether the weapon has an infinite supply
     /// of ammunition.
     /// </summary>
-    public bool InfiniteAmmo { get; set; }
+    public bool InfiniteAmmo { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the ammunition count previously stored in the weapon.
     /// </summary>
     public int AmmoMemory { get; set; }
 
-    public Rectangle CollisionBox { get; set; }
+    public Rectangle CollisionBox { get; set; } = Rectangle.Empty;
 
-    public bool CanCollide { get; set; }
+    public bool CanCollide { get; set; } = false;
 
-    public float CollisionDamage { get; set; }
+    public float CollisionDamage { get; set; } = 0F;
 
-    public float WeaponWarmUp { get; set; }
+    public float WeaponWarmUp { get; set; } = 5F;
 
-    public float ShotsPerSecond { get; set; }
-
-    public Weapon(int weaponId, ParticleEngine particleEngine)
-    {
-        WeaponId = weaponId;
-
-        Player = null;
-        _playerOffset = Vector2.Zero;
-        ParticleEngine = particleEngine;
-
-        WeaponSprite = new Sprite();
-        WeaponFireAnimation = null;
-
-        AmmoMemory = MaxAmmo = _ammoCount = 0;
-        InfiniteAmmo = false;
-
-        IsFiring = false;
-        FiredOnUpdate = false;
-
-        WeaponWarmUp = _timeTillWeaponStart = 5F;
-        ShotsPerSecond = _timeTillShot = 0F;
-
-        CanCollide = false;
-        CollisionBox = Rectangle.Empty;
-        CollisionDamage = 0F;
-    }
+    public float ShotsPerSecond { get; set; } = 0F;
 
     /// <summary>
     /// Called when the weapon is fired. Deriving classes can here decide how
@@ -181,7 +130,7 @@ public abstract class Weapon
             }
             else
             {
-                WeaponFireAnimation.Play();
+                WeaponFireAnimation?.Play();
                 OnStartFire();
             }
         }
@@ -199,10 +148,10 @@ public abstract class Weapon
             GamePad.SetVibration(PlayerIndex.One, 0, 0);
 
             // Stop the warm up animation ot be on the safe side
-            WarmupAnimation.Stop();
+            WarmupAnimation?.Stop();
 
             IsFiring = false;
-            WeaponFireAnimation.Stop();
+            WeaponFireAnimation?.Stop();
         }
     }
 
@@ -240,7 +189,7 @@ public abstract class Weapon
     public void Update(GameTime gameTime)
     {
         // Start by assuming that the weapon hasn't been fired
-        FiredOnUpdate = false;
+        WeaponFired = false;
 
         // See if the weapon is firing
         if (IsFiring)
@@ -253,8 +202,8 @@ public abstract class Weapon
                 // Go from warm up to firing if it's time
                 if (_timeTillWeaponStart <= 0)
                 {
-                    WarmupAnimation.Stop();
-                    WeaponFireAnimation.Play();
+                    WarmupAnimation?.Stop();
+                    WeaponFireAnimation?.Play();
 
                     OnStartFire();
                 }
@@ -269,7 +218,7 @@ public abstract class Weapon
                 FireWeapon();
 
                 // Let others know that the weapon was fired
-                FiredOnUpdate = true;
+                WeaponFired = true;
 
                 // Prepare for the next round if we're still firing
                 // and have the ammunition needed
@@ -313,32 +262,23 @@ public abstract class Weapon
         if ((spriteEffects & SpriteEffects.FlipHorizontally) != 0)
         {
             position.X -= Player.CollisionBox.Width;
-            origin.X -= _playerOffset.X;
+            origin.X -= PlayerOffset.X;
         }
         else
         {
-            origin.X += _playerOffset.X;
+            origin.X += PlayerOffset.X;
         }
 
         if ((spriteEffects & SpriteEffects.FlipVertically) != 0)
         {
-            origin.Y -= _playerOffset.Y;
+            origin.Y -= PlayerOffset.Y;
         }
         else
         {
-            origin.Y += _playerOffset.Y;
+            origin.Y += PlayerOffset.Y;
         }
 
-        Animation weaponAnim = null;
-
-        if (_timeTillWeaponStart > 0)
-        {
-            weaponAnim = WarmupAnimation;
-        }
-        else
-        {
-            weaponAnim = WeaponFireAnimation;
-        }
+        Animation? weaponAnim = _timeTillWeaponStart > 0 ? WarmupAnimation : WeaponFireAnimation;
 
         spriteBatch.Draw(weaponAnim.Texture,
             position - positionOffset,

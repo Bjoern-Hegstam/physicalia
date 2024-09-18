@@ -240,13 +240,13 @@ public class Level
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Background" })
             {
-                int spriteKey = int.Parse(reader.GetAttribute("spriteKey") ?? throw new ResourceLoadException());
+                SpriteId spriteId = new SpriteId(int.Parse(reader.GetAttribute("spriteKey") ?? throw new ResourceLoadException()));
                 float depth = float.Parse(reader.GetAttribute("depth") ?? throw new ResourceLoadException());
                 string loopString = reader.GetAttribute("loop") ?? throw new ResourceLoadException();
                 bool loopX = loopString.Contains('x');
                 bool loopY = loopString.Contains('y');
 
-                Sprite sprite = SpriteLibrary.GetSprite(spriteKey);
+                Sprite sprite = SpriteLibrary.GetSprite(spriteId);
                 var background = new BackgroundLayer(sprite, depth)
                 {
                     LoopX = loopX,
@@ -351,7 +351,7 @@ public class Level
                 int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
                 int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
 
-                Sprite triggerSprite = SpriteLibrary.GetSprite(-1);
+                Sprite triggerSprite = SpriteLibrary.GetSprite(new SpriteId(-1));
                 var trigger = new EndLevelTrigger(this, triggerSprite);
 
                 var cont = new PickupContainer(trigger)

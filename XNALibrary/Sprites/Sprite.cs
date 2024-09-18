@@ -7,7 +7,7 @@ namespace XNALibrary.Sprites;
 /// Struct representing a single Sprite. The sprite contains the source texture
 /// to use and a Rectangle marking of the texture to use.
 /// </summary>
-public struct Sprite
+public class Sprite
 {
     /// <summary>
     /// Texture used by the sprite

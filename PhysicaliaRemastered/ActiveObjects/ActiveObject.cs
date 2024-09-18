@@ -19,9 +19,7 @@ public abstract class ActiveObject : ICollisionObject
 
     private readonly SpriteLibrary _spriteLibrary;
     private Sprite _sprite;
-
-    // Width and Height must not be the same dimensions as the Sprite.
-
+    
     private Rectangle _collisionBox;
 
     public int UniqueId { get; }
@@ -79,7 +77,7 @@ public abstract class ActiveObject : ICollisionObject
     {
     }
 
-    public ActiveObject()
+    protected ActiveObject()
     {
         UniqueId = _activeObjectCount++;
 
@@ -94,11 +92,11 @@ public abstract class ActiveObject : ICollisionObject
         CanTakeDamage = false;
     }
 
-    public ActiveObject(SpriteLibrary spriteLibrary, int spriteKey)
+    public ActiveObject(SpriteLibrary spriteLibrary, SpriteId spriteId)
         : this()
     {
         _spriteLibrary = spriteLibrary;
-        _sprite = _spriteLibrary.GetSprite(spriteKey);
+        _sprite = _spriteLibrary.GetSprite(spriteId);
     }
 
     public void CheckCollisions(IEnumerable<ICollisionObject> collObjects)
@@ -125,24 +123,7 @@ public abstract class ActiveObject : ICollisionObject
 
     public abstract void Update(GameTime gameTime);
 
-    public virtual void Draw(SpriteBatch spriteBatch)
-    {
-        Draw(spriteBatch, Vector2.Zero);
-    }
-
     public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-        if (Visible && _spriteLibrary != null)
-        {
-            spriteBatch.Draw(_sprite.Texture,
-                _position - offsetPosition,
-                _sprite.SourceRectangle,
-                Color.White,
-                0F,
-                Origin,
-                1.0F,
-                SpriteEffects.None,
-                0.8F);
-        }
     }
 }

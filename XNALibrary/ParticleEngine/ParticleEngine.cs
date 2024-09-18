@@ -113,7 +113,7 @@ public class ParticleEngine
             throw new ArgumentException("Invalid type id: " + typeId);
         }
 
-        Particle particle = null;
+        Particle particle;
 
         for (int i = _particleBuffer.Count - 1; i >= 0 && count > 0; i--)
         {

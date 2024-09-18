@@ -13,34 +13,21 @@ namespace PhysicaliaRemastered.Pickups;
 public abstract class ModifierPickup : Pickup
 {
     private const float IconTimerSpacing = 5F;
-    private const float DefaultDuration = 5F;
 
     private float _duration;
 
-    private Sprite _icon;
-
     public bool IsActive { get; set; }
-
-    public float Duration
-    {
-        get => _duration;
-        set => TimeRemaining = _duration = value;
-    }
 
     public float TimeRemaining { get; set; }
 
-    public Sprite Icon
-    {
-        get => _icon;
-        set => _icon = value;
-    }
+    public Sprite Icon { get; set; }
 
     public ModifierPickup(Level level, Sprite icon, Sprite sprite, float duration)
         : base(level)
     {
         TimeRemaining = _duration = duration;
         Sprite = sprite;
-        _icon = icon;
+        Icon = icon;
     }
 
     public sealed override void OnPickedUp()
@@ -95,9 +82,9 @@ public abstract class ModifierPickup : Pickup
     public void DrawTimer(SpriteBatch spriteBatch, Vector2 position, SpriteFont font)
     {
         // Draw icon
-        spriteBatch.Draw(_icon.Texture,
+        spriteBatch.Draw(Icon.Texture,
             position,
-            _icon.SourceRectangle,
+            Icon.SourceRectangle,
             Color.White);
 
         // Build the time string
@@ -125,8 +112,8 @@ public abstract class ModifierPickup : Pickup
         // TODO: Use other font (ModifierFont)
 
         Vector2 textPos = position;
-        textPos.X += _icon.SourceRectangle.Width + IconTimerSpacing;
-        textPos.Y += (_icon.SourceRectangle.Height - timeStringSize.Y) / 2;
+        textPos.X += Icon.SourceRectangle.Width + IconTimerSpacing;
+        textPos.Y += (Icon.SourceRectangle.Height - timeStringSize.Y) / 2;
 
         spriteBatch.DrawString(font, timeText, textPos, Color.White);
     }

@@ -126,6 +126,11 @@ public class ProjectileWeapon : Weapon
 
     private void FireShot()
     {
+        if (ParticleId == null)
+        {
+            return;
+        }
+        
         // Get needed fire data
         Vector2 muzzle = GetMuzzlePosition();
 
@@ -135,7 +140,7 @@ public class ProjectileWeapon : Weapon
             float angle = GetFireAngle(i);
 
             // Fire the projectile
-            ParticleEngine.Add(ParticleId, 1, muzzle, angle);
+            ParticleEngine.Add((int)ParticleId, 1, muzzle, angle);
         }
 
         // Decrease ammunition and count the number of fired shots

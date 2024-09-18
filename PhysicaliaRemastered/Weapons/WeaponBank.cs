@@ -73,8 +73,9 @@ public class WeaponBank(ParticleEngine particleEngine, SpriteLibrary spriteLibra
             {
                 // Get sprite
                 reader.ReadToFollowing("Sprite");
-                int spriteKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                weapon.WeaponSprite = spriteLibrary.GetSprite(spriteKey);
+                SpriteId spriteId =
+                    new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                weapon.WeaponSprite = spriteLibrary.GetSprite(spriteId);
 
                 // Get animations
                 reader.ReadToFollowing("Warmup");

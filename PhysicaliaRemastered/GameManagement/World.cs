@@ -90,8 +90,8 @@ public class World
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "StartSprite" })
             {
-                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                _worldSprite = spriteLibrary.GetSprite(key);
+                SpriteId spriteId = new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                _worldSprite = spriteLibrary.GetSprite(spriteId);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Quote" })
@@ -269,15 +269,17 @@ public class World
                             quoteHeight * _worldQuoteLines.Length / 2
                     };
 
-                    for (var i = 0; i < _worldQuoteLines.Length; i++)
+                    foreach (string line in _worldQuoteLines)
                     {
-                        Vector2 quoteSize = _settings.WorldQuoteFont.MeasureString(_worldQuoteLines[i]);
+                        Vector2 quoteSize = _settings.WorldQuoteFont.MeasureString(line);
                         quoteStartPos.X = (_levels[0].ScreenSampler.Width - quoteSize.X) / 2;
 
-                        spriteBatch.DrawString(_settings.WorldQuoteFont,
-                            _worldQuoteLines[i],
+                        spriteBatch.DrawString(
+                            _settings.WorldQuoteFont,
+                            line,
                             quoteStartPos,
-                            _worldQuoteColor);
+                            _worldQuoteColor
+                            );
 
                         quoteStartPos.Y += quoteHeight;
                     }
