@@ -53,14 +53,12 @@ public class BackgroundLayer
     public void Draw(SpriteBatch spriteBatch, Viewport viewport)
     {
         // Don't draw anything if the background isn't visible
-        if (!LoopX &&
-            viewport.Position.X * Depth > _backgroundSprite.SourceRectangle.Width)
+        if (!LoopX && viewport.Position.X * Depth > _backgroundSprite.SourceRectangle.Width)
         {
             return;
         }
 
-        if (!LoopY &&
-            viewport.Position.Y * Depth > _backgroundSprite.SourceRectangle.Height)
+        if (!LoopY && viewport.Position.Y * Depth > _backgroundSprite.SourceRectangle.Height)
         {
             return;
         }
@@ -75,10 +73,14 @@ public class BackgroundLayer
         Vector2 startPos = Position;
 
         while (startPos.X < -_backgroundSprite.SourceRectangle.Width)
+        {
             startPos.X += _backgroundSprite.SourceRectangle.Width;
+        }
 
         while (startPos.Y < -_backgroundSprite.SourceRectangle.Height)
+        {
             startPos.Y += _backgroundSprite.SourceRectangle.Height;
+        }
 
         for (float y = startPos.Y;
              y < viewport.Position.Y + viewport.Height;

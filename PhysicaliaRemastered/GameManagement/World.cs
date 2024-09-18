@@ -241,7 +241,9 @@ public class World
         }
 
         while (_nextState != State)
+        {
             ChangeState();
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)

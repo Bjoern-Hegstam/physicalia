@@ -68,12 +68,12 @@ public abstract class ModifierPickup : Pickup
     public abstract void Activate();
     public abstract void Deactivate();
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
         if (!PickedUp)
         {
             spriteBatch.Draw(Sprite.Texture,
-                positionOffset,
+                viewportPosition,
                 Sprite.SourceRectangle,
                 Color.White);
         }

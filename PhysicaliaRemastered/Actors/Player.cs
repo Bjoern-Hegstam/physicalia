@@ -406,15 +406,6 @@ public class Player : Actor
         }
     }
 
-    public void NewSession()
-    {
-        _weapons.Clear();
-
-        _invincibleTime = 0;
-        _flickerInterval = DefaultFlickerInterval;
-        _visible = true;
-    }
-
     public void LoadSession(GameSession session, WeaponBank weaponBank)
     {
         CurrentAnimationType = 0;

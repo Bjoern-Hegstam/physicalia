@@ -86,11 +86,6 @@ public class Enemy : Actor
         SetDefaults();
     }
 
-    public override void UpdateAnimation()
-    {
-        base.UpdateAnimation();
-    }
-
     /// <summary>
     /// Updates the Enemy. The Player reference is used for determining the
     /// behavior of the Enemy.

@@ -41,7 +41,7 @@ public abstract class Actor : ICollisionObject
     private SpriteEffects _verticalFlip;
     private SpriteEffects _horizontalFlip;
 
-    public SpriteEffects SpriteFlip => (_horizontalFlip | _verticalFlip);
+    public SpriteEffects SpriteFlip => _horizontalFlip | _verticalFlip;
 
     private float _health;
 
@@ -56,10 +56,6 @@ public abstract class Actor : ICollisionObject
     private Rectangle _collisionBox;
 
     public abstract ObjectType Type { get; }
-
-    public Rectangle SourceRectangle => CurrentAnimation.SourceRectangle;
-
-    public Texture2D Texture => CurrentAnimation.Texture;
 
     public Rectangle CollisionBox
     {
@@ -324,26 +320,23 @@ public abstract class Actor : ICollisionObject
         Position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch)
-    {
-        Draw(spriteBatch, Vector2.Zero);
-    }
-
     public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        // Only draw if a valid animation is set
-        if (Animations.ContainsKey(_currentAnimType))
+        if (!Animations.ContainsKey(_currentAnimType))
         {
-            SpriteEffects test = SpriteFlip;
-            spriteBatch.Draw(CurrentAnimation.Texture,
-                Position - viewportPosition,
-                CurrentAnimation.SourceRectangle,
-                Color.White,
-                0F,
-                Origin,
-                1.0F,
-                SpriteFlip,
-                0.8F);
+            return;
         }
+
+        spriteBatch.Draw(
+            CurrentAnimation.Texture,
+            Position - viewportPosition,
+            CurrentAnimation.SourceRectangle,
+            Color.White,
+            0F,
+            Origin,
+            1.0F,
+            SpriteFlip,
+            0.8F
+        );
     }
 }

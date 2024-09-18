@@ -241,10 +241,10 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
     /// specified by the Weapon.PlayerOffset property.
     /// </summary>
     /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
-    /// <param name="positionOffset">The position of the screen.</param>
+    /// <param name="viewportPosition">The position of the screen.</param>
     /// <param name="spriteEffects">Effects to apply to the weapon in order
     /// for it to correspond with the player.</param>
-    public void Draw(SpriteBatch spriteBatch, Vector2 positionOffset, SpriteEffects spriteEffects)
+    public void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition, SpriteEffects spriteEffects)
     {
         // TODO: Methods only works for animations with width 64px
 
@@ -281,7 +281,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
         Animation? weaponAnim = _timeTillWeaponStart > 0 ? WarmupAnimation : WeaponFireAnimation;
 
         spriteBatch.Draw(weaponAnim.Texture,
-            position - positionOffset,
+            position - viewportPosition,
             weaponAnim.SourceRectangle,
             Color.White,
             0.0F,

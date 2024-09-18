@@ -6,6 +6,7 @@ using PhysicaliaRemastered.Actors.Enemies;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Weapons.NewWeapons;
 using XNALibrary.TileEngine;
+using Viewport = XNALibrary.Graphics.Viewport;
 
 namespace PhysicaliaRemastered.Actors.EnemyManagement;
 
@@ -42,14 +43,7 @@ public class EnemyManager
         ActivationDistance = _defaultActivationDistance;
     }
 
-    /// <summary>
-    /// Checks whether the passed in Enemy is either on screen or within the
-    /// set activation distance from it.
-    /// </summary>
-    /// <param name="enemy">Enemy to check.</param>
-    /// <param name="screenRect">Rectangle with the size and position of the screen.</param>
-    /// <returns></returns>
-    private bool EnemyOnScreen(Enemy enemy, Rectangle screenRect)
+    private bool EnemyOnScreen(Enemy enemy, Viewport viewport)
     {
         // Get the position of the enemies collision box
         Rectangle enemyBox = enemy.CollisionBox;
@@ -57,40 +51,33 @@ public class EnemyManager
         enemyBox.X += (int)enemyPos.X;
         enemyBox.Y += (int)enemyPos.Y;
 
-        // Add the activation distance to the side of the screen rectangle
-        screenRect.Inflate(ActivationDistance, ActivationDistance);
+        enemyBox.Inflate(ActivationDistance, ActivationDistance);
 
-        // Return a boolean indicating whether the rectangles are intersecting
-        return screenRect.Intersects(enemyBox);
+        return viewport.IsOnScreen(enemyBox);
     }
 
-    public void ActivateVisible(Rectangle screenRect)
+    public void ActivateVisible(Viewport viewport)
     {
         // Activate Enemies near the screen
         for (int i = _inactiveEnemies.Count - 1; i >= 0; i--)
         {
             Enemy enemy = _inactiveEnemies[i];
 
-            if (EnemyOnScreen(enemy, screenRect))
+            if (!EnemyOnScreen(enemy, viewport))
             {
-                _inactiveEnemies.RemoveAt(i);
-                enemy.IsActive = true;
-                _activatedEnemies.Add(enemy);
+                continue;
             }
+
+            _inactiveEnemies.RemoveAt(i);
+            enemy.IsActive = true;
+            _activatedEnemies.Add(enemy);
         }
     }
 
-    /// <summary>
-    /// Updates the EnemyManager.
-    /// </summary>
-    /// <param name="gameTime"></param>
-    /// <param name="player"></param>
-    /// <param name="screenRect">Rectangle with the current position and
-    /// size of the screen.</param>
-    public void Update(GameTime gameTime, Player player, Rectangle screenRect)
+    public void Update(GameTime gameTime, Player player, Viewport viewport)
     {
         // Activate Enemies near the screen
-        ActivateVisible(screenRect);
+        ActivateVisible(viewport);
 
         // Update the activated Enemies that are still active
         foreach (Enemy enemy in _activatedEnemies)

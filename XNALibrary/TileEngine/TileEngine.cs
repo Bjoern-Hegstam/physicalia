@@ -241,11 +241,12 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         }
     }
 
-    public void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    public void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        var topLeftX = (int)(positionOffset.X / TileWidthPx);
-        var topLeftY = (int)(positionOffset.Y / TileHeightPx);
+        var topLeftX = (int)(viewportPosition.X / TileWidthPx);
+        var topLeftY = (int)(viewportPosition.Y / TileHeightPx);
 
+        // TODO: Render windows should be based on viewport dimensions
         for (int x = topLeftX; x < Width; x++)
         {
             for (int y = topLeftY; y < Height; y++)
@@ -258,14 +259,16 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 Tile tile = tileLibrary.GetTile(tileId);
 
                 var position = new Vector2(
-                    x * TileWidthPx - positionOffset.X,
-                    y * TileHeightPx - positionOffset.Y
+                    x * TileWidthPx - viewportPosition.X,
+                    y * TileHeightPx - viewportPosition.Y
                 );
 
-                spriteBatch.Draw(tile.Texture,
+                spriteBatch.Draw(
+                    tile.Texture,
                     position,
                     tile.SourceRectangle,
-                    Color.White);
+                    Color.White
+                );
             }
         }
     }

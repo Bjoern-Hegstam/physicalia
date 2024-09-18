@@ -19,19 +19,8 @@ public class Viewport
         }
     }
 
-    public int Width
-    {
-        get => _screen.Width;
-        set => _screen.Width = MathHelper.Clamp(value, 0, MaxWidth);
-    }
-
-    public int Height
-    {
-        get => _screen.Height;
-        set => _screen.Height = MathHelper.Clamp(value, 0, MaxHeight);
-    }
-
-    public Rectangle ScreenRectangle => _screen;
+    public int Width => _screen.Width;
+    public int Height => _screen.Height;
 
     public int MaxWidth { get; set; }
     public int MaxHeight { get; set; }
@@ -42,5 +31,10 @@ public class Viewport
         _position = new Vector2(_screen.X, _screen.Y);
         MaxWidth = _screen.Width;
         MaxHeight = _screen.Height;
+    }
+    
+    public bool IsOnScreen(Rectangle rect)
+    {
+        return _screen.Intersects(rect);
     }
 }

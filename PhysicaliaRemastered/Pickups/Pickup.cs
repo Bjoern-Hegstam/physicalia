@@ -38,8 +38,8 @@ public abstract class Pickup(Level level)
         PickedUp = false;
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 positionOffset)
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        spriteBatch.Draw(Sprite.Texture, positionOffset, Sprite.SourceRectangle, Color.White);
+        spriteBatch.Draw(Sprite.Texture, viewportPosition, Sprite.SourceRectangle, Color.White);
     }
 }

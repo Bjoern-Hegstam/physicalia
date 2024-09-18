@@ -205,12 +205,6 @@ public class Level
         }
     }
 
-    public void LoadXml(string path, TileLibrary tileLibrary)
-    {
-        using var reader = XmlReader.Create(path);
-        LoadXml(reader, tileLibrary);
-    }
-
     public void LoadXml(XmlReader reader, TileLibrary tileLibrary)
     {
         while (reader.Read())
@@ -517,7 +511,7 @@ public class Level
 
         // Run a check so that any objects that's on screen is activated
         ActivateObjects();
-        EnemyManager.ActivateVisible(Viewport.ScreenRectangle);
+        EnemyManager.ActivateVisible(Viewport);
     }
 
     /// <summary>
@@ -640,7 +634,7 @@ public class Level
         playerRect.X = (int)(Player.Position.X - Player.Origin.X);
         playerRect.Y = (int)(Player.Position.Y - Player.Origin.Y);
 
-        return !Viewport.ScreenRectangle.Intersects(playerRect);
+        return !Viewport.IsOnScreen(playerRect);
     }
 
     /// <summary>
@@ -709,7 +703,7 @@ public class Level
         }
 
         // EnemyManager
-        EnemyManager.Update(gameTime, Player, Viewport.ScreenRectangle);
+        EnemyManager.Update(gameTime, Player, Viewport);
 
         // ParticleEngine
         ParticleEngine.Update(gameTime);
