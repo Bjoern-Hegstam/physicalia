@@ -16,9 +16,7 @@ public abstract class ActiveObject : ICollisionObject
     private static int _activeObjectCount;
 
     private Vector2 _position;
-
-    private readonly SpriteLibrary _spriteLibrary;
-    private Sprite _sprite;
+    private Sprite? _sprite;
     
     private Rectangle _collisionBox;
 
@@ -82,21 +80,14 @@ public abstract class ActiveObject : ICollisionObject
         UniqueId = _activeObjectCount++;
 
         Children = [];
-        Width = _sprite.SourceRectangle.Width;
-        Height = _sprite.SourceRectangle.Height;
+        Width = 0;
+        Height = 0;
 
         Velocity = _position = Vector2.Zero;
 
         IsActive = false;
         CanCollide = true;
         CanTakeDamage = false;
-    }
-
-    public ActiveObject(SpriteLibrary spriteLibrary, SpriteId spriteId)
-        : this()
-    {
-        _spriteLibrary = spriteLibrary;
-        _sprite = _spriteLibrary.GetSprite(spriteId);
     }
 
     public void CheckCollisions(IEnumerable<ICollisionObject> collObjects)
