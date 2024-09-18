@@ -24,7 +24,7 @@ public interface IParticleEngine
     //void Add(int typeId, int count, Vector2 position, Vector2 velocity);
     //void Add(int typeId, int count, Vector2 position, Vector2 velocity, Vector2 acceleration);
 
-    void CheckCollisions(ICollisionObject[] collObjects);
+    void CheckCollisions(IEnumerable<ICollisionObject> collObjects);
     void CheckCollisions(ICollisionObject collObject);
 
     // Makes the IParticleEngine empty its buffer of inactive particles

@@ -6,13 +6,13 @@ using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.Pickups;
 
-public class PickupLibrary
+public class PickupTemplateLibrary
 {
-    private readonly Dictionary<int, Pickup> _modifierLib = new();
+    private readonly Dictionary<PickupTemplateId, Pickup> _pickupTemplates = new();
 
-    public Pickup GetPickup(int key)
+    public Pickup CreatePickup(PickupTemplateId templateId)
     {
-        return _modifierLib[key].Copy();
+        return _pickupTemplates[templateId].Copy();
     }
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary)
@@ -35,17 +35,18 @@ public class PickupLibrary
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Pickup" })
             {
                 string type = reader.GetAttribute("type") ?? throw new ResourceLoadException();
-                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                int id = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
 
-                Pickup pickup = type switch
+                Pickup pickupTemplate = type switch
                 {
                     "GravityReverser" => GravityReverser.CreateFromXml(reader, spriteLibrary),
                     "HealthPickup" => HealthPickup.CreateFromXml(reader, spriteLibrary),
                     _ => throw new InvalidGameStateException($"Unknown pickup type {type}")
                 };
 
-                pickup.Id = key;
-                _modifierLib.Add(key, pickup);
+                var templateId = new PickupTemplateId(id);
+                pickupTemplate.TemplateId = templateId;
+                _pickupTemplates.Add(templateId, pickupTemplate);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Pickups" })

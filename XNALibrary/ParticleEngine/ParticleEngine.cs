@@ -116,16 +116,20 @@ public class ParticleEngine : IParticleEngine
         if (rinseBuffer)
         {
             for (var i = 0; i < _activeParticles.Count; i++)
+            {
                 if (_activeParticles[i].Definition.Id == definitionId)
                 {
                     _activeParticles.RemoveAt(i);
                 }
+            }
 
             for (var i = 0; i < _particleBuffer.Count; i++)
+            {
                 if (_particleBuffer[i].Definition.Id == definitionId)
                 {
                     _particleBuffer.RemoveAt(i);
                 }
+            }
         }
     }
 
@@ -190,7 +194,7 @@ public class ParticleEngine : IParticleEngine
         }
     }
 
-    public void CheckCollisions(ICollisionObject[] collObjects)
+    public void CheckCollisions(IEnumerable<ICollisionObject> collObjects)
     {
         foreach (ICollisionObject collObj in collObjects)
         {

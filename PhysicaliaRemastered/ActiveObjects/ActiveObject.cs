@@ -101,14 +101,16 @@ public abstract class ActiveObject : ICollisionObject
         _sprite = _spriteLibrary.GetSprite(spriteKey);
     }
 
-    public void CheckCollisions(ICollisionObject[] collObjects)
+    public void CheckCollisions(IEnumerable<ICollisionObject> collObjects)
     {
-        if (CanCollide)
+        if (!CanCollide)
         {
-            for (var i = 0; i < collObjects.Length; i++)
-            {
-                CheckCollision(collObjects[i]);
-            }
+            return;
+        }
+
+        foreach (ICollisionObject collObject in collObjects)
+        {
+            CheckCollision(collObject);
         }
     }
 

@@ -45,7 +45,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         }
     }
 
-    public void CheckCollisions(ICollisionObject[] collisionObjects)
+    public void CheckCollisions(IEnumerable<ICollisionObject> collisionObjects)
     {
         foreach (ICollisionObject collObj in collisionObjects)
         {

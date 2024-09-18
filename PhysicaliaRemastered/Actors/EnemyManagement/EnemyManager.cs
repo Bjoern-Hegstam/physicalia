@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors.Enemies;
@@ -24,7 +25,7 @@ public class EnemyManager
     /// </summary>
     public int ActivationDistance { get; set; }
 
-    public Enemy[] ActivatedEnemies => _activatedEnemies.ToArray();
+    public ReadOnlyCollection<Enemy> ActivatedEnemies => _activatedEnemies.AsReadOnly();
 
     /// <summary>
     /// Creates a new EnemyManager.
@@ -93,10 +94,12 @@ public class EnemyManager
 
         // Update the activated Enemies that are still active
         foreach (Enemy enemy in _activatedEnemies)
+        {
             if (enemy.IsActive)
             {
                 enemy.Update(gameTime, player);
             }
+        }
     }
 
     /// <summary>
@@ -183,7 +186,9 @@ public class EnemyManager
     {
         // Set the default on all activated enemies
         foreach (Enemy enemy in _activatedEnemies)
+        {
             enemy.SetDefaults();
+        }
 
         // Transfer the reset Enemies to the queue
         while (_activatedEnemies.Count > 0)
@@ -230,10 +235,12 @@ public class EnemyManager
     public void UpdateAnimations()
     {
         foreach (Enemy enemy in _activatedEnemies)
+        {
             if (enemy.IsActive)
             {
                 enemy.UpdateAnimation();
             }
+        }
     }
 
     /// <summary>

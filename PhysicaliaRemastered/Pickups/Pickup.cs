@@ -13,7 +13,7 @@ public abstract class Pickup(Level level)
 
     public Sprite Sprite { get; set; }
 
-    public int Id { get; set; }
+    public PickupTemplateId TemplateId { get; set; }
 
     public Pickup Copy()
     {

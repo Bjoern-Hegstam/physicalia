@@ -319,13 +319,17 @@ public class Player : Actor
     public void StoreWeaponAmmoCount()
     {
         foreach (Weapon weapon in _weapons.Values)
+        {
             weapon.StoreAmmoCount();
+        }
     }
 
     public void ApplyStoredWeaponAmmoCount()
     {
         foreach (Weapon weapon in _weapons.Values)
+        {
             weapon.ApplyStoredAmmoCount();
+        }
     }
 
     public void Kill()
@@ -469,7 +473,9 @@ public class Player : Actor
         session.SelectedWeapon = _currentWeapon;
 
         foreach (int weaponId in _weapons.Keys)
+        {
             session.WeaponSaves.Add(weaponId,
                 new WeaponSave(_weapons[weaponId].AmmoCount, _weapons[weaponId].AmmoMemory));
+        }
     }
 }

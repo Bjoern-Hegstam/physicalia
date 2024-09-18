@@ -62,7 +62,7 @@ public class Level
     private readonly List<TileEngine> _tileEngines;
     private ActorStartValues _playerStartValues;
     private readonly WeaponBank _weaponBank;
-    private readonly PickupLibrary _modifierLibrary;
+    private readonly PickupTemplateLibrary _modifierTemplateLibrary;
 
     // ActiveObjects
 
@@ -100,7 +100,7 @@ public class Level
         SpriteLibrary = (SpriteLibrary)game.Services.GetService(typeof(SpriteLibrary));
         EnemyManager = new EnemyManager((EnemyBank)_game.Services.GetService(typeof(EnemyBank)));
         _weaponBank = (WeaponBank)_game.Services.GetService(typeof(WeaponBank));
-        _modifierLibrary = (PickupLibrary)_game.Services.GetService(typeof(PickupLibrary));
+        _modifierTemplateLibrary = (PickupTemplateLibrary)_game.Services.GetService(typeof(PickupTemplateLibrary));
 
         Player = player;
         _playerStartValues = new ActorStartValues();
@@ -242,9 +242,9 @@ public class Level
             {
                 int spriteKey = int.Parse(reader.GetAttribute("spriteKey") ?? throw new ResourceLoadException());
                 float depth = float.Parse(reader.GetAttribute("depth") ?? throw new ResourceLoadException());
-                string loopString = reader.GetAttribute("loop");
-                bool loopX = loopString.Contains("x");
-                bool loopY = loopString.Contains("y");
+                string loopString = reader.GetAttribute("loop") ?? throw new ResourceLoadException();
+                bool loopX = loopString.Contains('x');
+                bool loopY = loopString.Contains('y');
 
                 Sprite sprite = SpriteLibrary.GetSprite(spriteKey);
                 var background = new BackgroundLayer(sprite, depth)
@@ -413,11 +413,12 @@ public class Level
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Pickup" })
             {
-                int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                int x = int.Parse(reader.GetAttribute("x"));
-                int y = int.Parse(reader.GetAttribute("y"));
+                int id = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                PickupTemplateId templateId = new PickupTemplateId(id);
+                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
 
-                Pickup pickup = _modifierLibrary.GetPickup(key);
+                Pickup pickup = _modifierTemplateLibrary.CreatePickup(templateId);
                 pickup.Level = this;
 
                 var cont = new PickupContainer(pickup)
@@ -443,7 +444,9 @@ public class Level
     {
         // Reset background layers
         foreach (BackgroundLayer background in _backgrounds)
+        {
             background.Position = background.StartPosition;
+        }
 
         // Reset enemies
         EnemyManager.Reset();
@@ -488,7 +491,9 @@ public class Level
     {
         // Reset background layers
         foreach (BackgroundLayer background in _backgrounds)
+        {
             background.Position = background.StartPosition;
+        }
 
         // Reset enemies
         EnemyManager.Reset();
@@ -521,15 +526,6 @@ public class Level
     public void AddModifier(ModifierPickup modifier)
     {
         _modifiers.Add(modifier);
-    }
-
-    /// <summary>
-    /// Adds an ActiveObject to the Level's list of ActiveObjects.
-    /// </summary>
-    /// <param name="obj">ActiveObject to add.</param>
-    public void AddActiveObject(ActiveObject obj)
-    {
-        _activeObjects.Add(obj);
     }
 
     /// <summary>
@@ -609,6 +605,8 @@ public class Level
                 break;
             case LevelState.Finished:
                 break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
         State = NextState;
@@ -630,6 +628,8 @@ public class Level
 
                 Player.CanTakeDamage = false;
                 break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -683,9 +683,6 @@ public class Level
         return result;
     }
 
-    /// <summary>
-    /// Updates the objects in the level.
-    /// </summary>
     private void UpdateLevel(GameTime gameTime)
     {
         // TODO: Add variable for modifying the gameTime, so that it can be controlled by a modifier.
@@ -743,25 +740,24 @@ public class Level
 
     private void UpdateScreenSampler()
     {
-        Vector2 positionDelta = ScreenSampler.Position;
-
-        // Only update the screen position if the player is still alive
-        if (Player.Health > 0)
+        if (Player.Health <= 0)
         {
-            // Update the position of the screen sampler
-            ScreenSampler.Position = Player.Position - new Vector2(ScreenSampler.Width / 2, ScreenSampler.Height / 2);
+            return;
+        }
 
-            positionDelta -= ScreenSampler.Position;
+        Vector2 prevScreenSamplerPosition = ScreenSampler.Position;
+        ScreenSampler.Position = Player.Position - new Vector2(ScreenSampler.Width / 2f, ScreenSampler.Height / 2f);
 
-            // Background
-            foreach (BackgroundLayer background in _backgrounds)
-                background.Update(positionDelta);
+        Vector2 positionDelta = prevScreenSamplerPosition - ScreenSampler.Position;
+
+        foreach (BackgroundLayer background in _backgrounds)
+        {
+            background.Update(positionDelta);
         }
     }
 
     /// <summary>
-    /// Activates the ActiveObjects that are within a certain distance from the
-    /// screen area. The distance is specified by SCREEN_ACTIVATION_DISTANCE.
+    /// Activates the ActiveObjects that are within a certain distance from the screen area.
     /// </summary>
     private void ActivateObjects()
     {
@@ -776,40 +772,34 @@ public class Level
         {
             ActiveObject obj = _inactiveObjects[i];
 
-            // Get the collision box of the object
             Rectangle collBox = obj.CollisionBox;
 
             // Set the position to be in level coordinates
             collBox.X += (int)obj.Position.X;
             collBox.Y += (int)obj.Position.Y;
 
-            // Is the ActiveObject within the required distance from the screen
-            if (collBox.Intersects(screenRect))
+            if (!collBox.Intersects(screenRect))
             {
-                // Active the object
-                obj.IsActive = true;
-                // Add it to the list of activated objects
-                _activeObjects.Add(obj);
-                _inactiveObjects.RemoveAt(i);
+                continue;
             }
+
+            obj.IsActive = true;
+                
+            _activeObjects.Add(obj);
+            _inactiveObjects.RemoveAt(i);
         }
     }
 
     /// <summary>
-    /// Checks for collisions between the currently active objects
-    /// in the level.
+    /// Checks for collisions between the currently active objects in the level.
     /// </summary>
     private void CheckCollisions()
     {
-        // Player -> EnemyManager
         EnemyManager.CheckCollisions(Player);
 
-        // Actors -> ParticleEngine
         ParticleEngine.CheckCollisions(Player);
         ParticleEngine.CheckCollisions(EnemyManager.ActivatedEnemies);
 
-        // Actors -> ActiveObjects
-        // Particles -> ActiveObjects
         for (var i = 0; i < _activeObjects.Count; i++)
         {
             _activeObjects[i].CheckCollision(Player);
@@ -836,7 +826,6 @@ public class Level
     /// </summary>
     private void UpdateAnimations()
     {
-        // Only update the player's animation if the game is being played
         if (State == LevelState.Playing)
         {
             Player.UpdateAnimation();
@@ -852,15 +841,21 @@ public class Level
         for (backgroundIndex = 0;
              backgroundIndex < _backgrounds.Count && _backgrounds[backgroundIndex].Depth <= 1;
              backgroundIndex++)
+        {
             _backgrounds[backgroundIndex].Draw(spriteBatch, ScreenSampler);
+        }
 
         // TileEngine
         for (int i = _tileEngines.Count - 1; i >= 0; i--)
+        {
             _tileEngines[i].Draw(spriteBatch, ScreenSampler.Position);
+        }
 
         // ActiveObjects
-        for (var i = 0; i < _activeObjects.Count; i++)
-            _activeObjects[i].Draw(spriteBatch, ScreenSampler.Position);
+        foreach (ActiveObject activeObject in _activeObjects)
+        {
+            activeObject.Draw(spriteBatch, ScreenSampler.Position);
+        }
 
         // Enemies
         EnemyManager.Draw(spriteBatch, ScreenSampler.Position);
@@ -873,7 +868,9 @@ public class Level
 
         // Foreground
         for (; backgroundIndex < _backgrounds.Count; backgroundIndex++)
+        {
             _backgrounds[backgroundIndex].Draw(spriteBatch, ScreenSampler);
+        }
 
         // UI
         DrawUi(spriteBatch);
@@ -957,11 +954,15 @@ public class Level
     public void SaveSession(GameSession session)
     {
         foreach (ModifierPickup modifier in _modifiers)
-            session.LevelModifiers.Add(new ModifierSave(modifier.Id, modifier.TimeRemaining));
+        {
+            session.LevelModifiers.Add(new ModifierSave(modifier.TemplateId.Id, modifier.TimeRemaining));
+        }
 
         foreach (ActiveObject activeObject in _activeObjects)
+        {
             session.ActivatedObjects.Add(activeObject.UniqueId,
                 new ActiveObjectSave(activeObject.Position, activeObject.IsActive));
+        }
 
         EnemyManager.SaveSession(session);
     }
@@ -971,10 +972,9 @@ public class Level
         // Make a soft reset to prepare for loading the new session
         SoftReset();
 
-        // Get all active modifiers
         foreach (ModifierSave modifier in session.LevelModifiers)
         {
-            var levelMod = _modifierLibrary.GetPickup(modifier.Id) as ModifierPickup;
+            var levelMod = _modifierTemplateLibrary.CreatePickup(new PickupTemplateId(modifier.Id)) as ModifierPickup;
             levelMod.Level = this;
             levelMod.TimeRemaining = modifier.TimeLeft;
             levelMod.IsActive = true;
@@ -992,17 +992,16 @@ public class Level
         // Activate ActiveObjects
         for (int i = _inactiveObjects.Count - 1; i >= 0; i--)
         {
-            if (session.ActivatedObjects.ContainsKey(_inactiveObjects[i].UniqueId))
+            if (session.ActivatedObjects.TryGetValue(_inactiveObjects[i].UniqueId, out ActiveObjectSave activeObjectSave))
             {
-                // Move the object to the list of actived objects
+                // Move the object to the list of activated objects
                 ActiveObject activeObj = _inactiveObjects[i];
                 _inactiveObjects.RemoveAt(i);
                 _activeObjects.Add(activeObj);
 
                 // Setup object
-                ActiveObjectSave save = session.ActivatedObjects[activeObj.UniqueId];
-                activeObj.Position = save.Position;
-                activeObj.IsActive = save.IsActive;
+                activeObj.Position = activeObjectSave.Position;
+                activeObj.IsActive = activeObjectSave.IsActive;
             }
             else
                 // Since the load of a new session is only prepared for

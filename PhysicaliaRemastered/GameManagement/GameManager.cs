@@ -40,7 +40,7 @@ public class GameManager
     private readonly AnimationManager _animationManager;
     private readonly EnemyBank _enemyBank;
     private readonly WeaponBank _weaponBank;
-    private readonly PickupLibrary _modifierLibrary;
+    private readonly PickupTemplateLibrary _modifierTemplateLibrary;
 
     private readonly List<World> _worlds;
     private int _worldIndex;
@@ -93,8 +93,8 @@ public class GameManager
         _weaponBank = new WeaponBank(_particleEngine, _spriteLibrary, _animationManager);
         _game.Services.AddService(typeof(WeaponBank), _weaponBank);
 
-        _modifierLibrary = new PickupLibrary();
-        _game.Services.AddService(typeof(PickupLibrary), _modifierLibrary);
+        _modifierTemplateLibrary = new PickupTemplateLibrary();
+        _game.Services.AddService(typeof(PickupTemplateLibrary), _modifierTemplateLibrary);
 
         _worlds = [];
         _worldIndex = -1;
@@ -286,7 +286,7 @@ public class GameManager
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "PickupLibrary" })
             {
-                _modifierLibrary.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary);
+                _modifierTemplateLibrary.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Player" })
