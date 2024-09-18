@@ -104,8 +104,7 @@ public abstract class Actor : ICollisionObject
             // Do checks if the actor will be moving somewhere
             if (value.X != 0)
             {
-                SpriteEffects flip;
-                flip = value.X < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                SpriteEffects flip = value.X < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
                 if (flip != _horizontalFlip)
                 {
@@ -330,14 +329,14 @@ public abstract class Actor : ICollisionObject
         Draw(spriteBatch, Vector2.Zero);
     }
 
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
         // Only draw if a valid animation is set
         if (Animations.ContainsKey(_currentAnimType))
         {
             SpriteEffects test = SpriteFlip;
             spriteBatch.Draw(CurrentAnimation.Texture,
-                Position - offsetPosition,
+                Position - viewportPosition,
                 CurrentAnimation.SourceRectangle,
                 Color.White,
                 0F,

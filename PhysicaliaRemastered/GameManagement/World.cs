@@ -254,8 +254,8 @@ public class World
                 Vector2 indexStringSize = _settings.WorldIndexFont.MeasureString(indexString);
                 var indexPosition = new Vector2
                 {
-                    X = (_levels[0].ScreenSampler.Width - indexStringSize.X) / 2,
-                    Y = _levels[0].ScreenSampler.Height / 4f - indexStringSize.Y / 2
+                    X = (_levels[0].Viewport.Width - indexStringSize.X) / 2,
+                    Y = _levels[0].Viewport.Height / 4f - indexStringSize.Y / 2
                 };
                 spriteBatch.DrawString(_settings.WorldIndexFont, indexString, indexPosition, _worldIndexColor);
 
@@ -265,14 +265,14 @@ public class World
                     float quoteHeight = _settings.WorldQuoteFont.MeasureString("W").Y;
                     var quoteStartPos = new Vector2
                     {
-                        Y = _levels[0].ScreenSampler.Height * 3f / 4 -
+                        Y = _levels[0].Viewport.Height * 3f / 4 -
                             quoteHeight * _worldQuoteLines.Length / 2
                     };
 
                     foreach (string line in _worldQuoteLines)
                     {
                         Vector2 quoteSize = _settings.WorldQuoteFont.MeasureString(line);
-                        quoteStartPos.X = (_levels[0].ScreenSampler.Width - quoteSize.X) / 2;
+                        quoteStartPos.X = (_levels[0].Viewport.Width - quoteSize.X) / 2;
 
                         spriteBatch.DrawString(
                             _settings.WorldQuoteFont,
@@ -288,8 +288,8 @@ public class World
                 // Draw World Sprite
                 var spritePos = new Vector2
                 {
-                    X = (_levels[0].ScreenSampler.Width - _worldSprite.SourceRectangle.Width) / 2f,
-                    Y = (_levels[0].ScreenSampler.Height - _worldSprite.SourceRectangle.Height) / 2f
+                    X = (_levels[0].Viewport.Width - _worldSprite.SourceRectangle.Width) / 2f,
+                    Y = (_levels[0].Viewport.Height - _worldSprite.SourceRectangle.Height) / 2f
                 };
 
                 spriteBatch.Draw(_worldSprite.Texture,

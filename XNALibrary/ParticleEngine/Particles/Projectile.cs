@@ -34,25 +34,28 @@ public class Projectile : SpriteParticle
     public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
-        // Damage the object if possible
-        if ((DamageObjects & collidedObject.Type) != 0)
+        if ((collidedObject.Type & DamageObjects) == 0)
         {
-            if (collidedObject.CanTakeDamage)
-            {
-                collidedObject.TakeDamage(DamageAmount);
-            }
+            return;
+        }
 
-            // Go inactive if we collided with the object
-            if (collidedObject.CanCollide)
-            {
-                IsActive = false;
+        if (collidedObject.CanTakeDamage)
+        {
+            collidedObject.TakeDamage(DamageAmount);
+        }
 
-                // See if a new particle should be fired on collision
-                if (SpawnOnImpact)
-                {
-                    ParticleEngine.Add(CollisionProjectileId, 1, Position);
-                }
-            }
+        // Go inactive if we collided with the object
+        if (!collidedObject.CanCollide)
+        {
+            return;
+        }
+
+        IsActive = false;
+
+        // See if a new particle should be fired on collision
+        if (SpawnOnImpact)
+        {
+            ParticleEngine.Add(CollisionProjectileId, 1, Position);
         }
     }
 }

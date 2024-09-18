@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Graphics;
 using XNALibrary.Sprites;
+using Viewport = XNALibrary.Graphics.Viewport;
 
 namespace PhysicaliaRemastered.Graphics;
 
@@ -49,17 +50,17 @@ public class BackgroundLayer
             Color.White);
     }
 
-    public void Draw(SpriteBatch spriteBatch, ScreenSampler screenSampler)
+    public void Draw(SpriteBatch spriteBatch, Viewport viewport)
     {
         // Don't draw anything if the background isn't visible
         if (!LoopX &&
-            screenSampler.Position.X * Depth > _backgroundSprite.SourceRectangle.Width)
+            viewport.Position.X * Depth > _backgroundSprite.SourceRectangle.Width)
         {
             return;
         }
 
         if (!LoopY &&
-            screenSampler.Position.Y * Depth > _backgroundSprite.SourceRectangle.Height)
+            viewport.Position.Y * Depth > _backgroundSprite.SourceRectangle.Height)
         {
             return;
         }
@@ -80,11 +81,11 @@ public class BackgroundLayer
             startPos.Y += _backgroundSprite.SourceRectangle.Height;
 
         for (float y = startPos.Y;
-             y < screenSampler.Position.Y + screenSampler.Height;
+             y < viewport.Position.Y + viewport.Height;
              y += _backgroundSprite.SourceRectangle.Height)
         {
             for (float x = startPos.X;
-                 x < screenSampler.Position.X + screenSampler.Width;
+                 x < viewport.Position.X + viewport.Width;
                  x += _backgroundSprite.SourceRectangle.Width)
             {
                 spriteBatch.Draw(_backgroundSprite.Texture,

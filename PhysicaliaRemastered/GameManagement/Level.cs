@@ -17,6 +17,7 @@ using XNALibrary.Graphics;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 using XNALibrary.TileEngine;
+using Viewport = XNALibrary.Graphics.Viewport;
 
 namespace PhysicaliaRemastered.GameManagement;
 
@@ -86,7 +87,7 @@ public class Level
 
     public EnemyManager EnemyManager { get; set; }
 
-    public ScreenSampler ScreenSampler { get; }
+    public Viewport Viewport { get; }
 
     public Level(Game game, Player player)
     {
@@ -106,7 +107,7 @@ public class Level
         _playerStartValues = new ActorStartValues();
         NextState = State = LevelState.Start;
         ParticleEngine = (ParticleEngine)game.Services.GetService(typeof(ParticleEngine));
-        ScreenSampler = new ScreenSampler(game, 0, 0, _game.GraphicsDevice.Viewport.Width,
+        Viewport = new Viewport(0, 0, _game.GraphicsDevice.Viewport.Width,
             _game.GraphicsDevice.Viewport.Height);
         _tileEngines = [];
         _modifiers = [];
@@ -219,8 +220,8 @@ public class Level
                 int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
                 int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
 
-                ScreenSampler.MaxWidth = width;
-                ScreenSampler.MaxHeight = height;
+                Viewport.MaxWidth = width;
+                Viewport.MaxHeight = height;
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "PlayerStart" })
@@ -463,7 +464,7 @@ public class Level
         Player.ApplyStoredWeaponAmmoCount();
 
         // Set the start position of the screen sampler
-        ScreenSampler.Position = Vector2.Zero;
+        Viewport.Position = Vector2.Zero;
 
         while (_activeObjects.Count > 0)
         {
@@ -502,7 +503,7 @@ public class Level
         Player.CanTakeDamage = true;
 
         // Set the start position of the screen sampler
-        ScreenSampler.Position = Vector2.Zero;
+        Viewport.Position = Vector2.Zero;
 
         while (_activeObjects.Count > 0)
         {
@@ -516,7 +517,7 @@ public class Level
 
         // Run a check so that any objects that's on screen is activated
         ActivateObjects();
-        EnemyManager.ActivateVisible(ScreenSampler.ScreenRectangle);
+        EnemyManager.ActivateVisible(Viewport.ScreenRectangle);
     }
 
     /// <summary>
@@ -550,8 +551,8 @@ public class Level
                 Vector2 indexStringSize = Settings.LevelIndexFont.MeasureString(indexString);
                 var indexPosition = new Vector2
                 {
-                    X = (ScreenSampler.Width - indexStringSize.X) / 2,
-                    Y = (ScreenSampler.Height - indexStringSize.Y) / 2
+                    X = (Viewport.Width - indexStringSize.X) / 2,
+                    Y = (Viewport.Height - indexStringSize.Y) / 2
                 };
 
                 spriteBatch.DrawString(Settings.LevelIndexFont, indexString, indexPosition, Color.White);
@@ -565,8 +566,8 @@ public class Level
                 var deadString = "You Have Died!";
                 Vector2 deadStringSize = Settings.PlayerDeadFont.MeasureString(deadString);
                 Vector2 deadPos;
-                deadPos.X = (ScreenSampler.Width - deadStringSize.X) / 2;
-                deadPos.Y = (ScreenSampler.Width - deadStringSize.X) / 2;
+                deadPos.X = (Viewport.Width - deadStringSize.X) / 2;
+                deadPos.Y = (Viewport.Width - deadStringSize.X) / 2;
 
                 spriteBatch.DrawString(Settings.PlayerDeadFont, deadString, deadPos, Color.White);
                 break;
@@ -576,8 +577,8 @@ public class Level
                 var finishString = "Level Finished!";
                 Vector2 finishStringSize = Settings.PlayerDeadFont.MeasureString(finishString);
                 Vector2 finishPos;
-                finishPos.X = (ScreenSampler.Width - finishStringSize.X) / 2;
-                finishPos.Y = (ScreenSampler.Width - finishStringSize.X) / 2;
+                finishPos.X = (Viewport.Width - finishStringSize.X) / 2;
+                finishPos.Y = (Viewport.Width - finishStringSize.X) / 2;
 
                 spriteBatch.DrawString(Settings.PlayerDeadFont, finishString, finishPos, Color.White);
                 break;
@@ -639,7 +640,7 @@ public class Level
         playerRect.X = (int)(Player.Position.X - Player.Origin.X);
         playerRect.Y = (int)(Player.Position.Y - Player.Origin.Y);
 
-        return !ScreenSampler.ScreenRectangle.Intersects(playerRect);
+        return !Viewport.ScreenRectangle.Intersects(playerRect);
     }
 
     /// <summary>
@@ -652,8 +653,8 @@ public class Level
 
         var levelRect = new Rectangle
         {
-            Width = ScreenSampler.MaxWidth,
-            Height = ScreenSampler.MaxHeight
+            Width = Viewport.MaxWidth,
+            Height = Viewport.MaxHeight
         };
 
         Rectangle playerRect = Player.CurrentAnimation.SourceRectangle;
@@ -701,14 +702,14 @@ public class Level
         }
 
         // Left edge
-        if (Player.Position.X - Player.Origin.X + Player.Width > ScreenSampler.MaxWidth)
+        if (Player.Position.X - Player.Origin.X + Player.Width > Viewport.MaxWidth)
         {
             Player.Position *= Vector2.UnitY;
-            Player.Position += new Vector2(ScreenSampler.MaxWidth - Player.Width + Player.Origin.X, 0);
+            Player.Position += new Vector2(Viewport.MaxWidth - Player.Width + Player.Origin.X, 0);
         }
 
         // EnemyManager
-        EnemyManager.Update(gameTime, Player, ScreenSampler.ScreenRectangle);
+        EnemyManager.Update(gameTime, Player, Viewport.ScreenRectangle);
 
         // ParticleEngine
         ParticleEngine.Update(gameTime);
@@ -745,10 +746,10 @@ public class Level
             return;
         }
 
-        Vector2 prevScreenSamplerPosition = ScreenSampler.Position;
-        ScreenSampler.Position = Player.Position - new Vector2(ScreenSampler.Width / 2f, ScreenSampler.Height / 2f);
+        Vector2 prevScreenSamplerPosition = Viewport.Position;
+        Viewport.Position = Player.Position - new Vector2(Viewport.Width / 2f, Viewport.Height / 2f);
 
-        Vector2 positionDelta = prevScreenSamplerPosition - ScreenSampler.Position;
+        Vector2 positionDelta = prevScreenSamplerPosition - Viewport.Position;
 
         foreach (BackgroundLayer background in _backgrounds)
         {
@@ -761,10 +762,10 @@ public class Level
     /// </summary>
     private void ActivateObjects()
     {
-        var screenRect = new Rectangle((int)ScreenSampler.Position.X,
-            (int)ScreenSampler.Position.Y,
-            ScreenSampler.Width,
-            ScreenSampler.Height);
+        var screenRect = new Rectangle((int)Viewport.Position.X,
+            (int)Viewport.Position.Y,
+            Viewport.Width,
+            Viewport.Height);
 
         screenRect.Inflate(ScreenActivationDistance, ScreenActivationDistance);
 
@@ -842,34 +843,34 @@ public class Level
              backgroundIndex < _backgrounds.Count && _backgrounds[backgroundIndex].Depth <= 1;
              backgroundIndex++)
         {
-            _backgrounds[backgroundIndex].Draw(spriteBatch, ScreenSampler);
+            _backgrounds[backgroundIndex].Draw(spriteBatch, Viewport);
         }
 
         // TileEngine
         for (int i = _tileEngines.Count - 1; i >= 0; i--)
         {
-            _tileEngines[i].Draw(spriteBatch, ScreenSampler.Position);
+            _tileEngines[i].Draw(spriteBatch, Viewport.Position);
         }
 
         // ActiveObjects
         foreach (ActiveObject activeObject in _activeObjects)
         {
-            activeObject.Draw(spriteBatch, ScreenSampler.Position);
+            activeObject.Draw(spriteBatch, Viewport.Position);
         }
 
         // Enemies
-        EnemyManager.Draw(spriteBatch, ScreenSampler.Position);
+        EnemyManager.Draw(spriteBatch, Viewport.Position);
 
         // Player
-        Player.Draw(spriteBatch, ScreenSampler.Position);
+        Player.Draw(spriteBatch, Viewport.Position);
 
         // ParticleEngine
-        ParticleEngine.Draw(spriteBatch, ScreenSampler.Position);
+        ParticleEngine.Draw(spriteBatch, Viewport.Position);
 
         // Foreground
         for (; backgroundIndex < _backgrounds.Count; backgroundIndex++)
         {
-            _backgrounds[backgroundIndex].Draw(spriteBatch, ScreenSampler);
+            _backgrounds[backgroundIndex].Draw(spriteBatch, Viewport);
         }
 
         // UI
@@ -902,7 +903,7 @@ public class Level
         Vector2 indexSize = Settings.LevelIndexFont.MeasureString(indexString);
         var indexPos = new Vector2
         {
-            X = (ScreenSampler.Width - indexSize.X) / 2,
+            X = (Viewport.Width - indexSize.X) / 2,
             Y = UiIndexPosY
         };
 
@@ -914,7 +915,7 @@ public class Level
         if (playerWeapon != null)
         {
             // Ammo is drawn below the weapon sprite
-            var ammoPos = new Vector2(ScreenSampler.Width - 20, 0);
+            var ammoPos = new Vector2(Viewport.Width - 20, 0);
 
             string ammoString;
             if (playerWeapon.InfiniteAmmo)

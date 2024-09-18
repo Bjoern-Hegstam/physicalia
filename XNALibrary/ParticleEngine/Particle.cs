@@ -21,43 +21,33 @@ public enum ParticleLifeMode
     Damage
 }
 
-public abstract class Particle : ICollisionObject
+public abstract class Particle(Vector2 position) : ICollisionObject
 {
     private const float DefaultLife = 5F;
 
-    public Vector2 Position { get; set; }
+    public Vector2 Position { get; set; } = position;
 
-    public Vector2 Velocity { get; set; }
+    public Vector2 Velocity { get; set; } = Vector2.Zero;
 
-    public Vector2 Acceleration { get; set; }
+    public Vector2 Acceleration { get; set; } = Vector2.Zero;
 
     public CollisionMode CollisionMode { get; set; }
 
     public float Radius { get; set; }
 
-    public ParticleLifeMode LifeMode { get; set; }
+    public ParticleLifeMode LifeMode { get; set; } = ParticleLifeMode.Time;
 
-    public float Life { get; set; }
+    public float Life { get; set; } = DefaultLife;
 
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
 
-    public ParticleDefinition? Definition { get; set; }
+    public ParticleDefinition? Definition { get; set; } = null;
 
     public ParticleEngine? ParticleEngine { get; set; }
 
-    public Particle()
+    protected Particle()
         : this(Vector2.Zero)
     {
-    }
-
-    public Particle(Vector2 position)
-    {
-        Position = position;
-        Acceleration = Velocity = Vector2.Zero;
-        Definition = null;
-        Life = DefaultLife;
-        LifeMode = ParticleLifeMode.Time;
-        IsActive = true;
     }
 
     public virtual void Update(GameTime gameTime)
@@ -85,11 +75,8 @@ public abstract class Particle : ICollisionObject
 
     public abstract Vector2 Origin { get; }
 
-    public abstract int Width { get; set; }
-    public abstract int Height { get; set; }
-
-    public abstract Rectangle SourceRectangle { get; }
-    public abstract Texture2D Texture { get; }
+    public abstract int Width { get; }
+    public abstract int Height { get; }
 
     public abstract Rectangle CollisionBox { get; }
 
@@ -102,22 +89,26 @@ public abstract class Particle : ICollisionObject
     public virtual void OnCollision(ICollisionObject collisionObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
-        if (CanCollide)
+        if (!CanCollide)
         {
-            Position = position;
-            Velocity = velocity;
+            return;
         }
+
+        Position = position;
+        Velocity = velocity;
     }
 
     public void TakeDamage(float damage)
     {
-        if (LifeMode == ParticleLifeMode.Damage)
+        if (LifeMode != ParticleLifeMode.Damage)
         {
-            Life -= damage;
-            if (Life <= 0)
-            {
-                IsActive = false;
-            }
+            return;
+        }
+
+        Life -= damage;
+        if (Life <= 0)
+        {
+            IsActive = false;
         }
     }
 }

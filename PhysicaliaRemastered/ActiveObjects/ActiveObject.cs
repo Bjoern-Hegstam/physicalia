@@ -80,8 +80,6 @@ public abstract class ActiveObject : ICollisionObject
         UniqueId = _activeObjectCount++;
 
         Children = [];
-        Width = 0;
-        Height = 0;
 
         Velocity = _position = Vector2.Zero;
 

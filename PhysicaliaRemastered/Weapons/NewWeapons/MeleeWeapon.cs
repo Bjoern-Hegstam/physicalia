@@ -53,11 +53,9 @@ public class MeleeWeapon : Weapon
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Vibration" })
             {
-                float low, high;
-
                 reader.ReadToFollowing("Warmup");
-                low = float.Parse(reader.GetAttribute("low") ?? throw new ResourceLoadException());
-                high = float.Parse(reader.GetAttribute("high") ?? throw new ResourceLoadException());
+                float low = float.Parse(reader.GetAttribute("low") ?? throw new ResourceLoadException());
+                float high = float.Parse(reader.GetAttribute("high") ?? throw new ResourceLoadException());
 
                 _warmupVibration = new Vector2(low, high);
 

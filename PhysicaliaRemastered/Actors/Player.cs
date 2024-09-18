@@ -386,7 +386,7 @@ public class Player : Actor
         }
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
         if (!_visible)
         {
@@ -394,7 +394,7 @@ public class Player : Actor
         }
 
         // Draw player
-        base.Draw(spriteBatch, offsetPosition);
+        base.Draw(spriteBatch, viewportPosition);
 
         // Draw weapon
         if (_weapons.Count != 0 &&
@@ -402,7 +402,7 @@ public class Player : Actor
             CurrentAnimationType != (int)ActorAnimation.Die &&
             CurrentAnimationType != (int)ActorAnimation.Win)
         {
-            _weapons[_currentWeapon].Draw(spriteBatch, offsetPosition, SpriteFlip);
+            _weapons[_currentWeapon].Draw(spriteBatch, viewportPosition, SpriteFlip);
         }
     }
 

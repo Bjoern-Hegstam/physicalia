@@ -6,46 +6,27 @@ namespace XNALibrary.ParticleEngine.Particles;
 
 public class SpriteParticle : Particle
 {
-    private Sprite _sprite;
-
-    public Sprite Sprite
-    {
-        get => _sprite;
-        set => _sprite = value;
-    }
+    public Sprite Sprite { get; set; }
 
     public float Rotation { get; set; }
 
-    public override Vector2 Origin => new(_sprite.SourceRectangle.Width / 2f, _sprite.SourceRectangle.Height / 2f);
+    public override Vector2 Origin => new(Sprite.SourceRectangle.Width / 2f, Sprite.SourceRectangle.Height / 2f);
 
-    public override int Width
-    {
-        get => _sprite.SourceRectangle.Width;
-        set => throw new Exception("The method or operation is not implemented.");
-    }
+    public override int Width => Sprite.SourceRectangle.Width;
 
-    public override int Height
-    {
-        get => _sprite.SourceRectangle.Height;
-        set => throw new Exception("The method or operation is not implemented.");
-    }
+    public override int Height => Sprite.SourceRectangle.Height;
 
-    public override Rectangle SourceRectangle => _sprite.SourceRectangle;
+    public virtual Rectangle SourceRectangle => Sprite.SourceRectangle;
 
-    public override Texture2D Texture => _sprite.Texture;
+    public virtual Texture2D Texture => Sprite.Texture;
 
-    public override Rectangle CollisionBox => new(0, 0, _sprite.SourceRectangle.Width, _sprite.SourceRectangle.Height);
-
-    public virtual void Draw(SpriteBatch spriteBatch)
-    {
-        Draw(spriteBatch, Vector2.Zero);
-    }
+    public override Rectangle CollisionBox => new(0, 0, Sprite.SourceRectangle.Width, Sprite.SourceRectangle.Height);
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-        spriteBatch.Draw(_sprite.Texture,
+        spriteBatch.Draw(Sprite.Texture,
             Position - offsetPosition,
-            _sprite.SourceRectangle,
+            Sprite.SourceRectangle,
             Color.White,
             -Rotation,
             Origin,

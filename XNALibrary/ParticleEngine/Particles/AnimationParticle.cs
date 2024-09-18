@@ -7,9 +7,6 @@ namespace XNALibrary.ParticleEngine.Particles;
 
 public class AnimationParticle(Animation.Animation animation) : Particle
 {
-    /// <summary>
-    /// Gets or sets the animation used by the particle
-    /// </summary>
     public Animation.Animation Animation { get; set; } = animation;
 
     /// <summary>
@@ -18,28 +15,13 @@ public class AnimationParticle(Animation.Animation animation) : Particle
     /// </summary>
     public ObjectType DamageObjects { get; set; } = 0;
 
-    /// <summary>
-    /// Gets or sets the amount of damage caused by the particle
-    /// </summary>
     public float DamageAmount { get; set; } = 0F;
 
     public override Vector2 Origin => new(Animation.SourceRectangle.Width / 2f, Animation.SourceRectangle.Height / 2f);
 
-    public override int Width
-    {
-        get => Animation.SourceRectangle.Width;
-        set => throw new Exception("The method or operation is not implemented.");
-    }
+    public override int Width => Animation.SourceRectangle.Width;
 
-    public override int Height
-    {
-        get => Animation.SourceRectangle.Height;
-        set => throw new Exception("The method or operation is not implemented.");
-    }
-
-    public override Rectangle SourceRectangle => Animation.SourceRectangle;
-
-    public override Texture2D Texture => Animation.Texture;
+    public override int Height => Animation.SourceRectangle.Height;
 
     public override Rectangle CollisionBox => new(0, 0, Width, Height);
 
