@@ -43,7 +43,7 @@ public abstract class Particle : ICollisionObject
 
     public ParticleDefinition? Definition { get; set; }
 
-    public IParticleEngine? ParticleEngine { get; set; }
+    public ParticleEngine? ParticleEngine { get; set; }
 
     public Particle()
         : this(Vector2.Zero)

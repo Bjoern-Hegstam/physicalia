@@ -80,7 +80,7 @@ public class Level
 
     public SpriteLibrary SpriteLibrary { get; set; }
 
-    public IParticleEngine ParticleEngine { get; set; }
+    public ParticleEngine ParticleEngine { get; set; }
 
     public Settings Settings { get; }
 
@@ -105,7 +105,7 @@ public class Level
         Player = player;
         _playerStartValues = new ActorStartValues();
         NextState = State = LevelState.Start;
-        ParticleEngine = (IParticleEngine)game.Services.GetService(typeof(IParticleEngine));
+        ParticleEngine = (ParticleEngine)game.Services.GetService(typeof(ParticleEngine));
         ScreenSampler = new ScreenSampler(game, 0, 0, _game.GraphicsDevice.Viewport.Width,
             _game.GraphicsDevice.Viewport.Height);
         _tileEngines = [];

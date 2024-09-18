@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace XNALibrary.Graphics;
 
-public class ScreenSampler : IScreenSampler
+public class ScreenSampler
 {
     /// <summary>
     /// Current position of the sampler.

@@ -85,7 +85,7 @@ public class GameManager
         _game.Services.AddService(typeof(TileLibrary), _tileLibrary);
 
         _particleEngine = new ParticleEngine();
-        _game.Services.AddService(typeof(IParticleEngine), _particleEngine);
+        _game.Services.AddService(typeof(ParticleEngine), _particleEngine);
 
         _enemyBank = new EnemyBank(_animationManager);
         _game.Services.AddService(typeof(EnemyBank), _enemyBank);

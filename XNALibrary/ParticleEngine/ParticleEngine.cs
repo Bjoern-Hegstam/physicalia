@@ -10,7 +10,7 @@ using XNALibrary.TileEngine;
 
 namespace XNALibrary.ParticleEngine;
 
-public class ParticleEngine : IParticleEngine
+public class ParticleEngine
 {
     // Particle management
     private readonly Dictionary<int, ParticleDefinition> _definitions;

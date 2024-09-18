@@ -11,7 +11,7 @@ public class MeleeWeapon : Weapon
     private Vector2 _warmupVibration;
     private Vector2 _fireVibration;
 
-    public MeleeWeapon(int weaponId, IParticleEngine particleEngine)
+    public MeleeWeapon(int weaponId, ParticleEngine particleEngine)
         : base(weaponId, particleEngine)
     {
         _warmupVibration = _fireVibration = Vector2.Zero;

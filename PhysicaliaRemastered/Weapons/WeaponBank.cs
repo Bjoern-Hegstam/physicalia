@@ -13,7 +13,7 @@ namespace PhysicaliaRemastered.Weapons;
 /// Class for managing over a collection of weapons that serve as the base
 /// for all weapons in the game.
 /// </summary>
-public class WeaponBank(IParticleEngine particleEngine, SpriteLibrary spriteLibrary, AnimationManager animationManager)
+public class WeaponBank(ParticleEngine particleEngine, SpriteLibrary spriteLibrary, AnimationManager animationManager)
 {
     private readonly Dictionary<int, Weapon> _weaponBank = new();
 

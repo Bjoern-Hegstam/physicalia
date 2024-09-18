@@ -49,7 +49,7 @@ public class ProjectileWeapon : Weapon
 
     private int _shotsFired;
 
-    public ProjectileWeapon(int weaponId, IParticleEngine particleEngine)
+    public ProjectileWeapon(int weaponId, ParticleEngine particleEngine)
         : base(weaponId, particleEngine)
     {
         _warmupVibration = _fireVibration = Vector2.Zero;

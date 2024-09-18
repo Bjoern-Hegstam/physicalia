@@ -43,7 +43,7 @@ public abstract class Weapon
     /// <summary>
     /// Gets or sets the particleengine uesd by the weapon.
     /// </summary>
-    public IParticleEngine ParticleEngine { get; set; }
+    public ParticleEngine ParticleEngine { get; set; }
 
     /// <summary>
     /// Gets or sets the position of the player's origin relative to the
@@ -125,7 +125,7 @@ public abstract class Weapon
 
     public float ShotsPerSecond { get; set; }
 
-    public Weapon(int weaponId, IParticleEngine particleEngine)
+    public Weapon(int weaponId, ParticleEngine particleEngine)
     {
         WeaponId = weaponId;
 
