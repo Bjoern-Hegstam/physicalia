@@ -78,7 +78,7 @@ public class GameManager
         _game.Services.AddService(typeof(SpriteLibrary), _spriteLibrary);
 
         _animationManager = new AnimationManager(_game, _textureLibrary);
-        _game.Services.AddService(typeof(IAnimationManager), _animationManager);
+        _game.Services.AddService(typeof(AnimationManager), _animationManager);
         _game.Components.Add(_animationManager);
 
         _tileLibrary = new TileLibrary();

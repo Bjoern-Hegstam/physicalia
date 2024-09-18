@@ -76,7 +76,7 @@ public class Level
 
     public Player Player { get; set; }
 
-    public IAnimationManager AnimationManager { get; set; }
+    public AnimationManager AnimationManager { get; set; }
 
     public SpriteLibrary SpriteLibrary { get; set; }
 
@@ -96,7 +96,7 @@ public class Level
 
         // Get needed services
         Settings = (Settings)game.Services.GetService(typeof(Settings));
-        AnimationManager = (IAnimationManager)game.Services.GetService(typeof(IAnimationManager));
+        AnimationManager = (AnimationManager)game.Services.GetService(typeof(AnimationManager));
         SpriteLibrary = (SpriteLibrary)game.Services.GetService(typeof(SpriteLibrary));
         EnemyManager = new EnemyManager((EnemyBank)_game.Services.GetService(typeof(EnemyBank)));
         _weaponBank = (WeaponBank)_game.Services.GetService(typeof(WeaponBank));

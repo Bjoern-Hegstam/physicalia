@@ -5,18 +5,18 @@ namespace XNALibrary.Graphics;
 
 public class TextureLibrary
 {
-    private readonly Dictionary<int, Texture2D> _textureLibrary = new();
+    private readonly Dictionary<TextureId, Texture2D> _textureLibrary = new();
 
-    public Texture2D this[int key] => GetTexture(key);
+    public Texture2D this[TextureId id] => GetTexture(id);
 
-    public bool AddTexture(int key, Texture2D texture)
+    public bool AddTexture(TextureId id, Texture2D texture)
     {
-        return _textureLibrary.TryAdd(key, texture);
+        return _textureLibrary.TryAdd(id, texture);
     }
 
-    public Texture2D GetTexture(int key)
+    public Texture2D GetTexture(TextureId id)
     {
-        return _textureLibrary[key];
+        return _textureLibrary[id];
     }
 
     public void LoadXml(string path, GraphicsDevice graphics)
@@ -40,8 +40,9 @@ public class TextureLibrary
             {
                 int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
+                TextureId textureId = new TextureId(id);
                 Texture2D texture = Texture2D.FromFile(graphics, reader.ReadString());
-                AddTexture(id, texture);
+                AddTexture(textureId, texture);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TextureLibrary" })

@@ -16,13 +16,13 @@ public class EnemyBank
     /// </summary>
     private readonly Dictionary<int, Enemy> _enemyBank;
 
-    private readonly IAnimationManager _animationManager;
+    private readonly AnimationManager _animationManager;
 
     /// <summary>
     /// Creates a new EnemyBank instance and adds that instance as a service
     /// to the games service collection.
     /// </summary>
-    public EnemyBank(IAnimationManager animationManager)
+    public EnemyBank(AnimationManager animationManager)
     {
         _animationManager = animationManager;
 

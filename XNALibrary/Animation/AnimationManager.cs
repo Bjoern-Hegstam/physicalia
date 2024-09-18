@@ -4,58 +4,14 @@ using XNALibrary.Graphics;
 
 namespace XNALibrary.Animation;
 
-public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameComponent(game), IAnimationManager
+public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameComponent(game)
 {
     private readonly Dictionary<int, Animation> _animationBank = new();
     private readonly List<Animation> _playbackAnims = [];
 
-    /// <summary>
-    /// Adds a new animation to the manager.
-    /// </summary>
-    /// <param name="key">Key to use for identifying the animation.</param>
-    /// <param name="animation">Animation to add.</param>
-    /// <returns>True if the animation was successfully added.</returns>
-    public bool AddBankAnimation(int key, Animation animation)
-    {
-        return _animationBank.TryAdd(key, animation);
-    }
-
-    /// <summary>
-    /// Adds a new animation the manager.
-    /// </summary>
-    /// <param name="key">Key to use for identifying the animation.</param>
-    /// <param name="startFrame">The first frame of the animation.</param>
-    /// <param name="columns">The number of columns making up the animation.</param>
-    /// <param name="rows">The number of rows making up the animation.</param>
-    /// <param name="framerate">Framerate of the animation, measured in frames per seconds.</param>
-    /// <param name="textureKey">Key of the texture used by the animation.</param>
-    /// <returns>True if the animation was successfully added; false otherwise</returns>
-    public bool AddBankAnimation(int key, Rectangle startFrame, int columns, int rows, float framerate, int textureKey)
-    {
-        if (_animationBank.ContainsKey(key))
-        {
-            return false;
-        }
-
-        var animation = new Animation(startFrame, columns, rows, framerate, textureLibrary[textureKey]);
-        _animationBank.Add(key, animation);
-        return true;
-
-    }
-
-    public void RemoveBankAnimation(int key)
-    {
-        _animationBank.Remove(key);
-    }
-
     public Animation GetBankAnimation(int key)
     {
         return _animationBank[key];
-    }
-
-    public void ClearPlaybackAnimations()
-    {
-        _playbackAnims.Clear();
     }
 
     public void AddPlaybackAnimation(Animation animation)
@@ -78,17 +34,12 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
 
     }
 
-    public bool HasBankAnimation(int bankKey)
-    {
-        return _animationBank.ContainsKey(bankKey);
-    }
-
     public override void Update(GameTime gameTime)
     {
         // The increase in frame index
         var indexIncrease = 0;
 
-        // Go throught every active animation
+        // Go through every active animation
         foreach (Animation animation in _playbackAnims)
         {
             // Only update active animations
@@ -147,7 +98,7 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
     private Animation LoadAnimationFromXml(XmlReader reader)
     {
         reader.ReadToFollowing("TextureKey");
-        var textureKey = int.Parse(reader.ReadElementContentAsString());
+        var textureId = new TextureId(int.Parse(reader.ReadElementContentAsString()));
 
         reader.ReadToFollowing("StartFrame");
         var x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
@@ -166,7 +117,7 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
         var loop = bool.Parse(reader.ReadElementContentAsString());
 
         var startFrame = new Rectangle(x, y, width, height);
-        var anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureKey])
+        var anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureId])
         {
             Loop = loop
         };

@@ -27,7 +27,7 @@ public class ParticleEngine : IParticleEngine
         _activeParticles = [];
     }
 
-    public void LoadXml(string path, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    public void LoadXml(string path, SpriteLibrary spriteLibrary, AnimationManager animationManager)
     {
         var readerSettings = new XmlReaderSettings
         {
@@ -40,7 +40,7 @@ public class ParticleEngine : IParticleEngine
         LoadXml(reader, spriteLibrary, animationManager);
     }
 
-    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, AnimationManager animationManager)
     {
         while (reader.Read())
         {

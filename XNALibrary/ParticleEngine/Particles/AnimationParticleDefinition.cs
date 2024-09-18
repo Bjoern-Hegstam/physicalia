@@ -3,7 +3,7 @@ using XNALibrary.Animation;
 
 namespace XNALibrary.ParticleEngine.Particles;
 
-public class AnimationParticleDefinition(int id, Animation.Animation animation, IAnimationManager animationManager)
+public class AnimationParticleDefinition(int id, Animation.Animation animation, AnimationManager animationManager)
     : ParticleDefinition(id)
 {
     private readonly List<Animation.Animation> _createdAnimations = [];

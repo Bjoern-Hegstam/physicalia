@@ -19,7 +19,7 @@ public class TileLibrary
         return _tileLibrary.ContainsKey(key);
     }
 
-    public void LoadXml(string path, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    public void LoadXml(string path, SpriteLibrary spriteLibrary, AnimationManager animationManager)
     {
         var settings = new XmlReaderSettings
         {
@@ -33,7 +33,7 @@ public class TileLibrary
         LoadXml(reader, spriteLibrary, animationManager);
     }
 
-    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, IAnimationManager animationManager)
+    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, AnimationManager animationManager)
     {
         while (reader.Read())
         {
