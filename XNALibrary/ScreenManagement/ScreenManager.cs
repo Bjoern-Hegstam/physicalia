@@ -174,16 +174,14 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
 
     protected override void LoadContent()
     {
-        // Initialize the SpriteBatch and RenderTarget2D
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-
+        
         _renderTarget = new RenderTarget2D(
             Game.GraphicsDevice,
             Game.GraphicsDevice.PresentationParameters.BackBufferWidth,
             Game.GraphicsDevice.PresentationParameters.BackBufferHeight
         );
 
-        // Let screens load content
         foreach (Screen screen in Screens)
         {
             screen.LoadContent(Game.Content);
@@ -194,29 +192,23 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
     {
         base.Update(gameTime);
 
-        // Don't update if no Screens are in the stack
         if (_screenStack.Count == 0)
         {
             return;
         }
 
-        // Are we transitioning between screens
         if (Transitioning)
         {
-            // Let both screens update but not handle input
             _screenStack.Peek().Update(gameTime, false);
             _transitionScreen?.Update(gameTime, false);
 
-            // Increase the transition amount
             _transitionAmount += (float)gameTime.ElapsedGameTime.TotalSeconds * _transitionSpeed;
 
-            // Has the transition come to its end?
             if (_transitionAmount >= 1.0F)
             {
                 EndTransition();
             }
         }
-        // if not just update the current Screen
         else
         {
             _screenStack.Peek().Update(gameTime, true);
@@ -225,22 +217,16 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
 
     public override void Draw(GameTime gameTime)
     {
-        // Don't draw if no Screens are on the stack
         if (_screenStack.Count == 0)
         {
             return;
         }
 
-        // Are we transitioning between Screens?
         if (Transitioning && TransitionEffect != null)
         {
-            // Change the render target
             GraphicsDevice.SetRenderTarget(_renderTarget);
-
-            // Clear the graphics device
             GraphicsDevice.Clear(Color.Black);
 
-            // Draw the next screen to the render target
             if (_transitionState == ScreenTransitionState.Forward)
             {
                 _transitionScreen?.Draw(_spriteBatch);
@@ -250,10 +236,8 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
                 _screenStack.Peek().Draw(_spriteBatch);
             }
 
-            // Change the render target back
             GraphicsDevice.SetRenderTarget(null);
 
-            // Draw current Screen
             if (_transitionState == ScreenTransitionState.Forward)
             {
                 _screenStack.Peek().Draw(_spriteBatch);
@@ -263,37 +247,28 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
                 _transitionScreen?.Draw(_spriteBatch);
             }
 
-            // Begin draw call
-            _spriteBatch?.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            _spriteBatch?.Begin();
 
-            // Set the transition mask
             GraphicsDevice.Textures[1] = TransitionEffect.TransitionMask;
 
-            // Set parameters on the used effect
             TransitionEffect.TransitionProgress = _transitionAmount;
 
-            // Start effect
             TransitionEffect.Begin();
 
-            // Draw texture of current Screen
             _spriteBatch?.Draw(_renderTarget, Vector2.Zero, Color.White);
 
-            // End draw and the effect
             _spriteBatch?.End();
             TransitionEffect.End();
         }
         else if (Transitioning)
         {
-            // Calculate an overlay color for the transition
             Vector3 overlay = _transitionAmount < 0.5F
                 ? Vector3.Lerp(Color.White.ToVector3(), Color.Black.ToVector3(), _transitionAmount * 2)
                 : Vector3.Lerp(Color.Black.ToVector3(), Color.White.ToVector3(), (_transitionAmount - 0.5F) * 2);
 
-            // Set render target and clear device
             GraphicsDevice.SetRenderTarget(_renderTarget);
             GraphicsDevice.Clear(Color.Black);
 
-            // Draw current screen
             if (_transitionState == ScreenTransitionState.Forward)
             {
                 if (_transitionAmount < 0.5F)
@@ -317,19 +292,14 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
                 }
             }
 
-            // Reset the device
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch?.Begin();
-
-            // Draw screen texture using the overlay color
             _spriteBatch?.Draw(_renderTarget, Vector2.Zero, new Color(overlay));
-
             _spriteBatch?.End();
         }
         else
-            // Draw current Screen
         {
             _screenStack.Peek().Draw(_spriteBatch);
         }

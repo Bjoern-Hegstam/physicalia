@@ -23,9 +23,11 @@ public class EndLevelTrigger(Level level, Sprite sprite) : Pickup(level)
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        spriteBatch.Draw(sprite.Texture,
+        spriteBatch.Draw(
+            sprite.Texture,
             viewportPosition,
             sprite.SourceRectangle,
-            Color.White);
+            Color.White
+        );
     }
 }
