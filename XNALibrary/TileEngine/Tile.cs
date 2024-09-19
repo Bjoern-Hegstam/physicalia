@@ -1,35 +1,21 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Collision;
+using XNALibrary.Graphics;
 
 namespace XNALibrary.TileEngine;
 
 public abstract class Tile : ICollisionObject
 {
     /// <summary>
-    /// The collision of the Tile.
-    /// </summary>
-    private BoxSide _collisionSides;
-
-    /// <summary>
     /// Collision box of the Tile.
     /// </summary>
     private Rectangle _collisionBox;
 
     /// <summary>
-    /// Indicates whether the Tile can give damage.
-    /// </summary>
-    private bool _givesDamage;
-
-    /// <summary>
-    /// The damage level of the Tile in procetual damage in decimal form.
+    /// The damage level of the Tile in range [0, 1].
     /// </summary>
     private float _damageLevel;
-
-    /// <summary>
-    /// The sides of the Tile that can give damage.
-    /// </summary>
-    private BoxSide _damageSides;
 
     /// <summary>
     /// Gets and Sets the collision box of the Tile.
@@ -43,20 +29,12 @@ public abstract class Tile : ICollisionObject
     /// <summary>
     /// Gets and Sets the collision sides of the tile.
     /// </summary>
-    public BoxSide CollisionSides
-    {
-        get => _collisionSides;
-        set => _collisionSides = value;
-    }
+    public BoxSide CollisionSides { get; set; }
 
     /// <summary>
     /// Gets and Sets a bool denoting whether the tile can give damage.
     /// </summary>
-    public bool GivesDamage
-    {
-        get => _givesDamage;
-        set => _givesDamage = value;
-    }
+    public bool GivesDamage { get; set; }
 
     /// <summary>
     /// Gets and Sets the damage level of the Tile. The value can be between
@@ -68,37 +46,10 @@ public abstract class Tile : ICollisionObject
         set => _damageLevel = MathHelper.Clamp(value, 0, 1);
     }
 
-    /// <summary>
-    /// Gets and Sets the damage sides of the Tile.
-    /// </summary>
-    public BoxSide DamageSides
-    {
-        get => _damageSides;
-        set => _damageSides = value;
-    }
-
-    /// <summary>
-    /// Creates a new Tile.
-    /// </summary>
-    public Tile() : this(Rectangle.Empty, 0)
-    {
-    }
-
-    /// <summary>
-    /// Creates a new tile.
-    /// </summary>
-    /// <param name="collisionSides">Collision sides of the tile.</param>
-    public Tile(Rectangle collisionBox, BoxSide collisionSides)
-    {
-        _collisionBox = collisionBox;
-        _collisionSides = collisionSides;
-        _givesDamage = false;
-        _damageLevel = 0;
-        _damageSides = 0;
-    }
+    public BoxSide DamageSides { get; set; }
 
     // ICollisionObject is only implemented for consistency and only provides
-    // support for the Type propery. In the future other parts may be
+    // support for the Type property. In the future other parts may be
     // implemented.
 
     public ObjectType Type => ObjectType.Tile;
@@ -132,10 +83,23 @@ public abstract class Tile : ICollisionObject
     public abstract Rectangle SourceRectangle { get; }
     public abstract Texture2D Texture { get; }
 
-    public bool CanCollide => _collisionSides != 0;
+    public bool CanCollide => CollisionSides != 0;
 
     public bool CanTakeDamage => false;
+    
+    public Tile() : this(Rectangle.Empty, 0)
+    {
+    }
 
+    public Tile(Rectangle collisionBox, BoxSide collisionSides)
+    {
+        _collisionBox = collisionBox;
+        CollisionSides = collisionSides;
+        GivesDamage = false;
+        _damageLevel = 0;
+        DamageSides = 0;
+    }
+    
     public virtual void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {

@@ -50,8 +50,14 @@ internal class GamePadInputMap : InputMap
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Button" })
             {
-                var action = (InputAction)Enum.Parse(typeof(InputAction), reader.GetAttribute("action") ?? throw new ResourceLoadException());
-                var button = (Buttons)Enum.Parse(typeof(Buttons), reader.GetAttribute("value") ?? throw new ResourceLoadException());
+                var action = (InputAction)Enum.Parse(
+                    typeof(InputAction),
+                    reader.GetAttribute("action") ?? throw new ResourceLoadException()
+                );
+                var button = (Buttons)Enum.Parse(
+                    typeof(Buttons),
+                    reader.GetAttribute("value") ?? throw new ResourceLoadException()
+                );
 
                 _buttons[action] = button;
             }

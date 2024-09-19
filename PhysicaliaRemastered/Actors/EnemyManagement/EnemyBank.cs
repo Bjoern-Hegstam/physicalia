@@ -7,28 +7,17 @@ using XNALibrary.Animation;
 
 namespace PhysicaliaRemastered.Actors.EnemyManagement;
 
-public class EnemyBank
+public class EnemyBank(GameServiceContainer gameServiceContainer)
 {
     /// <summary>
     /// Dictionary mapping the Id's of the enemy types to the base enemies.
     /// The animation keys kept by the enemies are those going to the
     /// base animations.
     /// </summary>
-    private readonly Dictionary<int, Enemy> _enemyBank;
-
-    private readonly AnimationManager _animationManager;
-
-    /// <summary>
-    /// Creates a new EnemyBank instance and adds that instance as a service
-    /// to the games service collection.
-    /// </summary>
-    public EnemyBank(AnimationManager animationManager)
-    {
-        _animationManager = animationManager;
-
-        _enemyBank = new Dictionary<int, Enemy>();
-    }
-
+    private readonly Dictionary<int, Enemy> _enemyBank = new();
+    
+    private AnimationManager AnimationManager => gameServiceContainer.GetService<AnimationManager>();
+    
     public void LoadXml(string path)
     {
         var readerSettings = new XmlReaderSettings
@@ -54,7 +43,7 @@ public class EnemyBank
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Enemy" })
             {
                 int typeId = int.Parse(reader.GetAttribute("typeID") ?? throw new ResourceLoadException());
-                
+
                 Enemy enemy = new Enemy(new ActorStartValues());
 
                 SetupEnemy(reader, enemy);
@@ -77,7 +66,8 @@ public class EnemyBank
     {
         // Make sure the type has been defined
         _enemyBank.TryGetValue(typeId, out Enemy? value);
-        Enemy enemy = value?.Copy(startValues) ?? throw new InvalidGameStateException($"Unknown enemy type id {typeId}");
+        Enemy enemy = value?.Copy(startValues) ??
+                      throw new InvalidGameStateException($"Unknown enemy type id {typeId}");
 
         SetPlaybackKeys(typeId, enemy);
 
@@ -149,7 +139,7 @@ public class EnemyBank
                 int animKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 int action = int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
 
-                Animation anim = _animationManager.AddPlaybackAnimation(animKey);
+                Animation anim = AnimationManager.AddPlaybackAnimation(animKey);
 
                 // Add the animation to the Enemy
                 enemy.AddAnimation(action, anim);
@@ -191,7 +181,7 @@ public class EnemyBank
         {
             Animation anim = bankAnimations[animType].Copy();
 
-            _animationManager.AddPlaybackAnimation(anim);
+            AnimationManager.AddPlaybackAnimation(anim);
 
             enemy.Animations.Add(animType, anim);
         }

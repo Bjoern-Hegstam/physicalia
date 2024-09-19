@@ -72,20 +72,24 @@ public abstract class ModifierPickup : Pickup
     {
         if (!PickedUp)
         {
-            spriteBatch.Draw(Sprite.Texture,
+            spriteBatch.Draw(
+                Sprite.Texture,
                 viewportPosition,
                 Sprite.SourceRectangle,
-                Color.White);
+                Color.White
+            );
         }
     }
 
     public void DrawTimer(SpriteBatch spriteBatch, Vector2 position, SpriteFont font)
     {
         // Draw icon
-        spriteBatch.Draw(Icon.Texture,
+        spriteBatch.Draw(
+            Icon.Texture,
             position,
             Icon.SourceRectangle,
-            Color.White);
+            Color.White
+        );
 
         // Build the time string
         var timeText = "";

@@ -484,7 +484,7 @@ public class Level
     {
         _modifiers.Add(modifier);
     }
-    
+
     public void EnqueueActiveObject(ActiveObject obj)
     {
         _inactiveObjects.Add(obj);
@@ -791,7 +791,7 @@ public class Level
              backgroundIndex < _backgrounds.Count && _backgrounds[backgroundIndex].Depth <= 1;
              backgroundIndex++)
         {
-            _backgrounds[backgroundIndex].Draw(spriteBatch, Viewport);
+            _backgrounds[backgroundIndex].Draw(spriteBatch);
         }
 
         // TileEngine
@@ -818,7 +818,7 @@ public class Level
         // Foreground
         for (; backgroundIndex < _backgrounds.Count; backgroundIndex++)
         {
-            _backgrounds[backgroundIndex].Draw(spriteBatch, Viewport);
+            _backgrounds[backgroundIndex].Draw(spriteBatch);
         }
 
         // UI
@@ -829,19 +829,19 @@ public class Level
     {
         // HEALTH BAR
         float playerHealthPercentage = Player.Health / Settings.PlayerStartHealth;
-        Rectangle fullHealthSource = Settings.FullHealthUi.SourceRectangle;
+        Rectangle fullHealthSource = (Rectangle)Settings.FullHealthUi?.SourceRectangle;
         // 48 is the start of the health indicator in x
         // 115 is the width of the health indicator
         fullHealthSource.Width = 48 + (int)(115 * playerHealthPercentage);
 
         // Draw empty health bar first
-        spriteBatch.Draw(Settings.EmptyHealthUi.Texture,
+        spriteBatch.Draw(Settings.EmptyHealthUi?.Texture,
             Vector2.Zero,
-            Settings.EmptyHealthUi.SourceRectangle,
+            Settings.EmptyHealthUi?.SourceRectangle,
             Color.White);
 
         // Draw the visible part of the full health bar
-        spriteBatch.Draw(Settings.FullHealthUi.Texture,
+        spriteBatch.Draw(Settings.FullHealthUi?.Texture,
             Vector2.Zero,
             fullHealthSource,
             Color.White);
@@ -885,9 +885,9 @@ public class Level
             if (playerWeapon.WeaponSprite != null)
             {
                 spriteBatch.Draw(
-                    playerWeapon.WeaponSprite.Texture,
+                    playerWeapon.WeaponSprite?.Texture,
                     weaponPos,
-                    playerWeapon.WeaponSprite.SourceRectangle,
+                    playerWeapon.WeaponSprite?.SourceRectangle,
                     Color.White
                 );
             }
@@ -895,7 +895,7 @@ public class Level
 
         // MODIFIERS
         // A little extra spacing is added (5 px)
-        var modifierPos = new Vector2(5, Settings.FullHealthUi.SourceRectangle.Height + 5);
+        var modifierPos = new Vector2(5, (float)Settings.FullHealthUi?.SourceRectangle.Height + 5);
         foreach (ModifierPickup modifier in _modifiers)
         {
             modifier.DrawTimer(spriteBatch, modifierPos, Settings.LevelIndexFont);

@@ -26,8 +26,6 @@ public class InputHandler : GameComponent
     public InputHandler(Game game)
         : base(game)
     {
-        // Add the InputHandler to the game's collection of Services
-        game.Services.AddService(typeof(InputHandler), this);
     }
 
     /// <summary>

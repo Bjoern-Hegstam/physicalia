@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary;
 using XNALibrary.Collision;
-using XNALibrary.Sprites;
 using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.ActiveObjects;
@@ -16,8 +15,7 @@ public abstract class ActiveObject : ICollisionObject
     private static int _activeObjectCount;
 
     private Vector2 _position;
-    private Sprite? _sprite;
-    
+
     private Rectangle _collisionBox;
 
     public int UniqueId { get; }
@@ -35,10 +33,6 @@ public abstract class ActiveObject : ICollisionObject
     public List<ActiveObject> Children { get; }
 
     public virtual ObjectType Type => ObjectType.ActiveObject;
-
-    public virtual Rectangle SourceRectangle => _sprite.SourceRectangle;
-
-    public virtual Texture2D Texture => _sprite.Texture;
 
     public Rectangle CollisionBox
     {

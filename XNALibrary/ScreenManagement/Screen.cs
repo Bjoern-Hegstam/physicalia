@@ -1,27 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Input;
 
 namespace XNALibrary.ScreenManagement;
 
-public class Screen(Game game, ScreenManager manager)
+public class Screen(Texture2D? background = null)
 {
-    public Texture2D? Background { get; set; }
-
-    public Game Game => game;
-
-    public InputHandler? InputHandler { get; private set; }
-
-    public ScreenManager ScreenManager { get; } = manager;
-
-    /// <summary>
-    /// Lets the ScreenButton load any needed non-graphical services. If overriden a call to
-    /// base.Initialize() must be made.
-    /// </summary>
     public virtual void Initialize()
     {
-        InputHandler = game.Services.GetService(typeof(InputHandler)) as InputHandler ?? throw new ResourceLoadException();
     }
 
     public virtual void LoadContent(ContentManager contentManager)
@@ -50,9 +36,9 @@ public class Screen(Game game, ScreenManager manager)
         spriteBatch.Begin();
 
         // Draw background if one has been set
-        if (Background != null)
+        if (background != null)
         {
-            spriteBatch.Draw(Background, Vector2.Zero, Color.White);
+            spriteBatch.Draw(background, Vector2.Zero, Color.White);
         }
 
         OnDraw(spriteBatch);

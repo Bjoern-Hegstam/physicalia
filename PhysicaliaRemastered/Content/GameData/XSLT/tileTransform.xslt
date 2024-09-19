@@ -10,8 +10,8 @@
 			<xsl:attribute name="key">
 				<xsl:value-of select="@id" />
 			</xsl:attribute>
-			<xsl:attribute name="textureKey">
-				<xsl:value-of select="@textureKey" />
+			<xsl:attribute name="textureId">
+				<xsl:value-of select="@textureId" />
 			</xsl:attribute>
 			<xsl:attribute name="textureType">
 				<xsl:value-of select="@textureType" />

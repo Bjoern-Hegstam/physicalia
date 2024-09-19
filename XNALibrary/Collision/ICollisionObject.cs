@@ -14,8 +14,8 @@ public interface ICollisionObject
     Vector2 Velocity { get; set; }
 
     int Width { get; }
-    int Height { get; }    
-    
+    int Height { get; }
+
     bool CanCollide { get; }
 
     Rectangle CollisionBox { get; }

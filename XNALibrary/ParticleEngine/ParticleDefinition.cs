@@ -100,7 +100,8 @@ public abstract class ParticleDefinition
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Life" })
             {
                 var mode =
-                    (ParticleLifeMode)Enum.Parse(typeof(ParticleLifeMode), reader.GetAttribute("mode") ?? throw new ResourceLoadException());
+                    (ParticleLifeMode)Enum.Parse(typeof(ParticleLifeMode),
+                        reader.GetAttribute("mode") ?? throw new ResourceLoadException());
                 float value = float.Parse(reader.GetAttribute("value"));
 
                 LifeMode = mode;

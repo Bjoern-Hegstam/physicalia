@@ -1,10 +1,12 @@
 using System.Xml;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Graphics;
 
 namespace XNALibrary.Animation;
 
-public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameComponent(game)
+public class AnimationManager(Game game) : GameComponent(game)
 {
     private readonly Dictionary<int, Animation> _animationBank = new();
     private readonly List<Animation> _playbackAnims = [];
@@ -31,7 +33,6 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
         Animation animation = _animationBank[bankKey].Copy();
         _playbackAnims.Add(animation);
         return animation;
-
     }
 
     public override void Update(GameTime gameTime)
@@ -76,29 +77,29 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
         }
     }
 
-    public void LoadXml(string path)
+    public void LoadXml(string path, ContentManager contentManager)
     {
         using var reader = XmlReader.Create(path);
-        LoadXml(reader);
+        LoadXml(reader, contentManager);
     }
 
-    public void LoadXml(XmlReader reader)
+    public void LoadXml(XmlReader reader, ContentManager contentManager)
     {
         while (reader.Read())
         {
             if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "Animation") continue;
-            
+
             int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
-            Animation anim = LoadAnimationFromXml(reader);
+            Animation anim = LoadAnimationFromXml(reader, contentManager);
 
             _animationBank.Add(id, anim);
         }
     }
 
-    private Animation LoadAnimationFromXml(XmlReader reader)
+    private Animation LoadAnimationFromXml(XmlReader reader, ContentManager contentManager)
     {
-        reader.ReadToFollowing("TextureKey");
-        var textureId = new TextureId(int.Parse(reader.ReadElementContentAsString()));
+        reader.ReadToFollowing("TextureId");
+        var textureId = new TextureId(reader.ReadElementContentAsString());
 
         reader.ReadToFollowing("StartFrame");
         var x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
@@ -117,7 +118,8 @@ public class AnimationManager(Game game, TextureLibrary textureLibrary) : GameCo
         var loop = bool.Parse(reader.ReadElementContentAsString());
 
         var startFrame = new Rectangle(x, y, width, height);
-        var anim = new Animation(startFrame, columns, rows, frameRate, textureLibrary[textureId])
+        var texture = contentManager.Load<Texture2D>(textureId.Id);
+        var anim = new Animation(startFrame, columns, rows, frameRate, texture)
         {
             Loop = loop
         };

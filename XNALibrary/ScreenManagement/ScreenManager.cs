@@ -13,17 +13,11 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
 
     public List<Screen> Screens { get; } = [];
 
-    /// <summary>
-    /// Sets the base Screen of the screen hierarchy.
-    /// </summary>
-    public Screen? BaseScreen
+    public Screen BaseScreen
     {
         set
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value), "BaseScreen cannot be null!");
-            }
+            ArgumentNullException.ThrowIfNull(value, nameof(BaseScreen));
 
             if (_screenStack.Count > 0)
             {
@@ -31,9 +25,10 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
             }
 
             _screenStack.Push(value);
+            Screens.Add(value);
         }
     }
-    
+
     private enum ScreenTransitionState
     {
         Forward,
@@ -175,7 +170,7 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-        
+
         _renderTarget = new RenderTarget2D(
             Game.GraphicsDevice,
             Game.GraphicsDevice.PresentationParameters.BackBufferWidth,

@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Input;
@@ -58,8 +59,11 @@ public class Settings
         Random = new Random();
     }
 
-    public Settings(InputHandler inputHandler)
+    public Settings(GameServiceContainer gameServiceContainer)
     {
+        var inputHandler = gameServiceContainer.GetService<InputHandler>();
+        ArgumentNullException.ThrowIfNull(inputHandler);
+        
         _gamePadMap = new GamePadInputMap
         {
             InputHandler = inputHandler
@@ -121,11 +125,13 @@ public class Settings
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "UI" })
             {
                 reader.ReadToFollowing("FullHealthBar");
-                SpriteId fullBarSpriteId = new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                SpriteId fullBarSpriteId =
+                    new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
                 FullHealthUi = spriteLibrary.GetSprite(fullBarSpriteId);
 
                 reader.ReadToFollowing("EmptyHealthBar");
-                SpriteId emptyBarSpriteId = new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                SpriteId emptyBarSpriteId =
+                    new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
                 EmptyHealthUi = spriteLibrary.GetSprite(emptyBarSpriteId);
             }
 

@@ -53,7 +53,8 @@ public class AnimationParticle(Animation.Animation animation) : Particle
     {
         if (Animation.IsActive)
         {
-            spriteBatch.Draw(Animation.Texture,
+            spriteBatch.Draw(
+                Animation.Texture,
                 Position - offsetPosition,
                 Animation.SourceRectangle,
                 Color.White,
@@ -61,7 +62,8 @@ public class AnimationParticle(Animation.Animation animation) : Particle
                 Origin,
                 1.0F,
                 SpriteEffects.None,
-                1.0F);
+                1.0F
+            );
         }
     }
 }

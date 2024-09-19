@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -28,9 +27,7 @@ public enum WorldState
 public class World
 {
     private const string LevelPath = "Content/GameData/Worlds/Levels/";
-
-    private readonly Settings _settings;
-
+    
     private readonly List<Level> _levels;
     private int _levelIndex;
 
@@ -40,13 +37,13 @@ public class World
     private Color _worldQuoteColor;
     private Sprite _worldSprite;
 
-    // TODO: Add fields for keeping the text to view when finished
-
     private WorldState _nextState;
 
     private readonly Game _game;
     private readonly Player _player;
 
+    private Settings Settings => _game.Services.GetService<Settings>();
+    
     public int WorldIndex { get; set; }
 
     public WorldState State { get; private set; }
@@ -57,8 +54,6 @@ public class World
     {
         _game = game;
         _player = player;
-
-        _settings = _game.Services.GetService(typeof(Settings)) as Settings ?? throw new ArgumentNullException();
 
         _levels = [];
         _levelIndex = -1;
@@ -90,7 +85,8 @@ public class World
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "StartSprite" })
             {
-                SpriteId spriteId = new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                SpriteId spriteId =
+                    new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
                 _worldSprite = spriteLibrary.GetSprite(spriteId);
             }
 
@@ -192,7 +188,7 @@ public class World
         switch (State)
         {
             case WorldState.Start:
-                if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+                if (Settings.InputMap.IsPressed(InputAction.MenuStart))
                 {
                     _nextState = WorldState.PlayingLevel;
                 }
@@ -203,7 +199,7 @@ public class World
                 {
                     _levels[_levelIndex].Update(gameTime);
 
-                    if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+                    if (Settings.InputMap.IsPressed(InputAction.MenuStart))
                     {
                         // Go to next level
                         _levelIndex++;
@@ -224,7 +220,7 @@ public class World
                 {
                     _levels[_levelIndex].Update(gameTime);
 
-                    if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+                    if (Settings.InputMap.IsPressed(InputAction.MenuStart))
                     {
                         _levels[_levelIndex].Reset();
                     }
@@ -253,18 +249,18 @@ public class World
             case WorldState.Start:
                 // Write draw world index
                 string indexString = "World " + WorldIndex;
-                Vector2 indexStringSize = _settings.WorldIndexFont.MeasureString(indexString);
+                Vector2 indexStringSize = Settings.WorldIndexFont!.MeasureString(indexString);
                 var indexPosition = new Vector2
                 {
                     X = (_levels[0].Viewport.Width - indexStringSize.X) / 2,
                     Y = _levels[0].Viewport.Height / 4f - indexStringSize.Y / 2
                 };
-                spriteBatch.DrawString(_settings.WorldIndexFont, indexString, indexPosition, _worldIndexColor);
+                spriteBatch.DrawString(Settings.WorldIndexFont, indexString, indexPosition, _worldIndexColor);
 
                 // Draw quote
                 if (_worldQuoteLines.Length > 0)
                 {
-                    float quoteHeight = _settings.WorldQuoteFont.MeasureString("W").Y;
+                    float quoteHeight = Settings.WorldQuoteFont!.MeasureString("W").Y;
                     var quoteStartPos = new Vector2
                     {
                         Y = _levels[0].Viewport.Height * 3f / 4 -
@@ -273,15 +269,15 @@ public class World
 
                     foreach (string line in _worldQuoteLines)
                     {
-                        Vector2 quoteSize = _settings.WorldQuoteFont.MeasureString(line);
+                        Vector2 quoteSize = Settings.WorldQuoteFont.MeasureString(line);
                         quoteStartPos.X = (_levels[0].Viewport.Width - quoteSize.X) / 2;
 
                         spriteBatch.DrawString(
-                            _settings.WorldQuoteFont,
+                            Settings.WorldQuoteFont,
                             line,
                             quoteStartPos,
                             _worldQuoteColor
-                            );
+                        );
 
                         quoteStartPos.Y += quoteHeight;
                     }
@@ -294,16 +290,18 @@ public class World
                     Y = (_levels[0].Viewport.Height - _worldSprite.SourceRectangle.Height) / 2f
                 };
 
-                spriteBatch.Draw(_worldSprite.Texture,
+                spriteBatch.Draw(
+                    _worldSprite.Texture,
                     spritePos,
                     _worldSprite.SourceRectangle,
-                    Color.White);
+                    Color.White
+                );
                 break;
             case WorldState.PlayingLevel:
                 _levels[_levelIndex].Draw(spriteBatch);
                 break;
             case WorldState.Finished:
-                spriteBatch.DrawString(_settings.WorldQuoteFont, "World Finished", new Vector2(160, 200), Color.White);
+                spriteBatch.DrawString(Settings.WorldQuoteFont, "World Finished", new Vector2(160, 200), Color.White);
                 break;
         }
     }

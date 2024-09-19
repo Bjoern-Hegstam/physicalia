@@ -10,8 +10,6 @@ using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
 using XNALibrary;
 using XNALibrary.Animation;
-using XNALibrary.Graphics;
-using XNALibrary.Input;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 using XNALibrary.TileEngine;
@@ -28,85 +26,40 @@ public enum GameState
 
 public class GameManager
 {
-    private const string GamedataPath = "Content/GameData/";
-    private const string LibraryPath = GamedataPath + "Libraries/";
-    private const string WorldPath = GamedataPath + "Worlds/";
-
     private readonly Game _game;
-    private readonly TextureLibrary _textureLibrary;
-    private readonly TileLibrary _tileLibrary;
-    private readonly SpriteLibrary _spriteLibrary;
-    private readonly ParticleEngine _particleEngine;
-    private readonly AnimationManager _animationManager;
-    private readonly EnemyBank _enemyBank;
-    private readonly WeaponBank _weaponBank;
-    private readonly PickupTemplateLibrary _modifierTemplateLibrary;
 
     private readonly List<World> _worlds;
     private int _worldIndex;
 
     private readonly Player _player;
 
-    // Used for making sure pause mode is only entered when it's available
     private int _pausePressedCount;
 
     public GameState State { get; set; }
-
     public GameState NextState { get; set; }
 
+    private Settings Settings => _game.Services.GetService<Settings>();
+    private SpriteLibrary SpriteLibrary => _game.Services.GetService<SpriteLibrary>();
+    private TileLibrary TileLibrary => _game.Services.GetService<TileLibrary>();
+    private AnimationManager AnimationManager => _game.Services.GetService<AnimationManager>();
+    private WeaponBank WeaponBank => _game.Services.GetService<WeaponBank>();
+    private ParticleEngine ParticleEngine => _game.Services.GetService<ParticleEngine>();
+    private EnemyBank EnemyBank => _game.Services.GetService<EnemyBank>();
+    private PickupTemplateLibrary PickupTemplateLibrary => _game.Services.GetService<PickupTemplateLibrary>();
 
-    public Settings Settings { get; }
-
-    /// <summary>
-    /// Creates a new GameManager.
-    /// </summary>
-    /// <param name="game">The game creating the GameManager. The Manager expects
-    /// the Game to have an Settings service.</param>
     public GameManager(Game game)
     {
         _game = game;
 
-        // Create and add needed services
-        var input = (InputHandler)_game.Services.GetService(typeof(InputHandler));
-        Settings = new Settings(input);
-        _game.Services.AddService(typeof(Settings), Settings);
-
-        _textureLibrary = new TextureLibrary();
-        _game.Services.AddService(typeof(TextureLibrary), _textureLibrary);
-
-        _spriteLibrary = new SpriteLibrary(_textureLibrary);
-        _game.Services.AddService(typeof(SpriteLibrary), _spriteLibrary);
-
-        _animationManager = new AnimationManager(_game, _textureLibrary);
-        _game.Services.AddService(typeof(AnimationManager), _animationManager);
-        _game.Components.Add(_animationManager);
-
-        _tileLibrary = new TileLibrary();
-        _game.Services.AddService(typeof(TileLibrary), _tileLibrary);
-
-        _particleEngine = new ParticleEngine();
-        _game.Services.AddService(typeof(ParticleEngine), _particleEngine);
-
-        _enemyBank = new EnemyBank(_animationManager);
-        _game.Services.AddService(typeof(EnemyBank), _enemyBank);
-
-        _weaponBank = new WeaponBank(_particleEngine, _spriteLibrary, _animationManager);
-        _game.Services.AddService(typeof(WeaponBank), _weaponBank);
-
-        _modifierTemplateLibrary = new PickupTemplateLibrary();
-        _game.Services.AddService(typeof(PickupTemplateLibrary), _modifierTemplateLibrary);
-
         _worlds = [];
         _worldIndex = -1;
 
-        _player = new Player(Settings);
+        var settings = game.Services.GetService<Settings>();
+        _player = new Player(settings);
 
         NextState = State = GameState.Start;
     }
 
-    /// <summary>
-    /// Changes the state of the GameManager.
-    /// </summary>
     private void ChangeState()
     {
         // Cleanup things that was done when we previously entered the current state
@@ -119,7 +72,7 @@ public class GameManager
             case GameState.End:
                 break;
             case GameState.Paused:
-                _animationManager.Enabled = true;
+                AnimationManager.Enabled = true;
                 break;
         }
 
@@ -133,7 +86,7 @@ public class GameManager
             case GameState.End:
                 break;
             case GameState.Paused:
-                _animationManager.Enabled = false;
+                AnimationManager.Enabled = false;
                 break;
         }
 
@@ -159,7 +112,7 @@ public class GameManager
     public void NewSession()
     {
         // Make sure the animation manager is enabled
-        _animationManager.Enabled = true;
+        AnimationManager.Enabled = true;
 
         _worldIndex = 0;
         _worlds[_worldIndex].NewSession();
@@ -167,7 +120,7 @@ public class GameManager
         _player.Health = Settings.PlayerStartHealth;
         // Give the player his default weapon
         _player.ClearWeapons();
-        _player.AddWeapon(_weaponBank.GetWeapon(-1).Copy());
+        _player.AddWeapon(WeaponBank.GetWeapon(-1).Copy());
 
         State = NextState = GameState.Start;
     }
@@ -182,7 +135,7 @@ public class GameManager
         _worldIndex = session.WorldIndex;
         _player.Health = Settings.PlayerStartHealth;
 
-        _player.LoadSession(session, _weaponBank);
+        _player.LoadSession(session, WeaponBank);
 
         _worlds[_worldIndex].LoadSession(session);
 
@@ -210,17 +163,8 @@ public class GameManager
 
         return session;
     }
-
-    public void LoadContent(ContentManager contentManager)
-    {
-        Settings.LoadContent(contentManager);
-    }
-
-    /// <summary>
-    /// Loads in a game as specified in the file indentified by the path.
-    /// </summary>
-    /// <param name="path">Path to the file containing the xml data to load.</param>
-    public void LoadXml(string path)
+    
+    public void LoadXml(string path, ContentManager contentManager)
     {
         var readerSettings = new XmlReaderSettings
         {
@@ -230,63 +174,54 @@ public class GameManager
         };
 
         using var reader = XmlReader.Create(path, readerSettings);
-        LoadXml(reader);
+        LoadXml(reader, contentManager);
     }
 
-    /// <summary>
-    /// Loads in a game as specified by the xml data loaded by the reader.
-    /// </summary>
-    /// <param name="reader">XmlReader to be used for reading the xml data.</param>
-    public void LoadXml(XmlReader reader)
+    public void LoadXml(XmlReader reader, ContentManager contentManager)
     {
         while (reader.Read())
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Settings" })
             {
-                Settings.LoadXml(GamedataPath + reader.ReadString(), _spriteLibrary);
-            }
-
-            if (reader is { NodeType: XmlNodeType.Element, LocalName: "TextureLibrary" })
-            {
-                _textureLibrary.LoadXml(LibraryPath + reader.ReadString(), _game.GraphicsDevice);
+                Settings.LoadXml(Environment.GameDataPath + reader.ReadString(), SpriteLibrary);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "SpriteLibrary" })
             {
-                _spriteLibrary.LoadXml(LibraryPath + reader.ReadString());
+                SpriteLibrary.LoadXml(Environment.LibraryPath + reader.ReadString(), contentManager);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "AnimationBank" })
             {
-                _animationManager.LoadXml(LibraryPath + reader.ReadString());
+                AnimationManager.LoadXml(Environment.LibraryPath + reader.ReadString(), contentManager);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileLibrary" })
             {
-                _tileLibrary.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary, _animationManager);
+                TileLibrary.LoadXml(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "ParticleDefinitions" })
             {
-                _particleEngine.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary, _animationManager);
+                ParticleEngine.LoadXml(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
 
                 // Prepare the particle engine to avoid slow downs (JIT)
-                _particleEngine.Prepare();
+                ParticleEngine.Prepare();
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "WeaponBank" })
             {
-                _weaponBank.LoadXml(LibraryPath + reader.ReadString());
+                WeaponBank.LoadXml(Environment.LibraryPath + reader.ReadString());
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "EnemyBank" })
             {
-                _enemyBank.LoadXml(LibraryPath + reader.ReadString());
+                EnemyBank.LoadXml(Environment.LibraryPath + reader.ReadString());
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "PickupLibrary" })
             {
-                _modifierTemplateLibrary.LoadXml(LibraryPath + reader.ReadString(), _spriteLibrary);
+                PickupTemplateLibrary.LoadXml(Environment.LibraryPath + reader.ReadString(), SpriteLibrary);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Player" })
@@ -316,7 +251,7 @@ public class GameManager
                 var world = new World(_game, _player);
                 _worlds.Add(world);
                 world.WorldIndex = _worlds.Count;
-                world.LoadXml(WorldPath + reader.ReadString(), _tileLibrary, _spriteLibrary);
+                world.LoadXml(Environment.WorldPath + reader.ReadString(), TileLibrary, SpriteLibrary);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Worlds" })
@@ -339,7 +274,7 @@ public class GameManager
             {
                 int animKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 int action = int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
-                Animation anim = _animationManager.AddPlaybackAnimation(animKey);
+                Animation anim = AnimationManager.AddPlaybackAnimation(animKey);
                 _player.AddAnimation(action, anim);
                 _player.CurrentAnimationType = action;
             }

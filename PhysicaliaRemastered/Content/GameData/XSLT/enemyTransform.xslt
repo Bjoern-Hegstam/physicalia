@@ -10,7 +10,7 @@
 			<xsl:attribute name="key">
 				<xsl:value-of select="@typeID" />
 			</xsl:attribute>
-			<xsl:attribute name="textureKey">
+			<xsl:attribute name="textureId">
 				<xsl:value-of select="Animations/Animation[@action='1']/@key" />
 			</xsl:attribute>
 			<xsl:attribute name="textureType">Animation</xsl:attribute>

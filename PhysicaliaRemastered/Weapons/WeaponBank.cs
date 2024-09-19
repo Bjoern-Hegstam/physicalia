@@ -13,9 +13,13 @@ namespace PhysicaliaRemastered.Weapons;
 /// Class for managing over a collection of weapons that serve as the base
 /// for all weapons in the game.
 /// </summary>
-public class WeaponBank(ParticleEngine particleEngine, SpriteLibrary spriteLibrary, AnimationManager animationManager)
+public class WeaponBank(GameServiceContainer gameServiceContainer)
 {
     private readonly Dictionary<int, Weapon> _weaponBank = new();
+
+    private SpriteLibrary SpriteLibrary => gameServiceContainer.GetService<SpriteLibrary>();
+    private AnimationManager AnimationManager => gameServiceContainer.GetService<AnimationManager>();
+    private ParticleEngine ParticleEngine => gameServiceContainer.GetService<ParticleEngine>();
 
     public Weapon GetWeapon(int weaponId)
     {
@@ -47,8 +51,8 @@ public class WeaponBank(ParticleEngine particleEngine, SpriteLibrary spriteLibra
 
                 Weapon weapon = weaponType switch
                 {
-                    "Melee" => new MeleeWeapon(weaponId, particleEngine),
-                    "Projectile" => new ProjectileWeapon(weaponId, particleEngine),
+                    "Melee" => new MeleeWeapon(weaponId, ParticleEngine),
+                    "Projectile" => new ProjectileWeapon(weaponId, ParticleEngine),
                     _ => throw new InvalidGameStateException($"Unknown weapon type {weaponType}")
                 };
 
@@ -75,16 +79,16 @@ public class WeaponBank(ParticleEngine particleEngine, SpriteLibrary spriteLibra
                 reader.ReadToFollowing("Sprite");
                 SpriteId spriteId =
                     new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
-                weapon.WeaponSprite = spriteLibrary.GetSprite(spriteId);
+                weapon.WeaponSprite = SpriteLibrary.GetSprite(spriteId);
 
                 // Get animations
                 reader.ReadToFollowing("Warmup");
                 int warmUpKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                weapon.WarmupAnimation = animationManager.AddPlaybackAnimation(warmUpKey);
+                weapon.WarmupAnimation = AnimationManager.AddPlaybackAnimation(warmUpKey);
 
                 reader.ReadToFollowing("Fire");
                 int fireKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                weapon.WeaponFireAnimation = animationManager.AddPlaybackAnimation(fireKey);
+                weapon.WeaponFireAnimation = AnimationManager.AddPlaybackAnimation(fireKey);
 
                 reader.ReadToFollowing("PlayerOffset");
                 float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());

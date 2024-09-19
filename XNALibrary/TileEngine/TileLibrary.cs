@@ -39,14 +39,16 @@ public class TileLibrary
                 Tile tile;
                 if (reader.GetAttribute("textureType") == "Animation")
                 {
-                    int animationKey = int.Parse(reader.GetAttribute("textureKey") ?? throw new ResourceLoadException());
+                    int animationKey =
+                        int.Parse(reader.GetAttribute("textureId") ?? throw new ResourceLoadException());
                     Animation.Animation animation = animationManager.GetBankAnimation(animationKey).Copy();
                     animationManager.AddPlaybackAnimation(animation);
                     tile = new AnimatedTile(animation);
                 }
                 else
                 {
-                    SpriteId spriteId = new SpriteId(int.Parse(reader.GetAttribute("textureKey") ?? throw new ResourceLoadException()));
+                    SpriteId spriteId =
+                        new SpriteId(int.Parse(reader.GetAttribute("textureId") ?? throw new ResourceLoadException()));
                     Sprite sprite = spriteLibrary.GetSprite(spriteId);
 
                     tile = new SpriteTile(sprite);

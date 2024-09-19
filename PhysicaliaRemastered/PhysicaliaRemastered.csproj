@@ -115,9 +115,6 @@
         <None Update="Content\GameData\Libraries\SpriteLibrary.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Content\GameData\Libraries\TextureLibrary.xml">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="Content\GameData\Libraries\TileLibrary.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

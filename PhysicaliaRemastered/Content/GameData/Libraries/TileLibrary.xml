@@ -1,134 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
 <TileLibrary>
     <Tiles>
         <!-- Standard Tiles -->
-        <Tile id="0" textureType="Sprite" textureKey="0">
+        <Tile id="0" textureType="Sprite" textureId="0">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Left Top</CollisionSides>
         </Tile>
-        <Tile id="1" textureType="Sprite" textureKey="1">
+        <Tile id="1" textureType="Sprite" textureId="1">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Top</CollisionSides>
         </Tile>
-        <Tile id="2" textureType="Sprite" textureKey="2">
+        <Tile id="2" textureType="Sprite" textureId="2">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Top Right</CollisionSides>
         </Tile>
-        <Tile id="3" textureType="Sprite" textureKey="3">
+        <Tile id="3" textureType="Sprite" textureId="3">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Left</CollisionSides>
         </Tile>
-        <Tile id="4" textureType="Sprite" textureKey="4">
+        <Tile id="4" textureType="Sprite" textureId="4">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="5" textureType="Sprite" textureKey="5">
+        <Tile id="5" textureType="Sprite" textureId="5">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Right</CollisionSides>
         </Tile>
-        <Tile id="6" textureType="Sprite" textureKey="6">
+        <Tile id="6" textureType="Sprite" textureId="6">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="7" textureType="Sprite" textureKey="7">
+        <Tile id="7" textureType="Sprite" textureId="7">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="8" textureType="Sprite" textureKey="8">
+        <Tile id="8" textureType="Sprite" textureId="8">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="9" textureType="Sprite" textureKey="1">
+        <Tile id="9" textureType="Sprite" textureId="1">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Bottom</CollisionSides>
         </Tile>
         <!-- Special Tiles -->
-        <Tile id="10" textureType="Sprite" textureKey="0">
+        <Tile id="10" textureType="Sprite" textureId="0">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Top</CollisionSides>
         </Tile>
-        <Tile id="11" textureType="Sprite" textureKey="1">
+        <Tile id="11" textureType="Sprite" textureId="1">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Top</CollisionSides>
         </Tile>
-        <Tile id="12" textureType="Sprite" textureKey="2">
+        <Tile id="12" textureType="Sprite" textureId="2">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Top</CollisionSides>
         </Tile>
-        <Tile id="13" textureType="Sprite" textureKey="3">
+        <Tile id="13" textureType="Sprite" textureId="3">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="14" textureType="Sprite" textureKey="4">
+        <Tile id="14" textureType="Sprite" textureId="4">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="15" textureType="Sprite" textureKey="5">
+        <Tile id="15" textureType="Sprite" textureId="5">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="16" textureType="Sprite" textureKey="6">
+        <Tile id="16" textureType="Sprite" textureId="6">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="17" textureType="Sprite" textureKey="7">
+        <Tile id="17" textureType="Sprite" textureId="7">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="18" textureType="Sprite" textureKey="8">
+        <Tile id="18" textureType="Sprite" textureId="8">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="19" textureType="Sprite" textureKey="1">
+        <Tile id="19" textureType="Sprite" textureId="1">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Bottom</CollisionSides>
         </Tile>
         <!-- Tiles Grass Upsidedown-->
-        <Tile id="20" textureType="Sprite" textureKey="20">
+        <Tile id="20" textureType="Sprite" textureId="20">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="21" textureType="Sprite" textureKey="21">
+        <Tile id="21" textureType="Sprite" textureId="21">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="22" textureType="Sprite" textureKey="22">
+        <Tile id="22" textureType="Sprite" textureId="22">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="23" textureType="Sprite" textureKey="23">
+        <Tile id="23" textureType="Sprite" textureId="23">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Left</CollisionSides>
         </Tile>
-        <Tile id="24" textureType="Sprite" textureKey="24">
+        <Tile id="24" textureType="Sprite" textureId="24">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>
             </CollisionSides>
         </Tile>
-        <Tile id="25" textureType="Sprite" textureKey="25">
+        <Tile id="25" textureType="Sprite" textureId="25">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Right</CollisionSides>
         </Tile>
-        <Tile id="26" textureType="Sprite" textureKey="26">
+        <Tile id="26" textureType="Sprite" textureId="26">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Bottom Left</CollisionSides>
         </Tile>
-        <Tile id="27" textureType="Sprite" textureKey="27">
+        <Tile id="27" textureType="Sprite" textureId="27">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Bottom</CollisionSides>
         </Tile>
-        <Tile id="28" textureType="Sprite" textureKey="28">
+        <Tile id="28" textureType="Sprite" textureId="28">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Bottom Right</CollisionSides>
         </Tile>
@@ -137,185 +136,185 @@
         <!-- Interior -->
         <!-- 	Wall Colors -->
         <!-- 		Light Yellow-->
-        <Tile id="30" textureType="Sprite" textureKey="30">
+        <Tile id="30" textureType="Sprite" textureId="30">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides></CollisionSides>
         </Tile>
 
         <!-- 	Straight lines -->
         <!-- 		Vertical -->
-        <Tile id="31" textureType="Sprite" textureKey="31">
+        <Tile id="31" textureType="Sprite" textureId="31">
             <CollisionBox x="0" y="0" width="7" height="32" />
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
-        <Tile id="32" textureType="Sprite" textureKey="32">
+        <Tile id="32" textureType="Sprite" textureId="32">
             <CollisionBox x="0" y="0" width="7" height="32" />
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
-        <Tile id="33" textureType="Sprite" textureKey="33">
+        <Tile id="33" textureType="Sprite" textureId="33">
             <CollisionBox x="0" y="0" width="7" height="32" />
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
 
-        <Tile id="34" textureType="Sprite" textureKey="34">
+        <Tile id="34" textureType="Sprite" textureId="34">
             <CollisionBox x="25" y="0" width="7" height="32" />
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
-        <Tile id="35" textureType="Sprite" textureKey="35">
+        <Tile id="35" textureType="Sprite" textureId="35">
             <CollisionBox x="25" y="0" width="7" height="32" />
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
-        <Tile id="36" textureType="Sprite" textureKey="36">
+        <Tile id="36" textureType="Sprite" textureId="36">
             <CollisionBox x="25" y="0" width="7" height="32" />
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
 
         <!-- 		Horizontal -->
-        <Tile id="37" textureType="Sprite" textureKey="37">
+        <Tile id="37" textureType="Sprite" textureId="37">
             <CollisionBox x="0" y="0" width="32" height="7" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
-        <Tile id="38" textureType="Sprite" textureKey="38">
+        <Tile id="38" textureType="Sprite" textureId="38">
             <CollisionBox x="0" y="0" width="32" height="7" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
-        <Tile id="39" textureType="Sprite" textureKey="39">
+        <Tile id="39" textureType="Sprite" textureId="39">
             <CollisionBox x="0" y="0" width="32" height="7" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
 
-        <Tile id="40" textureType="Sprite" textureKey="40">
+        <Tile id="40" textureType="Sprite" textureId="40">
             <CollisionBox x="0" y="25" width="32" height="7" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
-        <Tile id="41" textureType="Sprite" textureKey="41">
+        <Tile id="41" textureType="Sprite" textureId="41">
             <CollisionBox x="0" y="25" width="32" height="7" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
-        <Tile id="42" textureType="Sprite" textureKey="42">
+        <Tile id="42" textureType="Sprite" textureId="42">
             <CollisionBox x="0" y="25" width="32" height="7" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
 
         <!-- 	Corners -->
-        <Tile id="43" textureType="Sprite" textureKey="43">
+        <Tile id="43" textureType="Sprite" textureId="43">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Top Right</CollisionSides>
         </Tile>
-        <Tile id="44" textureType="Sprite" textureKey="44">
+        <Tile id="44" textureType="Sprite" textureId="44">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Left Top</CollisionSides>
         </Tile>
 
-        <Tile id="45" textureType="Sprite" textureKey="45">
+        <Tile id="45" textureType="Sprite" textureId="45">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Top Right</CollisionSides>
         </Tile>
-        <Tile id="46" textureType="Sprite" textureKey="46">
+        <Tile id="46" textureType="Sprite" textureId="46">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides>Left Top</CollisionSides>
         </Tile>
 
-        <Tile id="47" textureType="Sprite" textureKey="47">
+        <Tile id="47" textureType="Sprite" textureId="47">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="48" textureType="Sprite" textureKey="48">
+        <Tile id="48" textureType="Sprite" textureId="48">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
 
         <!-- Blackboard -->
-        <Tile id="49" textureType="Sprite" textureKey="49">
+        <Tile id="49" textureType="Sprite" textureId="49">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="50" textureType="Sprite" textureKey="50">
+        <Tile id="50" textureType="Sprite" textureId="50">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="51" textureType="Sprite" textureKey="51">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
-        </Tile>
-
-        <Tile id="52" textureType="Sprite" textureKey="52">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
-        </Tile>
-        <Tile id="53" textureType="Sprite" textureKey="53">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
-        </Tile>
-        <Tile id="54" textureType="Sprite" textureKey="54">
+        <Tile id="51" textureType="Sprite" textureId="51">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
 
-        <Tile id="55" textureType="Sprite" textureKey="55">
+        <Tile id="52" textureType="Sprite" textureId="52">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="56" textureType="Sprite" textureKey="56">
+        <Tile id="53" textureType="Sprite" textureId="53">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="57" textureType="Sprite" textureKey="57">
+        <Tile id="54" textureType="Sprite" textureId="54">
+            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionSides />
+        </Tile>
+
+        <Tile id="55" textureType="Sprite" textureId="55">
+            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionSides />
+        </Tile>
+        <Tile id="56" textureType="Sprite" textureId="56">
+            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionSides />
+        </Tile>
+        <Tile id="57" textureType="Sprite" textureId="57">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
 
         <!-- Blackboard decorations -->
-        <Tile id="58" textureType="Sprite" textureKey="58">
+        <Tile id="58" textureType="Sprite" textureId="58">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="59" textureType="Sprite" textureKey="59">
+        <Tile id="59" textureType="Sprite" textureId="59">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="60" textureType="Sprite" textureKey="60">
+        <Tile id="60" textureType="Sprite" textureId="60">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="61" textureType="Sprite" textureKey="61">
+        <Tile id="61" textureType="Sprite" textureId="61">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="62" textureType="Sprite" textureKey="62">
+        <Tile id="62" textureType="Sprite" textureId="62">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
 
         <!-- Door -->
-        <Tile id="63" textureType="Sprite" textureKey="63">
+        <Tile id="63" textureType="Sprite" textureId="63">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
-        <Tile id="64" textureType="Sprite" textureKey="64">
+        <Tile id="64" textureType="Sprite" textureId="64">
             <CollisionBox x="0" y="0" width="32" height="32" />
             <CollisionSides />
         </Tile>
 
         <!-- Top edges -->
-        <Tile id="65" textureType="Sprite" textureKey="65">
+        <Tile id="65" textureType="Sprite" textureId="65">
             <CollisionBox x="0" y="24" width="32" height="8" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
-        <Tile id="66" textureType="Sprite" textureKey="66">
+        <Tile id="66" textureType="Sprite" textureId="66">
             <CollisionBox x="0" y="24" width="32" height="8" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
-        <Tile id="67" textureType="Sprite" textureKey="67">
+        <Tile id="67" textureType="Sprite" textureId="67">
             <CollisionBox x="0" y="24" width="32" height="8" />
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
 
-        <Tile id="68" textureType="Sprite" textureKey="68">
+        <Tile id="68" textureType="Sprite" textureId="68">
             <CollisionBox x="24" y="24" width="8" height="8" />
             <CollisionSides>Left Top Bottom</CollisionSides>
         </Tile>
-        <Tile id="69" textureType="Sprite" textureKey="69">
+        <Tile id="69" textureType="Sprite" textureId="69">
             <CollisionBox x="0" y="24" width="8" height="8" />
             <CollisionSides>Top Bottom Right</CollisionSides>
         </Tile>

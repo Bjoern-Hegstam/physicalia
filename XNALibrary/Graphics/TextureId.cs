@@ -1,6 +1,6 @@
 namespace XNALibrary.Graphics;
 
-public readonly struct TextureId(int id)
+public readonly struct TextureId(string id)
 {
-    public int Id => id;
+    public string Id => id;
 }

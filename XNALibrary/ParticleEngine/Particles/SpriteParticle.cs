@@ -16,15 +16,12 @@ public class SpriteParticle : Particle
 
     public override int Height => Sprite.SourceRectangle.Height;
 
-    public virtual Rectangle SourceRectangle => Sprite.SourceRectangle;
-
-    public virtual Texture2D Texture => Sprite.Texture;
-
     public override Rectangle CollisionBox => new(0, 0, Sprite.SourceRectangle.Width, Sprite.SourceRectangle.Height);
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {
-        spriteBatch.Draw(Sprite.Texture,
+        spriteBatch.Draw(
+            Sprite.Texture,
             Position - offsetPosition,
             Sprite.SourceRectangle,
             Color.White,
@@ -32,6 +29,7 @@ public class SpriteParticle : Particle
             Origin,
             1.0F,
             SpriteEffects.None,
-            1.0F);
+            1.0F
+        );
     }
 }

@@ -7,9 +7,8 @@ using XNALibrary.ScreenManagement;
 
 namespace PhysicaliaRemastered.Screens;
 
-public class MenuScreen : Screen
+public class MenuScreen(Game game, GameManager gameManager, ScreenManager screenManager) : Screen
 {
-    // Distance of the menu items from the right edge
     private const float MenuItemRightPadding = 25F;
     private const float MenuItemBottomPadding = 70F;
     private const float MenuItemSpacing = 5F;
@@ -17,32 +16,15 @@ public class MenuScreen : Screen
     private readonly Color _menuSelectedColor = Color.SlateGray;
     private readonly Color _menuColor = Color.White;
 
-    private Settings _settings;
-
-    private string[] _menuItems;
+    private string[]? _menuItems;
     private int _menuIndex;
 
-    private SpriteFont _menuFont;
+    private SpriteFont? _menuFont;
 
-    private Texture2D _titleTexture;
-    private Texture2D _backLevelTexture;
+    private Texture2D? _titleTexture;
+    private Texture2D? _backLevelTexture;
 
-    private GameManager _gameManager;
-
-    public Settings Settings
-    {
-        set => _settings = value;
-    }
-
-    public GameManager GameManager
-    {
-        set => _gameManager = value;
-    }
-
-    public MenuScreen(Game game, ScreenManager screenManager)
-        : base(game, screenManager)
-    {
-    }
+    private Settings Settings => game.Services.GetService<Settings>();
 
     public override void LoadContent(ContentManager contentManager)
     {
@@ -60,17 +42,17 @@ public class MenuScreen : Screen
 
     protected override void OnHandleInput()
     {
-        if (_settings.InputMap.IsPressed(InputAction.MenuDown))
+        if (Settings.InputMap.IsPressed(InputAction.MenuDown))
         {
             _menuIndex++;
 
-            if (_menuIndex >= _menuItems.Length)
+            if (_menuIndex >= _menuItems!.Length)
             {
                 _menuIndex = _menuItems.Length - 1;
             }
         }
 
-        if (_settings.InputMap.IsPressed(InputAction.MenuUp))
+        if (Settings.InputMap.IsPressed(InputAction.MenuUp))
         {
             _menuIndex--;
 
@@ -80,15 +62,15 @@ public class MenuScreen : Screen
             }
         }
 
-        if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+        if (Settings.InputMap.IsPressed(InputAction.MenuStart))
         {
-            string selectedItem = _menuItems[_menuIndex];
+            string selectedItem = _menuItems![_menuIndex];
 
             switch (selectedItem)
             {
                 case "New Game":
-                    _gameManager.NewSession();
-                    ScreenManager.TransitionTo(typeof(GameScreen));
+                    gameManager.NewSession();
+                    screenManager.TransitionTo(typeof(GameScreen));
                     break;
                 case "Load Game":
                     /*
@@ -106,7 +88,7 @@ public class MenuScreen : Screen
                     */
                     break;
                 case "Exit":
-                    Game.Exit();
+                    game.Exit();
                     break;
             }
         }
@@ -119,18 +101,18 @@ public class MenuScreen : Screen
         spriteBatch.Draw(_titleTexture, Vector2.Zero, Color.White);
 
         // Draw menu
-        int screenWidth = Game.GraphicsDevice.Viewport.Width;
-        int screenHeight = Game.GraphicsDevice.Viewport.Height;
+        int screenWidth = game.GraphicsDevice.Viewport.Width;
+        int screenHeight = game.GraphicsDevice.Viewport.Height;
 
         var textPos = new Vector2(0, screenHeight - MenuItemBottomPadding);
 
-        for (int i = _menuItems.Length - 1; i >= 0; i--)
+        for (int i = _menuItems!.Length - 1; i >= 0; i--)
         {
             // Get the color of the item
             Color textColor = _menuIndex == i ? _menuSelectedColor : _menuColor;
 
             // Get the position of the item
-            Vector2 textSize = _menuFont.MeasureString(_menuItems[i]);
+            Vector2 textSize = _menuFont!.MeasureString(_menuItems[i]);
             textPos.X = screenWidth - MenuItemRightPadding - textSize.X;
             textPos.Y -= textSize.Y;
 

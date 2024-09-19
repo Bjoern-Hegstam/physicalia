@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Graphics;
 using XNALibrary.Sprites;
 using Viewport = XNALibrary.Graphics.Viewport;
 
@@ -12,7 +11,7 @@ namespace PhysicaliaRemastered.Graphics;
 /// </summary>
 public class BackgroundLayer
 {
-    private Sprite _backgroundSprite;
+    private readonly Sprite _backgroundSprite;
 
     /// <summary>
     /// Gets or sets the layer's depth value. A value of zero means that the
@@ -44,10 +43,12 @@ public class BackgroundLayer
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(_backgroundSprite.Texture,
+        spriteBatch.Draw(
+            _backgroundSprite.Texture,
             Position,
             _backgroundSprite.SourceRectangle,
-            Color.White);
+            Color.White
+        );
     }
 
     public void Draw(SpriteBatch spriteBatch, Viewport viewport)
@@ -90,10 +91,12 @@ public class BackgroundLayer
                  x < viewport.Position.X + viewport.Width;
                  x += _backgroundSprite.SourceRectangle.Width)
             {
-                spriteBatch.Draw(_backgroundSprite.Texture,
+                spriteBatch.Draw(
+                    _backgroundSprite.Texture,
                     new Vector2(x, y),
                     _backgroundSprite.SourceRectangle,
-                    Color.White);
+                    Color.White
+                );
 
                 if (!LoopX)
                 {

@@ -48,9 +48,11 @@ public class WeaponPickup : Pickup
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        spriteBatch.Draw(_weapon.WeaponSprite.Texture,
+        spriteBatch.Draw(
+            _weapon.WeaponSprite?.Texture,
             viewportPosition,
-            _weapon.WeaponSprite.SourceRectangle,
-            Color.White);
+            _weapon.WeaponSprite?.SourceRectangle,
+            Color.White
+        );
     }
 }

@@ -52,8 +52,14 @@ internal class KeyboardInputMap : InputMap
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Key" })
             {
-                var action = (InputAction)Enum.Parse(typeof(InputAction), reader.GetAttribute("action") ?? throw new ResourceLoadException());
-                var key = (Keys)Enum.Parse(typeof(Keys), reader.GetAttribute("value") ?? throw new ResourceLoadException());
+                var action = (InputAction)Enum.Parse(
+                    typeof(InputAction),
+                    reader.GetAttribute("action") ?? throw new ResourceLoadException()
+                );
+                var key = (Keys)Enum.Parse(
+                    typeof(Keys),
+                    reader.GetAttribute("value") ?? throw new ResourceLoadException()
+                );
 
                 _keys[action] = key;
             }

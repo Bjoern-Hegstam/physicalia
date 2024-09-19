@@ -1,8 +1,16 @@
 using System;
 using Microsoft.Xna.Framework;
+using PhysicaliaRemastered.Actors.EnemyManagement;
+using PhysicaliaRemastered.GameManagement;
+using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Screens;
+using PhysicaliaRemastered.Weapons;
+using XNALibrary.Animation;
 using XNALibrary.Input;
+using XNALibrary.ParticleEngine;
 using XNALibrary.ScreenManagement;
+using XNALibrary.Sprites;
+using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered;
 
@@ -10,19 +18,12 @@ public class PhysicaliaGame : Game
 {
     private readonly GraphicsDeviceManager _graphics;
 
-    private InputHandler? _inputHandler;
-
-    private ScreenManager? _screenManager;
-
-    private MenuScreen? _menuScreen;
-    private GameScreen? _gameScreen;
-
     public PhysicaliaGame()
     {
         TargetElapsedTime = TimeSpan.FromSeconds(1) / 60;
 
         Content.RootDirectory = "Content";
-        
+
         _graphics = new GraphicsDeviceManager(this);
         _graphics.PreferredBackBufferWidth = 640;
         _graphics.PreferredBackBufferHeight = 480;
@@ -34,41 +35,35 @@ public class PhysicaliaGame : Game
     /// <summary>
     /// Allows the game to perform any initialization it needs to before starting to run.
     /// This is where it can query for any required services and load any non-graphic
-    /// related content.  Calling base.Initialize will enumerate through any components
+    /// related content. Calling base.Initialize will enumerate through any components
     /// and initialize them as well.
     /// </summary>
     protected override void Initialize()
     {
-        _inputHandler = new InputHandler(this);
-        Components.Add(_inputHandler);
+        Services.AddService(new InputHandler(this));
+        Services.AddService(new Settings(Services));
+        Services.AddService(new SpriteLibrary());
+        Services.AddService(new AnimationManager(this));
+        Services.AddService(new TileLibrary());
+        Services.AddService(new ParticleEngine());
+        Services.AddService(new EnemyBank(Services));
+        Services.AddService(new WeaponBank(Services));
+        Services.AddService(new PickupTemplateLibrary());
 
-        _screenManager = new ScreenManager(this);
-        Components.Add(_screenManager);
+        Components.Add(Services.GetService<InputHandler>());
+        Components.Add(Services.GetService<AnimationManager>());
 
-        _menuScreen = new MenuScreen(this, _screenManager);
-        _gameScreen = new GameScreen(this, _screenManager);
+        var gameManager = new GameManager(this);
 
-        _screenManager.BaseScreen = _menuScreen;
+        var screenManager = new ScreenManager(this);
+        Components.Add(screenManager);
 
-        _screenManager.Screens.Add(_menuScreen);
-        _screenManager.Screens.Add(_gameScreen);
+        var menuScreen = new MenuScreen(this, gameManager, screenManager);
+
+        screenManager.BaseScreen = menuScreen;
+        screenManager.Screens.Add(new GameScreen(this, gameManager, screenManager));
 
         base.Initialize();
-    }
-
-    /// <summary>
-    /// LoadContent will be called once per game and is the place to load
-    /// all of your content.
-    /// </summary>
-    protected override void LoadContent()
-    {
-        // The ScreenManager gets to load content before we get here
-        //this.titleScreen.Settings = this.gameScreen.Settings;
-        _menuScreen.Settings = _gameScreen.Settings;
-
-        _menuScreen.GameManager = _gameScreen.GameManager;
-
-        // TODO: use this.Content to load your game content here
     }
 
     /// <summary>

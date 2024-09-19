@@ -8,7 +8,7 @@ using XNALibrary.ScreenManagement;
 
 namespace PhysicaliaRemastered.Screens;
 
-public class GameScreen : Screen
+public class GameScreen(Game game, GameManager gameManager, ScreenManager screenManager) : Screen
 {
     public enum PauseMenuOption
     {
@@ -23,66 +23,52 @@ public class GameScreen : Screen
     private const float PauseMenuX = 250F;
     private const float PauseMenuMargin = 5F;
 
-    private readonly Settings _settings;
-
-    // Pause menu fields
-    private Texture2D _pauseOverlayTexture;
+    private Texture2D? _pauseOverlayTexture;
     private Rectangle _pauseOverlayArea;
 
     private int _pauseMenuIndex;
 
     private readonly PauseMenuOption[] _pauseMenuOptions = (PauseMenuOption[])Enum.GetValues(typeof(PauseMenuOption));
 
-    public Settings Settings => GameManager.Settings;
-
-    public GameManager GameManager { get; }
-
-    public GameScreen(Game game, ScreenManager manager)
-        : base(game, manager)
-    {
-        GameManager = new GameManager(Game);
-        _settings = GameManager.Settings;
-    }
+    private Settings Settings => game.Services.GetService<Settings>();
 
     public override void Initialize()
     {
         base.Initialize();
 
-        // Create Pause overlay texture
-        _pauseOverlayTexture = new Texture2D(Game.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
+        _pauseOverlayTexture = new Texture2D(game.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
         _pauseOverlayTexture.SetData([new Color(0, 0, 0, 128)]);
 
         _pauseOverlayArea = new Rectangle
         {
-            Width = Game.GraphicsDevice.Viewport.Width,
-            Height = Game.GraphicsDevice.Viewport.Height
+            Width = game.GraphicsDevice.Viewport.Width,
+            Height = game.GraphicsDevice.Viewport.Height
         };
     }
 
     public override void LoadContent(ContentManager contentManager)
     {
-        GameManager.LoadXml("Content/GameData/Game.xml");
-        GameManager.LoadContent(contentManager);
+        Settings.LoadContent(contentManager);
+        gameManager.LoadXml("Content/GameData/Game.xml", contentManager);
     }
 
     protected override void OnUpdate(GameTime gameTime)
     {
-        if (GameManager.State == GameState.Paused)
+        if (gameManager.State == GameState.Paused)
         {
             HandlePauseMenu();
         }
 
-        // Always update the game
-        GameManager.Update(gameTime);
+        gameManager.Update(gameTime);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Begin();
 
-        GameManager.Draw(spriteBatch);
+        gameManager.Draw(spriteBatch);
 
-        if (GameManager.State == GameState.Paused)
+        if (gameManager.State == GameState.Paused)
         {
             DrawPauseMenu(spriteBatch);
         }
@@ -92,10 +78,10 @@ public class GameScreen : Screen
 
     private void HandlePauseMenu()
     {
-        // Read input for moving between meny options
+        // Read input for moving between menu options
         // Because of the way the options are drawn the index goes in the
         // reverse direction of what the player presses
-        if (_settings.InputMap.IsPressed(InputAction.MenuUp))
+        if (Settings.InputMap.IsPressed(InputAction.MenuUp))
         {
             _pauseMenuIndex--;
 
@@ -105,7 +91,7 @@ public class GameScreen : Screen
             }
         }
 
-        if (_settings.InputMap.IsPressed(InputAction.MenuDown))
+        if (Settings.InputMap.IsPressed(InputAction.MenuDown))
         {
             _pauseMenuIndex++;
 
@@ -116,17 +102,17 @@ public class GameScreen : Screen
         }
 
         // Check if MenuStart is pressed and take appropriate action
-        if (_settings.InputMap.IsPressed(InputAction.MenuStart))
+        if (Settings.InputMap.IsPressed(InputAction.MenuStart))
         {
             PauseMenuOption selectedOption = _pauseMenuOptions[_pauseMenuIndex];
 
             switch (selectedOption)
             {
                 case PauseMenuOption.Resume:
-                    GameManager.NextState = GameState.Playing;
+                    gameManager.NextState = GameState.Playing;
                     break;
                 case PauseMenuOption.Reset:
-                    GameManager.ResetLevel();
+                    gameManager.ResetLevel();
                     _pauseMenuIndex = 0;
                     break;
                 case PauseMenuOption.Load:
@@ -160,13 +146,13 @@ public class GameScreen : Screen
                     */
                     break;
                 case PauseMenuOption.Menu:
-                    ScreenManager.TransitionBack();
+                    screenManager.TransitionBack();
                     break;
             }
         }
     }
 
-    private void DrawPauseMenu(SpriteBatch? spriteBatch)
+    private void DrawPauseMenu(SpriteBatch spriteBatch)
     {
         // Pause menu is drawn in the center of the screen
 
@@ -181,7 +167,7 @@ public class GameScreen : Screen
         // TODO: Mirror top graphics for bottom?
 
         // Draw pause menu text
-        SpriteFont pauseFont = _settings.PauseMenuFont;
+        SpriteFont pauseFont = Settings.PauseMenuFont!;
         var textPos = new Vector2(PauseMenuX, PauseMenuY);
 
         float pauseTextHeight = pauseFont.MeasureString("42").Y;

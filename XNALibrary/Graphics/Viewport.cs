@@ -32,7 +32,7 @@ public class Viewport
         MaxWidth = _screen.Width;
         MaxHeight = _screen.Height;
     }
-    
+
     public bool IsOnScreen(Rectangle rect)
     {
         return _screen.Intersects(rect);

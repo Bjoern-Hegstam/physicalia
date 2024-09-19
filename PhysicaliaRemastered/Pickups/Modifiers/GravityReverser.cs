@@ -25,7 +25,8 @@ public class GravityReverser : ModifierPickup
     public static GravityReverser CreateFromXml(XmlReader reader, SpriteLibrary spriteLibrary)
     {
         reader.ReadToFollowing("Icon");
-        SpriteId iconSpriteId = new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+        SpriteId iconSpriteId =
+            new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
 
         reader.ReadToFollowing("Sprite");
         SpriteId spriteId = new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));

@@ -38,7 +38,7 @@ public class ParticleEngine
                 int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
                 string particleType = reader.GetAttribute("type") ?? throw new ResourceLoadException();
                 ParticleDefinition particleDef;
-                
+
                 switch (particleType)
                 {
                     case "SpriteParticle":

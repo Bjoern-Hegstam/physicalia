@@ -67,12 +67,7 @@ public struct WeaponSave
 /// </summary>
 public class GameSession
 {
-    // Player
     private ActorStartValues _playerValues;
-
-    // Level
-
-    // EnemyManager
 
     public int WorldIndex { get; set; }
 
@@ -88,21 +83,13 @@ public class GameSession
 
     public int SelectedWeapon { get; set; }
 
-    public Dictionary<int, WeaponSave> WeaponSaves { get; }
+    public Dictionary<int, WeaponSave> WeaponSaves { get; } = new();
 
-    public List<ModifierSave> LevelModifiers { get; }
+    public List<ModifierSave> LevelModifiers { get; } = [];
 
-    public Dictionary<int, ActiveObjectSave> ActivatedObjects { get; }
+    public Dictionary<int, ActiveObjectSave> ActivatedObjects { get; } = new();
 
-    public Dictionary<int, EnemySave> SavedEnemies { get; }
-
-    public GameSession()
-    {
-        WeaponSaves = new Dictionary<int, WeaponSave>();
-        LevelModifiers = [];
-        ActivatedObjects = new Dictionary<int, ActiveObjectSave>();
-        SavedEnemies = new Dictionary<int, EnemySave>();
-    }
+    public Dictionary<int, EnemySave> SavedEnemies { get; } = new();
 
     public void SaveToXml(string path)
     {
@@ -273,7 +260,8 @@ public class GameSession
                     return;
                 }
 
-                session.SelectedWeapon = int.Parse(reader.GetAttribute("selected") ?? throw new ResourceLoadException());
+                session.SelectedWeapon =
+                    int.Parse(reader.GetAttribute("selected") ?? throw new ResourceLoadException());
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapon" })

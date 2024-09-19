@@ -130,7 +130,7 @@ public class ProjectileWeapon : Weapon
         {
             return;
         }
-        
+
         // Get needed fire data
         Vector2 muzzle = GetMuzzlePosition();
 
@@ -232,7 +232,8 @@ public class ProjectileWeapon : Weapon
                 MaxAmmo = int.Parse(reader.GetAttribute("max") ?? throw new ResourceLoadException());
                 AmmoCount = int.Parse(reader.GetAttribute("count") ?? throw new ResourceLoadException());
 
-                _projectilesPerShot = int.Parse(reader.GetAttribute("projectilesPerShot") ?? throw new ResourceLoadException());
+                _projectilesPerShot =
+                    int.Parse(reader.GetAttribute("projectilesPerShot") ?? throw new ResourceLoadException());
                 _spread = float.Parse(reader.GetAttribute("spread") ?? throw new ResourceLoadException());
             }
 

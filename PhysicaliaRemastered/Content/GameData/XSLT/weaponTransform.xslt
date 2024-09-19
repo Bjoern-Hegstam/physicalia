@@ -10,7 +10,7 @@
 			<xsl:attribute name="key">
 				<xsl:value-of select="@id" />
 			</xsl:attribute>
-			<xsl:attribute name="textureKey">
+			<xsl:attribute name="textureId">
 				<xsl:value-of select="Graphics/Sprite/@key" />
 			</xsl:attribute>
 			<xsl:attribute name="textureType">Sprite</xsl:attribute>

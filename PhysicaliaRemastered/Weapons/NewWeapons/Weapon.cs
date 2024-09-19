@@ -20,7 +20,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
     private float _timeTillWeaponStart = 5F;
 
     private float _timeTillShot;
-    
+
     private int _ammoCount;
 
     // Collision fields
