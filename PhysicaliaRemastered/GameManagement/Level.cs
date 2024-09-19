@@ -90,6 +90,7 @@ public class Level
         Viewport = new Viewport(0, 0, game.GraphicsDevice.Viewport.Width,
             game.GraphicsDevice.Viewport.Height);
         Debug.WriteLine($"{Viewport}");
+
         _tileEngines = [];
         _modifiers = [];
 
@@ -99,84 +100,77 @@ public class Level
 
     public void Update(GameTime gameTime)
     {
-        // Switch based on current state
-        switch (State)
+        if (State == LevelState.Start)
         {
-            case LevelState.Start:
-                if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+            if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+            {
+                NextState = LevelState.Playing;
+            }
+        }
+        else if (State == LevelState.Playing)
+        {
+            UpdateLevel(gameTime);
+            CheckCollisions();
+            Player.HandleInput();
+            UpdateAnimations();
+
+            if (PlayerOutsideLevel())
+            {
+                Player.Kill();
+
+                // Do a little jump into screen
+                Player.Velocity = new Vector2(0, Player.JumpMagnitude * Math.Sign(Player.Acceleration.Y));
+                NextState = LevelState.Dead;
+            }
+            else if (Player.Health <= 0)
+            {
+                Player.CanCollide = false;
+                Player.Velocity = new Vector2(0, Player.JumpMagnitude * Math.Sign(Player.Acceleration.Y));
+
+                NextState = LevelState.Dead;
+            }
+        }
+        else if (State == LevelState.Dead)
+        {
+            // Continue updating the Level after death, just don't check input
+            UpdateLevel(gameTime);
+            CheckCollisions();
+            UpdateAnimations();
+
+            // Don't let the player continue falling if it's outside of the level (i.e. falling)
+            if (Player.Velocity != Vector2.Zero && PlayerOffScreen() &&
+                Player.Velocity.Y / Player.Acceleration.Y > 0)
+            {
+                Player.Velocity = Vector2.Zero;
+                Player.Acceleration = Vector2.Zero;
+            }
+        }
+        else if (State == LevelState.Finished)
+        {
+            // Don't let the player continue falling if it's outside of the level (i.e. falling)
+            if (Player.Velocity != Vector2.Zero &&
+                PlayerOffScreen() &&
+                Player.Velocity.Y / Player.Acceleration.Y > 0)
+            {
+                Player.Velocity = Vector2.Zero;
+                Player.Acceleration = Vector2.Zero;
+            }
+
+            // Slow down the player's movement in X if needed
+            if (Player.Velocity.X != 0)
+            {
+                Player.Velocity *= new Vector2(PlayerFinishSlowdown, 1F);
+
+                // Set velocity to zero if it's very close
+                if (Player.Velocity.X is > -1 and < 1)
                 {
-                    NextState = LevelState.Playing;
+                    Player.Velocity *= Vector2.UnitY;
                 }
+            }
 
-                break;
-            case LevelState.Playing:
-                UpdateLevel(gameTime);
-                CheckCollisions();
-                Player.HandleInput();
-                UpdateAnimations();
-
-                // See if the player has fallen out of the level
-                if (PlayerOutsideLevel())
-                {
-                    Player.Kill();
-
-                    // Do a little jump into screen
-                    Player.Velocity = new Vector2(0, Player.JumpMagnitude * Math.Sign(Player.Acceleration.Y));
-                    NextState = LevelState.Dead;
-                }
-
-                // Check if the player's died
-                if (Player.Health <= 0)
-                {
-                    Player.CanCollide = false;
-                    Player.Velocity = new Vector2(0, Player.JumpMagnitude * Math.Sign(Player.Acceleration.Y));
-
-                    NextState = LevelState.Dead;
-                }
-
-                break;
-            case LevelState.Dead:
-                // Continue updating the Level after death, just don't check input
-                UpdateLevel(gameTime);
-                CheckCollisions();
-                UpdateAnimations();
-
-                // Don't let the player continue falling if it's outside of the level (i.e. falling)
-                if (Player.Velocity != Vector2.Zero &&
-                    PlayerOffScreen() &&
-                    Player.Velocity.Y / Player.Acceleration.Y > 0)
-                {
-                    Player.Velocity = Vector2.Zero;
-                    Player.Acceleration = Vector2.Zero;
-                }
-
-                break;
-            case LevelState.Finished:
-                // Don't let the player continue falling if it's outside of the level (i.e. falling)
-                if (Player.Velocity != Vector2.Zero &&
-                    PlayerOffScreen() &&
-                    Player.Velocity.Y / Player.Acceleration.Y > 0)
-                {
-                    Player.Velocity = Vector2.Zero;
-                    Player.Acceleration = Vector2.Zero;
-                }
-
-                // Slow down the player's movement in X if needed
-                if (Player.Velocity.X != 0)
-                {
-                    Player.Velocity *= new Vector2(PlayerFinishSlowdown, 1F);
-
-                    // Set velocity to zero if it's very close
-                    if (Player.Velocity.X is > -1 and < 1)
-                    {
-                        Player.Velocity *= Vector2.UnitY;
-                    }
-                }
-
-                UpdateLevel(gameTime);
-                CheckCollisions();
-                UpdateAnimations();
-                break;
+            UpdateLevel(gameTime);
+            CheckCollisions();
+            UpdateAnimations();
         }
 
         // Should the state be changed?
@@ -216,7 +210,7 @@ public class Level
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Background" })
             {
-                SpriteId spriteId =
+                var spriteId =
                     new SpriteId(int.Parse(reader.GetAttribute("spriteKey") ?? throw new ResourceLoadException()));
                 float depth = float.Parse(reader.GetAttribute("depth") ?? throw new ResourceLoadException());
                 string loopString = reader.GetAttribute("loop") ?? throw new ResourceLoadException();
@@ -266,7 +260,7 @@ public class Level
     }
 
     /// <summary>
-    /// Loads in enemies as specfied by the xml read by the XmlReader.
+    /// Loads in enemies as specified by the xml read by the XmlReader.
     /// </summary>
     /// <param name="reader"></param>
     private void LoadEnemies(XmlReader reader)
@@ -419,27 +413,20 @@ public class Level
     /// </summary>
     public void Reset()
     {
-        // Reset background layers
         foreach (BackgroundLayer background in _backgrounds)
         {
             background.Position = background.StartPosition;
         }
 
-        // Reset enemies
         EnemyManager.Reset();
 
-        // Set and apply the start values of the player
         Player.StartValues = _playerStartValues;
         Player.ApplyStartValues();
         Player.CanCollide = true;
         Player.CanTakeDamage = true;
-
         Player.Health = Settings.PlayerStartHealth;
-
-        // Retrive the ammo count the player's weapons had at the start of the level
         Player.ApplyStoredWeaponAmmoCount();
 
-        // Set the start position of the screen sampler
         Viewport.Position = Vector2.Zero;
 
         while (_activeObjects.Count > 0)
@@ -449,13 +436,10 @@ public class Level
             _activeObjects.RemoveAt(0);
         }
 
-        // Clear out any modifiers
         _modifiers.Clear();
 
-        // Set the state of the level
         NextState = State = LevelState.Start;
 
-        // Run a check so that any objects that's on screen is activated
         ActivateObjects();
     }
 
@@ -496,28 +480,16 @@ public class Level
         EnemyManager.ActivateVisible(Viewport);
     }
 
-    /// <summary>
-    /// Adds a modifer to the Level's collection of modifiers.
-    /// </summary>
-    /// <param name="modifier">The modifier to add.</param>
     public void AddModifier(ModifierPickup modifier)
     {
         _modifiers.Add(modifier);
     }
-
-    /// <summary>
-    /// Enqueues an ActiveObject to the Level's Queue of ActiveObjects.
-    /// </summary>
-    /// <param name="obj">ActiveObject to enqueue.</param>
+    
     public void EnqueueActiveObject(ActiveObject obj)
     {
         _inactiveObjects.Add(obj);
     }
 
-    /// <summary>
-    /// Draws the level.
-    /// </summary>
-    /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
     public void Draw(SpriteBatch spriteBatch)
     {
         switch (State)

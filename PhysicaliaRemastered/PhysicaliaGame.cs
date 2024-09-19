@@ -23,7 +23,9 @@ public class PhysicaliaGame : Game
     {
         TargetElapsedTime = TimeSpan.FromSeconds(1) / 60;
 
-        _graphics = new GraphicsDeviceManager(this); Content.RootDirectory = "Content";
+        Content.RootDirectory = "Content";
+        
+        _graphics = new GraphicsDeviceManager(this);
         _graphics.PreferredBackBufferWidth = 640;
         _graphics.PreferredBackBufferHeight = 480;
 

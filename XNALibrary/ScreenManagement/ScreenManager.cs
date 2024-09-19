@@ -68,32 +68,24 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
     /// <returns>True if the transition was successfully initialized; false otherwise.</returns>
     public bool TransitionTo(Type screenType)
     {
-        if (screenType == null)
-        {
-            throw new ArgumentNullException(nameof(screenType));
-        }
+        ArgumentNullException.ThrowIfNull(screenType);
 
         if (Transitioning)
         {
             return false;
         }
 
-        // Go through every available screen
-        foreach (Screen? screen in Screens)
+
+        _transitionScreen = Screens.SingleOrDefault(screen => screen.GetType() == screenType);
+        if (_transitionScreen == null)
         {
-            // See if a screen of the wanted type is available
-            if (screen.GetType() == screenType)
-            {
-                // Found the screen, start the transition
-                _transitionScreen = screen;
-                _transitionState = ScreenTransitionState.Forward;
-                StartTransition();
-                return true;
-            }
+            return false;
         }
 
-        // Screen of type not found , return false
-        return false;
+        _transitionState = ScreenTransitionState.Forward;
+        StartTransition();
+
+        return true;
     }
 
     /// <summary>
@@ -102,19 +94,19 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
     /// <returns>True if the transition was successfully initialized; false otherwise.</returns>
     public bool TransitionBack()
     {
-        if (_screenStack.Count > 1 && !Transitioning)
+        if (_screenStack.Count <= 1 || Transitioning)
         {
-            _transitionScreen = _screenStack.Pop();
-            _transitionState = ScreenTransitionState.Backward;
-            StartTransition();
-            return true;
+            return false;
         }
 
-        return false;
+        _transitionScreen = _screenStack.Pop();
+        _transitionState = ScreenTransitionState.Backward;
+        StartTransition();
+        return true;
     }
 
     /// <summary>
-    /// Setst the variables needed for starting the transition to a new Screen.
+    /// Sets the variables needed for starting the transition to a new Screen.
     /// </summary>
     private void StartTransition()
     {
