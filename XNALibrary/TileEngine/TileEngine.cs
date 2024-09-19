@@ -257,15 +257,14 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 }
 
                 Tile tile = tileLibrary.GetTile(tileId);
-
-                var position = new Vector2(
-                    x * TileWidthPx - viewportPosition.X,
-                    y * TileHeightPx - viewportPosition.Y
+                var tilePosition = new Vector2(
+                    x * TileWidthPx - (int)viewportPosition.X,
+                    y * TileHeightPx - (int)viewportPosition.Y
                 );
 
                 spriteBatch.Draw(
                     tile.Texture,
-                    position,
+                    tilePosition,
                     tile.SourceRectangle,
                     Color.White
                 );
