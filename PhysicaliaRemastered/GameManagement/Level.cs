@@ -13,7 +13,6 @@ using PhysicaliaRemastered.Weapons;
 using PhysicaliaRemastered.Weapons.NewWeapons;
 using XNALibrary;
 using XNALibrary.Animation;
-using XNALibrary.Graphics;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 using XNALibrary.TileEngine;
@@ -21,9 +20,6 @@ using Viewport = XNALibrary.Graphics.Viewport;
 
 namespace PhysicaliaRemastered.GameManagement;
 
-/// <summary>
-/// Represents the possible states a Level can be in.
-/// </summary>
 public enum LevelState
 {
     Start,
@@ -32,14 +28,8 @@ public enum LevelState
     Finished
 }
 
-/// <summary>
-/// Class representing a Level in the game. A Level consists of a layered
-/// background, a tiled foreground, enemies, different kinds of active
-/// objects, particles and a player.
-/// </summary>
 public class Level
 {
-    // The start position of the UI in the y-axis
     private const float UiIndexPosY = 10F;
     private const float UiModifierSpacing = 5F;
 
@@ -47,27 +37,18 @@ public class Level
 
     private const float PlayerFinishSlowdown = 0.95F;
 
-    private readonly Game _game;
-
-    // States
-
     public LevelState State { get; private set; }
 
     public LevelState NextState { get; set; }
 
-    // View
     private readonly List<BackgroundLayer> _backgrounds;
 
-    // Gameplay
     private readonly List<ModifierPickup> _modifiers;
     private readonly List<TileEngine> _tileEngines;
     private ActorStartValues _playerStartValues;
     private readonly WeaponBank _weaponBank;
     private readonly PickupTemplateLibrary _modifierTemplateLibrary;
 
-    // ActiveObjects
-
-    // Lists of ActiveObjects
     private readonly List<ActiveObject> _activeObjects;
     private readonly List<ActiveObject> _inactiveObjects;
 
@@ -91,24 +72,22 @@ public class Level
 
     public Level(Game game, Player player)
     {
-        _game = game;
-
         _backgrounds = [];
 
         // Get needed services
         Settings = (Settings)game.Services.GetService(typeof(Settings));
         AnimationManager = (AnimationManager)game.Services.GetService(typeof(AnimationManager));
         SpriteLibrary = (SpriteLibrary)game.Services.GetService(typeof(SpriteLibrary));
-        EnemyManager = new EnemyManager((EnemyBank)_game.Services.GetService(typeof(EnemyBank)));
-        _weaponBank = (WeaponBank)_game.Services.GetService(typeof(WeaponBank));
-        _modifierTemplateLibrary = (PickupTemplateLibrary)_game.Services.GetService(typeof(PickupTemplateLibrary));
+        EnemyManager = new EnemyManager((EnemyBank)game.Services.GetService(typeof(EnemyBank)));
+        _weaponBank = (WeaponBank)game.Services.GetService(typeof(WeaponBank));
+        _modifierTemplateLibrary = (PickupTemplateLibrary)game.Services.GetService(typeof(PickupTemplateLibrary));
 
         Player = player;
         _playerStartValues = new ActorStartValues();
         NextState = State = LevelState.Start;
         ParticleEngine = (ParticleEngine)game.Services.GetService(typeof(ParticleEngine));
-        Viewport = new Viewport(0, 0, _game.GraphicsDevice.Viewport.Width,
-            _game.GraphicsDevice.Viewport.Height);
+        Viewport = new Viewport(0, 0, game.GraphicsDevice.Viewport.Width,
+            game.GraphicsDevice.Viewport.Height);
         _tileEngines = [];
         _modifiers = [];
 
@@ -235,7 +214,8 @@ public class Level
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Background" })
             {
-                SpriteId spriteId = new SpriteId(int.Parse(reader.GetAttribute("spriteKey") ?? throw new ResourceLoadException()));
+                SpriteId spriteId =
+                    new SpriteId(int.Parse(reader.GetAttribute("spriteKey") ?? throw new ResourceLoadException()));
                 float depth = float.Parse(reader.GetAttribute("depth") ?? throw new ResourceLoadException());
                 string loopString = reader.GetAttribute("loop") ?? throw new ResourceLoadException();
                 bool loopX = loopString.Contains('x');
@@ -725,9 +705,9 @@ public class Level
         ActivateObjects();
 
         // Update all active ActiveObjects
-        for (var i = 0; i < _activeObjects.Count; i++)
+        foreach (ActiveObject activeObject in _activeObjects)
         {
-            _activeObjects[i].Update(gameTime);
+            activeObject.Update(gameTime);
         }
 
         UpdateScreenSampler();
@@ -779,7 +759,7 @@ public class Level
             }
 
             obj.IsActive = true;
-                
+
             _activeObjects.Add(obj);
             _inactiveObjects.RemoveAt(i);
         }
@@ -795,22 +775,22 @@ public class Level
         ParticleEngine.CheckCollisions(Player);
         ParticleEngine.CheckCollisions(EnemyManager.ActivatedEnemies);
 
-        for (var i = 0; i < _activeObjects.Count; i++)
+        foreach (ActiveObject activeObject in _activeObjects)
         {
-            _activeObjects[i].CheckCollision(Player);
-            _activeObjects[i].CheckCollisions(EnemyManager.ActivatedEnemies);
-            _activeObjects[i].CheckCollisions(ParticleEngine.Particles);
+            activeObject.CheckCollision(Player);
+            activeObject.CheckCollisions(EnemyManager.ActivatedEnemies);
+            activeObject.CheckCollisions(ParticleEngine.Particles);
         }
 
         // ActiveObjects -> Particles
         ParticleEngine.CheckCollisions(_activeObjects.ToArray());
 
         // ICollisionObjects  -> TileEngine
-        for (var i = 0; i < _tileEngines.Count; i++)
+        foreach (TileEngine tileEngine in _tileEngines)
         {
-            _tileEngines[i].CheckCollision(Player);
-            _tileEngines[i].CheckCollisions(ParticleEngine.Particles);
-            _tileEngines[i].CheckCollisions(EnemyManager.ActivatedEnemies);
+            tileEngine.CheckCollision(Player);
+            tileEngine.CheckCollisions(ParticleEngine.Particles);
+            tileEngine.CheckCollisions(EnemyManager.ActivatedEnemies);
         }
     }
 
@@ -928,12 +908,15 @@ public class Level
             spriteBatch.DrawString(Settings.LevelIndexFont, ammoString, ammoPos, Color.White);
 
             var weaponPos = new Vector2(470, 5);
-            Sprite weaponSprite = playerWeapon.WeaponSprite;
-            // Draw weapon sprite
-            spriteBatch.Draw(weaponSprite.Texture,
-                weaponPos,
-                weaponSprite.SourceRectangle,
-                Color.White);
+            if (playerWeapon.WeaponSprite != null)
+            {
+                spriteBatch.Draw(
+                    playerWeapon.WeaponSprite.Texture,
+                    weaponPos,
+                    playerWeapon.WeaponSprite.SourceRectangle,
+                    Color.White
+                );
+            }
         }
 
         // MODIFIERS
@@ -987,7 +970,8 @@ public class Level
         // Activate ActiveObjects
         for (int i = _inactiveObjects.Count - 1; i >= 0; i--)
         {
-            if (session.ActivatedObjects.TryGetValue(_inactiveObjects[i].UniqueId, out ActiveObjectSave activeObjectSave))
+            if (session.ActivatedObjects.TryGetValue(_inactiveObjects[i].UniqueId,
+                    out ActiveObjectSave activeObjectSave))
             {
                 // Move the object to the list of activated objects
                 ActiveObject activeObj = _inactiveObjects[i];

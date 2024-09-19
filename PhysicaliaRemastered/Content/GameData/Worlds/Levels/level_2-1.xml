@@ -82,8 +82,8 @@
         <LevelFinishTrigger x="2356" y="898" />
     </ActiveObjects>
     <Backgrounds>
-        <Background spriteKey="303" depth="1" loop="" />
         <Background spriteKey="304" depth="1" loop="x" />
+        <Background spriteKey="303" depth="1" loop="" />
     </Backgrounds>
     <TileEngines count="5">
         <TileEngine>
