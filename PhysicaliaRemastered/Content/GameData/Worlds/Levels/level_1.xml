@@ -151,8 +151,8 @@
     </ActiveObjects>
     <Backgrounds>
         <Background spriteKey="300" depth="0" loop="" />
-        <Background spriteKey="301" depth="0,2" loop="" />
-        <Background spriteKey="302" depth="0,5" loop="" />
+        <Background spriteKey="301" depth="0.2" loop="" />
+        <Background spriteKey="302" depth="0.5" loop="" />
     </Backgrounds>
     <TileEngines count="1">
         <TileEngine>
