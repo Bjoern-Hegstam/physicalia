@@ -9,9 +9,6 @@ using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.GameManagement;
 
-/// <summary>
-/// Contains the data needed to create the game.
-/// </summary>
 public class Settings
 {
     private InputType _inputType;
@@ -40,21 +37,21 @@ public class Settings
 
     public float PlayerStartHealth { get; set; }
 
-    public SpriteFont WorldQuoteFont { get; private set; }
+    public SpriteFont? WorldQuoteFont { get; private set; }
 
-    public SpriteFont WorldIndexFont { get; private set; }
+    public SpriteFont? WorldIndexFont { get; private set; }
 
-    public SpriteFont LevelIndexFont { get; private set; }
+    public SpriteFont? LevelIndexFont { get; private set; }
 
-    public SpriteFont PlayerDeadFont { get; private set; }
+    public SpriteFont? PlayerDeadFont { get; private set; }
 
-    public SpriteFont WeaponAmmoFont { get; private set; }
+    public SpriteFont? WeaponAmmoFont { get; private set; }
 
-    public SpriteFont PauseMenuFont { get; private set; }
+    public SpriteFont? PauseMenuFont { get; private set; }
 
-    public Sprite FullHealthUi { get; private set; }
+    public Sprite? FullHealthUi { get; private set; }
 
-    public Sprite EmptyHealthUi { get; private set; }
+    public Sprite? EmptyHealthUi { get; private set; }
 
     static Settings()
     {

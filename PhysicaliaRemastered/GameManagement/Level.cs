@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -88,6 +89,7 @@ public class Level
         ParticleEngine = (ParticleEngine)game.Services.GetService(typeof(ParticleEngine));
         Viewport = new Viewport(0, 0, game.GraphicsDevice.Viewport.Width,
             game.GraphicsDevice.Viewport.Height);
+        Debug.WriteLine($"{Viewport}");
         _tileEngines = [];
         _modifiers = [];
 

@@ -37,4 +37,9 @@ public class Viewport
     {
         return _screen.Intersects(rect);
     }
+
+    public override string ToString()
+    {
+        return $"Viewport[{_screen}]";
+    }
 }

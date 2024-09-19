@@ -12,22 +12,23 @@ public class PhysicaliaGame : Game
 {
     private readonly GraphicsDeviceManager _graphics;
 
-    private InputHandler _inputHandler;
+    private InputHandler? _inputHandler;
 
-    private ScreenManager _screenManager;
+    private ScreenManager? _screenManager;
 
     private MenuScreen? _menuScreen;
-    private GameScreen _gameScreen;
+    private GameScreen? _gameScreen;
 
     public PhysicaliaGame()
     {
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        TargetElapsedTime = TimeSpan.FromSeconds(0.0083333); // 120fps
+        TargetElapsedTime = TimeSpan.FromSeconds(1) / 60;
+
+        _graphics = new GraphicsDeviceManager(this); Content.RootDirectory = "Content";
         _graphics.PreferredBackBufferWidth = 640;
         _graphics.PreferredBackBufferHeight = 480;
 
-        _graphics.IsFullScreen = false;
+        // _graphics.IsFullScreen = true;
+        // _graphics.HardwareModeSwitch = false;
     }
 
     /// <summary>

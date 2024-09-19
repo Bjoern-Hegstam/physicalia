@@ -246,7 +246,6 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         var topLeftX = (int)(viewportPosition.X / TileWidthPx);
         var topLeftY = (int)(viewportPosition.Y / TileHeightPx);
 
-        // TODO: Render windows should be based on viewport dimensions
         for (int x = topLeftX; x < Width; x++)
         {
             for (int y = topLeftY; y < Height; y++)
