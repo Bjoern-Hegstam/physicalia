@@ -23,17 +23,17 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileMap" })
             {
-                Width = int.Parse(reader.GetAttribute(0));
-                Height = int.Parse(reader.GetAttribute(1));
+                Width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
+                Height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
 
                 _tileMap.Clear();
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
             {
-                int x = int.Parse(reader.GetAttribute(0));
-                int y = int.Parse(reader.GetAttribute(1));
-                TileId tileId = new TileId(int.Parse(reader.GetAttribute(2)));
+                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                TileId tileId = new TileId(int.Parse(reader.GetAttribute("tileId") ?? throw new ResourceLoadException()));
 
                 _tileMap[new Vector2(x, y)] = tileId;
             }

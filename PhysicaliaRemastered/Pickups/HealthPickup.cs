@@ -24,7 +24,7 @@ public class HealthPickup : Pickup
     public static HealthPickup CreateFromXml(XmlReader reader, SpriteLibrary spriteLibrary)
     {
         reader.ReadToFollowing("Sprite");
-        var spriteId = new SpriteId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+        var spriteId = new SpriteId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("Health");
         int health = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());

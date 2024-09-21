@@ -10,7 +10,7 @@
                         <xs:sequence>
                             <xs:element name="StartSprite">
                                 <xs:complexType>
-                                    <xs:attribute name="key" type="xs:int" />
+                                    <xs:attribute name="spriteId" type="xs:int" />
                                 </xs:complexType>
                             </xs:element>
                             <xs:element name="Quote">

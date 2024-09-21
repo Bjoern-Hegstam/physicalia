@@ -86,7 +86,7 @@ public class World
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "StartSprite" })
             {
                 SpriteId spriteId =
-                    new SpriteId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                    new SpriteId(reader.GetAttribute("spriteId") ?? throw new ResourceLoadException());
                 _worldSprite = spriteLibrary.GetSprite(spriteId);
             }
 

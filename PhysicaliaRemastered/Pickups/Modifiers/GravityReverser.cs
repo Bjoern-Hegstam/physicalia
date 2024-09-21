@@ -26,10 +26,10 @@ public class GravityReverser : ModifierPickup
     {
         reader.ReadToFollowing("Icon");
         SpriteId iconSpriteId =
-            new SpriteId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+            new SpriteId(reader.GetAttribute("spriteId") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("Sprite");
-        SpriteId spriteId = new SpriteId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+        SpriteId spriteId = new SpriteId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("Duration");
         int duration = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());

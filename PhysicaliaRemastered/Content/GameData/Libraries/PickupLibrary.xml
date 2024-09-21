@@ -2,12 +2,12 @@
 
 <PickupLibrary>
     <Pickup key="0" type="GravityReverser">
-        <Icon key="400" />
-        <Sprite key="400" />
+        <Icon spriteId="400" />
+        <Sprite id="400" />
         <Duration value="5" />
     </Pickup>
     <Pickup key="1" type="HealthPickup">
-        <Sprite key="401" />
+        <Sprite id="401" />
         <Health value="20" />
     </Pickup>
 </PickupLibrary>

@@ -4,7 +4,7 @@
     <!-- Player arms -->
     <Weapon type="Melee" id="-1">
         <Graphics>
-            <Sprite key="100" />
+            <Sprite id="100" />
             <Animations>
                 <Warmup key="21" />
                 <Fire key="21" />
@@ -23,7 +23,7 @@
     <!-- Chainsaw -->
     <Weapon type="Melee" id="0">
         <Graphics>
-            <Sprite key="101" />
+            <Sprite id="101" />
             <Animations>
                 <Warmup key="8" />
                 <Fire key="8" />
@@ -47,7 +47,7 @@
     <!-- Minigun -->
     <Weapon type="Projectile" id="1">
         <Graphics>
-            <Sprite key="102" />
+            <Sprite id="102" />
             <Animations>
                 <Warmup key="7" />
                 <Fire key="9" />

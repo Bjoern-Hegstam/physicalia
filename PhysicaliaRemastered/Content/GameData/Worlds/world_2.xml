@@ -3,7 +3,7 @@
 <World xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../Schemas/schema_world.xsd">
     <Presentation>
-        <StartSprite key="0" />
+        <StartSprite spriteId="0" />
         <Quote color="255 255 255 255">Alpha &amp; Omega</Quote>
     </Presentation>
     <Levels>

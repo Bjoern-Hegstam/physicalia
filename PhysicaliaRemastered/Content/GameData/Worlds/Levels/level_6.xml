@@ -40,17 +40,17 @@
     <TileEngines count="1">
         <TileEngine>
             <TileMap width="63" height="46">
-                <Tile x="13" y="11" tileKey="10" />
-                <Tile x="14" y="11" tileKey="11" />
-                <Tile x="15" y="11" tileKey="11" />
-                <Tile x="16" y="11" tileKey="12" />
-                <Tile x="11" y="12" tileKey="11" />
-                <Tile x="12" y="12" tileKey="11" />
-                <Tile x="13" y="12" tileKey="11" />
-                <Tile x="14" y="12" tileKey="11" />
-                <Tile x="15" y="12" tileKey="11" />
-                <Tile x="16" y="12" tileKey="11" />
-                <Tile x="17" y="12" tileKey="11" />
+                <Tile x="13" y="11" tileId="10" />
+                <Tile x="14" y="11" tileId="11" />
+                <Tile x="15" y="11" tileId="11" />
+                <Tile x="16" y="11" tileId="12" />
+                <Tile x="11" y="12" tileId="11" />
+                <Tile x="12" y="12" tileId="11" />
+                <Tile x="13" y="12" tileId="11" />
+                <Tile x="14" y="12" tileId="11" />
+                <Tile x="15" y="12" tileId="11" />
+                <Tile x="16" y="12" tileId="11" />
+                <Tile x="17" y="12" tileId="11" />
             </TileMap>
         </TileEngine>
     </TileEngines>

@@ -2,7 +2,7 @@
 
 <ParticleDefinitions>
     <ParticleDefinition type="SpriteParticle" id="0">
-        <Sprite key="0" />
+        <Sprite id="0" />
         <Life mode="Time" value="1" />
         <Movement>
             <VelocityScale>40</VelocityScale>
@@ -14,7 +14,7 @@
 
     <!-- Projectile -->
     <ParticleDefinition type="Projectile" id="1">
-        <Sprite key="200" />
+        <Sprite id="200" />
         <Life mode="Time" value="1" />
         <Movement>
             <VelocityScale>800</VelocityScale>
