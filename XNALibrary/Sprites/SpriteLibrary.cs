@@ -43,12 +43,12 @@ public class SpriteLibrary
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Sprite" })
             {
-                var id = new SpriteId(reader.GetAttribute(0));
-                var textureId = new TextureId(reader.GetAttribute(1));
-                int x = int.Parse(reader.GetAttribute(2));
-                int y = int.Parse(reader.GetAttribute(3));
-                int width = int.Parse(reader.GetAttribute(4));
-                int height = int.Parse(reader.GetAttribute(5));
+                var id = new SpriteId(reader.GetAttribute("id" ) ?? throw new ResourceLoadException());
+                var textureId = new TextureId(reader.GetAttribute("textureId") ?? throw new ResourceLoadException());
+                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
+                int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
+                int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
 
                 var texture2D = contentManager.Load<Texture2D>(textureId.AssetName);
                 _sprites.Add(id, new Sprite(texture2D, new Rectangle(x, y, width, height)));
