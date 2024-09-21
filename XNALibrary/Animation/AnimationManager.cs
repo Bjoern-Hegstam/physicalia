@@ -11,11 +11,6 @@ public class AnimationManager(Game game) : GameComponent(game)
     private readonly Dictionary<int, Animation> _animationBank = new();
     private readonly List<Animation> _playbackAnims = [];
 
-    public Animation GetBankAnimation(int key)
-    {
-        return _animationBank[key];
-    }
-
     public void AddPlaybackAnimation(Animation animation)
     {
         _playbackAnims.Add(animation);

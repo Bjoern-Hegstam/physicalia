@@ -10,82 +10,44 @@ using XNALibrary.Sprites;
 
 namespace PhysicaliaRemastered.GameManagement;
 
-public class Settings
+public class Settings(Game game)
 {
-    private InputType _inputType;
-    private readonly KeyboardInputMap _keyboardMap;
-    private readonly GamePadInputMap _gamePadMap;
+    private readonly KeyboardInputMap _keyboardMap = new(game.Services.GetService<InputHandler>());
 
-    public InputType InputType
+    private readonly GamePadInputMap _gamePadMap = new(game.Services.GetService<InputHandler>());
+
+    public InputType InputType { get; set; }
+
+    public InputMap InputMap => InputType switch
     {
-        get => _inputType;
-        set
-        {
-            _inputType = value;
+        InputType.Gamepad => _gamePadMap,
+        InputType.Keyboard => _keyboardMap,
+        _ => throw new ArgumentOutOfRangeException()
+    };
 
-            // Change current input map if needed
-            if (InputMap == _keyboardMap &&
-                _inputType == InputType.Gamepad)
-            {
-                InputMap = _gamePadMap;
-            }
-        }
-    }
-
-    public InputMap InputMap { get; private set; }
-
-    public static Random Random { get; }
+    public static Random Random { get; } = new();
 
     public float PlayerStartHealth { get; set; }
 
-    public SpriteFont? WorldQuoteFont { get; private set; }
-
-    public SpriteFont? WorldIndexFont { get; private set; }
-
-    public SpriteFont? LevelIndexFont { get; private set; }
-
-    public SpriteFont? PlayerDeadFont { get; private set; }
-
-    public SpriteFont? WeaponAmmoFont { get; private set; }
-
-    public SpriteFont? PauseMenuFont { get; private set; }
+    public SpriteFont WorldQuoteFont => game.Content.Load<SpriteFont>("Fonts/WorldQuoteFont");
+    public SpriteFont WorldIndexFont => game.Content.Load<SpriteFont>("Fonts/WorldIndexFont");
+    public SpriteFont LevelIndexFont => game.Content.Load<SpriteFont>("Fonts/LevelIndexFont");
+    public SpriteFont PlayerDeadFont => game.Content.Load<SpriteFont>("Fonts/PlayerDeadFont");
+    public SpriteFont WeaponAmmoFont => game.Content.Load<SpriteFont>("Fonts/WeaponAmmoFont");
+    public SpriteFont PauseMenuFont => game.Content.Load<SpriteFont>("Fonts/PauseMenuFont");
 
     public Sprite? FullHealthUi { get; private set; }
-
     public Sprite? EmptyHealthUi { get; private set; }
-
-    static Settings()
-    {
-        Random = new Random();
-    }
-
-    public Settings(GameServiceContainer gameServiceContainer)
-    {
-        var inputHandler = gameServiceContainer.GetService<InputHandler>();
-        ArgumentNullException.ThrowIfNull(inputHandler);
-        
-        _gamePadMap = new GamePadInputMap
-        {
-            InputHandler = inputHandler
-        };
-
-        _keyboardMap = new KeyboardInputMap
-        {
-            InputHandler = inputHandler
-        };
-
-        InputMap = _keyboardMap;
-        _inputType = InputType.Keyboard;
-    }
 
     public void LoadContent(ContentManager contentManager)
     {
-        WorldQuoteFont = contentManager.Load<SpriteFont>(@"Fonts\WorldQuoteFont");
-        WorldIndexFont = contentManager.Load<SpriteFont>(@"Fonts\WorldIndexFont");
-        LevelIndexFont = contentManager.Load<SpriteFont>(@"Fonts\LevelIndexFont");
-        PlayerDeadFont = contentManager.Load<SpriteFont>(@"Fonts\PlayerDeadFont");
-        WeaponAmmoFont = contentManager.Load<SpriteFont>(@"Fonts\WeaponAmmoFont");
-        PauseMenuFont = contentManager.Load<SpriteFont>(@"Fonts\PauseMenuFont");
+        // Access fonts to force load
+        SpriteFont ignored = WorldQuoteFont;
+        ignored = WorldIndexFont;
+        ignored = LevelIndexFont;
+        ignored = PlayerDeadFont;
+        ignored = WeaponAmmoFont;
+        ignored = PauseMenuFont;
     }
 
     public void LoadXml(string path, SpriteLibrary spriteLibrary)

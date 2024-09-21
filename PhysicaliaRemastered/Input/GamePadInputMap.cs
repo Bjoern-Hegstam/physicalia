@@ -4,31 +4,27 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using XNALibrary;
+using XNALibrary.Input;
 
 namespace PhysicaliaRemastered.Input;
 
-internal class GamePadInputMap : InputMap
+internal class GamePadInputMap(InputHandler inputHandler) : InputMap
 {
-    private readonly Dictionary<InputAction, Buttons> _buttons;
-
-    public GamePadInputMap()
-    {
-        _buttons = new Dictionary<InputAction, Buttons>();
-    }
-
+    private readonly Dictionary<InputAction, Buttons> _buttons = new();
+    
     public override bool IsPressed(InputAction action)
     {
-        return InputHandler.IsPressed(PlayerIndex.One, _buttons[action]);
+        return inputHandler.IsPressed(PlayerIndex.One, _buttons[action]);
     }
 
     public override bool IsHolding(InputAction action)
     {
-        return InputHandler.IsHolding(PlayerIndex.One, _buttons[action]);
+        return inputHandler.IsHolding(PlayerIndex.One, _buttons[action]);
     }
 
     public override bool IsReleased(InputAction action)
     {
-        return InputHandler.IsReleased(PlayerIndex.One, _buttons[action]);
+        return inputHandler.IsReleased(PlayerIndex.One, _buttons[action]);
     }
 
     public virtual void SetButton(InputAction action, int button)

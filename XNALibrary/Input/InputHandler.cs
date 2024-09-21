@@ -7,7 +7,7 @@ namespace XNALibrary.Input;
 /// The InputHandler updates all available input devices and provides
 /// properties and methods for checking the devices current state.
 /// </summary>
-public class InputHandler : GameComponent
+public class InputHandler(Game game) : GameComponent(game)
 {
     private KeyboardState _oldKeyboardState;
     private KeyboardState _currentKeyboardState;
@@ -17,16 +17,6 @@ public class InputHandler : GameComponent
 
     private readonly GamePadState[] _currentGamePadState = new GamePadState[4];
     private readonly GamePadState[] _oldGamePadState = new GamePadState[4];
-
-    /// <summary>
-    /// Creates a new InputHandler. The instance is automatically added
-    /// to the games collection of services.
-    /// </summary>
-    /// <param name="game">Game to associate the instance with.</param>
-    public InputHandler(Game game)
-        : base(game)
-    {
-    }
 
     /// <summary>
     /// Checks if a key that was up during the last update has been pressed.

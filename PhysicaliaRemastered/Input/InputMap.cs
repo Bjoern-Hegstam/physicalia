@@ -1,5 +1,3 @@
-using XNALibrary.Input;
-
 namespace PhysicaliaRemastered.Input;
 
 /// <summary>
@@ -8,8 +6,6 @@ namespace PhysicaliaRemastered.Input;
 /// </summary>
 public abstract class InputMap
 {
-    public InputHandler? InputHandler { get; set; }
-
     public abstract bool IsPressed(InputAction action);
     public abstract bool IsHolding(InputAction action);
     public abstract bool IsReleased(InputAction action);

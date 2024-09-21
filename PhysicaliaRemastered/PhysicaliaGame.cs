@@ -41,7 +41,7 @@ public class PhysicaliaGame : Game
     protected override void Initialize()
     {
         Services.AddService(new InputHandler(this));
-        Services.AddService(new Settings(Services));
+        Services.AddService(new Settings(this));
         Services.AddService(new SpriteLibrary());
         Services.AddService(new AnimationManager(this));
         Services.AddService(new TileLibrary());

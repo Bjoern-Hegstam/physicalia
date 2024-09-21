@@ -3,34 +3,30 @@ using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework.Input;
 using XNALibrary;
+using XNALibrary.Input;
 
 namespace PhysicaliaRemastered.Input;
 
 /// <summary>
 /// Maps the keys on a Keyboard to the actions available in Physicalia.
 /// </summary>
-internal class KeyboardInputMap : InputMap
+internal class KeyboardInputMap(InputHandler inputHandler) : InputMap
 {
-    private readonly Dictionary<InputAction, Keys> _keys;
-
-    public KeyboardInputMap()
-    {
-        _keys = new Dictionary<InputAction, Keys>();
-    }
+    private readonly Dictionary<InputAction, Keys> _keys = new();
 
     public override bool IsPressed(InputAction action)
     {
-        return InputHandler.IsPressed(_keys[action]);
+        return inputHandler.IsPressed(_keys[action]);
     }
 
     public override bool IsHolding(InputAction action)
     {
-        return InputHandler.IsHolding(_keys[action]);
+        return inputHandler.IsHolding(_keys[action]);
     }
 
     public override bool IsReleased(InputAction action)
     {
-        return InputHandler.IsReleased(_keys[action]);
+        return inputHandler.IsReleased(_keys[action]);
     }
 
     public virtual void SetButton(InputAction action, int button)
