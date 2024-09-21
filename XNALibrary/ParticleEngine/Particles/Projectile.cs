@@ -31,7 +31,7 @@ public class Projectile : SpriteParticle
         CollisionProjectileId = -1;
     }
 
-    public override void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
+    public override void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
         if ((collidedObject.Type & DamageObjects) == 0)

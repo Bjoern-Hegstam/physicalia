@@ -28,7 +28,7 @@ public class PickupContainer(Pickup pickup) : ActiveObject
         PickupObject.OnPickedUp();
     }
 
-    public override void CheckCollision(ICollisionObject collObject)
+    public override void CheckCollision(ICollidable collObject)
     {
         // Only check for collision if we're still active
         if (!IsActive)

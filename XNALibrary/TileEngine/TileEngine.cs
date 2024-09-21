@@ -45,15 +45,15 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         }
     }
 
-    public void CheckCollisions(IEnumerable<ICollisionObject> collisionObjects)
+    public void CheckCollisions(IEnumerable<ICollidable> collisionObjects)
     {
-        foreach (ICollisionObject collObj in collisionObjects)
+        foreach (ICollidable collObj in collisionObjects)
         {
             CheckCollision(collObj);
         }
     }
 
-    public void CheckCollision(ICollisionObject collObject)
+    public void CheckCollision(ICollidable collObject)
     {
         // Get the positions of the Tiles to check
         var xMin = Math.Max(
@@ -86,7 +86,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
 
                 Tile tile = tileLibrary.GetTile(tileId);
 
-                if (tile is { CollisionSides: 0, GivesDamage: false })
+                if (!tile.CanCollide)
                 {
                     continue;
                 }
@@ -230,11 +230,6 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     if (collObject.CanCollide)
                     {
                         collObject.OnCollision(tile, objectSides, position + collObject.Origin, velocity);
-                    }
-
-                    if (collObject.CanTakeDamage && tile.GivesDamage)
-                    {
-                        collObject.TakeDamage(tile.DamageLevel);
                     }
                 }
             }

@@ -100,9 +100,8 @@ public abstract class ParticleDefinition
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Life" })
             {
                 var mode =
-                    (ParticleLifeMode)Enum.Parse(typeof(ParticleLifeMode),
-                        reader.GetAttribute("mode") ?? throw new ResourceLoadException());
-                float value = float.Parse(reader.GetAttribute("value"));
+                    Enum.Parse<ParticleLifeMode>(reader.GetAttribute("mode") ?? throw new ResourceLoadException());
+                float value = float.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
 
                 LifeMode = mode;
                 LifeTime = value;
@@ -120,7 +119,7 @@ public abstract class ParticleDefinition
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Collision" })
             {
-                var mode = (CollisionMode)Enum.Parse(typeof(CollisionMode), reader.GetAttribute("mode"));
+                var mode = Enum.Parse<CollisionMode>(reader.GetAttribute("mode") ?? throw new ResourceLoadException());
 
                 CollisionMode = mode;
             }

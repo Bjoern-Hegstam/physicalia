@@ -4,131 +4,121 @@
     <Tiles>
         <!-- Standard Tiles -->
         <Tile id="0" spriteId="0">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Left Top</CollisionSides>
         </Tile>
         <Tile id="1" spriteId="1">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Top</CollisionSides>
         </Tile>
         <Tile id="2" spriteId="2">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Top Right</CollisionSides>
         </Tile>
         <Tile id="3" spriteId="3">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Left</CollisionSides>
         </Tile>
         <Tile id="4" spriteId="4">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="5" spriteId="5">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Right</CollisionSides>
         </Tile>
         <Tile id="6" spriteId="6">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="7" spriteId="7">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="8" spriteId="8">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="9" spriteId="1">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Bottom</CollisionSides>
         </Tile>
         <!-- Special Tiles -->
         <Tile id="10" spriteId="0">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Top</CollisionSides>
         </Tile>
         <Tile id="11" spriteId="1">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Top</CollisionSides>
         </Tile>
         <Tile id="12" spriteId="2">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Top</CollisionSides>
         </Tile>
         <Tile id="13" spriteId="3">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="14" spriteId="4">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="15" spriteId="5">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="16" spriteId="6">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="17" spriteId="7">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="18" spriteId="8">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="19" spriteId="1">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Bottom</CollisionSides>
         </Tile>
         <!-- Tiles Grass Upsidedown-->
         <Tile id="20" spriteId="20">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="21" spriteId="21">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="22" spriteId="22">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="23" spriteId="23">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Left</CollisionSides>
         </Tile>
         <Tile id="24" spriteId="24">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides>
-            </CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="25" spriteId="25">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Right</CollisionSides>
         </Tile>
         <Tile id="26" spriteId="26">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Bottom Left</CollisionSides>
         </Tile>
         <Tile id="27" spriteId="27">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Bottom</CollisionSides>
         </Tile>
         <Tile id="28" spriteId="28">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Bottom Right</CollisionSides>
         </Tile>
 
@@ -137,185 +127,185 @@
         <!-- 	Wall Colors -->
         <!-- 		Light Yellow-->
         <Tile id="30" spriteId="30">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides></CollisionSides>
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
 
         <!-- 	Straight lines -->
         <!-- 		Vertical -->
         <Tile id="31" spriteId="31">
-            <CollisionBox x="0" y="0" width="7" height="32" />
+            <CollisionBox x="0" y="0" width="7" height="32"/>
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
         <Tile id="32" spriteId="32">
-            <CollisionBox x="0" y="0" width="7" height="32" />
+            <CollisionBox x="0" y="0" width="7" height="32"/>
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
         <Tile id="33" spriteId="33">
-            <CollisionBox x="0" y="0" width="7" height="32" />
+            <CollisionBox x="0" y="0" width="7" height="32"/>
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
 
         <Tile id="34" spriteId="34">
-            <CollisionBox x="25" y="0" width="7" height="32" />
+            <CollisionBox x="25" y="0" width="7" height="32"/>
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
         <Tile id="35" spriteId="35">
-            <CollisionBox x="25" y="0" width="7" height="32" />
+            <CollisionBox x="25" y="0" width="7" height="32"/>
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
         <Tile id="36" spriteId="36">
-            <CollisionBox x="25" y="0" width="7" height="32" />
+            <CollisionBox x="25" y="0" width="7" height="32"/>
             <CollisionSides>Left Right</CollisionSides>
         </Tile>
 
         <!-- 		Horizontal -->
         <Tile id="37" spriteId="37">
-            <CollisionBox x="0" y="0" width="32" height="7" />
+            <CollisionBox x="0" y="0" width="32" height="7"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
         <Tile id="38" spriteId="38">
-            <CollisionBox x="0" y="0" width="32" height="7" />
+            <CollisionBox x="0" y="0" width="32" height="7"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
         <Tile id="39" spriteId="39">
-            <CollisionBox x="0" y="0" width="32" height="7" />
+            <CollisionBox x="0" y="0" width="32" height="7"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
 
         <Tile id="40" spriteId="40">
-            <CollisionBox x="0" y="25" width="32" height="7" />
+            <CollisionBox x="0" y="25" width="32" height="7"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
         <Tile id="41" spriteId="41">
-            <CollisionBox x="0" y="25" width="32" height="7" />
+            <CollisionBox x="0" y="25" width="32" height="7"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
         <Tile id="42" spriteId="42">
-            <CollisionBox x="0" y="25" width="32" height="7" />
+            <CollisionBox x="0" y="25" width="32" height="7"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
 
         <!-- 	Corners -->
         <Tile id="43" spriteId="43">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Top Right</CollisionSides>
         </Tile>
         <Tile id="44" spriteId="44">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Left Top</CollisionSides>
         </Tile>
 
         <Tile id="45" spriteId="45">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Top Right</CollisionSides>
         </Tile>
         <Tile id="46" spriteId="46">
-            <CollisionBox x="0" y="0" width="32" height="32" />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
             <CollisionSides>Left Top</CollisionSides>
         </Tile>
 
         <Tile id="47" spriteId="47">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="48" spriteId="48">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
 
         <!-- Blackboard -->
         <Tile id="49" spriteId="49">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="50" spriteId="50">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="51" spriteId="51">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
 
         <Tile id="52" spriteId="52">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="53" spriteId="53">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="54" spriteId="54">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
 
         <Tile id="55" spriteId="55">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="56" spriteId="56">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="57" spriteId="57">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
 
         <!-- Blackboard decorations -->
         <Tile id="58" spriteId="58">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="59" spriteId="59">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="60" spriteId="60">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="61" spriteId="61">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="62" spriteId="62">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
 
         <!-- Door -->
         <Tile id="63" spriteId="63">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
         <Tile id="64" spriteId="64">
-            <CollisionBox x="0" y="0" width="32" height="32" />
-            <CollisionSides />
+            <CollisionBox x="0" y="0" width="32" height="32"/>
+            <CollisionSides/>
         </Tile>
 
         <!-- Top edges -->
         <Tile id="65" spriteId="65">
-            <CollisionBox x="0" y="24" width="32" height="8" />
+            <CollisionBox x="0" y="24" width="32" height="8"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
         <Tile id="66" spriteId="66">
-            <CollisionBox x="0" y="24" width="32" height="8" />
+            <CollisionBox x="0" y="24" width="32" height="8"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
         <Tile id="67" spriteId="67">
-            <CollisionBox x="0" y="24" width="32" height="8" />
+            <CollisionBox x="0" y="24" width="32" height="8"/>
             <CollisionSides>Top Bottom</CollisionSides>
         </Tile>
 
         <Tile id="68" spriteId="68">
-            <CollisionBox x="24" y="24" width="8" height="8" />
+            <CollisionBox x="24" y="24" width="8" height="8"/>
             <CollisionSides>Left Top Bottom</CollisionSides>
         </Tile>
         <Tile id="69" spriteId="69">
-            <CollisionBox x="0" y="24" width="8" height="8" />
+            <CollisionBox x="0" y="24" width="8" height="8"/>
             <CollisionSides>Top Bottom Right</CollisionSides>
         </Tile>
     </Tiles>

@@ -154,9 +154,9 @@ public class ParticleEngine
         }
     }
 
-    public void CheckCollisions(IEnumerable<ICollisionObject> collObjects)
+    public void CheckCollisions(IEnumerable<ICollidable> collObjects)
     {
-        foreach (ICollisionObject collObj in collObjects)
+        foreach (ICollidable collObj in collObjects)
         {
             if (collObj.CanCollide || collObj.CanTakeDamage)
             {
@@ -170,7 +170,7 @@ public class ParticleEngine
     /// managed by the engine.
     /// </summary>
     /// <param name="collObject">Object to check for collisions against.</param>
-    public void CheckCollisions(ICollisionObject collObject)
+    public void CheckCollisions(ICollidable collObject)
     {
         Rectangle particleRect, collObjRect = collObject.CollisionBox;
         Vector2 boxPos = collObject.Position - collObject.Origin;

@@ -200,7 +200,7 @@ public class ProjectileWeapon : Weapon
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "FireMode" })
             {
-                _fireMode = (FireMode)Enum.Parse(typeof(FireMode), reader.ReadString());
+                _fireMode = Enum.Parse<FireMode>(reader.ReadString());
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Vibration" })

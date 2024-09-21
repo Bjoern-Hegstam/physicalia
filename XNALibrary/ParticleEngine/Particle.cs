@@ -21,7 +21,7 @@ public enum ParticleLifeMode
     Damage
 }
 
-public abstract class Particle(Vector2 position) : ICollisionObject
+public abstract class Particle(Vector2 position) : ICollidable
 {
     private const float DefaultLife = 5F;
 
@@ -86,7 +86,7 @@ public abstract class Particle(Vector2 position) : ICollisionObject
 
     public bool CanCollide { get; set; }
 
-    public virtual void OnCollision(ICollisionObject collisionObject, BoxSide collisionSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidable, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
         if (!CanCollide)

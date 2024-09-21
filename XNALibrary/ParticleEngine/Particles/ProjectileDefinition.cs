@@ -45,7 +45,7 @@ public class ProjectileDefinition(int id, Sprite sprite) : SpriteParticleDefinit
 
             foreach (string objString in objects)
             {
-                var objectType = (ObjectType)Enum.Parse(typeof(ObjectType), objString);
+                var objectType = Enum.Parse<ObjectType>(objString);
                 DamageObjects |= objectType;
             }
         }

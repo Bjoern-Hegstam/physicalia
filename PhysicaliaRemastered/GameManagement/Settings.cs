@@ -102,7 +102,7 @@ public class Settings
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "InputType" })
             {
-                var input = (InputType)Enum.Parse(typeof(InputType), reader.ReadString());
+                var input = Enum.Parse<InputType>(reader.ReadString());
                 InputType = input;
             }
 

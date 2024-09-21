@@ -6,56 +6,15 @@ using XNALibrary.Sprites;
 
 namespace XNALibrary.TileEngine;
 
-public class Tile(Sprite sprite, Rectangle collisionBox, BoxSide collisionSides) : ICollisionObject
+public class Tile(Sprite sprite, Rectangle collisionBox, BoxSide collisionSides) : ICollidable
 {
-    /// <summary>
-    /// The damage level of the Tile in range [0, 1].
-    /// </summary>
-    private float _damageLevel;
-
-    public Rectangle CollisionBox
-    {
-        get => collisionBox;
-        set => collisionBox = value;
-    }
-
-    public BoxSide CollisionSides { get; set; } = collisionSides;
-
-    public bool GivesDamage { get; set; } = false;
-
-    public float DamageLevel
-    {
-        get => _damageLevel;
-        set => _damageLevel = MathHelper.Clamp(value, 0, 1);
-    }
-
     public ObjectType Type => ObjectType.Tile;
+    public Rectangle CollisionBox => collisionBox;
+    public BoxSide CollisionSides => collisionSides;
 
-    public Vector2 Position
-    {
-        get => throw new Exception("The method or operation is not implemented.");
-        set => throw new Exception("The method or operation is not implemented.");
-    }
-
-    public Vector2 Origin => throw new Exception("The method or operation is not implemented.");
-
-    public Vector2 Velocity
-    {
-        get => throw new Exception("The method or operation is not implemented.");
-        set => throw new Exception("The method or operation is not implemented.");
-    }
-
-    public int Width
-    {
-        get => collisionBox.Width;
-        set => throw new Exception("The method or operation is not implemented.");
-    }
-
-    public int Height
-    {
-        get => collisionBox.Height;
-        set => throw new Exception("The method or operation is not implemented.");
-    }
+    public Vector2 Position => throw new NotSupportedException("The method or operation is not implemented.");
+    public Vector2 Origin => throw new NotSupportedException("The method or operation is not implemented.");
+    public Vector2 Velocity => throw new NotSupportedException("The method or operation is not implemented.");
 
     public Rectangle SourceRectangle => sprite.SourceRectangle;
     public Texture2D Texture => sprite.Texture;
@@ -64,7 +23,7 @@ public class Tile(Sprite sprite, Rectangle collisionBox, BoxSide collisionSides)
 
     public bool CanTakeDamage => false;
 
-    public virtual void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
     }

@@ -4,7 +4,7 @@ namespace XNALibrary.Collision;
 
 public static class CollisionHelper
 {
-    public static bool IsColliding(ICollisionObject collA, ICollisionObject collB)
+    public static bool IsColliding(ICollidable collA, ICollidable collB)
     {
         // Get collision boxes
         Rectangle rectA = collA.CollisionBox;
@@ -20,7 +20,7 @@ public static class CollisionHelper
         return rectA.Intersects(rectB);
     }
 
-    public static bool PerPixelCollisionCheck(ICollisionObject collA, ICollisionObject collB)
+    public static bool PerPixelCollisionCheck(ICollidable collA, ICollidable collB)
     {
         // Get correctly positioned Collision boxes
         Rectangle rectA = GetAbsoluteCollisionBox(collA);
@@ -31,7 +31,7 @@ public static class CollisionHelper
         return false;
     }
 
-    private static Rectangle GetAbsoluteCollisionBox(ICollisionObject collObj)
+    private static Rectangle GetAbsoluteCollisionBox(ICollidable collObj)
     {
         Rectangle collRect = collObj.CollisionBox;
         collRect.X += (int)(collObj.Position.X - collObj.Origin.X);

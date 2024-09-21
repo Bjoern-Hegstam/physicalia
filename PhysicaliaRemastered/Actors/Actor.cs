@@ -23,7 +23,7 @@ public enum ActorAnimation
 /// Represents an active Actor that has a position and velocity as well as
 /// an animated Sprite.
 /// </summary>
-public abstract class Actor : ICollisionObject
+public abstract class Actor : ICollidable
 {
     public const float MaxVerticalVelocity = 600;
 
@@ -137,7 +137,7 @@ public abstract class Actor : ICollisionObject
 
     public abstract void TakeDamage(float damageLevel);
 
-    public virtual void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
         if (collidedObject.Type == ObjectType.Tile)

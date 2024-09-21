@@ -70,7 +70,7 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
 
         foreach (string obj in objects)
         {
-            var objectType = (ObjectType)Enum.Parse(typeof(ObjectType), obj);
+            var objectType = Enum.Parse<ObjectType>(obj);
             DamageObjects |= objectType;
         }
     }

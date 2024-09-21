@@ -10,7 +10,7 @@ namespace PhysicaliaRemastered.ActiveObjects;
 /// <summary>
 /// Base class for active objects such as coins, doors, platforms, etc.
 /// </summary>
-public abstract class ActiveObject : ICollisionObject
+public abstract class ActiveObject : ICollidable
 {
     private static int _activeObjectCount;
 
@@ -64,7 +64,7 @@ public abstract class ActiveObject : ICollisionObject
     {
     }
 
-    public virtual void OnCollision(ICollisionObject collidedObject, BoxSide collisionSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
     }
@@ -82,20 +82,20 @@ public abstract class ActiveObject : ICollisionObject
         CanTakeDamage = false;
     }
 
-    public void CheckCollisions(IEnumerable<ICollisionObject> collObjects)
+    public void CheckCollisions(IEnumerable<ICollidable> collObjects)
     {
         if (!CanCollide)
         {
             return;
         }
 
-        foreach (ICollisionObject collObject in collObjects)
+        foreach (ICollidable collObject in collObjects)
         {
             CheckCollision(collObject);
         }
     }
 
-    public abstract void CheckCollision(ICollisionObject collObject);
+    public abstract void CheckCollision(ICollidable collObject);
 
     /// <summary>
     /// When overriden in a derived class, resets the state of the ActiveObject.

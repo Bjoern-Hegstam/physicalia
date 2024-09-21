@@ -35,9 +35,7 @@ public class TileLibrary
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
             {
                 var tileId = new TileId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
-
                 var spriteId = new SpriteId(reader.GetAttribute("spriteId") ?? throw new ResourceLoadException());
-                Sprite sprite = spriteLibrary.GetSprite(spriteId);
 
                 reader.ReadToFollowing("CollisionBox");
                 var collisionBox = new Rectangle(
@@ -48,19 +46,15 @@ public class TileLibrary
                 );
 
                 reader.ReadToFollowing("CollisionSides");
+                string sides = reader.ReadElementContentAsString();
 
-                string[] sides = reader.ReadElementContentAsString().Split(' ');
+                BoxSide collisionSides = sides
+                    .Split(' ')
+                    .Where(side => !string.IsNullOrWhiteSpace(side))
+                    .Select(Enum.Parse<BoxSide>)
+                    .Aggregate(BoxSide.None, (current, side) => current | side);
 
-                BoxSide collisionSides = 0;
-                if (sides.Length > 0 && sides[0] != "")
-                {
-                    foreach (string sideString in sides)
-                    {
-                        var side = (BoxSide)Enum.Parse(typeof(BoxSide), sideString);
-                        collisionSides |= side;
-                    }
-                }
-
+                Sprite sprite = spriteLibrary.GetSprite(spriteId);
                 var tile = new Tile(sprite, collisionBox, collisionSides);
                 _tileLibrary.Add(tileId, tile);
             }
