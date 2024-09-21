@@ -78,7 +78,7 @@ public class WeaponBank(GameServiceContainer gameServiceContainer)
                 // Get sprite
                 reader.ReadToFollowing("Sprite");
                 SpriteId spriteId =
-                    new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                    new SpriteId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 weapon.WeaponSprite = SpriteLibrary.GetSprite(spriteId);
 
                 // Get animations

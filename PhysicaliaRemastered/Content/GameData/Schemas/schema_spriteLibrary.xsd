@@ -9,7 +9,7 @@
                         <xs:sequence>
                             <xs:element minOccurs="0" maxOccurs="unbounded" name="Sprite">
                                 <xs:complexType>
-                                    <xs:attribute name="id" type="xs:int" />
+                                    <xs:attribute name="id" type="xs:string" />
                                     <xs:attribute name="textureId" type="xs:string" />
                                     <xs:attribute name="x" type="xs:int" />
                                     <xs:attribute name="y" type="xs:int" />

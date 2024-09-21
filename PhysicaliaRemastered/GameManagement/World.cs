@@ -35,7 +35,7 @@ public class World
     private string[] _worldQuoteLines;
     private readonly Color _worldIndexColor;
     private Color _worldQuoteColor;
-    private Sprite _worldSprite;
+    private Sprite? _worldSprite;
 
     private WorldState _nextState;
 
@@ -86,7 +86,7 @@ public class World
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "StartSprite" })
             {
                 SpriteId spriteId =
-                    new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                    new SpriteId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                 _worldSprite = spriteLibrary.GetSprite(spriteId);
             }
 

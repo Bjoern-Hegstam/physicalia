@@ -44,8 +44,8 @@ public class ParticleEngine
                     case "SpriteParticle":
                     {
                         reader.ReadToFollowing("Sprite");
-                        SpriteId particleSpriteId =
-                            new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                        var particleSpriteId =
+                            new SpriteId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                         Sprite sprite = spriteLibrary.GetSprite(particleSpriteId);
 
                         particleDef = new SpriteParticleDefinition(id, sprite);
@@ -54,8 +54,8 @@ public class ParticleEngine
                     case "Projectile":
                     {
                         reader.ReadToFollowing("Sprite");
-                        SpriteId projectileSpriteId =
-                            new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                        var projectileSpriteId =
+                            new SpriteId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                         Sprite sprite = spriteLibrary.GetSprite(projectileSpriteId);
 
                         particleDef = new ProjectileDefinition(id, sprite);

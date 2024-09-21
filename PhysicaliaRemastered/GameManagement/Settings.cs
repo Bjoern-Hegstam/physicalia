@@ -126,12 +126,12 @@ public class Settings
             {
                 reader.ReadToFollowing("FullHealthBar");
                 SpriteId fullBarSpriteId =
-                    new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                    new SpriteId(reader.GetAttribute("spriteId") ?? throw new ResourceLoadException());
                 FullHealthUi = spriteLibrary.GetSprite(fullBarSpriteId);
 
                 reader.ReadToFollowing("EmptyHealthBar");
                 SpriteId emptyBarSpriteId =
-                    new SpriteId(int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException()));
+                    new SpriteId(reader.GetAttribute("spriteId") ?? throw new ResourceLoadException());
                 EmptyHealthUi = spriteLibrary.GetSprite(emptyBarSpriteId);
             }
 

@@ -43,7 +43,7 @@ public class SpriteLibrary
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Sprite" })
             {
-                var id = new SpriteId(int.Parse(reader.GetAttribute(0)));
+                var id = new SpriteId(reader.GetAttribute(0));
                 var textureId = new TextureId(reader.GetAttribute(1));
                 int x = int.Parse(reader.GetAttribute(2));
                 int y = int.Parse(reader.GetAttribute(3));

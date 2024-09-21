@@ -1,6 +1,6 @@
 namespace XNALibrary.Sprites;
 
-public readonly struct SpriteId(int id)
+public readonly struct SpriteId(string id)
 {
-    public int Id => id;
+    public string Id => id;
 }

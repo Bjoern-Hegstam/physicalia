@@ -9,7 +9,7 @@
         <GamepadMap>Content/GameData/GamepadMap.xml</GamepadMap>
     </ButtonMaps>
     <UI>
-        <FullHealthBar key="-2" />
-        <EmptyHealthBar key="-3" />
+        <FullHealthBar spriteId="health-bar-full" />
+        <EmptyHealthBar spriteId="health-bar-empty" />
     </UI>
 </Settings>
