@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,7 +12,6 @@ using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
 using PhysicaliaRemastered.Weapons.NewWeapons;
 using XNALibrary;
-using XNALibrary.Animation;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 using XNALibrary.TileEngine;
@@ -29,75 +27,46 @@ public enum LevelState
     Finished
 }
 
-public class Level
+public class Level(Game game, Player player)
 {
+    public int WorldIndex { get; set; }
+    public int LevelIndex { get; set; }
+    
+    public LevelState State { get; private set; } = LevelState.Start;
+    public LevelState NextState { get; set; } = LevelState.Start;
+
+    public Player Player { get; } = player;
+    
+    public Viewport Viewport { get; } = new(
+        0,
+        0,
+        game.GraphicsDevice.Viewport.Width,
+        game.GraphicsDevice.Viewport.Height
+    );
+    
     private const float UiIndexPosY = 10F;
     private const float UiModifierSpacing = 5F;
 
     private const int ScreenActivationDistance = 20;
 
     private const float PlayerFinishSlowdown = 0.95F;
+    
+    private readonly List<BackgroundLayer> _backgrounds = [];
+    private readonly List<ModifierPickup> _modifiers = [];
+    private readonly List<TileEngine> _tileEngines = [];
+    private readonly List<ActiveObject> _activeObjects = [];
+    private readonly List<ActiveObject> _inactiveObjects = [];
 
-    public LevelState State { get; private set; }
-
-    public LevelState NextState { get; set; }
-
-    private readonly List<BackgroundLayer> _backgrounds;
-
-    private readonly List<ModifierPickup> _modifiers;
-    private readonly List<TileEngine> _tileEngines;
     private ActorStartValues _playerStartValues;
-    private readonly WeaponBank _weaponBank;
-    private readonly PickupTemplateLibrary _modifierTemplateLibrary;
+    
+    private readonly EnemyManager _enemyManager = new(game.Services.GetService<EnemyBank>());
 
-    private readonly List<ActiveObject> _activeObjects;
-    private readonly List<ActiveObject> _inactiveObjects;
-
-    public int WorldIndex { get; set; }
-
-    public int LevelIndex { get; set; }
-
-    public Player Player { get; set; }
-
-    public AnimationManager AnimationManager { get; set; }
-
-    public SpriteLibrary SpriteLibrary { get; set; }
-
-    public ParticleEngine ParticleEngine { get; set; }
-
-    public Settings Settings { get; }
-
-    public EnemyManager EnemyManager { get; set; }
-
-    public Viewport Viewport { get; }
-
-    public Level(Game game, Player player)
-    {
-        _backgrounds = [];
-
-        // Get needed services
-        Settings = (Settings)game.Services.GetService(typeof(Settings));
-        AnimationManager = (AnimationManager)game.Services.GetService(typeof(AnimationManager));
-        SpriteLibrary = (SpriteLibrary)game.Services.GetService(typeof(SpriteLibrary));
-        EnemyManager = new EnemyManager((EnemyBank)game.Services.GetService(typeof(EnemyBank)));
-        _weaponBank = (WeaponBank)game.Services.GetService(typeof(WeaponBank));
-        _modifierTemplateLibrary = (PickupTemplateLibrary)game.Services.GetService(typeof(PickupTemplateLibrary));
-
-        Player = player;
-        _playerStartValues = new ActorStartValues();
-        NextState = State = LevelState.Start;
-        ParticleEngine = (ParticleEngine)game.Services.GetService(typeof(ParticleEngine));
-        Viewport = new Viewport(0, 0, game.GraphicsDevice.Viewport.Width,
-            game.GraphicsDevice.Viewport.Height);
-        Debug.WriteLine($"{Viewport}");
-
-        _tileEngines = [];
-        _modifiers = [];
-
-        _activeObjects = [];
-        _inactiveObjects = [];
-    }
-
+    private Settings Settings => game.Services.GetService<Settings>();
+    private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
+    private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
+    private WeaponBank WeaponBank => game.Services.GetService<WeaponBank>();
+    private PickupTemplateLibrary ModifierTemplateLibrary => game.Services.GetService<PickupTemplateLibrary>();
+    
     public void Update(GameTime gameTime)
     {
         if (State == LevelState.Start)
@@ -279,7 +248,7 @@ public class Level
                 int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
                 var patrolArea = new Rectangle(x, y, width, height);
 
-                EnemyManager.EnqueueEnemy(type, startValues, patrolArea);
+                _enemyManager.EnqueueEnemy(type, startValues, patrolArea);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Enemies" })
@@ -351,7 +320,7 @@ public class Level
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapon" })
             {
                 int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                Weapon weapon = _weaponBank.GetWeapon(key);
+                Weapon weapon = WeaponBank.GetWeapon(key);
 
                 var weaponPickup = new WeaponPickup(this, weapon);
                 var pickupCont = new PickupContainer(weaponPickup);
@@ -389,7 +358,7 @@ public class Level
                 int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
                 int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
 
-                Pickup pickup = _modifierTemplateLibrary.CreatePickup(templateId);
+                Pickup pickup = ModifierTemplateLibrary.CreatePickup(templateId);
                 pickup.Level = this;
 
                 var cont = new PickupContainer(pickup)
@@ -418,7 +387,7 @@ public class Level
             background.Position = background.StartPosition;
         }
 
-        EnemyManager.Reset();
+        _enemyManager.Reset();
 
         Player.StartValues = _playerStartValues;
         Player.ApplyStartValues();
@@ -457,7 +426,7 @@ public class Level
         }
 
         // Reset enemies
-        EnemyManager.Reset();
+        _enemyManager.Reset();
 
         Player.CanCollide = true;
         Player.CanTakeDamage = true;
@@ -477,7 +446,7 @@ public class Level
 
         // Run a check so that any objects that's on screen is activated
         ActivateObjects();
-        EnemyManager.ActivateVisible(Viewport);
+        _enemyManager.ActivateVisible(Viewport);
     }
 
     public void AddModifier(ModifierPickup modifier)
@@ -657,7 +626,7 @@ public class Level
         }
 
         // EnemyManager
-        EnemyManager.Update(gameTime, Player, Viewport);
+        _enemyManager.Update(gameTime, Player, Viewport);
 
         // ParticleEngine
         ParticleEngine.Update(gameTime);
@@ -744,15 +713,15 @@ public class Level
     /// </summary>
     private void CheckCollisions()
     {
-        EnemyManager.CheckCollisions(Player);
+        _enemyManager.CheckCollisions(Player);
 
         ParticleEngine.CheckCollisions(Player);
-        ParticleEngine.CheckCollisions(EnemyManager.ActivatedEnemies);
+        ParticleEngine.CheckCollisions(_enemyManager.ActivatedEnemies);
 
         foreach (ActiveObject activeObject in _activeObjects)
         {
             activeObject.CheckCollision(Player);
-            activeObject.CheckCollisions(EnemyManager.ActivatedEnemies);
+            activeObject.CheckCollisions(_enemyManager.ActivatedEnemies);
             activeObject.CheckCollisions(ParticleEngine.Particles);
         }
 
@@ -764,7 +733,7 @@ public class Level
         {
             tileEngine.CheckCollision(Player);
             tileEngine.CheckCollisions(ParticleEngine.Particles);
-            tileEngine.CheckCollisions(EnemyManager.ActivatedEnemies);
+            tileEngine.CheckCollisions(_enemyManager.ActivatedEnemies);
         }
     }
 
@@ -780,7 +749,7 @@ public class Level
             Player.UpdateAnimation();
         }
 
-        EnemyManager.UpdateAnimations();
+        _enemyManager.UpdateAnimations();
     }
 
     private void DrawLevel(SpriteBatch spriteBatch)
@@ -807,7 +776,7 @@ public class Level
         }
 
         // Enemies
-        EnemyManager.Draw(spriteBatch, Viewport.Position);
+        _enemyManager.Draw(spriteBatch, Viewport.Position);
 
         // Player
         Player.Draw(spriteBatch, Viewport.Position);
@@ -916,7 +885,7 @@ public class Level
                 new ActiveObjectSave(activeObject.Position, activeObject.IsActive));
         }
 
-        EnemyManager.SaveSession(session);
+        _enemyManager.SaveSession(session);
     }
 
     public void LoadSession(GameSession session)
@@ -926,7 +895,7 @@ public class Level
 
         foreach (ModifierSave modifier in session.LevelModifiers)
         {
-            var levelMod = _modifierTemplateLibrary.CreatePickup(new PickupTemplateId(modifier.Id)) as ModifierPickup;
+            var levelMod = ModifierTemplateLibrary.CreatePickup(new PickupTemplateId(modifier.Id)) as ModifierPickup;
             levelMod.Level = this;
             levelMod.TimeRemaining = modifier.TimeLeft;
             levelMod.IsActive = true;
@@ -966,7 +935,7 @@ public class Level
             }
         }
 
-        EnemyManager.LoadSession(session);
+        _enemyManager.LoadSession(session);
 
         // Have the screen sampler move to the players position
         UpdateScreenSampler();
