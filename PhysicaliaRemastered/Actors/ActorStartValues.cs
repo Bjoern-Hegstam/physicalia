@@ -7,25 +7,12 @@ namespace PhysicaliaRemastered.Actors;
 /// <summary>
 /// Struct for defining the start values for a Enemy.
 /// </summary>
-public struct ActorStartValues
+public struct ActorStartValues(Vector2 position, Vector2 velocity, Vector2 acceleration)
 {
-    public Vector2 Position;
-    public Vector2 Velocity;
-    public Vector2 Acceleration;
+    public Vector2 Position = position;
+    public Vector2 Velocity = velocity;
+    public Vector2 Acceleration = acceleration;
 
-    public ActorStartValues(Vector2 position, Vector2 velocity, Vector2 acceleration)
-    {
-        Position = position;
-        Velocity = velocity;
-        Acceleration = acceleration;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="endElement">Local name of the last element to read.</param>
-    /// <returns></returns>
     public static ActorStartValues FromXml(XmlReader reader, string endElement)
     {
         var startValues = new ActorStartValues();
@@ -55,11 +42,6 @@ public struct ActorStartValues
         }
 
         return startValues;
-    }
-
-    public static ActorStartValues FromXml(XmlReader reader)
-    {
-        return FromXml(reader, "ActorStartValues");
     }
 
     private static Vector2 ReadVector2(XmlReader reader)

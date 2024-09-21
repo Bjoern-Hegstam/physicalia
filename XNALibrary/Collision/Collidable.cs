@@ -8,15 +8,11 @@ public interface ICollidable
     ObjectType Type { get; }
 
     Vector2 Position { get; }
-
     Vector2 Origin { get; }
-
     Vector2 Velocity { get; }
 
     bool CanCollide { get; }
-
     Rectangle CollisionBox { get; }
-
     bool CanTakeDamage { get; }
 
     /// <summary>
@@ -33,4 +29,15 @@ public interface ICollidable
     /// </summary>
     /// <param name="damageLevel">The level of damage taken. Can range from 0.0 to 1.0</param>
     void TakeDamage(float damageLevel);
+
+    public static bool AreColliding(ICollidable c1, ICollidable c2)
+    {
+        Rectangle r1 = c1.CollisionBox;
+        Rectangle r2 = c2.CollisionBox;
+
+        r1.Location += (c1.Position - c1.Origin).ToPoint();
+        r2.Location += (c2.Position - c2.Origin).ToPoint();
+        
+        return r1.Intersects(r2);
+    }
 }

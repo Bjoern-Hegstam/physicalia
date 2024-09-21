@@ -43,7 +43,7 @@ public class PickupContainer(Pickup pickup) : ActiveObject
         }
 
         // Check to see if the Container is colliding with the Player
-        if (CollisionHelper.IsColliding(this, collObject))
+        if (ICollidable.AreColliding(this, collObject))
         {
             Pickup();
         }

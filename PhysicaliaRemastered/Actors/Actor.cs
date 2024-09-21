@@ -67,24 +67,16 @@ public abstract class Actor : ICollidable
 
     public bool CanTakeDamage { get; set; }
 
-    public int Width
-    {
-        get => CurrentAnimation.SourceRectangle.Width;
-        set { }
-    }
+    public int Width => CurrentAnimation.SourceRectangle.Width;
 
-    public int Height
-    {
-        get => CurrentAnimation.SourceRectangle.Height;
-        set { }
-    }
+    public int Height => CurrentAnimation.SourceRectangle.Height;
 
     public virtual Vector2 Origin
     {
         get
         {
             var origin = new Vector2(_collisionBox.X, _collisionBox.Y);
-            origin += new Vector2(_collisionBox.Width / 2, _collisionBox.Height / 2);
+            origin += new Vector2(_collisionBox.Width / 2f, _collisionBox.Height / 2f);
 
             return origin;
         }
@@ -163,7 +155,7 @@ public abstract class Actor : ICollidable
 
     public Dictionary<int, Animation> Animations { get; }
 
-    public Actor()
+    protected Actor()
     {
         Animations = new Dictionary<int, Animation>();
         _currentAnimType = -1;
@@ -175,10 +167,6 @@ public abstract class Actor : ICollidable
         CanTakeDamage = true;
     }
 
-    /// <summary>
-    /// Updates the player's animation according to its current state. Base
-    /// implementation provides support for the basic animation types.
-    /// </summary>
     public virtual void UpdateAnimation()
     {
         if (Animations.ContainsKey((int)ActorAnimation.Jump) &&
@@ -235,11 +223,6 @@ public abstract class Actor : ICollidable
         }
     }
 
-    /// <summary>
-    /// Stops the currently playing animation and starts playing the
-    /// new one.
-    /// </summary>
-    /// <param name="animationKey">Key to the new animation to play.</param>
     private void SetAnimation(int animationKey)
     {
         if (Animations.ContainsKey(_currentAnimType))
@@ -255,51 +238,11 @@ public abstract class Actor : ICollidable
         }
     }
 
-    /// <summary>
-    /// Adds a key to a playback animation and associates it with the
-    /// specified ActorAnimation value.
-    /// </summary>
-    /// <param name="animType">The type of animation the key goes to.</param>
-    /// <param name="animKey">Key to the playback animation.</param>
-    public void AddAnimation(ActorAnimation animType, Animation animation)
-    {
-        Animations.Add((int)animType, animation);
-    }
-
-    /// <summary>
-    /// Adds a key to a playback animation and associates it with the
-    /// specified integer value.
-    /// </summary>
-    /// <param name="animType">The type of animation the key goes to.</param>
-    /// <param name="animKey">Key to the playback animation.</param>
     public void AddAnimation(int animType, Animation animation)
     {
         Animations.Add(animType, animation);
     }
 
-    /// <summary>
-    /// Removes the specified animation key from the Actor's collection
-    /// of playback animation keys.
-    /// </summary>
-    /// <param name="animType">The type of animation to remove.</param>
-    public void RemoveAnimation(ActorAnimation animType)
-    {
-        Animations.Remove((int)animType);
-    }
-
-    /// <summary>
-    /// Removes the specified animation key from the Actor's collection
-    /// of playback animation keys.
-    /// </summary>
-    /// <param name="animType">The type of animation to remove.</param>
-    public void RemoveAnimation(int animType)
-    {
-        Animations.Remove(animType);
-    }
-
-    /// <summary>
-    /// Applies the values specified in Actor.StartValues.
-    /// </summary>
     public void ApplyStartValues()
     {
         Position = _startValues.Position;
