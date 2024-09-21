@@ -34,52 +34,35 @@ public class TileLibrary
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
             {
-                var id = new TileId(int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException()));
+                var tileId = new TileId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
-                Tile tile;
-                if (reader.GetAttribute("textureType") == "Animation")
-                {
-                    int animationKey =
-                        int.Parse(reader.GetAttribute("textureId") ?? throw new ResourceLoadException());
-                    Animation.Animation animation = animationManager.GetBankAnimation(animationKey).Copy();
-                    animationManager.AddPlaybackAnimation(animation);
-                    tile = new AnimatedTile(animation);
-                }
-                else
-                {
-                    SpriteId spriteId =
-                        new SpriteId(reader.GetAttribute("textureId") ?? throw new ResourceLoadException());
-                    Sprite sprite = spriteLibrary.GetSprite(spriteId);
+                var spriteId = new SpriteId(reader.GetAttribute("spriteId") ?? throw new ResourceLoadException());
+                Sprite sprite = spriteLibrary.GetSprite(spriteId);
 
-                    tile = new SpriteTile(sprite);
-                }
-
-                // Get the Tile's collision box
                 reader.ReadToFollowing("CollisionBox");
+                var collisionBox = new Rectangle(
+                    int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException()),
+                    int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException()),
+                    int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException()),
+                    int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException())
+                );
 
-                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
-                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
-                int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
-                int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
-
-                tile.CollisionBox = new Rectangle(x, y, width, height);
-
-                // Get the collision sides of the Tile
                 reader.ReadToFollowing("CollisionSides");
 
                 string[] sides = reader.ReadElementContentAsString().Split(' ');
 
+                BoxSide collisionSides = 0;
                 if (sides.Length > 0 && sides[0] != "")
                 {
                     foreach (string sideString in sides)
                     {
                         var side = (BoxSide)Enum.Parse(typeof(BoxSide), sideString);
-                        tile.CollisionSides |= side;
+                        collisionSides |= side;
                     }
                 }
 
-                // Store the Tile
-                _tileLibrary.Add(id, tile);
+                var tile = new Tile(sprite, collisionBox, collisionSides);
+                _tileLibrary.Add(tileId, tile);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TileLibrary" })

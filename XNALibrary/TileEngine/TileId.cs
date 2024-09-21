@@ -1,6 +1,6 @@
 namespace XNALibrary.TileEngine;
 
-public readonly struct TileId(int id)
+public readonly struct TileId(string id)
 {
-    public int Id => id;
+    public string Id => id;
 }

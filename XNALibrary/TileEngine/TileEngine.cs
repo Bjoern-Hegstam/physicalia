@@ -33,7 +33,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
             {
                 int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
                 int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
-                TileId tileId = new TileId(int.Parse(reader.GetAttribute("tileId") ?? throw new ResourceLoadException()));
+                TileId tileId = new TileId(reader.GetAttribute("tileId") ?? throw new ResourceLoadException());
 
                 _tileMap[new Vector2(x, y)] = tileId;
             }
