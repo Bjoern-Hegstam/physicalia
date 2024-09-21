@@ -24,41 +24,26 @@ public enum GameState
     Paused
 }
 
-public class GameManager
+public class GameManager(Game game)
 {
-    private readonly Game _game;
-
-    private readonly List<World> _worlds;
-    private int _worldIndex;
-
-    private readonly Player _player;
+    private readonly Player _player = new(game.Services.GetService<Settings>());
+    
+    private readonly List<World> _worlds = [];
+    private int _worldIndex = -1;
 
     private int _pausePressedCount;
 
-    public GameState State { get; set; }
-    public GameState NextState { get; set; }
+    public GameState State { get; set; } = GameState.Start;
+    public GameState NextState { get; set; } = GameState.Start;
 
-    private Settings Settings => _game.Services.GetService<Settings>();
-    private SpriteLibrary SpriteLibrary => _game.Services.GetService<SpriteLibrary>();
-    private TileLibrary TileLibrary => _game.Services.GetService<TileLibrary>();
-    private AnimationManager AnimationManager => _game.Services.GetService<AnimationManager>();
-    private WeaponBank WeaponBank => _game.Services.GetService<WeaponBank>();
-    private ParticleEngine ParticleEngine => _game.Services.GetService<ParticleEngine>();
-    private EnemyBank EnemyBank => _game.Services.GetService<EnemyBank>();
-    private PickupTemplateLibrary PickupTemplateLibrary => _game.Services.GetService<PickupTemplateLibrary>();
-
-    public GameManager(Game game)
-    {
-        _game = game;
-
-        _worlds = [];
-        _worldIndex = -1;
-
-        var settings = game.Services.GetService<Settings>();
-        _player = new Player(settings);
-
-        NextState = State = GameState.Start;
-    }
+    private Settings Settings => game.Services.GetService<Settings>();
+    private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
+    private TileLibrary TileLibrary => game.Services.GetService<TileLibrary>();
+    private AnimationManager AnimationManager => game.Services.GetService<AnimationManager>();
+    private WeaponBank WeaponBank => game.Services.GetService<WeaponBank>();
+    private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
+    private EnemyBank EnemyBank => game.Services.GetService<EnemyBank>();
+    private PickupTemplateLibrary PickupTemplateLibrary => game.Services.GetService<PickupTemplateLibrary>();
 
     private void ChangeState()
     {
@@ -248,7 +233,7 @@ public class GameManager
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "World" })
             {
-                var world = new World(_game, _player);
+                var world = new World(game, _player);
                 _worlds.Add(world);
                 world.WorldIndex = _worlds.Count;
                 world.LoadXml(Environment.WorldPath + reader.ReadString(), TileLibrary, SpriteLibrary);
