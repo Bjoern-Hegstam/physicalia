@@ -24,47 +24,27 @@ public enum WorldState
 /// the World will be considered completed after the player has finished
 /// the final Level.
 /// </summary>
-public class World
+public class World(Game game, Player player)
 {
     private const string LevelPath = "Content/GameData/Worlds/Levels/";
     
-    private readonly List<Level> _levels;
-    private int _levelIndex;
+    private readonly List<Level> _levels = [];
+    private int _levelIndex = -1;
 
     // Presentation
-    private string[] _worldQuoteLines;
-    private readonly Color _worldIndexColor;
-    private Color _worldQuoteColor;
+    private string[] _worldQuoteLines = [];
+    private readonly Color _worldIndexColor = Color.White;
+    private Color _worldQuoteColor = Color.White;
     private Sprite? _worldSprite;
 
-    private WorldState _nextState;
-
-    private readonly Game _game;
-    private readonly Player _player;
-
-    private Settings Settings => _game.Services.GetService<Settings>();
+    private Settings Settings => game.Services.GetService<Settings>();
     
-    public int WorldIndex { get; set; }
+    public int WorldIndex { get; set; } = -1;
 
-    public WorldState State { get; private set; }
+    public WorldState State { get; private set; } = WorldState.Start;
+    private WorldState _nextState = WorldState.Start;
 
     public LevelState LevelState => _levels[_levelIndex].State;
-
-    public World(Game game, Player player)
-    {
-        _game = game;
-        _player = player;
-
-        _levels = [];
-        _levelIndex = -1;
-
-        _nextState = State = WorldState.Start;
-
-        WorldIndex = -1;
-        _worldIndexColor = Color.White;
-        _worldQuoteLines = [];
-        _worldQuoteColor = Color.White;
-    }
 
     public void LoadXml(string path, TileLibrary tileLibrary, SpriteLibrary spriteLibrary)
     {
@@ -152,7 +132,7 @@ public class World
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Level" })
             {
                 // Create and initialize the new Level
-                var level = new Level(_game, _player);
+                var level = new Level(game, player);
 
                 using (var levelReader = XmlReader.Create(LevelPath + reader.ReadString(), reader.Settings))
                     level.LoadXml(levelReader, tileLibrary);
@@ -166,7 +146,7 @@ public class World
             // Read in BossLevels
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "BossLevel" })
             {
-                var level = new BossLevel(_game, _player);
+                var level = new BossLevel(game, player);
 
                 using (var levelReader = XmlReader.Create(reader.ReadElementContentAsString()))
                     level.LoadXml(levelReader, tileLibrary);
