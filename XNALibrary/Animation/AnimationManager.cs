@@ -118,7 +118,7 @@ public class AnimationManager(Game game) : GameComponent(game)
         var loop = bool.Parse(reader.ReadElementContentAsString());
 
         var startFrame = new Rectangle(x, y, width, height);
-        var texture = contentManager.Load<Texture2D>(textureId.Id);
+        var texture = contentManager.Load<Texture2D>(textureId.AssetName);
         var anim = new Animation(startFrame, columns, rows, frameRate, texture)
         {
             Loop = loop

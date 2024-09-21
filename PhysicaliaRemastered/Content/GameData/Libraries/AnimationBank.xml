@@ -5,42 +5,42 @@
     <Animations>
         <!-- Player -->
         <Animation id="0">
-            <TextureId>GameData/Graphics/player_spritesheet</TextureId>
+            <TextureId>player_spritesheet</TextureId>
             <StartFrame x="0" y="0" width="32" height="48" />
             <Dimensions columns="1" rows="1" />
             <FrameRate>0</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="1">
-            <TextureId>GameData/Graphics/player_spritesheet</TextureId>
+            <TextureId>player_spritesheet</TextureId>
             <StartFrame x="0" y="48" width="32" height="48" />
             <Dimensions columns="4" rows="1" />
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="2">
-            <TextureId>GameData/Graphics/player_spritesheet</TextureId>
+            <TextureId>player_spritesheet</TextureId>
             <StartFrame x="0" y="96" width="32" height="48" />
             <Dimensions columns="2" rows="1" />
             <FrameRate>4</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="3">
-            <TextureId>GameData/Graphics/player_spritesheet</TextureId>
+            <TextureId>player_spritesheet</TextureId>
             <StartFrame x="0" y="144" width="32" height="48" />
             <Dimensions columns="2" rows="1" />
             <FrameRate>4</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="4">
-            <TextureId>GameData/Graphics/player_spritesheet</TextureId>
+            <TextureId>player_spritesheet</TextureId>
             <StartFrame x="0" y="192" width="32" height="48" />
             <Dimensions columns="2" rows="1" />
             <FrameRate>4</FrameRate>
             <Loop>false</Loop>
         </Animation>
         <Animation id="5">
-            <TextureId>GameData/Graphics/player_spritesheet</TextureId>
+            <TextureId>player_spritesheet</TextureId>
             <StartFrame x="0" y="240" width="32" height="48" />
             <Dimensions columns="2" rows="1" />
             <FrameRate>5</FrameRate>
@@ -49,7 +49,7 @@
 
         <!-- Weapon Arms-->
         <Animation id="21">
-            <TextureId>GameData/Graphics/weaponSheet</TextureId>
+            <TextureId>weaponSheet</TextureId>
             <StartFrame x="0" y="0" width="64" height="48" />
             <Dimensions columns="1" rows="1" />
             <FrameRate>1</FrameRate>
@@ -58,14 +58,14 @@
 
         <!-- Weapon Minigun -->
         <Animation id="7">
-            <TextureId>GameData/Graphics/Weapon_minigun</TextureId>
+            <TextureId>Weapon_minigun</TextureId>
             <StartFrame x="0" y="48" width="64" height="48" />
             <Dimensions columns="4" rows="1" />
             <FrameRate>15</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="9">
-            <TextureId>GameData/Graphics/Weapon_minigun</TextureId>
+            <TextureId>Weapon_minigun</TextureId>
             <StartFrame x="0" y="0" width="64" height="48" />
             <Dimensions columns="4" rows="1" />
             <FrameRate>25</FrameRate>
@@ -74,7 +74,7 @@
 
         <!-- Weapon Chainsaw -->
         <Animation id="8">
-            <TextureId>GameData/Graphics/Weapon_chainsaw</TextureId>
+            <TextureId>Weapon_chainsaw</TextureId>
             <StartFrame x="0" y="0" width="64" height="48" />
             <Dimensions columns="2" rows="1" />
             <FrameRate>5</FrameRate>
@@ -83,28 +83,28 @@
 
         <!-- Enemy Passare-->
         <Animation id="10">
-            <TextureId>GameData/Graphics/enemy_passare</TextureId>
+            <TextureId>enemy_passare</TextureId>
             <StartFrame x="0" y="0" width="48" height="91" />
             <Dimensions columns="8" rows="1" />
             <FrameRate>7</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="11">
-            <TextureId>GameData/Graphics/enemy_passare</TextureId>
+            <TextureId>enemy_passare</TextureId>
             <StartFrame x="0" y="91" width="48" height="91" />
             <Dimensions columns="4" rows="1" />
             <FrameRate>10</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="12">
-            <TextureId>GameData/Graphics/enemy_passare</TextureId>
+            <TextureId>enemy_passare</TextureId>
             <StartFrame x="0" y="182" width="48" height="91" />
             <Dimensions columns="2" rows="1" />
             <FrameRate>7</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="13">
-            <TextureId>GameData/Graphics/enemy_passare</TextureId>
+            <TextureId>enemy_passare</TextureId>
             <StartFrame x="0" y="273" width="48" height="91" />
             <Dimensions columns="4" rows="1" />
             <FrameRate>7</FrameRate>
@@ -113,7 +113,7 @@
 
         <!-- Explosions -->
         <Animation id="42">
-            <TextureId>GameData/Graphics/explode_1</TextureId>
+            <TextureId>explode_1</TextureId>
             <StartFrame x="0" y="0" width="64" height="64" />
             <Dimensions columns="4" rows="4" />
             <FrameRate>15</FrameRate>

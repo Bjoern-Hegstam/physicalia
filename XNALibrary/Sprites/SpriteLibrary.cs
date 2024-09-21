@@ -50,7 +50,7 @@ public class SpriteLibrary
                 int width = int.Parse(reader.GetAttribute(4));
                 int height = int.Parse(reader.GetAttribute(5));
 
-                var texture2D = contentManager.Load<Texture2D>(textureId.Id);
+                var texture2D = contentManager.Load<Texture2D>(textureId.AssetName);
                 _sprites.Add(id, new Sprite(texture2D, new Rectangle(x, y, width, height)));
             }
 

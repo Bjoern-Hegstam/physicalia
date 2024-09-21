@@ -59,64 +59,64 @@
 # Textures
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/tiles_Grass_Earth.png
+/build:GameData/Texture/tiles_Grass_Earth.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/tiles_mechanical.png
+/build:GameData/Texture/tiles_mechanical.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/tiles_schoolSet.png
+/build:GameData/Texture/tiles_schoolSet.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/weaponSheet.png
+/build:GameData/Texture/weaponSheet.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/Weapon_chainsaw.png
+/build:GameData/Texture/Weapon_chainsaw.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/Weapon_minigun.png
+/build:GameData/Texture/Weapon_minigun.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/player_spritesheet.png
+/build:GameData/Texture/player_spritesheet.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/ui_healthBars.png
+/build:GameData/Texture/ui_healthBars.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/enemy_passare.png
+/build:GameData/Texture/enemy_passare.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/pickupSheet.png
+/build:GameData/Texture/pickupSheet.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/explode_1.png
+/build:GameData/Texture/explode_1.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/background_sky.png
+/build:GameData/Texture/background_sky.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/background_mountains.png
+/build:GameData/Texture/background_mountains.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/background_houses.png
+/build:GameData/Texture/background_houses.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/level2-1_back_1.png
+/build:GameData/Texture/level2-1_back_1.png
 
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:GameData/Graphics/level2-1_back_2.png
+/build:GameData/Texture/level2-1_back_2.png

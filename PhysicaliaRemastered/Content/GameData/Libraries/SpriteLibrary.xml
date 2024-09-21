@@ -4,131 +4,131 @@
                xsi:noNamespaceSchemaLocation="../Schemas/schema_spriteLibrary.xsd">
     <Sprites>
         <!-- EndLevelTrigger sprite -->
-        <Sprite id="-1" textureId="GameData/Graphics/pickupSheet" x="0" y="0" width="48" height="48" />
+        <Sprite id="-1" textureId="pickupSheet" x="0" y="0" width="48" height="48" />
 
         <!-- UI -->
-        <Sprite id="-2" textureId="GameData/Graphics/ui_healthBars" x="0" y="0" width="172" height="48" />
-        <Sprite id="-3" textureId="GameData/Graphics/ui_healthBars" x="0" y="48" width="172" height="48" />
+        <Sprite id="-2" textureId="ui_healthBars" x="0" y="0" width="172" height="48" />
+        <Sprite id="-3" textureId="ui_healthBars" x="0" y="48" width="172" height="48" />
 
         <!-- Tiles Grass -->
-        <Sprite id="0" textureId="GameData/Graphics/tiles_Grass_Earth" x="0" y="0" width="32" height="32" />
-        <Sprite id="1" textureId="GameData/Graphics/tiles_Grass_Earth" x="32" y="0" width="32" height="32" />
-        <Sprite id="2" textureId="GameData/Graphics/tiles_Grass_Earth" x="64" y="0" width="32" height="32" />
-        <Sprite id="3" textureId="GameData/Graphics/tiles_Grass_Earth" x="0" y="32" width="32" height="32" />
-        <Sprite id="4" textureId="GameData/Graphics/tiles_Grass_Earth" x="32" y="32" width="32" height="32" />
-        <Sprite id="5" textureId="GameData/Graphics/tiles_Grass_Earth" x="64" y="32" width="32" height="32" />
-        <Sprite id="6" textureId="GameData/Graphics/tiles_Grass_Earth" x="0" y="64" width="32" height="32" />
-        <Sprite id="7" textureId="GameData/Graphics/tiles_Grass_Earth" x="32" y="64" width="32" height="32" />
-        <Sprite id="8" textureId="GameData/Graphics/tiles_Grass_Earth" x="64" y="64" width="32" height="32" />
+        <Sprite id="0" textureId="tiles_Grass_Earth" x="0" y="0" width="32" height="32" />
+        <Sprite id="1" textureId="tiles_Grass_Earth" x="32" y="0" width="32" height="32" />
+        <Sprite id="2" textureId="tiles_Grass_Earth" x="64" y="0" width="32" height="32" />
+        <Sprite id="3" textureId="tiles_Grass_Earth" x="0" y="32" width="32" height="32" />
+        <Sprite id="4" textureId="tiles_Grass_Earth" x="32" y="32" width="32" height="32" />
+        <Sprite id="5" textureId="tiles_Grass_Earth" x="64" y="32" width="32" height="32" />
+        <Sprite id="6" textureId="tiles_Grass_Earth" x="0" y="64" width="32" height="32" />
+        <Sprite id="7" textureId="tiles_Grass_Earth" x="32" y="64" width="32" height="32" />
+        <Sprite id="8" textureId="tiles_Grass_Earth" x="64" y="64" width="32" height="32" />
 
         <!-- Tiles Grass Upside down-->
-        <Sprite id="20" textureId="GameData/Graphics/tiles_Grass_Earth" x="0" y="96" width="32" height="32" />
-        <Sprite id="21" textureId="GameData/Graphics/tiles_Grass_Earth" x="32" y="96" width="32" height="32" />
-        <Sprite id="22" textureId="GameData/Graphics/tiles_Grass_Earth" x="64" y="96" width="32" height="32" />
-        <Sprite id="23" textureId="GameData/Graphics/tiles_Grass_Earth" x="0" y="128" width="32" height="32" />
-        <Sprite id="24" textureId="GameData/Graphics/tiles_Grass_Earth" x="32" y="128" width="32" height="32" />
-        <Sprite id="25" textureId="GameData/Graphics/tiles_Grass_Earth" x="64" y="128" width="32" height="32" />
-        <Sprite id="26" textureId="GameData/Graphics/tiles_Grass_Earth" x="0" y="160" width="32" height="32" />
-        <Sprite id="27" textureId="GameData/Graphics/tiles_Grass_Earth" x="32" y="160" width="32" height="32" />
-        <Sprite id="28" textureId="GameData/Graphics/tiles_Grass_Earth" x="64" y="160" width="32" height="32" />
+        <Sprite id="20" textureId="tiles_Grass_Earth" x="0" y="96" width="32" height="32" />
+        <Sprite id="21" textureId="tiles_Grass_Earth" x="32" y="96" width="32" height="32" />
+        <Sprite id="22" textureId="tiles_Grass_Earth" x="64" y="96" width="32" height="32" />
+        <Sprite id="23" textureId="tiles_Grass_Earth" x="0" y="128" width="32" height="32" />
+        <Sprite id="24" textureId="tiles_Grass_Earth" x="32" y="128" width="32" height="32" />
+        <Sprite id="25" textureId="tiles_Grass_Earth" x="64" y="128" width="32" height="32" />
+        <Sprite id="26" textureId="tiles_Grass_Earth" x="0" y="160" width="32" height="32" />
+        <Sprite id="27" textureId="tiles_Grass_Earth" x="32" y="160" width="32" height="32" />
+        <Sprite id="28" textureId="tiles_Grass_Earth" x="64" y="160" width="32" height="32" />
 
         <!-- Tiles Mechanical -->
-        <Sprite id="10" textureId="GameData/Graphics/tiles_mechanical" x="0" y="0" width="32" height="32" />
-        <Sprite id="11" textureId="GameData/Graphics/tiles_mechanical" x="32" y="0" width="32" height="32" />
-        <Sprite id="12" textureId="GameData/Graphics/tiles_mechanical" x="64" y="0" width="32" height="32" />
-        <Sprite id="13" textureId="GameData/Graphics/tiles_mechanical" x="128" y="0" width="32" height="32" />
-        <Sprite id="14" textureId="GameData/Graphics/tiles_mechanical" x="0" y="32" width="32" height="32" />
-        <Sprite id="15" textureId="GameData/Graphics/tiles_mechanical" x="32" y="32" width="32" height="32" />
-        <Sprite id="16" textureId="GameData/Graphics/tiles_mechanical" x="64" y="32" width="32" height="32" />
-        <Sprite id="17" textureId="GameData/Graphics/tiles_mechanical" x="128" y="32" width="32" height="32" />
+        <Sprite id="10" textureId="tiles_mechanical" x="0" y="0" width="32" height="32" />
+        <Sprite id="11" textureId="tiles_mechanical" x="32" y="0" width="32" height="32" />
+        <Sprite id="12" textureId="tiles_mechanical" x="64" y="0" width="32" height="32" />
+        <Sprite id="13" textureId="tiles_mechanical" x="128" y="0" width="32" height="32" />
+        <Sprite id="14" textureId="tiles_mechanical" x="0" y="32" width="32" height="32" />
+        <Sprite id="15" textureId="tiles_mechanical" x="32" y="32" width="32" height="32" />
+        <Sprite id="16" textureId="tiles_mechanical" x="64" y="32" width="32" height="32" />
+        <Sprite id="17" textureId="tiles_mechanical" x="128" y="32" width="32" height="32" />
 
         <!-- School set -->
         <!-- Interior -->
         <!-- 	Wall Colors -->
         <!-- 		Light Yellow-->
-        <Sprite id="30" textureId="GameData/Graphics/tiles_schoolSet" x="32" y="0" width="32" height="32" />
+        <Sprite id="30" textureId="tiles_schoolSet" x="32" y="0" width="32" height="32" />
 
         <!-- 	Straight lines -->
         <!-- 		Vertical -->
-        <Sprite id="31" textureId="GameData/Graphics/tiles_schoolSet" x="0" y="0" width="32" height="32" />
-        <Sprite id="32" textureId="GameData/Graphics/tiles_schoolSet" x="0" y="32" width="32" height="32" />
-        <Sprite id="33" textureId="GameData/Graphics/tiles_schoolSet" x="0" y="64" width="32" height="32" />
+        <Sprite id="31" textureId="tiles_schoolSet" x="0" y="0" width="32" height="32" />
+        <Sprite id="32" textureId="tiles_schoolSet" x="0" y="32" width="32" height="32" />
+        <Sprite id="33" textureId="tiles_schoolSet" x="0" y="64" width="32" height="32" />
 
-        <Sprite id="34" textureId="GameData/Graphics/tiles_schoolSet" x="64" y="0" width="32" height="32" />
-        <Sprite id="35" textureId="GameData/Graphics/tiles_schoolSet" x="64" y="32" width="32" height="32" />
-        <Sprite id="36" textureId="GameData/Graphics/tiles_schoolSet" x="64" y="64" width="32" height="32" />
+        <Sprite id="34" textureId="tiles_schoolSet" x="64" y="0" width="32" height="32" />
+        <Sprite id="35" textureId="tiles_schoolSet" x="64" y="32" width="32" height="32" />
+        <Sprite id="36" textureId="tiles_schoolSet" x="64" y="64" width="32" height="32" />
 
         <!-- 		Horizontal -->
-        <Sprite id="37" textureId="GameData/Graphics/tiles_schoolSet" x="0" y="160" width="32" height="32" />
-        <Sprite id="38" textureId="GameData/Graphics/tiles_schoolSet" x="32" y="160" width="32" height="32" />
-        <Sprite id="39" textureId="GameData/Graphics/tiles_schoolSet" x="64" y="160" width="32" height="32" />
+        <Sprite id="37" textureId="tiles_schoolSet" x="0" y="160" width="32" height="32" />
+        <Sprite id="38" textureId="tiles_schoolSet" x="32" y="160" width="32" height="32" />
+        <Sprite id="39" textureId="tiles_schoolSet" x="64" y="160" width="32" height="32" />
 
-        <Sprite id="40" textureId="GameData/Graphics/tiles_schoolSet" x="96" y="96" width="32" height="32" />
-        <Sprite id="41" textureId="GameData/Graphics/tiles_schoolSet" x="128" y="96" width="32" height="32" />
-        <Sprite id="42" textureId="GameData/Graphics/tiles_schoolSet" x="160" y="96" width="32" height="32" />
+        <Sprite id="40" textureId="tiles_schoolSet" x="96" y="96" width="32" height="32" />
+        <Sprite id="41" textureId="tiles_schoolSet" x="128" y="96" width="32" height="32" />
+        <Sprite id="42" textureId="tiles_schoolSet" x="160" y="96" width="32" height="32" />
 
         <!-- 	Corners -->
-        <Sprite id="43" textureId="GameData/Graphics/tiles_schoolSet" x="32" y="32" width="32" height="32" />
-        <Sprite id="44" textureId="GameData/Graphics/tiles_schoolSet" x="32" y="64" width="32" height="32" />
+        <Sprite id="43" textureId="tiles_schoolSet" x="32" y="32" width="32" height="32" />
+        <Sprite id="44" textureId="tiles_schoolSet" x="32" y="64" width="32" height="32" />
 
-        <Sprite id="45" textureId="GameData/Graphics/tiles_schoolSet" x="0" y="96" width="32" height="32" />
-        <Sprite id="46" textureId="GameData/Graphics/tiles_schoolSet" x="32" y="96" width="32" height="32" />
+        <Sprite id="45" textureId="tiles_schoolSet" x="0" y="96" width="32" height="32" />
+        <Sprite id="46" textureId="tiles_schoolSet" x="32" y="96" width="32" height="32" />
 
-        <Sprite id="47" textureId="GameData/Graphics/tiles_schoolSet" x="0" y="128" width="32" height="32" />
-        <Sprite id="48" textureId="GameData/Graphics/tiles_schoolSet" x="32" y="128" width="32" height="32" />
+        <Sprite id="47" textureId="tiles_schoolSet" x="0" y="128" width="32" height="32" />
+        <Sprite id="48" textureId="tiles_schoolSet" x="32" y="128" width="32" height="32" />
 
         <!-- Blackboard -->
-        <Sprite id="49" textureId="GameData/Graphics/tiles_schoolSet" x="96" y="0" width="32" height="32" />
-        <Sprite id="50" textureId="GameData/Graphics/tiles_schoolSet" x="128" y="0" width="32" height="32" />
-        <Sprite id="51" textureId="GameData/Graphics/tiles_schoolSet" x="160" y="0" width="32" height="32" />
+        <Sprite id="49" textureId="tiles_schoolSet" x="96" y="0" width="32" height="32" />
+        <Sprite id="50" textureId="tiles_schoolSet" x="128" y="0" width="32" height="32" />
+        <Sprite id="51" textureId="tiles_schoolSet" x="160" y="0" width="32" height="32" />
 
-        <Sprite id="52" textureId="GameData/Graphics/tiles_schoolSet" x="96" y="32" width="32" height="32" />
-        <Sprite id="53" textureId="GameData/Graphics/tiles_schoolSet" x="128" y="32" width="32" height="32" />
-        <Sprite id="54" textureId="GameData/Graphics/tiles_schoolSet" x="160" y="32" width="32" height="32" />
+        <Sprite id="52" textureId="tiles_schoolSet" x="96" y="32" width="32" height="32" />
+        <Sprite id="53" textureId="tiles_schoolSet" x="128" y="32" width="32" height="32" />
+        <Sprite id="54" textureId="tiles_schoolSet" x="160" y="32" width="32" height="32" />
 
-        <Sprite id="55" textureId="GameData/Graphics/tiles_schoolSet" x="96" y="64" width="32" height="32" />
-        <Sprite id="56" textureId="GameData/Graphics/tiles_schoolSet" x="128" y="64" width="32" height="32" />
-        <Sprite id="57" textureId="GameData/Graphics/tiles_schoolSet" x="160" y="64" width="32" height="32" />
+        <Sprite id="55" textureId="tiles_schoolSet" x="96" y="64" width="32" height="32" />
+        <Sprite id="56" textureId="tiles_schoolSet" x="128" y="64" width="32" height="32" />
+        <Sprite id="57" textureId="tiles_schoolSet" x="160" y="64" width="32" height="32" />
 
         <!-- Blackboard decorations -->
-        <Sprite id="58" textureId="GameData/Graphics/tiles_schoolSet" x="192" y="0" width="32" height="32" />
-        <Sprite id="59" textureId="GameData/Graphics/tiles_schoolSet" x="192" y="32" width="32" height="32" />
-        <Sprite id="60" textureId="GameData/Graphics/tiles_schoolSet" x="192" y="64" width="32" height="32" />
-        <Sprite id="61" textureId="GameData/Graphics/tiles_schoolSet" x="224" y="0" width="32" height="32" />
-        <Sprite id="62" textureId="GameData/Graphics/tiles_schoolSet" x="224" y="32" width="32" height="32" />
+        <Sprite id="58" textureId="tiles_schoolSet" x="192" y="0" width="32" height="32" />
+        <Sprite id="59" textureId="tiles_schoolSet" x="192" y="32" width="32" height="32" />
+        <Sprite id="60" textureId="tiles_schoolSet" x="192" y="64" width="32" height="32" />
+        <Sprite id="61" textureId="tiles_schoolSet" x="224" y="0" width="32" height="32" />
+        <Sprite id="62" textureId="tiles_schoolSet" x="224" y="32" width="32" height="32" />
 
         <!-- Door -->
-        <Sprite id="63" textureId="GameData/Graphics/tiles_schoolSet" x="96" y="128" width="32" height="32" />
-        <Sprite id="64" textureId="GameData/Graphics/tiles_schoolSet" x="96" y="160" width="32" height="32" />
+        <Sprite id="63" textureId="tiles_schoolSet" x="96" y="128" width="32" height="32" />
+        <Sprite id="64" textureId="tiles_schoolSet" x="96" y="160" width="32" height="32" />
 
         <!-- Top edges -->
-        <Sprite id="65" textureId="GameData/Graphics/tiles_schoolSet" x="128" y="128" width="32" height="32" />
-        <Sprite id="66" textureId="GameData/Graphics/tiles_schoolSet" x="160" y="128" width="32" height="32" />
-        <Sprite id="67" textureId="GameData/Graphics/tiles_schoolSet" x="192" y="128" width="32" height="32" />
+        <Sprite id="65" textureId="tiles_schoolSet" x="128" y="128" width="32" height="32" />
+        <Sprite id="66" textureId="tiles_schoolSet" x="160" y="128" width="32" height="32" />
+        <Sprite id="67" textureId="tiles_schoolSet" x="192" y="128" width="32" height="32" />
 
-        <Sprite id="68" textureId="GameData/Graphics/tiles_schoolSet" x="128" y="160" width="32" height="32" />
-        <Sprite id="69" textureId="GameData/Graphics/tiles_schoolSet" x="160" y="160" width="32" height="32" />
+        <Sprite id="68" textureId="tiles_schoolSet" x="128" y="160" width="32" height="32" />
+        <Sprite id="69" textureId="tiles_schoolSet" x="160" y="160" width="32" height="32" />
 
         <!-- Weapon sprites 1xx-->
         <!-- Arms -->
-        <Sprite id="100" textureId="GameData/Graphics/weaponSheet" x="0" y="0" width="32" height="13" />
+        <Sprite id="100" textureId="weaponSheet" x="0" y="0" width="32" height="13" />
         <!-- Chainsaw -->
-        <Sprite id="101" textureId="GameData/Graphics/weaponSheet" x="128" y="49" width="25" height="13" />
+        <Sprite id="101" textureId="weaponSheet" x="128" y="49" width="25" height="13" />
         <!-- Minigun -->
-        <Sprite id="102" textureId="GameData/Graphics/weaponSheet" x="256" y="97" width="64" height="48" />
+        <Sprite id="102" textureId="weaponSheet" x="256" y="97" width="64" height="48" />
 
         <!-- Particle sprites 2xx -->
-        <Sprite id="200" textureId="GameData/Graphics/explode_1" x="10" y="48" width="8" height="2" />
+        <Sprite id="200" textureId="explode_1" x="10" y="48" width="8" height="2" />
 
         <!-- Backgrounds 3xx -->
-        <Sprite id="300" textureId="GameData/Graphics/background_sky" x="0" y="0" width="640" height="480" />
-        <Sprite id="301" textureId="GameData/Graphics/background_mountains" x="0" y="0" width="1600" height="500" />
-        <Sprite id="302" textureId="GameData/Graphics/background_houses" x="0" y="0" width="1600" height="528" />
-        <Sprite id="303" textureId="GameData/Graphics/level2-1_back_1" x="0" y="0" width="2048" height="960" />
-        <Sprite id="304" textureId="GameData/Graphics/level2-1_back_2" x="0" y="0" width="352" height="960" />
+        <Sprite id="300" textureId="background_sky" x="0" y="0" width="640" height="480" />
+        <Sprite id="301" textureId="background_mountains" x="0" y="0" width="1600" height="500" />
+        <Sprite id="302" textureId="background_houses" x="0" y="0" width="1600" height="528" />
+        <Sprite id="303" textureId="level2-1_back_1" x="0" y="0" width="2048" height="960" />
+        <Sprite id="304" textureId="level2-1_back_2" x="0" y="0" width="352" height="960" />
 
         <!-- Pickups 4xx -->
-        <Sprite id="400" textureId="GameData/Graphics/pickupSheet" x="48" y="0" width="32" height="32" />
-        <Sprite id="401" textureId="GameData/Graphics/pickupSheet" x="80" y="0" width="14" height="14" />
+        <Sprite id="400" textureId="pickupSheet" x="48" y="0" width="32" height="32" />
+        <Sprite id="401" textureId="pickupSheet" x="80" y="0" width="14" height="14" />
     </Sprites>
 </SpriteLibrary>
