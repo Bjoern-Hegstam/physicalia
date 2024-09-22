@@ -91,16 +91,13 @@ public class GameManager(Game game)
         }
     }
 
-    /// <summary>
-    /// Makes the game ready for a new game session.
-    /// </summary>
-    public void NewSession()
+    public void NewGame()
     {
         // Make sure the animation manager is enabled
         AnimationManager.Enabled = true;
 
         _worldIndex = 0;
-        _worlds[_worldIndex].NewSession();
+        _worlds[_worldIndex].NewGame();
 
         _player.Health = Settings.PlayerStartHealth;
         // Give the player his default weapon
@@ -110,43 +107,33 @@ public class GameManager(Game game)
         State = NextState = GameState.Start;
     }
 
-    /// <summary>
-    /// Sets the state of the GameManager as specified by the session object.
-    /// </summary>
-    /// <param name="session">GameSession containing representing the
-    /// wanted state of the GameManager.</param>
-    public void LoadSession(GameSession session)
+    public void LoadGame(SaveGame saveGame)
     {
-        _worldIndex = session.WorldIndex;
+        _worldIndex = saveGame.WorldIndex;
         _player.Health = Settings.PlayerStartHealth;
 
-        _player.LoadSession(session, WeaponBank);
+        _player.LoadGame(saveGame, WeaponBank);
 
-        _worlds[_worldIndex].LoadSession(session);
+        _worlds[_worldIndex].LoadGame(saveGame);
 
         // Pause the game and ensure
         NextState = GameState.Paused;
         _pausePressedCount = 1;
     }
 
-    /// <summary>
-    /// Saves the current state of the GameManager to a GameSession object.
-    /// </summary>
-    /// <returns>A GameSession object representing the current state of
-    /// the GameManager.</returns>
-    public GameSession SaveSession()
+    public SaveGame SaveGame()
     {
         NextState = GameState.Paused;
 
-        var session = new GameSession
+        var saveGame = new SaveGame
         {
             WorldIndex = _worldIndex
         };
 
-        _player.SaveSession(session);
-        _worlds[_worldIndex].SaveSession(session);
+        _player.SaveGame(saveGame);
+        _worlds[_worldIndex].SaveGame(saveGame);
 
-        return session;
+        return saveGame;
     }
     
     public void LoadXml(string path, ContentManager contentManager)

@@ -7,65 +7,15 @@ using XNALibrary;
 
 namespace PhysicaliaRemastered.GameManagement;
 
-public struct ModifierSave
-{
-    public int Id;
-    public float TimeLeft;
+public record struct ModifierSave(int Id, float TimeLeft);
 
-    public ModifierSave(int id, float timeLeft)
-    {
-        Id = id;
-        TimeLeft = timeLeft;
-    }
-}
+public record struct ActiveObjectSave(Vector2 Position, bool IsActive);
 
-public struct ActiveObjectSave
-{
-    public Vector2 Position;
-    public bool IsActive;
+public record struct EnemySave(Vector2 Position, Vector2 Velocity, float Health, bool IsActive);
 
-    public ActiveObjectSave(Vector2 position, bool active)
-    {
-        Position = position;
-        IsActive = active;
-    }
-}
+public record struct WeaponSave(int AmmoCount, int StoredAmmo);
 
-public struct EnemySave
-{
-    public Vector2 Position;
-    public Vector2 Velocity;
-
-    public float Health;
-    public bool IsActive;
-
-    public EnemySave(Vector2 position, Vector2 velocity, float health, bool active)
-    {
-        Position = position;
-        Velocity = velocity;
-        Health = health;
-        IsActive = active;
-    }
-}
-
-public struct WeaponSave
-{
-    public int AmmoCount;
-    public int StoredAmmo;
-
-    public WeaponSave(int ammoCount, int storedAmmo)
-    {
-        AmmoCount = ammoCount;
-        StoredAmmo = storedAmmo;
-    }
-}
-
-/// <summary>
-/// A GameSession represents a state that the game can be in. A GameSession
-/// object can be de-/serialized from/to xml. GameSessions can be used to
-/// implement a system where games can be saved and later loaded.
-/// </summary>
-public class GameSession
+public class SaveGame
 {
     private ActorStartValues _playerValues;
 
@@ -101,7 +51,7 @@ public class GameSession
         using var writer = XmlWriter.Create(path, writerSettings);
         writer.WriteStartDocument();
 
-        writer.WriteStartElement("GameSession");
+        writer.WriteStartElement("SaveGame");
 
         writer.WriteStartElement("WorldIndex");
         writer.WriteAttributeString("value", WorldIndex.ToString());
@@ -141,7 +91,7 @@ public class GameSession
         // End of player
         writer.WriteEndElement();
 
-        // Modifers
+        // Modifiers
         WriteModifiers(writer);
 
         // Activated objects
@@ -218,9 +168,9 @@ public class GameSession
         writer.WriteEndElement();
     }
 
-    public static GameSession LoadFromXml(string path)
+    public static SaveGame LoadFromXml(string path)
     {
-        var session = new GameSession();
+        var saveGame = new SaveGame();
 
         var readerSettings = new XmlReaderSettings
         {
@@ -231,25 +181,25 @@ public class GameSession
 
         using var reader = XmlReader.Create(path, readerSettings);
         reader.ReadToFollowing("WorldIndex");
-        session.WorldIndex = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
+        saveGame.WorldIndex = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("LevelIndex");
-        session.LevelIndex = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
+        saveGame.LevelIndex = int.Parse(reader.GetAttribute("value") ?? throw new ResourceLoadException());
 
         reader.ReadToFollowing("Player");
-        session.PlayerHealth = float.Parse(reader.GetAttribute("health") ?? throw new ResourceLoadException());
+        saveGame.PlayerHealth = float.Parse(reader.GetAttribute("health") ?? throw new ResourceLoadException());
 
-        session._playerValues = ActorStartValues.FromXml(reader, "PlayerValues");
+        saveGame._playerValues = ActorStartValues.FromXml(reader, "PlayerValues");
 
-        LoadWeapons(reader, session);
-        LoadModifiers(reader, session);
-        LoadActiveObjects(reader, session);
-        LoadEnemies(reader, session);
+        LoadWeapons(reader, saveGame);
+        LoadModifiers(reader, saveGame);
+        LoadActiveObjects(reader, saveGame);
+        LoadEnemies(reader, saveGame);
 
-        return session;
+        return saveGame;
     }
 
-    private static void LoadWeapons(XmlReader reader, GameSession session)
+    private static void LoadWeapons(XmlReader reader, SaveGame saveGame)
     {
         while (reader.Read())
         {
@@ -260,7 +210,7 @@ public class GameSession
                     return;
                 }
 
-                session.SelectedWeapon =
+                saveGame.SelectedWeapon =
                     int.Parse(reader.GetAttribute("selected") ?? throw new ResourceLoadException());
             }
 
@@ -270,7 +220,7 @@ public class GameSession
                 int ammoCount = int.Parse(reader.GetAttribute("ammoCount") ?? throw new ResourceLoadException());
                 int storedAmmo = int.Parse(reader.GetAttribute("storedAmmo") ?? throw new ResourceLoadException());
 
-                session.WeaponSaves.Add(id, new WeaponSave(ammoCount, storedAmmo));
+                saveGame.WeaponSaves.Add(id, new WeaponSave(ammoCount, storedAmmo));
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Weapons" })
@@ -280,7 +230,7 @@ public class GameSession
         }
     }
 
-    private static void LoadModifiers(XmlReader reader, GameSession session)
+    private static void LoadModifiers(XmlReader reader, SaveGame saveGame)
     {
         while (reader.Read())
         {
@@ -295,7 +245,7 @@ public class GameSession
                 int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
                 float timeLeft = float.Parse(reader.GetAttribute("timeLeft") ?? throw new ResourceLoadException());
 
-                session.LevelModifiers.Add(new ModifierSave(id, timeLeft));
+                saveGame.LevelModifiers.Add(new ModifierSave(id, timeLeft));
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Modifiers" })
@@ -305,7 +255,7 @@ public class GameSession
         }
     }
 
-    private static void LoadActiveObjects(XmlReader reader, GameSession session)
+    private static void LoadActiveObjects(XmlReader reader, SaveGame saveGame)
     {
         while (reader.Read())
         {
@@ -325,7 +275,7 @@ public class GameSession
                 float y = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 var position = new Vector2(x, y);
 
-                session.ActivatedObjects.Add(key, new ActiveObjectSave(position, active));
+                saveGame.ActivatedObjects.Add(key, new ActiveObjectSave(position, active));
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "ActiveObjects" })
@@ -335,7 +285,7 @@ public class GameSession
         }
     }
 
-    private static void LoadEnemies(XmlReader reader, GameSession session)
+    private static void LoadEnemies(XmlReader reader, SaveGame saveGame)
     {
         while (reader.Read())
         {
@@ -361,7 +311,7 @@ public class GameSession
                 float velY = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 var velocity = new Vector2(velX, velY);
 
-                session.SavedEnemies.Add(key, new EnemySave(position, velocity, health, active));
+                saveGame.SavedEnemies.Add(key, new EnemySave(position, velocity, health, active));
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Enemies" })

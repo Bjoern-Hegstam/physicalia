@@ -61,7 +61,7 @@ public class MainMenuScreen(Game game, GameManager gameManager, ScreenManager sc
         switch (_menuItems[_selectedMenuItemIndex])
         {
             case "New Game":
-                gameManager.NewSession();
+                gameManager.NewGame();
                 screenManager.TransitionTo(typeof(GameScreen));
                 break;
             case "Load Game":
@@ -74,7 +74,7 @@ public class MainMenuScreen(Game game, GameManager gameManager, ScreenManager sc
 
                     if (loadDialog.ShowDialog() == DialogResult.OK)
                     {
-                        gameManager.LoadSession(GameSession.LoadFromXml(loadDialog.FileName));
+                        gameManager.LoadGame(SaveGame.LoadFromXml(loadDialog.FileName));
                         ScreenManager.TransitionTo(typeof(GameScreen));
                     }
                     */

@@ -243,20 +243,20 @@ public class EnemyManager
         }
     }
 
-    public void SaveSession(GameSession session)
+    public void SaveGame(SaveGame saveGame)
     {
         foreach (Enemy enemy in _activatedEnemies)
         {
             var enemySave = new EnemySave(enemy.Position, enemy.Velocity, enemy.Health, enemy.IsActive);
-            session.SavedEnemies.Add(enemy.UniqueId, enemySave);
+            saveGame.SavedEnemies.Add(enemy.UniqueId, enemySave);
         }
     }
 
-    public void LoadSession(GameSession session)
+    public void LoadGame(SaveGame saveGame)
     {
         for (int i = _inactiveEnemies.Count - 1; i >= 0; i--)
         {
-            if (session.SavedEnemies.ContainsKey(_inactiveEnemies[i].UniqueId))
+            if (saveGame.SavedEnemies.ContainsKey(_inactiveEnemies[i].UniqueId))
             {
                 // Move the enemy
                 Enemy enemy = _inactiveEnemies[i];
@@ -264,7 +264,7 @@ public class EnemyManager
                 _activatedEnemies.Add(enemy);
 
                 // Setup the enemy
-                EnemySave save = session.SavedEnemies[enemy.UniqueId];
+                EnemySave save = saveGame.SavedEnemies[enemy.UniqueId];
                 enemy.Position = save.Position;
                 enemy.Velocity = save.Velocity;
                 enemy.Health = save.Health;

@@ -872,28 +872,27 @@ public class Level(Game game, Player player)
         }
     }
 
-    public void SaveSession(GameSession session)
+    public void SaveGame(SaveGame saveGame)
     {
         foreach (ModifierPickup modifier in _modifiers)
         {
-            session.LevelModifiers.Add(new ModifierSave(modifier.TemplateId.Id, modifier.TimeRemaining));
+            saveGame.LevelModifiers.Add(new ModifierSave(modifier.TemplateId.Id, modifier.TimeRemaining));
         }
 
         foreach (ActiveObject activeObject in _activeObjects)
         {
-            session.ActivatedObjects.Add(activeObject.UniqueId,
+            saveGame.ActivatedObjects.Add(activeObject.UniqueId,
                 new ActiveObjectSave(activeObject.Position, activeObject.IsActive));
         }
 
-        _enemyManager.SaveSession(session);
+        _enemyManager.SaveGame(saveGame);
     }
 
-    public void LoadSession(GameSession session)
+    public void LoadGame(SaveGame saveGame)
     {
-        // Make a soft reset to prepare for loading the new session
         SoftReset();
 
-        foreach (ModifierSave modifier in session.LevelModifiers)
+        foreach (ModifierSave modifier in saveGame.LevelModifiers)
         {
             var levelMod = ModifierTemplateLibrary.CreatePickup(new PickupTemplateId(modifier.Id)) as ModifierPickup;
             levelMod.Level = this;
@@ -913,7 +912,7 @@ public class Level(Game game, Player player)
         // Activate ActiveObjects
         for (int i = _inactiveObjects.Count - 1; i >= 0; i--)
         {
-            if (session.ActivatedObjects.TryGetValue(_inactiveObjects[i].UniqueId,
+            if (saveGame.ActivatedObjects.TryGetValue(_inactiveObjects[i].UniqueId,
                     out ActiveObjectSave activeObjectSave))
             {
                 // Move the object to the list of activated objects
@@ -926,16 +925,16 @@ public class Level(Game game, Player player)
                 activeObj.IsActive = activeObjectSave.IsActive;
             }
             else
-                // Since the load of a new session is only prepared for
+                // Since the load of a new game is only prepared for
                 // with a soft reset, there could be active objects that where
-                // activated that should inactive. Therefore all ActiveObjects
-                // not affected by the new session are reset
+                // activated that should inactive. Therefore, all ActiveObjects
+                // not affected by the new game are reset.
             {
                 _inactiveObjects[i].Reset();
             }
         }
 
-        _enemyManager.LoadSession(session);
+        _enemyManager.LoadGame(saveGame);
 
         // Have the screen sampler move to the players position
         UpdateScreenSampler();

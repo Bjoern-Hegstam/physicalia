@@ -318,7 +318,7 @@ public class World(Game game, Player player)
         }
     }
 
-    public void NewSession()
+    public void NewGame()
     {
         _levelIndex = 0;
         _levels[_levelIndex].Reset();
@@ -326,17 +326,17 @@ public class World(Game game, Player player)
         State = _nextState = WorldState.Start;
     }
 
-    public void LoadSession(GameSession session)
+    public void LoadGame(SaveGame saveGame)
     {
-        _levelIndex = session.LevelIndex;
-        _levels[_levelIndex].LoadSession(session);
+        _levelIndex = saveGame.LevelIndex;
+        _levels[_levelIndex].LoadGame(saveGame);
 
         State = _nextState = WorldState.PlayingLevel;
     }
 
-    public void SaveSession(GameSession session)
+    public void SaveGame(SaveGame saveGame)
     {
-        session.LevelIndex = _levelIndex;
-        _levels[_levelIndex].SaveSession(session);
+        saveGame.LevelIndex = _levelIndex;
+        _levels[_levelIndex].SaveGame(saveGame);
     }
 }

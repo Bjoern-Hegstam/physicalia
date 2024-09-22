@@ -406,7 +406,7 @@ public class Player : Actor
         }
     }
 
-    public void LoadSession(GameSession session, WeaponBank weaponBank)
+    public void LoadGame(SaveGame saveGame, WeaponBank weaponBank)
     {
         CurrentAnimationType = 0;
 
@@ -415,11 +415,11 @@ public class Player : Actor
         _visible = true;
 
         // Setup player
-        Position = session.PlayerValues.Position;
-        Velocity = session.PlayerValues.Velocity;
-        Acceleration = session.PlayerValues.Acceleration;
+        Position = saveGame.PlayerValues.Position;
+        Velocity = saveGame.PlayerValues.Velocity;
+        Acceleration = saveGame.PlayerValues.Acceleration;
 
-        Health = session.PlayerHealth;
+        Health = saveGame.PlayerHealth;
 
         // Clear previous weapons
         if (_weapons.Count > 0)
@@ -428,12 +428,12 @@ public class Player : Actor
         }
 
         // Set the current weapon
-        _currentWeapon = session.SelectedWeapon;
+        _currentWeapon = saveGame.SelectedWeapon;
 
         // Load in weapons and ammo
-        foreach (int weaponId in session.WeaponSaves.Keys)
+        foreach (int weaponId in saveGame.WeaponSaves.Keys)
         {
-            WeaponSave weaponSave = session.WeaponSaves[weaponId];
+            WeaponSave weaponSave = saveGame.WeaponSaves[weaponId];
 
             // Get the saved weapon
             Weapon weapon = weaponBank.GetWeapon(weaponId).Copy();
@@ -448,7 +448,7 @@ public class Player : Actor
         }
     }
 
-    public void SaveSession(GameSession session)
+    public void SaveGame(SaveGame saveGame)
     {
         var playerValues = new ActorStartValues
         {
@@ -457,15 +457,15 @@ public class Player : Actor
             Acceleration = Acceleration
         };
 
-        session.PlayerValues = playerValues;
-        session.PlayerHealth = Health;
+        saveGame.PlayerValues = playerValues;
+        saveGame.PlayerHealth = Health;
 
         // Weapons
-        session.SelectedWeapon = _currentWeapon;
+        saveGame.SelectedWeapon = _currentWeapon;
 
         foreach (int weaponId in _weapons.Keys)
         {
-            session.WeaponSaves.Add(weaponId,
+            saveGame.WeaponSaves.Add(weaponId,
                 new WeaponSave(_weapons[weaponId].AmmoCount, _weapons[weaponId].AmmoMemory));
         }
     }

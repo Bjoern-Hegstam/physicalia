@@ -125,7 +125,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
 
                     if (loadDialog.ShowDialog() == DialogResult.OK)
                     {
-                        gameManager.LoadSession(GameSession.LoadFromXml(loadDialog.FileName));
+                        gameManager.LoadGame(SaveGame.LoadFromXml(loadDialog.FileName));
                         pauseMenuIndex = 0;
                     }
                     */
@@ -140,7 +140,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
 
                     if (saveDialog.ShowDialog() == DialogResult.OK)
                     {
-                        gameManager.SaveSession().SaveToXml(saveDialog.FileName);
+                        gameManager.SaveGame().SaveToXml(saveDialog.FileName);
                         pauseMenuIndex = 0;
                     }
                     */
