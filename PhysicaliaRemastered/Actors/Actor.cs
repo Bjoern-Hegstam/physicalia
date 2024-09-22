@@ -68,7 +68,6 @@ public abstract class Actor : ICollidable
     public bool CanTakeDamage { get; set; }
 
     public int Width => CurrentAnimation.SourceRectangle.Width;
-
     public int Height => CurrentAnimation.SourceRectangle.Height;
 
     public virtual Vector2 Origin
@@ -281,5 +280,22 @@ public abstract class Actor : ICollidable
             SpriteFlip,
             0.8F
         );
+
+#if DEBUG
+        var collisionBoxLineTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+        collisionBoxLineTexture.SetData([Color.Red]);
+
+        spriteBatch.Draw(
+            collisionBoxLineTexture,
+            Position - viewportPosition + _collisionBox.Location.ToVector2(),
+            _collisionBox,
+            Color.White,
+            0F,
+            Origin,
+            1.0F,
+            SpriteFlip,
+            0.2F
+        );
+#endif
     }
 }

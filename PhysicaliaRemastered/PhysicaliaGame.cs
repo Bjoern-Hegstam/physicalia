@@ -27,7 +27,7 @@ public class PhysicaliaGame : Game
         _graphics = new GraphicsDeviceManager(this);
         _graphics.PreferredBackBufferWidth = 640;
         _graphics.PreferredBackBufferHeight = 480;
-
+        
         // _graphics.IsFullScreen = true;
         // _graphics.HardwareModeSwitch = false;
     }
