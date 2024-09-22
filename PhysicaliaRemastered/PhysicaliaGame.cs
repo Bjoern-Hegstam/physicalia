@@ -58,9 +58,9 @@ public class PhysicaliaGame : Game
         var screenManager = new ScreenManager(this);
         Components.Add(screenManager);
 
-        var menuScreen = new MenuScreen(this, gameManager, screenManager);
+        var mainMenuScreen = new MainMenuScreen(this, gameManager, screenManager);
 
-        screenManager.BaseScreen = menuScreen;
+        screenManager.BaseScreen = mainMenuScreen;
         screenManager.Screens.Add(new GameScreen(this, gameManager, screenManager));
 
         base.Initialize();
