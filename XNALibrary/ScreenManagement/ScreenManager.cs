@@ -49,12 +49,33 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
     /// transitioning between two Screens.
     /// </summary>
     public bool Transitioning => _transitionState != ScreenTransitionState.None;
-
-
+    
     public IScreenTransitionEffect? TransitionEffect { get; set; }
 
-    private SpriteBatch? _spriteBatch;
-    private RenderTarget2D? _renderTarget;
+    private readonly SpriteBatch _spriteBatch = new(game.GraphicsDevice);
+    private readonly RenderTarget2D _renderTarget = new(
+        game.GraphicsDevice,
+        game.GraphicsDevice.PresentationParameters.BackBufferWidth,
+        game.GraphicsDevice.PresentationParameters.BackBufferHeight
+    );
+
+    public override void Initialize()
+    {
+        foreach (Screen screen in Screens)
+        {
+            screen.Initialize();
+        }
+
+        base.Initialize();
+    }
+
+    protected override void LoadContent()
+    {
+        foreach (Screen screen in Screens)
+        {
+            screen.LoadContent(Game.Content);
+        }
+    }
 
     /// <summary>
     /// Makes the ScreenManager start the transition to a new Screen.
@@ -149,38 +170,10 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
             _screenStack.Push(_transitionScreen);
         }
 
-        // Do needed cleanup
         _transitionScreen = null;
         _transitionState = ScreenTransitionState.None;
         _transitionAmount = 0F;
         _transitionSpeed *= -1;
-    }
-
-    public override void Initialize()
-    {
-        // Initialize all screens
-        foreach (Screen screen in Screens)
-        {
-            screen.Initialize();
-        }
-
-        base.Initialize();
-    }
-
-    protected override void LoadContent()
-    {
-        _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-
-        _renderTarget = new RenderTarget2D(
-            Game.GraphicsDevice,
-            Game.GraphicsDevice.PresentationParameters.BackBufferWidth,
-            Game.GraphicsDevice.PresentationParameters.BackBufferHeight
-        );
-
-        foreach (Screen screen in Screens)
-        {
-            screen.LoadContent(Game.Content);
-        }
     }
 
     public override void Update(GameTime gameTime)
@@ -242,7 +235,7 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
                 _transitionScreen?.Draw(_spriteBatch);
             }
 
-            _spriteBatch?.Begin();
+            _spriteBatch.Begin();
 
             GraphicsDevice.Textures[1] = TransitionEffect.TransitionMask;
 
@@ -250,9 +243,9 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
 
             TransitionEffect.Begin();
 
-            _spriteBatch?.Draw(_renderTarget, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
 
-            _spriteBatch?.End();
+            _spriteBatch.End();
             TransitionEffect.End();
         }
         else if (Transitioning)
@@ -290,9 +283,9 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch?.Begin();
-            _spriteBatch?.Draw(_renderTarget, Vector2.Zero, new Color(overlay));
-            _spriteBatch?.End();
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(_renderTarget, Vector2.Zero, new Color(overlay));
+            _spriteBatch.End();
         }
         else
         {
