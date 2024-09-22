@@ -281,7 +281,15 @@ public class World(Game game, Player player)
                 _levels[_levelIndex].Draw(spriteBatch);
                 break;
             case WorldState.Finished:
-                spriteBatch.DrawString(Settings.WorldQuoteFont, "World Finished", new Vector2(160, 200), Color.White);
+                const string finishString = "World Finished!";
+                Vector2 finishStringSize = Settings.PlayerDeadFont.MeasureString(finishString);
+                Vector2 finishPos = new Vector2
+                {
+                    X = (game.GraphicsDevice.Viewport.Width - finishStringSize.X) / 2,
+                    Y = (game.GraphicsDevice.Viewport.Height - finishStringSize.Y) / 2
+                };
+
+                spriteBatch.DrawString(Settings.WorldQuoteFont, finishString, finishPos, Color.White);
                 break;
         }
     }

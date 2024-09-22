@@ -491,11 +491,13 @@ public class Level(Game game, Player player)
             case LevelState.Finished:
                 DrawLevel(spriteBatch);
 
-                var finishString = "Level Finished!";
+                const string finishString = "Level Finished!";
                 Vector2 finishStringSize = Settings.PlayerDeadFont.MeasureString(finishString);
-                Vector2 finishPos;
-                finishPos.X = (Viewport.Width - finishStringSize.X) / 2;
-                finishPos.Y = (Viewport.Width - finishStringSize.X) / 2;
+                var finishPos = new Vector2
+                {
+                    X = (game.GraphicsDevice.Viewport.Width - finishStringSize.X) / 2,
+                    Y = (game.GraphicsDevice.Viewport.Height - finishStringSize.Y) / 2
+                };
 
                 spriteBatch.DrawString(Settings.PlayerDeadFont, finishString, finishPos, Color.White);
                 break;
