@@ -332,6 +332,10 @@ public class GameManager(Game game)
 
                 break;
             case GameState.End:
+                if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+                {
+                    game.Exit();
+                }
                 break;
         }
 
