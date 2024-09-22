@@ -285,17 +285,45 @@ public abstract class Actor : ICollidable
         var collisionBoxLineTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
         collisionBoxLineTexture.SetData([Color.Red]);
 
+        var collisionBoxLocation = (Position - viewportPosition + _collisionBox.Location.ToVector2()).ToPoint();
+
+        const int outlineThickness = 1;
+        
         spriteBatch.Draw(
             collisionBoxLineTexture,
-            Position - viewportPosition + _collisionBox.Location.ToVector2(),
-            _collisionBox,
+            collisionBoxLocation.ToVector2(),
+            new Rectangle(
+                collisionBoxLocation.X,
+                collisionBoxLocation.Y,
+                outlineThickness,
+                _collisionBox.Height
+                ),
             Color.White,
             0F,
             Origin,
             1.0F,
             SpriteFlip,
-            0.2F
+            0.7F
         );
+        
+        spriteBatch.Draw(
+            collisionBoxLineTexture,
+            collisionBoxLocation.ToVector2(),
+            new Rectangle(
+                collisionBoxLocation.X,
+                collisionBoxLocation.Y,
+                _collisionBox.Width,
+                outlineThickness
+            ),
+            Color.White,
+            0F,
+            Origin,
+            1.0F,
+            SpriteFlip,
+            0.7F
+        );
+
+        
 #endif
     }
 }
