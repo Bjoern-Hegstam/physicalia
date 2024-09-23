@@ -11,7 +11,7 @@ public class ProjectileDefinition(int id, Sprite sprite) : SpriteParticleDefinit
 
     public override Particle Create(float angle)
     {
-        var projectile = new Projectile(Sprite);
+        var projectile = new Projectile(sprite);
         SetupParticle(projectile, angle);
 
         return projectile;

@@ -5,7 +5,6 @@ namespace XNALibrary.ParticleEngine.Particles;
 
 public class SpriteParticleDefinition(int id, Sprite sprite) : ParticleDefinition(id)
 {
-    public Sprite Sprite { get; } = sprite;
 
     public override Particle Create(float angle)
     {
