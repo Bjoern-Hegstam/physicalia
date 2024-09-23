@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.Collision;
+using XNALibrary.Graphics;
 using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors;
@@ -282,85 +283,13 @@ public abstract class Actor : ICollidable
         );
 
 #if DEBUG
-        DrawCollisionBox(spriteBatch, viewportPosition);
+        spriteBatch.DrawRectangle(
+            Position - viewportPosition + _collisionBox.Location.ToVector2(),
+            _collisionBox,
+            Color.Red,
+            Origin,
+            SpriteFlip
+        );
 #endif
-    }
-
-    private void DrawCollisionBox(SpriteBatch spriteBatch, Vector2 viewportPosition)
-    {
-        var collisionBoxLineTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-        collisionBoxLineTexture.SetData([Color.Red]);
-
-        var collisionBoxLocation = (Position - viewportPosition + _collisionBox.Location.ToVector2()).ToPoint();
-
-        const int outlineThickness = 1;
-
-        spriteBatch.Draw(
-            collisionBoxLineTexture,
-            collisionBoxLocation.ToVector2(),
-            new Rectangle(
-                collisionBoxLocation.X,
-                collisionBoxLocation.Y,
-                _collisionBox.Width,
-                outlineThickness
-            ),
-            Color.White,
-            0F,
-            Origin,
-            1.0F,
-            SpriteFlip,
-            0.7F
-        );
-
-        spriteBatch.Draw(
-            collisionBoxLineTexture,
-            collisionBoxLocation.ToVector2() + new Vector2 { X = _collisionBox.Width },
-            new Rectangle(
-                collisionBoxLocation.X,
-                collisionBoxLocation.Y,
-                outlineThickness,
-                _collisionBox.Height
-            ),
-            Color.White,
-            0F,
-            Origin,
-            1.0F,
-            SpriteFlip,
-            0.7F
-        );
-
-        spriteBatch.Draw(
-            collisionBoxLineTexture,
-            collisionBoxLocation.ToVector2() + new Vector2() { Y = _collisionBox.Height },
-            new Rectangle(
-                collisionBoxLocation.X,
-                collisionBoxLocation.Y,
-                _collisionBox.Width,
-                outlineThickness
-            ),
-            Color.White,
-            0F,
-            Origin,
-            1.0F,
-            SpriteFlip,
-            0.7F
-        );
-
-        spriteBatch.Draw(
-            collisionBoxLineTexture,
-            collisionBoxLocation.ToVector2(),
-            new Rectangle(
-                collisionBoxLocation.X,
-                collisionBoxLocation.Y,
-                outlineThickness,
-                _collisionBox.Height
-            ),
-            Color.White,
-            0F,
-            Origin,
-            1.0F,
-            SpriteFlip,
-            0.7F
-        );
     }
 }
