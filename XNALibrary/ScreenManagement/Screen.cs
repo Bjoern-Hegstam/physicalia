@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XNALibrary.ScreenManagement;
 
-public class Screen(Texture2D? background = null)
+public class Screen
 {
     public virtual void Initialize()
     {
@@ -33,17 +33,6 @@ public class Screen(Texture2D? background = null)
     /// <param name="spriteBatch">SpriteBatch used for drawing.</param>
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Begin();
-
-        // Draw background if one has been set
-        if (background != null)
-        {
-            spriteBatch.Draw(background, Vector2.Zero, Color.White);
-        }
-
-        OnDraw(spriteBatch);
-
-        spriteBatch.End();
     }
 
     /// <summary>
@@ -51,14 +40,6 @@ public class Screen(Texture2D? background = null)
     /// if a transition is taking place.
     /// </summary>
     protected virtual void OnHandleInput()
-    {
-    }
-
-    /// <summary>
-    /// Override this method to draw any special content before the buttons are drawn.
-    /// </summary>
-    /// <param name="spriteBatch">Initialized SpriteBatch to use for drawing content.</param>
-    protected virtual void OnDraw(SpriteBatch spriteBatch)
     {
     }
 

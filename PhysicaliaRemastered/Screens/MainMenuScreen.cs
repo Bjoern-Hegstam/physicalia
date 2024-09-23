@@ -85,10 +85,14 @@ public class MainMenuScreen(Game game, GameManager gameManager, ScreenManager sc
         }
     }
 
-    protected override void OnDraw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch)
     {
+        spriteBatch.Begin();
+        
         DrawBackground(spriteBatch);
         DrawMenu(spriteBatch);
+        
+        spriteBatch.End();
     }
 
     private void DrawBackground(SpriteBatch spriteBatch)
