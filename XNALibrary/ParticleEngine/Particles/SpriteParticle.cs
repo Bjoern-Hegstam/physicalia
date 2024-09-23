@@ -1,12 +1,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using XNALibrary.Graphics;
 using XNALibrary.Sprites;
 
 namespace XNALibrary.ParticleEngine.Particles;
 
-public class SpriteParticle : Particle
+public class SpriteParticle(Sprite sprite) : Particle
 {
-    public Sprite Sprite { get; set; }
+    public Sprite Sprite { get; } = sprite;
 
     public float Rotation { get; set; }
 
@@ -31,5 +32,15 @@ public class SpriteParticle : Particle
             SpriteEffects.None,
             1.0F
         );
+
+#if DEBUG
+        spriteBatch.DrawRectangle(
+            Position - offsetPosition,
+            new Rectangle(Point.Zero, Sprite.SourceRectangle.Size),
+            Color.Red,
+            Origin,
+            SpriteEffects.None
+        );
+#endif
     }
 }

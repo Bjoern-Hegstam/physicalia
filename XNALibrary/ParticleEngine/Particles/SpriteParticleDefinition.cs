@@ -3,24 +3,13 @@ using XNALibrary.Sprites;
 
 namespace XNALibrary.ParticleEngine.Particles;
 
-public class SpriteParticleDefinition : ParticleDefinition
+public class SpriteParticleDefinition(int id, Sprite sprite) : ParticleDefinition(id)
 {
-    public Sprite Sprite { get; set; }
-
-    public SpriteParticleDefinition(int id)
-        : base(id)
-    {
-    }
-
-    public SpriteParticleDefinition(int id, Sprite sprite)
-        : this(id)
-    {
-        Sprite = sprite;
-    }
+    public Sprite Sprite { get; } = sprite;
 
     public override Particle Create(float angle)
     {
-        var particle = new SpriteParticle();
+        var particle = new SpriteParticle(sprite);
         SetupParticle(particle, angle);
         return particle;
     }
@@ -31,7 +20,6 @@ public class SpriteParticleDefinition : ParticleDefinition
 
         var spriteParticle = (SpriteParticle)particle;
 
-        spriteParticle.Sprite = Sprite;
         spriteParticle.Rotation = angle;
     }
 
