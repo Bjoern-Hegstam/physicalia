@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PhysicaliaRemastered.GameManagement;
 using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.Collision;
@@ -283,6 +284,24 @@ public abstract class Actor : ICollidable
         );
 
 #if DEBUG
+        // Origin
+        spriteBatch.DrawRectangle(
+            Position - viewportPosition + Origin - new Vector2 { X = 2 },
+            new Rectangle(0, 0, 5, 1),
+            Color.Purple,
+            Origin,
+            SpriteFlip
+        );
+
+        spriteBatch.DrawRectangle(
+            Position - viewportPosition + Origin - new Vector2 { Y = 2 },
+            new Rectangle(0, 0, 1, 5),
+            Color.Purple,
+            Origin,
+            SpriteFlip
+        );
+        
+        // Collision box
         spriteBatch.DrawRectangle(
             Position - viewportPosition + _collisionBox.Location.ToVector2(),
             _collisionBox,

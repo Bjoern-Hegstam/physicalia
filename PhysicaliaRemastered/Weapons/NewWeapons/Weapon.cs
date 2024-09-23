@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PhysicaliaRemastered.Actors;
 using XNALibrary.Animation;
+using XNALibrary.Graphics;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 
@@ -253,11 +254,11 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
         // when using SpriteEffects.
         Vector2 origin = Player.Origin + new Vector2(Player.CollisionBox.X, Player.CollisionBox.Y);
 
-        // Worldposition of the weapon
+        // World position of the weapon
         Vector2 position = Player.Position;
 
         // If the player is flipped horizontally then we need to
-        // subtract the width of its collisionbox to properly
+        // subtract the width of its collision box to properly
         // place the weapon
         if ((spriteEffects & SpriteEffects.FlipHorizontally) != 0)
         {

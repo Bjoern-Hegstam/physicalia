@@ -9,7 +9,7 @@ public static class SpriteBatchExtensions
         Vector2 origin, SpriteEffects effects)
     {
         var collisionBoxLineTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-        collisionBoxLineTexture.SetData([Color.Red]);
+        collisionBoxLineTexture.SetData([color]);
 
         const int outlineThickness = 1;
 
