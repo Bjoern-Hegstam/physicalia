@@ -6,8 +6,8 @@
         <Graphics>
             <Sprite id="100" />
             <Animations>
-                <Warmup key="21" />
-                <Fire key="21" />
+                <Warmup animationDefinitionId="21" />
+                <Fire animationDefinitionId="21" />
             </Animations>
             <PlayerOffset x="-8" y="-3" />
         </Graphics>
@@ -25,8 +25,8 @@
         <Graphics>
             <Sprite id="101" />
             <Animations>
-                <Warmup key="8" />
-                <Fire key="8" />
+                <Warmup animationDefinitionId="8" />
+                <Fire animationDefinitionId="8" />
             </Animations>
             <PlayerOffset x="16" y="0" />
         </Graphics>
@@ -49,8 +49,8 @@
         <Graphics>
             <Sprite id="102" />
             <Animations>
-                <Warmup key="7" />
-                <Fire key="9" />
+                <Warmup animationDefinitionId="7" />
+                <Fire animationDefinitionId="9" />
             </Animations>
             <PlayerOffset x="-3" y="0" />
         </Graphics>

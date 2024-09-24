@@ -83,11 +83,11 @@ public class WeaponBank(GameServiceContainer gameServiceContainer)
 
                 // Get animations
                 reader.ReadToFollowing("Warmup");
-                int warmUpKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                var warmUpKey = new AnimationDefinitionId(reader.GetAttribute("animationDefinitionId") ?? throw new ResourceLoadException());
                 weapon.WarmupAnimation = AnimationManager.AddPlaybackAnimation(warmUpKey);
 
                 reader.ReadToFollowing("Fire");
-                int fireKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                var fireKey = new AnimationDefinitionId(reader.GetAttribute("animationDefinitionId") ?? throw new ResourceLoadException());
                 weapon.WeaponFireAnimation = AnimationManager.AddPlaybackAnimation(fireKey);
 
                 reader.ReadToFollowing("PlayerOffset");

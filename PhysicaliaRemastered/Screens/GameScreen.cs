@@ -49,7 +49,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
 
     public override void LoadContent(ContentManager contentManager)
     {
-        gameManager.LoadXml("Content/GameData/Game.xml", contentManager);
+        gameManager.LoadContent("Content/GameData/Game.xml", contentManager);
     }
 
     protected override void OnUpdate(GameTime gameTime)

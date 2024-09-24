@@ -545,7 +545,7 @@ public class Level(Game game, Player player)
             case LevelState.Finished:
                 // Store the current ammo count of the player's retrieved weapons
                 Player.StoreWeaponAmmoCount();
-                Player.CurrentAnimationType = (int)ActorAnimation.Win;
+                Player.CurrentAnimationType = ActorAnimationType.Win;
 
                 Player.CanTakeDamage = false;
                 break;
@@ -556,7 +556,7 @@ public class Level(Game game, Player player)
 
     private bool PlayerOffScreen()
     {
-        Rectangle playerRect = Player.CurrentAnimation.SourceRectangle;
+        Rectangle playerRect = Player.CurrentAnimation.Frame;
         playerRect.X = (int)(Player.Position.X - Player.Origin.X);
         playerRect.Y = (int)(Player.Position.Y - Player.Origin.Y);
 
@@ -577,7 +577,7 @@ public class Level(Game game, Player player)
             Height = Viewport.MaxHeight
         };
 
-        Rectangle playerRect = Player.CurrentAnimation.SourceRectangle;
+        Rectangle playerRect = Player.CurrentAnimation.Frame;
         playerRect.X = (int)(Player.Position.X - Player.Origin.X);
         playerRect.Y = (int)(Player.Position.Y - Player.Origin.Y);
 

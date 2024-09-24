@@ -9,10 +9,10 @@
             <CollisionBox x="0" y="0" width="48" height="91" />
         </Setup>
         <Animations>
-            <Animation key="10" action="1" />
-            <Animation key="11" action="2" />
-            <Animation key="12" action="3" />
-            <Animation key="13" action="4" />
+            <Animation id="10" action="1" />
+            <Animation id="11" action="2" />
+            <Animation id="12" action="3" />
+            <Animation id="13" action="4" />
         </Animations>
     </Enemy>
 </EnemyBank>

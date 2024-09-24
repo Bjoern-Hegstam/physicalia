@@ -8,67 +8,26 @@ namespace XNALibrary.Animation;
 
 public class AnimationManager(Game game) : GameComponent(game)
 {
-    private readonly Dictionary<int, Animation> _animationBank = new();
-    private readonly List<Animation> _playbackAnims = [];
+    private readonly Dictionary<AnimationDefinitionId, AnimationDefinition> _animationDefinitions = new();
+    private readonly List<Animation> _playbackAnimations = [];
 
     public void AddPlaybackAnimation(Animation animation)
     {
-        _playbackAnims.Add(animation);
+        _playbackAnimations.Add(animation);
     }
 
-    /// <summary>
-    /// Adds an animation from the bank to the collection of available
-    /// animations.
-    /// </summary>
-    /// <param name="bankKey">Key to the animation in the bank.</param>
-    /// <returns>The added animation or null if the animation bank didn't
-    /// contain an animation with the specified key.</returns>
-    public Animation AddPlaybackAnimation(int bankKey)
+    public Animation AddPlaybackAnimation(AnimationDefinitionId animationDefinitionId)
     {
-        Animation animation = _animationBank[bankKey].Copy();
-        _playbackAnims.Add(animation);
+        Animation animation = new Animation(_animationDefinitions[animationDefinitionId]);
+        _playbackAnimations.Add(animation);
         return animation;
     }
 
     public override void Update(GameTime gameTime)
     {
-        // The increase in frame index
-        var indexIncrease = 0;
-
-        // Go through every active animation
-        foreach (Animation animation in _playbackAnims)
+        foreach (Animation animation in _playbackAnimations.Where(animation => animation.IsActive))
         {
-            // Only update active animations
-            if (!animation.IsActive)
-            {
-                continue;
-            }
-
-            // Subtract total number of seconds from the count down to till
-            // the next frame
-            animation.TimeTillNextFrame -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            // Increase the index increase as long as we need to change frames
-            while (animation.TimeTillNextFrame <= 0)
-            {
-                animation.TimeTillNextFrame += 1 / animation.Framerate;
-                indexIncrease++;
-            }
-
-            // If a frame change was made then add to the index of the
-            // animation and reset the increase
-            if (indexIncrease > 0)
-            {
-                animation.FrameIndex += indexIncrease;
-                indexIncrease = 0;
-            }
-
-            // See if the animation has come to its last frame and
-            // wont loop
-            if (animation.FrameIndex == animation.Rows * animation.Columns - 1 && !animation.Loop)
-            {
-                animation.IsActive = false;
-            }
+            animation.Update(gameTime);
         }
     }
 
@@ -84,15 +43,16 @@ public class AnimationManager(Game game) : GameComponent(game)
         {
             if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "Animation") continue;
 
-            int id = int.Parse(reader.GetAttribute("id") ?? throw new ResourceLoadException());
-            Animation anim = LoadAnimationFromXml(reader, contentManager);
+            AnimationDefinition animationDefinition = LoadAnimationDefinition(reader, contentManager);
 
-            _animationBank.Add(id, anim);
+            _animationDefinitions.Add(animationDefinition.Id, animationDefinition);
         }
     }
 
-    private Animation LoadAnimationFromXml(XmlReader reader, ContentManager contentManager)
+    private AnimationDefinition LoadAnimationDefinition(XmlReader reader, ContentManager contentManager)
     {
+        var id = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
+        
         reader.ReadToFollowing("TextureId");
         var textureId = new TextureId(reader.ReadElementContentAsString());
 
@@ -114,11 +74,16 @@ public class AnimationManager(Game game) : GameComponent(game)
 
         var startFrame = new Rectangle(x, y, width, height);
         var texture = contentManager.Load<Texture2D>(textureId.AssetName);
-        var anim = new Animation(startFrame, columns, rows, frameRate, texture)
-        {
-            Loop = loop
-        };
+        var animationDefinition = new AnimationDefinition(
+            id,
+            texture,
+            startFrame,
+            columns,
+            rows,
+            frameRate,
+            loop
+        );
 
-        return anim;
+        return animationDefinition;
     }
 }

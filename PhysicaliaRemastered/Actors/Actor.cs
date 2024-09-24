@@ -10,7 +10,7 @@ using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors;
 
-public enum ActorAnimation
+public enum ActorAnimationType
 {
     Rest = 0,
     Walk = 1,
@@ -36,8 +36,8 @@ public abstract class Actor : ICollidable
         set => _startValues = value;
     }
 
-    private Vector2 _velocity;
-    private Vector2 _acceleration;
+    private Vector2 _velocity = Vector2.Zero;
+    private Vector2 _acceleration = Vector2.Zero;
 
     private SpriteEffects _verticalFlip;
     private SpriteEffects _horizontalFlip;
@@ -52,7 +52,7 @@ public abstract class Actor : ICollidable
         set => _health = value;
     }
 
-    private int _currentAnimType;
+    private ActorAnimationType _currentAnimationType = ActorAnimationType.Rest;
 
     private Rectangle _collisionBox;
 
@@ -64,12 +64,12 @@ public abstract class Actor : ICollidable
         set => _collisionBox = value;
     }
 
-    public bool CanCollide { get; set; }
+    public bool CanCollide { get; set; } = true;
 
-    public bool CanTakeDamage { get; set; }
+    public bool CanTakeDamage { get; set; } = true;
 
-    public int Width => CurrentAnimation.SourceRectangle.Width;
-    public int Height => CurrentAnimation.SourceRectangle.Height;
+    public int Width => CurrentAnimation.Frame.Width;
+    public int Height => CurrentAnimation.Frame.Height;
 
     public virtual Vector2 Origin
     {
@@ -82,7 +82,7 @@ public abstract class Actor : ICollidable
         }
     }
 
-    public Vector2 Position { get; set; }
+    public Vector2 Position { get; set; } = Vector2.Zero;
 
     public Vector2 Velocity
     {
@@ -139,106 +139,73 @@ public abstract class Actor : ICollidable
         }
     }
 
-    /// <summary>
-    /// Gets the currently used Animation.
-    /// </summary>
-    public Animation CurrentAnimation => Animations.ContainsKey(_currentAnimType) ? Animations[_currentAnimType] : null;
+    public Dictionary<ActorAnimationType, Animation> Animations = new();
 
-    /// <summary>
-    /// The key to the currently used animation key.
-    /// </summary>
-    public int CurrentAnimationType
+    public ActorAnimationType CurrentAnimationType
     {
-        get => _currentAnimType;
-        set => SetAnimation(value);
+        get => _currentAnimationType;
+        set
+        {
+            Animations.GetValueOrDefault(_currentAnimationType)?.Stop();
+            _currentAnimationType = value;
+            Animations.GetValueOrDefault(_currentAnimationType)?.Play();
+        }
     }
 
-    public Dictionary<int, Animation> Animations { get; }
-
-    protected Actor()
-    {
-        Animations = new Dictionary<int, Animation>();
-        _currentAnimType = -1;
-
-        _velocity = Position = Vector2.Zero;
-        _acceleration = Vector2.Zero;
-
-        CanCollide = true;
-        CanTakeDamage = true;
-    }
+    public Animation CurrentAnimation => Animations[CurrentAnimationType];
 
     public virtual void UpdateAnimation()
     {
-        if (Animations.ContainsKey((int)ActorAnimation.Jump) &&
-            _velocity.Y / _acceleration.Y < 0)
+        if (Animations.ContainsKey(ActorAnimationType.Jump) && _velocity.Y / _acceleration.Y < 0)
         {
-            if (_currentAnimType != (int)ActorAnimation.Jump)
+            if (_currentAnimationType != ActorAnimationType.Jump)
             {
-                CurrentAnimationType = (int)ActorAnimation.Jump;
+                CurrentAnimationType = ActorAnimationType.Jump;
             }
 
             return;
         }
 
-        if (Animations.ContainsKey((int)ActorAnimation.Fall) &&
-            _velocity.Y / _acceleration.Y > 0)
+        if (Animations.ContainsKey(ActorAnimationType.Fall) && _velocity.Y / _acceleration.Y > 0)
         {
-            if (_currentAnimType != (int)ActorAnimation.Fall)
+            if (_currentAnimationType != ActorAnimationType.Fall)
             {
-                CurrentAnimationType = (int)ActorAnimation.Fall;
+                CurrentAnimationType = ActorAnimationType.Fall;
             }
 
             return;
         }
 
-        if (Animations.ContainsKey((int)ActorAnimation.Walk) &&
-            _velocity.X != 0)
+        if (Animations.ContainsKey(ActorAnimationType.Walk) && _velocity.X != 0)
         {
-            if (_currentAnimType != (int)ActorAnimation.Walk)
+            if (_currentAnimationType != ActorAnimationType.Walk)
             {
-                CurrentAnimationType = (int)ActorAnimation.Walk;
+                CurrentAnimationType = ActorAnimationType.Walk;
             }
 
             return;
         }
 
-        if (Animations.ContainsKey((int)ActorAnimation.Die) &&
-            _health <= 0)
+        if (Animations.ContainsKey(ActorAnimationType.Die) && _health <= 0)
         {
-            if (_currentAnimType != (int)ActorAnimation.Die)
+            if (_currentAnimationType != ActorAnimationType.Die)
             {
-                CurrentAnimationType = (int)ActorAnimation.Die;
+                CurrentAnimationType = ActorAnimationType.Die;
             }
 
             return;
         }
 
-        if (Animations.ContainsKey((int)ActorAnimation.Rest) &&
-            _velocity.X == 0)
+        if (Animations.ContainsKey(ActorAnimationType.Rest) && _velocity.X == 0)
         {
-            if (_currentAnimType != (int)ActorAnimation.Rest)
+            if (_currentAnimationType != ActorAnimationType.Rest)
             {
-                CurrentAnimationType = (int)ActorAnimation.Rest;
+                CurrentAnimationType = ActorAnimationType.Rest;
             }
         }
     }
 
-    private void SetAnimation(int animationKey)
-    {
-        if (Animations.ContainsKey(_currentAnimType))
-        {
-            CurrentAnimation.Stop();
-        }
-
-        _currentAnimType = animationKey;
-
-        if (Animations.ContainsKey(_currentAnimType))
-        {
-            CurrentAnimation.Play();
-        }
-    }
-
-    public void AddAnimation(int animType, Animation animation)
+    public void AddAnimation(ActorAnimationType animType, Animation animation)
     {
         Animations.Add(animType, animation);
     }
@@ -265,15 +232,15 @@ public abstract class Actor : ICollidable
 
     public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        if (!Animations.ContainsKey(_currentAnimType))
+        if (!Animations.ContainsKey(_currentAnimationType))
         {
             return;
         }
 
         spriteBatch.Draw(
-            CurrentAnimation.Texture,
+            CurrentAnimation.AnimationDefinition.Texture,
             Position - viewportPosition,
-            CurrentAnimation.SourceRectangle,
+            CurrentAnimation.Frame,
             Color.White,
             0F,
             Origin,
@@ -299,7 +266,7 @@ public abstract class Actor : ICollidable
             Origin,
             SpriteFlip
         );
-        
+
         // Collision box
         spriteBatch.DrawRectangle(
             Position - viewportPosition + _collisionBox.Location.ToVector2(),

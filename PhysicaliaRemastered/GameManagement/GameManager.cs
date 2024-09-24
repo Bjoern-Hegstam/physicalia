@@ -136,7 +136,7 @@ public class GameManager(Game game)
         return saveGame;
     }
     
-    public void LoadXml(string path, ContentManager contentManager)
+    public void LoadContent(string path, ContentManager contentManager)
     {
         var readerSettings = new XmlReaderSettings
         {
@@ -146,16 +146,16 @@ public class GameManager(Game game)
         };
 
         using var reader = XmlReader.Create(path, readerSettings);
-        LoadXml(reader, contentManager);
+        LoadContent(reader, contentManager);
     }
 
-    public void LoadXml(XmlReader reader, ContentManager contentManager)
+    public void LoadContent(XmlReader reader, ContentManager contentManager)
     {
         while (reader.Read())
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Settings" })
             {
-                var settings = SettingsLoader.Load(Environment.GameDataPath + reader.ReadString(), game);
+                Settings settings = SettingsLoader.Load(Environment.GameDataPath + reader.ReadString(), game);
                 game.Services.AddService(settings);
             }
 
@@ -172,7 +172,7 @@ public class GameManager(Game game)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileLibrary" })
             {
-                var tileLibrary = TileLibraryLoader.Load(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
+                TileLibrary tileLibrary = TileLibraryLoader.Load(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
                 game.Services.AddService(tileLibrary);
             }
 
@@ -249,9 +249,9 @@ public class GameManager(Game game)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Animation" })
             {
-                int animKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                int action = int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
-                Animation anim = AnimationManager.AddPlaybackAnimation(animKey);
+                var animationDefinitionId = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
+                var action = (ActorAnimationType)int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
+                Animation anim = AnimationManager.AddPlaybackAnimation(animationDefinitionId);
                 _player.AddAnimation(action, anim);
                 _player.CurrentAnimationType = action;
             }
@@ -263,7 +263,7 @@ public class GameManager(Game game)
         }
     }
 
-    private Rectangle ReadRectangle(XmlReader reader)
+    private static Rectangle ReadRectangle(XmlReader reader)
     {
         int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
         int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());

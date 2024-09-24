@@ -17,11 +17,11 @@ public class AnimationParticle(Animation.Animation animation) : Particle
 
     public float DamageAmount { get; set; } = 0F;
 
-    public override Vector2 Origin => new(Animation.SourceRectangle.Width / 2f, Animation.SourceRectangle.Height / 2f);
+    public override Vector2 Origin => new(Animation.Frame.Width / 2f, Animation.Frame.Height / 2f);
 
-    public override int Width => Animation.SourceRectangle.Width;
+    public override int Width => Animation.Frame.Width;
 
-    public override int Height => Animation.SourceRectangle.Height;
+    public override int Height => Animation.Frame.Height;
 
     public override Rectangle CollisionBox => new(0, 0, Width, Height);
 
@@ -54,9 +54,9 @@ public class AnimationParticle(Animation.Animation animation) : Particle
         if (Animation.IsActive)
         {
             spriteBatch.Draw(
-                Animation.Texture,
+                Animation.AnimationDefinition.Texture,
                 Position - offsetPosition,
-                Animation.SourceRectangle,
+                Animation.Frame,
                 Color.White,
                 0F,
                 Origin,

@@ -280,14 +280,16 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 
         Animation? weaponAnim = _timeTillWeaponStart > 0 ? WarmupAnimation : WeaponFireAnimation;
 
-        spriteBatch.Draw(weaponAnim.Texture,
+        spriteBatch.Draw(
+            weaponAnim.AnimationDefinition.Texture,
             position - viewportPosition,
-            weaponAnim.SourceRectangle,
+            weaponAnim.Frame,
             Color.White,
             0.0F,
             origin,
             1.0F,
             spriteEffects,
-            1.0F);
+            1.0F
+        );
     }
 }

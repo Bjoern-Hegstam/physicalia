@@ -85,8 +85,7 @@ public class Player : Actor
         velocity.X = 0;
 
         float moveSpeed = WalkSpeed;
-        if (CurrentAnimationType == (int)ActorAnimation.Fall ||
-            CurrentAnimationType == (int)ActorAnimation.Jump)
+        if (CurrentAnimationType is ActorAnimationType.Fall or ActorAnimationType.Jump)
         {
             moveSpeed = FallMovementSpeed;
         }
@@ -104,8 +103,8 @@ public class Player : Actor
 
         // Jump
         if (Settings.InputMap.IsPressed(InputAction.Jump) &&
-            CurrentAnimationType != (int)ActorAnimation.Jump &&
-            CurrentAnimationType != (int)ActorAnimation.Fall)
+            CurrentAnimationType != ActorAnimationType.Jump &&
+            CurrentAnimationType != ActorAnimationType.Fall)
         {
             velocity.Y = JumpMagnitude * (Acceleration.Y > 0 ? 1 : -1);
         }
@@ -360,7 +359,7 @@ public class Player : Actor
             return;
         }
 
-        // Decreaes health
+        // Decrease health
         Health -= damageLevel;
 
         // Decrease life count if the player died
@@ -399,8 +398,8 @@ public class Player : Actor
         // Draw weapon
         if (_weapons.Count != 0 &&
             _weapons.ContainsKey(_currentWeapon) &&
-            CurrentAnimationType != (int)ActorAnimation.Die &&
-            CurrentAnimationType != (int)ActorAnimation.Win)
+            CurrentAnimationType != ActorAnimationType.Die &&
+            CurrentAnimationType != ActorAnimationType.Win)
         {
             _weapons[_currentWeapon].Draw(spriteBatch, viewportPosition, SpriteFlip);
         }

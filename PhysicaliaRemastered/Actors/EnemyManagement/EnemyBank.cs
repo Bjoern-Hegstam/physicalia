@@ -136,8 +136,8 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Animation" })
             {
-                int animKey = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                int action = int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
+                var animKey = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
+                var action = (ActorAnimationType)int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
 
                 Animation anim = AnimationManager.AddPlaybackAnimation(animKey);
 
@@ -175,15 +175,10 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
     /// <returns></returns>
     private void SetPlaybackKeys(int typeId, Enemy enemy)
     {
-        Dictionary<int, Animation> bankAnimations = _enemyBank[typeId].Animations;
-
-        foreach (int animType in bankAnimations.Keys)
+        foreach ((ActorAnimationType actorAnimationType, Animation animation) in _enemyBank[typeId].Animations)
         {
-            Animation anim = bankAnimations[animType].Copy();
-
-            AnimationManager.AddPlaybackAnimation(anim);
-
-            enemy.Animations.Add(animType, anim);
+            Animation newAnimation = AnimationManager.AddPlaybackAnimation(animation.AnimationDefinition.Id);
+            enemy.Animations.Add(actorAnimationType, newAnimation);
         }
     }
 }

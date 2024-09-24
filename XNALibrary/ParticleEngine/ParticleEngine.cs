@@ -64,7 +64,8 @@ public class ParticleEngine
                     case "AnimationParticle":
                     {
                         reader.ReadToFollowing("Animation");
-                        int animationId = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
+                        AnimationDefinitionId animationId =
+                            new AnimationDefinitionId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
                         Animation.Animation animation = animationManager.AddPlaybackAnimation(animationId);
 
                         particleDef = new AnimationParticleDefinition(id, animation, animationManager);

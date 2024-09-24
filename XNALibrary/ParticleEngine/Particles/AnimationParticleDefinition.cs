@@ -14,20 +14,13 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
 
     public override Particle Create(float angle)
     {
-        Animation.Animation? particleAnimation = null;
-
         // See if a reusable animations has already been created
-        foreach (Animation.Animation anim in _createdAnimations.Where(anim => !anim.IsActive))
-        {
-            anim.FrameIndex = 0;
-            particleAnimation = anim;
-        }
+        Animation.Animation? particleAnimation = _createdAnimations.FirstOrDefault(anim => !anim.IsActive);
 
         // Create a new animation if none could be reused
         if (particleAnimation == null)
         {
-            particleAnimation = animation.Copy();
-            animationManager.AddPlaybackAnimation(particleAnimation);
+            particleAnimation = animationManager.AddPlaybackAnimation(animation.AnimationDefinition.Id);
             _createdAnimations.Add(particleAnimation);
         }
 
