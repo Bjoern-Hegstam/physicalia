@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
@@ -40,6 +41,7 @@ public class GameManager(Game game)
     private Settings Settings => game.Services.GetService<Settings>();
     private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
     private TileLibrary TileLibrary => game.Services.GetService<TileLibrary>();
+    private AnimationLibrary AnimationLibrary => game.Services.GetService<AnimationLibrary>();
     private AnimationRunner AnimationRunner => game.Services.GetService<AnimationRunner>();
     private WeaponLibrary WeaponLibrary => game.Services.GetService<WeaponLibrary>();
     private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
@@ -250,11 +252,11 @@ public class GameManager(Game game)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Animation" })
             {
+                var actorState = Enum.Parse<ActorState>(reader.GetAttribute("actorState") ?? throw new ResourceLoadException());
                 var animationDefinitionId = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
-                var action = (ActorAnimationType)int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
-                Animation anim = AnimationRunner.AddPlaybackAnimation(animationDefinitionId);
-                _player.AddAnimation(action, anim);
-                _player.CurrentAnimationType = action;
+
+                Animation anim = new Animation(AnimationLibrary[animationDefinitionId]);
+                _player.AddAnimation(actorState, anim);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Player" })

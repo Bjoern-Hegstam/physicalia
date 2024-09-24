@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors.Enemies;
@@ -56,9 +57,8 @@ public class EnemyManager
         return viewport.IsOnScreen(enemyBox);
     }
 
-    public void ActivateVisible(Viewport viewport)
+    public void ActivateVisibleEnemies(Viewport viewport)
     {
-        // Activate Enemies near the screen
         for (int i = _inactiveEnemies.Count - 1; i >= 0; i--)
         {
             Enemy enemy = _inactiveEnemies[i];
@@ -76,16 +76,11 @@ public class EnemyManager
 
     public void Update(GameTime gameTime, Player player, Viewport viewport)
     {
-        // Activate Enemies near the screen
-        ActivateVisible(viewport);
+        ActivateVisibleEnemies(viewport);
 
-        // Update the activated Enemies that are still active
-        foreach (Enemy enemy in _activatedEnemies)
+        foreach (Enemy enemy in _activatedEnemies.Where(enemy => enemy.IsActive))
         {
-            if (enemy.IsActive)
-            {
-                enemy.Update(gameTime, player);
-            }
+            enemy.Update(gameTime, player);
         }
     }
 
@@ -174,7 +169,7 @@ public class EnemyManager
         // Set the default on all activated enemies
         foreach (Enemy enemy in _activatedEnemies)
         {
-            enemy.SetDefaults();
+            enemy.ApplyStartValues();
         }
 
         // Transfer the reset Enemies to the queue
@@ -219,14 +214,11 @@ public class EnemyManager
     /// <summary>
     /// Updates the animations of all active Enemies
     /// </summary>
-    public void UpdateAnimations()
+    public void UpdateActorStates()
     {
-        foreach (Enemy enemy in _activatedEnemies)
+        foreach (Enemy enemy in _activatedEnemies.Where(enemy => enemy.IsActive))
         {
-            if (enemy.IsActive)
-            {
-                enemy.UpdateAnimation();
-            }
+            enemy.UpdateActorState();
         }
     }
 

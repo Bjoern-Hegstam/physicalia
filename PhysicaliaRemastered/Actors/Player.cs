@@ -48,13 +48,7 @@ public class Player : Actor
             }
         }
     }
-
-    public override float Health
-    {
-        get => base.Health;
-        set => base.Health = Math.Max(Math.Min(Settings.PlayerStartHealth, value), 0);
-    }
-
+    
     public Settings Settings { get; }
 
     private readonly Dictionary<int, Weapon> _weapons;
@@ -85,7 +79,7 @@ public class Player : Actor
         velocity.X = 0;
 
         float moveSpeed = WalkSpeed;
-        if (CurrentAnimationType is ActorAnimationType.Fall or ActorAnimationType.Jump)
+        if (CurrentState is ActorState.Falling or ActorState.Jumping)
         {
             moveSpeed = FallMovementSpeed;
         }
@@ -103,8 +97,8 @@ public class Player : Actor
 
         // Jump
         if (Settings.InputMap.IsPressed(InputAction.Jump) &&
-            CurrentAnimationType != ActorAnimationType.Jump &&
-            CurrentAnimationType != ActorAnimationType.Fall)
+            CurrentState != ActorState.Jumping &&
+            CurrentState != ActorState.Falling)
         {
             velocity.Y = JumpMagnitude * (Acceleration.Y > 0 ? 1 : -1);
         }
@@ -398,8 +392,8 @@ public class Player : Actor
         // Draw weapon
         if (_weapons.Count != 0 &&
             _weapons.ContainsKey(_currentWeapon) &&
-            CurrentAnimationType != ActorAnimationType.Die &&
-            CurrentAnimationType != ActorAnimationType.Win)
+            CurrentState != ActorState.Dying &&
+            CurrentState != ActorState.Celebrating)
         {
             _weapons[_currentWeapon].Draw(spriteBatch, viewportPosition, SpriteFlip);
         }
@@ -407,7 +401,7 @@ public class Player : Actor
 
     public void LoadGame(SaveGame saveGame, WeaponLibrary weaponLibrary)
     {
-        CurrentAnimationType = 0;
+        CurrentState = 0;
 
         _invincibleTime = 0;
         _flickerInterval = DefaultFlickerInterval;

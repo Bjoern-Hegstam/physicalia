@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary;
@@ -10,20 +12,17 @@ using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors;
 
-public enum ActorAnimationType
+public enum ActorState
 {
-    Rest = 0,
-    Walk = 1,
-    Jump = 2,
-    Fall = 3,
-    Die = 4,
-    Win = 5
+    Standing,
+    Walking,
+    Jumping,
+    Falling,
+    Dying,
+    Dead,
+    Celebrating
 }
 
-/// <summary>
-/// Represents an active Actor that has a position and velocity as well as
-/// an animated Sprite.
-/// </summary>
 public abstract class Actor : ICollidable
 {
     public const float MaxVerticalVelocity = 600;
@@ -46,13 +45,13 @@ public abstract class Actor : ICollidable
 
     private float _health;
 
-    public virtual float Health
+    public float Health
     {
         get => _health;
-        set => _health = value;
+        set => _health = Math.Max(value, 0);
     }
 
-    private ActorAnimationType _currentAnimationType = ActorAnimationType.Rest;
+    private ActorState _currentState = ActorState.Standing;
 
     private Rectangle _collisionBox;
 
@@ -139,75 +138,65 @@ public abstract class Actor : ICollidable
         }
     }
 
-    public Dictionary<ActorAnimationType, Animation> Animations = new();
+    private readonly Dictionary<ActorState, Animation> _animations = new();
 
-    public ActorAnimationType CurrentAnimationType
+    public ActorState CurrentState
     {
-        get => _currentAnimationType;
+        get => _currentState;
         set
         {
-            Animations.GetValueOrDefault(_currentAnimationType)?.Stop();
-            _currentAnimationType = value;
-            Animations.GetValueOrDefault(_currentAnimationType)?.Play();
+            if (_currentState == value)
+            {
+                return;
+            }
+
+            Debug.WriteLine($"{GetType().Name} changing state {_currentState} -> {value}");
+            Animations.GetValueOrDefault(_currentState)?.Stop();
+            _currentState = value;
+            Animations.GetValueOrDefault(_currentState)?.Play();
         }
     }
 
-    public Animation CurrentAnimation => Animations[CurrentAnimationType];
+    public Animation CurrentAnimation => Animations[CurrentState];
 
-    public virtual void UpdateAnimation()
+    public ReadOnlyDictionary<ActorState, Animation> Animations => _animations.AsReadOnly();
+
+    public virtual void UpdateActorState()
     {
-        if (Animations.ContainsKey(ActorAnimationType.Jump) && _velocity.Y / _acceleration.Y < 0)
+        if (_currentState is ActorState.Dead)
         {
-            if (_currentAnimationType != ActorAnimationType.Jump)
-            {
-                CurrentAnimationType = ActorAnimationType.Jump;
-            }
-
             return;
         }
 
-        if (Animations.ContainsKey(ActorAnimationType.Fall) && _velocity.Y / _acceleration.Y > 0)
+        if (_currentState == ActorState.Dying && !CurrentAnimation.IsActive)
         {
-            if (_currentAnimationType != ActorAnimationType.Fall)
-            {
-                CurrentAnimationType = ActorAnimationType.Fall;
-            }
-
-            return;
+            CurrentState = ActorState.Dead;
         }
-
-        if (Animations.ContainsKey(ActorAnimationType.Walk) && _velocity.X != 0)
+        else if (_health <= 0)
         {
-            if (_currentAnimationType != ActorAnimationType.Walk)
-            {
-                CurrentAnimationType = ActorAnimationType.Walk;
-            }
-
-            return;
+            CurrentState = ActorState.Dying;
         }
-
-        if (Animations.ContainsKey(ActorAnimationType.Die) && _health <= 0)
+        else if (_velocity.Y / _acceleration.Y < 0)
         {
-            if (_currentAnimationType != ActorAnimationType.Die)
-            {
-                CurrentAnimationType = ActorAnimationType.Die;
-            }
-
-            return;
+            CurrentState = ActorState.Jumping;
         }
-
-        if (Animations.ContainsKey(ActorAnimationType.Rest) && _velocity.X == 0)
+        else if (_velocity.Y / _acceleration.Y > 0)
         {
-            if (_currentAnimationType != ActorAnimationType.Rest)
-            {
-                CurrentAnimationType = ActorAnimationType.Rest;
-            }
+            CurrentState = ActorState.Falling;
+        }
+        else if (_velocity.X != 0)
+        {
+            CurrentState = ActorState.Walking;
+        }
+        else if (_velocity.X == 0)
+        {
+            CurrentState = ActorState.Standing;
         }
     }
 
-    public void AddAnimation(ActorAnimationType animType, Animation animation)
+    public void AddAnimation(ActorState animType, Animation animation)
     {
-        Animations.Add(animType, animation);
+        _animations.Add(animType, animation);
     }
 
     public void ApplyStartValues()
@@ -219,20 +208,25 @@ public abstract class Actor : ICollidable
 
     public virtual void Update(GameTime gameTime)
     {
-        _velocity += _acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        // Cap off velocity in Y
-        float quota = _velocity.Y / MaxVerticalVelocity;
-        if (quota >= 1 || quota <= -1)
+        if (_currentState is not ActorState.Dying)
         {
-            _velocity.Y = MaxVerticalVelocity * Math.Sign(_velocity.Y);
+            _velocity += _acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            // Cap off velocity in Y
+            float quota = _velocity.Y / MaxVerticalVelocity;
+            if (quota is >= 1 or <= -1)
+            {
+                _velocity.Y = MaxVerticalVelocity * Math.Sign(_velocity.Y);
+            }
+
+            Position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        Position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        CurrentAnimation.Update(gameTime);
     }
 
     public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        if (!Animations.ContainsKey(_currentAnimationType))
+        if (!_animations.ContainsKey(_currentState))
         {
             return;
         }

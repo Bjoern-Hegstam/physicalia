@@ -24,7 +24,7 @@
                                         <xs:element minOccurs="1" maxOccurs="unbounded" name="Animation">
                                             <xs:complexType>
                                                 <xs:attribute name="id" type="xs:int" />
-                                                <xs:attribute name="action" type="xs:int" />
+                                                <xs:attribute name="actorState" type="xs:string" />
                                             </xs:complexType>
                                         </xs:element>
                                     </xs:sequence>

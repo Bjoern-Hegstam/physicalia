@@ -13,12 +13,12 @@
     <Player>
         <CollisionBox x="2" y="0" width="18" height="48" />
         <Animations>
-            <Animation id="0" action="0" />
-            <Animation id="1" action="1" />
-            <Animation id="2" action="2" />
-            <Animation id="3" action="3" />
-            <Animation id="4" action="4" />
-            <Animation id="5" action="5" />
+            <Animation id="0" actorState="Standing" />
+            <Animation id="1" actorState="Walking" />
+            <Animation id="2" actorState="Jumping" />
+            <Animation id="3" actorState="Falling" />
+            <Animation id="4" actorState="Dying" />
+            <Animation id="5" actorState="Celebrating" />
         </Animations>
     </Player>
     <Worlds>

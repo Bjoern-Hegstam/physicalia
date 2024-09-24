@@ -7,34 +7,11 @@ using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors.Enemies;
 
-/// <summary>
-/// Describes the intelligence level of an Enemy.
-/// </summary>
-public enum AiLevel
-{
-    Dumb,
-    Smart,
-    Savant
-}
-
-/// <summary>
-/// Descrines the behavior of an Enemy.
-/// </summary>
-public enum EnemyBehavior
-{
-    Idle,
-    Seek,
-    Attack,
-    Follow
-}
-
 public class Enemy : Actor
 {
     private static int _enemyCount;
 
-    // AI
     private Rectangle _patrolArea;
-    private EnemyBehavior _behavior;
 
     // Post-death
     private float _blinkDelay = 1F;
@@ -44,7 +21,7 @@ public class Enemy : Actor
 
     public int UniqueId { get; }
 
-    public int TypeId { get; }
+    public readonly int TypeId = 0;
 
     public bool IsActive
     {
@@ -55,7 +32,7 @@ public class Enemy : Actor
 
             if (value)
             {
-                CurrentAnimationType = CurrentAnimationType;
+                CurrentState = CurrentState;
             }
         }
     }
@@ -66,39 +43,26 @@ public class Enemy : Actor
 
     public int Damage { get; set; }
 
-    public float AttackRange { get; set; }
-
     public Rectangle PatrolArea
     {
         get => _patrolArea;
         set => _patrolArea = value;
     }
 
-    public AiLevel Intelligence { get; set; }
-
     public Enemy(ActorStartValues startValues)
     {
-        // Provide the enemy with a "unique" id
         UniqueId = _enemyCount++;
 
-        TypeId = 0;
         StartValues = startValues;
-        SetDefaults();
+        ApplyStartValues();
     }
 
-    /// <summary>
-    /// Updates the Enemy. The Player reference is used for determining the
-    /// behavior of the Enemy.
-    /// </summary>
-    /// <param name="gameTime"></param>
-    /// <param name="player"></param>
     public virtual void Update(GameTime gameTime, Player player)
     {
-        if (Health > 0)
+        if (CurrentState is not ActorState.Dead)
         {
             base.Update(gameTime);
 
-            // TODO: Remove temp code and make better!
             if (!WithinArea(this, _patrolArea))
             {
                 MoveToArea();
@@ -106,8 +70,6 @@ public class Enemy : Actor
         }
         else
         {
-            // TODO: Probably redo or make better later (Blink)
-
             // Start blinking after a set time
             if (_blinkDelay > 0)
             {
@@ -132,11 +94,13 @@ public class Enemy : Actor
                 }
 
                 // Make sure we're not visible if we're done blinking
-                if (_blinkCount == 0 && Visible)
+                if (_blinkCount != 0 || !Visible)
                 {
-                    Visible = false;
-                    Enabled = false;
+                    return;
                 }
+
+                Visible = false;
+                Enabled = false;
             }
         }
     }
@@ -185,23 +149,13 @@ public class Enemy : Actor
     private void MoveToArea()
     {
         // Make the enemy move in the correct direction in X
-        if ((Position.X < _patrolArea.X + _patrolArea.Width / 2 && Velocity.X < 0) ||
-            (Position.X > _patrolArea.X + _patrolArea.Width / 2 && Velocity.X > 0))
+        if ((Position.X < _patrolArea.X + _patrolArea.Width / 2f && Velocity.X < 0) ||
+            (Position.X > _patrolArea.X + _patrolArea.Width / 2f && Velocity.X > 0))
         {
             Vector2 velocity = Velocity;
             velocity.X *= -1;
             Velocity = velocity;
         }
-    }
-
-    /// <summary>
-    /// Sets all fields to their default values. Values stored in Enemy.StartValues
-    /// are also set. Override this method to set values specific to the
-    /// enemy type.
-    /// </summary>
-    public virtual void SetDefaults()
-    {
-        ApplyStartValues();
     }
 
     /// <summary>
@@ -222,14 +176,11 @@ public class Enemy : Actor
     /// <param name="enemy"></param>
     public virtual void Copy(Enemy enemy)
     {
-        enemy.AttackRange = AttackRange;
-        enemy._behavior = _behavior;
         enemy.CanCollide = CanCollide;
         enemy.CanTakeDamage = CanTakeDamage;
         enemy.CollisionBox = CollisionBox;
         enemy.Damage = Damage;
         enemy.Enabled = Enabled;
-        enemy.Intelligence = Intelligence;
         enemy.Health = Health;
 
         enemy._blinkCount = _blinkCount;
@@ -237,7 +188,7 @@ public class Enemy : Actor
         enemy._blinkInterval = _blinkInterval;
         enemy._blinkTime = _blinkTime;
 
-        enemy.CurrentAnimationType = CurrentAnimationType;
+        enemy.CurrentState = CurrentState;
     }
 
     public override ObjectType Type => ObjectType.Enemy;

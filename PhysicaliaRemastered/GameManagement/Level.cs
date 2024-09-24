@@ -82,7 +82,7 @@ public class Level(Game game, Player player)
             UpdateLevel(gameTime);
             CheckCollisions();
             Player.HandleInput();
-            UpdateAnimations();
+            UpdateActorState();
 
             if (PlayerOutsideLevel())
             {
@@ -105,7 +105,7 @@ public class Level(Game game, Player player)
             // Continue updating the Level after death, just don't check input
             UpdateLevel(gameTime);
             CheckCollisions();
-            UpdateAnimations();
+            UpdateActorState();
 
             // Don't let the player continue falling if it's outside of the level (i.e. falling)
             if (Player.Velocity != Vector2.Zero && PlayerOffScreen() &&
@@ -140,7 +140,7 @@ public class Level(Game game, Player player)
 
             UpdateLevel(gameTime);
             CheckCollisions();
-            UpdateAnimations();
+            UpdateActorState();
         }
 
         // Should the state be changed?
@@ -447,7 +447,7 @@ public class Level(Game game, Player player)
 
         // Run a check so that any objects that's on screen is activated
         ActivateObjects();
-        _enemyManager.ActivateVisible(Viewport);
+        _enemyManager.ActivateVisibleEnemies(Viewport);
     }
 
     public void AddModifier(ModifierPickup modifier)
@@ -545,7 +545,7 @@ public class Level(Game game, Player player)
             case LevelState.Finished:
                 // Store the current ammo count of the player's retrieved weapons
                 Player.StoreWeaponAmmoCount();
-                Player.CurrentAnimationType = ActorAnimationType.Win;
+                Player.CurrentState = ActorState.Celebrating;
 
                 Player.CanTakeDamage = false;
                 break;
@@ -741,18 +741,18 @@ public class Level(Game game, Player player)
     }
 
     /// <summary>
-    /// Updates the animations of all actors. Doing this only once per update
+    /// Updates the state of all actors. Doing this only once per update
     /// reduces the risk of flickering that can occur if an actor often switches
-    /// between animations.
+    /// between states.
     /// </summary>
-    private void UpdateAnimations()
+    private void UpdateActorState()
     {
         if (State == LevelState.Playing)
         {
-            Player.UpdateAnimation();
+            Player.UpdateActorState();
         }
 
-        _enemyManager.UpdateAnimations();
+        _enemyManager.UpdateActorStates();
     }
 
     private void DrawLevel(SpriteBatch spriteBatch)
@@ -943,7 +943,7 @@ public class Level(Game game, Player player)
         UpdateScreenSampler();
 
         // Update animations so that they reflect the state of the player and enemies
-        UpdateAnimations();
+        UpdateActorState();
 
         State = NextState = LevelState.Playing;
     }

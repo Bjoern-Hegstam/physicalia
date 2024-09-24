@@ -106,8 +106,15 @@
         <Animation id="13">
             <TextureId>enemy_passare</TextureId>
             <StartFrame x="0" y="273" width="48" height="91" />
-            <Dimensions columns="4" rows="1" />
+            <Dimensions columns="5" rows="1" />
             <FrameRate>7</FrameRate>
+            <Loop>false</Loop>
+        </Animation>
+        <Animation id="14">
+            <TextureId>enemy_passare</TextureId>
+            <StartFrame x="192" y="273" width="48" height="91" />
+            <Dimensions columns="1" rows="1" />
+            <FrameRate>1</FrameRate>
             <Loop>false</Loop>
         </Animation>
 

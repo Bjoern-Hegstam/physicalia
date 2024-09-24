@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
@@ -15,9 +16,9 @@ public class EnemyLibrary(GameServiceContainer gameServiceContainer)
     /// base animations.
     /// </summary>
     private readonly Dictionary<int, Enemy> _enemyLibrary = new();
-    
-    private AnimationRunner AnimationRunner => gameServiceContainer.GetService<AnimationRunner>();
-    
+
+    private AnimationLibrary AnimationLibrary => gameServiceContainer.GetService<AnimationLibrary>();
+
     public void LoadXml(string path)
     {
         var readerSettings = new XmlReaderSettings
@@ -128,16 +129,11 @@ public class EnemyLibrary(GameServiceContainer gameServiceContainer)
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Animation" })
             {
+                var actorState =
+                    Enum.Parse<ActorState>(reader.GetAttribute("actorState") ?? throw new ResourceLoadException());
                 var animKey = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
-                var action = (ActorAnimationType)int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
 
-                Animation anim = AnimationRunner.AddPlaybackAnimation(animKey);
-
-                // Add the animation to the Enemy
-                enemy.AddAnimation(action, anim);
-
-                // Make sure the Enemy always has a valid animation set
-                enemy.CurrentAnimationType = action;
+                enemy.AddAnimation(actorState, new Animation(AnimationLibrary[animKey]));
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Setup" })
@@ -167,10 +163,9 @@ public class EnemyLibrary(GameServiceContainer gameServiceContainer)
     /// <returns></returns>
     private void SetPlaybackKeys(int typeId, Enemy enemy)
     {
-        foreach ((ActorAnimationType actorAnimationType, Animation animation) in _enemyLibrary[typeId].Animations)
+        foreach ((ActorState actorAnimationType, Animation animation) in _enemyLibrary[typeId].Animations)
         {
-            Animation newAnimation = AnimationRunner.AddPlaybackAnimation(animation.AnimationDefinition.Id);
-            enemy.Animations.Add(actorAnimationType, newAnimation);
+            enemy.AddAnimation(actorAnimationType, new Animation(animation.AnimationDefinition));
         }
     }
 }
