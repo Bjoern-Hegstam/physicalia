@@ -16,7 +16,7 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
     /// </summary>
     private readonly Dictionary<int, Enemy> _enemyBank = new();
     
-    private AnimationManager AnimationManager => gameServiceContainer.GetService<AnimationManager>();
+    private AnimationRunner AnimationRunner => gameServiceContainer.GetService<AnimationRunner>();
     
     public void LoadXml(string path)
     {
@@ -139,7 +139,7 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
                 var animKey = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
                 var action = (ActorAnimationType)int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
 
-                Animation anim = AnimationManager.AddPlaybackAnimation(animKey);
+                Animation anim = AnimationRunner.AddPlaybackAnimation(animKey);
 
                 // Add the animation to the Enemy
                 enemy.AddAnimation(action, anim);
@@ -177,7 +177,7 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
     {
         foreach ((ActorAnimationType actorAnimationType, Animation animation) in _enemyBank[typeId].Animations)
         {
-            Animation newAnimation = AnimationManager.AddPlaybackAnimation(animation.AnimationDefinition.Id);
+            Animation newAnimation = AnimationRunner.AddPlaybackAnimation(animation.AnimationDefinition.Id);
             enemy.Animations.Add(actorAnimationType, newAnimation);
         }
     }

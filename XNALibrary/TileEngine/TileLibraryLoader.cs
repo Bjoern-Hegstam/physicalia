@@ -7,7 +7,7 @@ namespace XNALibrary.TileEngine;
 
 public static class TileLibraryLoader
 {
-    public static TileLibrary Load(string path, SpriteLibrary spriteLibrary, AnimationManager animationManager)
+    public static TileLibrary Load(string path, SpriteLibrary spriteLibrary, AnimationRunner animationRunner)
     {
         var settings = new XmlReaderSettings
         {
@@ -18,10 +18,10 @@ public static class TileLibraryLoader
         };
 
         using var reader = XmlReader.Create(path, settings);
-        return Load(reader, spriteLibrary, animationManager);
+        return Load(reader, spriteLibrary, animationRunner);
     }
 
-    public static TileLibrary Load(XmlReader reader, SpriteLibrary spriteLibrary, AnimationManager animationManager)
+    public static TileLibrary Load(XmlReader reader, SpriteLibrary spriteLibrary, AnimationRunner animationRunner)
     {
         var tileLibrary = new TileLibrary();
         

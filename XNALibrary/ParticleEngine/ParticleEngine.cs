@@ -16,7 +16,7 @@ public class ParticleEngine
     private readonly List<Particle> _particleBuffer = [];
     private readonly List<Particle> _activeParticles = [];
 
-    public void LoadXml(string path, SpriteLibrary spriteLibrary, AnimationManager animationManager)
+    public void LoadXml(string path, SpriteLibrary spriteLibrary, AnimationRunner animationRunner)
     {
         var readerSettings = new XmlReaderSettings
         {
@@ -26,10 +26,10 @@ public class ParticleEngine
         };
 
         using var reader = XmlReader.Create(path, readerSettings);
-        LoadXml(reader, spriteLibrary, animationManager);
+        LoadXml(reader, spriteLibrary, animationRunner);
     }
 
-    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, AnimationManager animationManager)
+    public void LoadXml(XmlReader reader, SpriteLibrary spriteLibrary, AnimationRunner animationRunner)
     {
         while (reader.Read())
         {
@@ -66,9 +66,9 @@ public class ParticleEngine
                         reader.ReadToFollowing("Animation");
                         AnimationDefinitionId animationId =
                             new AnimationDefinitionId(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                        Animation.Animation animation = animationManager.AddPlaybackAnimation(animationId);
+                        Animation.Animation animation = animationRunner.AddPlaybackAnimation(animationId);
 
-                        particleDef = new AnimationParticleDefinition(id, animation, animationManager);
+                        particleDef = new AnimationParticleDefinition(id, animation, animationRunner);
                         break;
                     }
                     default:

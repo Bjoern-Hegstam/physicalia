@@ -18,7 +18,7 @@ public class WeaponBank(GameServiceContainer gameServiceContainer)
     private readonly Dictionary<int, Weapon> _weaponBank = new();
 
     private SpriteLibrary SpriteLibrary => gameServiceContainer.GetService<SpriteLibrary>();
-    private AnimationManager AnimationManager => gameServiceContainer.GetService<AnimationManager>();
+    private AnimationRunner AnimationRunner => gameServiceContainer.GetService<AnimationRunner>();
     private ParticleEngine ParticleEngine => gameServiceContainer.GetService<ParticleEngine>();
 
     public Weapon GetWeapon(int weaponId)
@@ -84,11 +84,11 @@ public class WeaponBank(GameServiceContainer gameServiceContainer)
                 // Get animations
                 reader.ReadToFollowing("Warmup");
                 var warmUpKey = new AnimationDefinitionId(reader.GetAttribute("animationDefinitionId") ?? throw new ResourceLoadException());
-                weapon.WarmupAnimation = AnimationManager.AddPlaybackAnimation(warmUpKey);
+                weapon.WarmupAnimation = AnimationRunner.AddPlaybackAnimation(warmUpKey);
 
                 reader.ReadToFollowing("Fire");
                 var fireKey = new AnimationDefinitionId(reader.GetAttribute("animationDefinitionId") ?? throw new ResourceLoadException());
-                weapon.WeaponFireAnimation = AnimationManager.AddPlaybackAnimation(fireKey);
+                weapon.WeaponFireAnimation = AnimationRunner.AddPlaybackAnimation(fireKey);
 
                 reader.ReadToFollowing("PlayerOffset");
                 float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());

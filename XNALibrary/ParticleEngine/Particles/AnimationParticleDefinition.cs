@@ -3,7 +3,7 @@ using XNALibrary.Animation;
 
 namespace XNALibrary.ParticleEngine.Particles;
 
-public class AnimationParticleDefinition(int id, Animation.Animation animation, AnimationManager animationManager)
+public class AnimationParticleDefinition(int id, Animation.Animation animation, AnimationRunner animationRunner)
     : ParticleDefinition(id)
 {
     private readonly List<Animation.Animation> _createdAnimations = [];
@@ -20,7 +20,7 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
         // Create a new animation if none could be reused
         if (particleAnimation == null)
         {
-            particleAnimation = animationManager.AddPlaybackAnimation(animation.AnimationDefinition.Id);
+            particleAnimation = animationRunner.AddPlaybackAnimation(animation.AnimationDefinition.Id);
             _createdAnimations.Add(particleAnimation);
         }
 

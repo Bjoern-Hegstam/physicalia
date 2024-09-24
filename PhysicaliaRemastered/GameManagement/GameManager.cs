@@ -40,7 +40,7 @@ public class GameManager(Game game)
     private Settings Settings => game.Services.GetService<Settings>();
     private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
     private TileLibrary TileLibrary => game.Services.GetService<TileLibrary>();
-    private AnimationManager AnimationManager => game.Services.GetService<AnimationManager>();
+    private AnimationRunner AnimationRunner => game.Services.GetService<AnimationRunner>();
     private WeaponBank WeaponBank => game.Services.GetService<WeaponBank>();
     private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
     private EnemyBank EnemyBank => game.Services.GetService<EnemyBank>();
@@ -58,7 +58,7 @@ public class GameManager(Game game)
             case GameState.End:
                 break;
             case GameState.Paused:
-                AnimationManager.Enabled = true;
+                AnimationRunner.Enabled = true;
                 break;
         }
 
@@ -72,7 +72,7 @@ public class GameManager(Game game)
             case GameState.End:
                 break;
             case GameState.Paused:
-                AnimationManager.Enabled = false;
+                AnimationRunner.Enabled = false;
                 break;
         }
 
@@ -95,7 +95,7 @@ public class GameManager(Game game)
     public void NewGame()
     {
         // Make sure the animation manager is enabled
-        AnimationManager.Enabled = true;
+        AnimationRunner.Enabled = true;
 
         _worldIndex = 0;
         _worlds[_worldIndex].NewGame();
@@ -167,18 +167,19 @@ public class GameManager(Game game)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "AnimationBank" })
             {
-                AnimationManager.LoadXml(Environment.LibraryPath + reader.ReadString(), contentManager);
+                AnimationLibrary animationLibrary = AnimationLibraryLoader.LoadXml(Environment.LibraryPath + reader.ReadString(), contentManager);
+                game.Services.AddService(animationLibrary);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileLibrary" })
             {
-                TileLibrary tileLibrary = TileLibraryLoader.Load(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
+                TileLibrary tileLibrary = TileLibraryLoader.Load(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationRunner);
                 game.Services.AddService(tileLibrary);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "ParticleDefinitions" })
             {
-                ParticleEngine.LoadXml(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
+                ParticleEngine.LoadXml(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationRunner);
 
                 // Prepare the particle engine to avoid slow downs (JIT)
                 ParticleEngine.Prepare();
@@ -251,7 +252,7 @@ public class GameManager(Game game)
             {
                 var animationDefinitionId = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
                 var action = (ActorAnimationType)int.Parse(reader.GetAttribute("action") ?? throw new ResourceLoadException());
-                Animation anim = AnimationManager.AddPlaybackAnimation(animationDefinitionId);
+                Animation anim = AnimationRunner.AddPlaybackAnimation(animationDefinitionId);
                 _player.AddAnimation(action, anim);
                 _player.CurrentAnimationType = action;
             }

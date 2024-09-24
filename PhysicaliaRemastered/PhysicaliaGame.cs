@@ -39,14 +39,14 @@ public class PhysicaliaGame : Game
     protected override void Initialize()
     {
         Services.AddService(new InputHandler(this));
-        Services.AddService(new AnimationManager(this));
+        Services.AddService(new AnimationRunner(this));
         Services.AddService(new ParticleEngine());
         Services.AddService(new EnemyBank(Services));
         Services.AddService(new WeaponBank(Services));
         Services.AddService(new PickupTemplateLibrary());
 
         Components.Add(Services.GetService<InputHandler>());
-        Components.Add(Services.GetService<AnimationManager>());
+        Components.Add(Services.GetService<AnimationRunner>());
 
         var gameManager = new GameManager(this);
 

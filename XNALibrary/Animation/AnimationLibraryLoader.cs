@@ -6,45 +6,31 @@ using XNALibrary.Graphics;
 
 namespace XNALibrary.Animation;
 
-public class AnimationManager(Game game) : GameComponent(game)
+public static class AnimationLibraryLoader
 {
-    private readonly Dictionary<AnimationDefinitionId, AnimationDefinition> _animationDefinitions = new();
-    private readonly List<Animation> _playbackAnimations = [];
-
-    public Animation AddPlaybackAnimation(AnimationDefinitionId animationDefinitionId)
-    {
-        var animation = new Animation(_animationDefinitions[animationDefinitionId]);
-        _playbackAnimations.Add(animation);
-        return animation;
-    }
-
-    public override void Update(GameTime gameTime)
-    {
-        foreach (Animation animation in _playbackAnimations.Where(animation => animation.IsActive))
-        {
-            animation.Update(gameTime);
-        }
-    }
-
-    public void LoadXml(string path, ContentManager contentManager)
+    public static AnimationLibrary LoadXml(string path, ContentManager contentManager)
     {
         using var reader = XmlReader.Create(path);
-        LoadXml(reader, contentManager);
+        return LoadXml(reader, contentManager);
     }
 
-    public void LoadXml(XmlReader reader, ContentManager contentManager)
+    private static AnimationLibrary LoadXml(XmlReader reader, ContentManager contentManager)
     {
+        AnimationLibrary library = new();
+
         while (reader.Read())
         {
             if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "Animation") continue;
 
             AnimationDefinition animationDefinition = LoadAnimationDefinition(reader, contentManager);
 
-            _animationDefinitions.Add(animationDefinition.Id, animationDefinition);
+            library.Add(animationDefinition);
         }
+
+        return library;
     }
 
-    private AnimationDefinition LoadAnimationDefinition(XmlReader reader, ContentManager contentManager)
+    private static AnimationDefinition LoadAnimationDefinition(XmlReader reader, ContentManager contentManager)
     {
         var id = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
 
