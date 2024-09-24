@@ -4,11 +4,11 @@
     <TextureLibrary>TextureLibrary.xml</TextureLibrary>
     <SpriteLibrary>SpriteLibrary.xml</SpriteLibrary>
     <Settings>Settings.xml</Settings>
-    <AnimationBank>AnimationBank.xml</AnimationBank>
+    <AnimationLibrary>AnimationLibrary.xml</AnimationLibrary>
     <TileLibrary>TileLibrary.xml</TileLibrary>
     <ParticleDefinitions>ParticleDefinitions.xml</ParticleDefinitions>
-    <WeaponBank>WeaponBank.xml</WeaponBank>
-    <EnemyBank>EnemyBank.xml</EnemyBank>
+    <WeaponLibrary>WeaponLibrary.xml</WeaponLibrary>
+    <EnemyLibrary>EnemyLibrary.xml</EnemyLibrary>
     <PickupLibrary>PickupLibrary.xml</PickupLibrary>
     <Player>
         <CollisionBox x="2" y="0" width="18" height="48" />

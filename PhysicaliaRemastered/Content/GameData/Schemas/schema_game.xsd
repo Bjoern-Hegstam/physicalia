@@ -8,11 +8,11 @@
                 <xs:element name="TextureLibrary" />
                 <xs:element name="SpriteLibrary" />
                 <xs:element name="Settings" type="xs:string" />
-                <xs:element name="AnimationBank" />
+                <xs:element name="AnimationLibrary" />
                 <xs:element name="TileLibrary" />
                 <xs:element name="ParticleDefinitions" />
-                <xs:element name="WeaponBank" />
-                <xs:element name="EnemyBank" />
+                <xs:element name="WeaponLibrary" />
+                <xs:element name="EnemyLibrary" />
                 <xs:element name="PickupLibrary" />
                 <xs:element name="Player">
                     <xs:complexType>

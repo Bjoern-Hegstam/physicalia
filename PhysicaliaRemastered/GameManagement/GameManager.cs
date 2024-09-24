@@ -41,9 +41,9 @@ public class GameManager(Game game)
     private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
     private TileLibrary TileLibrary => game.Services.GetService<TileLibrary>();
     private AnimationRunner AnimationRunner => game.Services.GetService<AnimationRunner>();
-    private WeaponBank WeaponBank => game.Services.GetService<WeaponBank>();
+    private WeaponLibrary WeaponLibrary => game.Services.GetService<WeaponLibrary>();
     private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
-    private EnemyBank EnemyBank => game.Services.GetService<EnemyBank>();
+    private EnemyLibrary EnemyLibrary => game.Services.GetService<EnemyLibrary>();
     private PickupTemplateLibrary PickupTemplateLibrary => game.Services.GetService<PickupTemplateLibrary>();
 
     private void ChangeState()
@@ -102,7 +102,7 @@ public class GameManager(Game game)
 
         // Give the player his default weapon
         _player!.ClearWeapons();
-        _player.AddWeapon(WeaponBank.GetWeapon(-1).Copy());
+        _player.AddWeapon(WeaponLibrary.GetWeapon(-1).Copy());
 
         State = NextState = GameState.Start;
     }
@@ -112,7 +112,7 @@ public class GameManager(Game game)
         _worldIndex = saveGame.WorldIndex;
         _player!.Health = Settings.PlayerStartHealth;
 
-        _player.LoadGame(saveGame, WeaponBank);
+        _player.LoadGame(saveGame, WeaponLibrary);
 
         _worlds[_worldIndex].LoadGame(saveGame);
 
@@ -165,9 +165,9 @@ public class GameManager(Game game)
                 game.Services.AddService(spriteLibrary);
             }
 
-            if (reader is { NodeType: XmlNodeType.Element, LocalName: "AnimationBank" })
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "AnimationLibrary" })
             {
-                AnimationLibrary animationLibrary = AnimationLibraryLoader.LoadXml(Environment.LibraryPath + reader.ReadString(), contentManager);
+                AnimationLibrary animationLibrary = AnimationLibraryLoader.Load(Environment.LibraryPath + reader.ReadString(), contentManager);
                 game.Services.AddService(animationLibrary);
             }
 
@@ -185,14 +185,14 @@ public class GameManager(Game game)
                 ParticleEngine.Prepare();
             }
 
-            if (reader is { NodeType: XmlNodeType.Element, LocalName: "WeaponBank" })
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "WeaponLibrary" })
             {
-                WeaponBank.LoadXml(Environment.LibraryPath + reader.ReadString());
+                WeaponLibrary.LoadXml(Environment.LibraryPath + reader.ReadString());
             }
 
-            if (reader is { NodeType: XmlNodeType.Element, LocalName: "EnemyBank" })
+            if (reader is { NodeType: XmlNodeType.Element, LocalName: "EnemyLibrary" })
             {
-                EnemyBank.LoadXml(Environment.LibraryPath + reader.ReadString());
+                EnemyLibrary.LoadXml(Environment.LibraryPath + reader.ReadString());
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "PickupLibrary" })

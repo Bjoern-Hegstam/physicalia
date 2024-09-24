@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<EnemyBank>
+<EnemyLibrary>
     <Enemy typeID="0">
         <Setup>
             <Intelligence>Savant</Intelligence>
@@ -15,4 +15,4 @@
             <Animation id="13" action="4" />
         </Animations>
     </Enemy>
-</EnemyBank>
+</EnemyLibrary>

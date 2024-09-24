@@ -41,8 +41,8 @@ public class PhysicaliaGame : Game
         Services.AddService(new InputHandler(this));
         Services.AddService(new AnimationRunner(this));
         Services.AddService(new ParticleEngine());
-        Services.AddService(new EnemyBank(Services));
-        Services.AddService(new WeaponBank(Services));
+        Services.AddService(new EnemyLibrary(Services));
+        Services.AddService(new WeaponLibrary(Services));
         Services.AddService(new PickupTemplateLibrary());
 
         Components.Add(Services.GetService<InputHandler>());

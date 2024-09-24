@@ -17,7 +17,7 @@ public class EnemyManager
 {
     private readonly int _defaultActivationDistance = 20;
 
-    private readonly EnemyBank _enemyBank;
+    private readonly EnemyLibrary _enemyLibrary;
     private readonly List<Enemy> _activatedEnemies;
     private readonly List<Enemy> _inactiveEnemies;
 
@@ -31,11 +31,11 @@ public class EnemyManager
     /// <summary>
     /// Creates a new EnemyManager.
     /// </summary>
-    /// <param name="enemyBank">Class implementing EnemyBank, that contains the
+    /// <param name="enemyLibrary">Class implementing EnemyLibrary, that contains the
     /// definitions for the enemies to use.</param>
-    public EnemyManager(EnemyBank enemyBank)
+    public EnemyManager(EnemyLibrary enemyLibrary)
     {
-        _enemyBank = enemyBank;
+        _enemyLibrary = enemyLibrary;
 
         _activatedEnemies = [];
         _inactiveEnemies = [];
@@ -182,7 +182,7 @@ public class EnemyManager
         {
             Enemy enemy = _activatedEnemies[0];
             _activatedEnemies.RemoveAt(0);
-            _enemyBank.SetupEnemy(enemy);
+            _enemyLibrary.SetupEnemy(enemy);
             _inactiveEnemies.Add(enemy);
         }
     }
@@ -194,14 +194,14 @@ public class EnemyManager
     /// <param name="startValues">Start values for the new enemy.</param>
     public void EnqueueEnemy(int typeId, ActorStartValues startValues)
     {
-        Enemy enemy = _enemyBank.CreateEnemy(typeId, startValues);
+        Enemy enemy = _enemyLibrary.CreateEnemy(typeId, startValues);
 
         EnqueueEnemy(enemy);
     }
 
     public void EnqueueEnemy(int typeId, ActorStartValues startValues, Rectangle patrolArea)
     {
-        Enemy enemy = _enemyBank.CreateEnemy(typeId, startValues);
+        Enemy enemy = _enemyLibrary.CreateEnemy(typeId, startValues);
         enemy.PatrolArea = patrolArea;
 
         EnqueueEnemy(enemy);

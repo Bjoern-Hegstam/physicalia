@@ -2,7 +2,7 @@
 
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:include schemaLocation="schema_dataTypes.xsd" />
-    <xs:element name="AnimationBank">
+    <xs:element name="AnimationLibrary">
         <xs:complexType>
             <xs:sequence>
                 <xs:element minOccurs="1" maxOccurs="1" name="Animations">

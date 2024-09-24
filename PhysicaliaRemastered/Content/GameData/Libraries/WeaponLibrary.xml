@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<WeaponBank>
+<WeaponLibrary>
     <!-- Player arms -->
     <Weapon type="Melee" id="-1">
         <Graphics>
@@ -70,4 +70,4 @@
             <Ammunition count="250" max="500" projectilesPerShot="1" spread="0,5" />
         </WeaponData>
     </Weapon>
-</WeaponBank>
+</WeaponLibrary>

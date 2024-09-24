@@ -13,9 +13,9 @@ namespace PhysicaliaRemastered.Weapons;
 /// Class for managing over a collection of weapons that serve as the base
 /// for all weapons in the game.
 /// </summary>
-public class WeaponBank(GameServiceContainer gameServiceContainer)
+public class WeaponLibrary(GameServiceContainer gameServiceContainer)
 {
-    private readonly Dictionary<int, Weapon> _weaponBank = new();
+    private readonly Dictionary<int, Weapon> _weaponLibrary = new();
 
     private SpriteLibrary SpriteLibrary => gameServiceContainer.GetService<SpriteLibrary>();
     private AnimationRunner AnimationRunner => gameServiceContainer.GetService<AnimationRunner>();
@@ -23,7 +23,7 @@ public class WeaponBank(GameServiceContainer gameServiceContainer)
 
     public Weapon GetWeapon(int weaponId)
     {
-        return _weaponBank[weaponId];
+        return _weaponLibrary[weaponId];
     }
 
     public void LoadXml(string path)
@@ -58,10 +58,10 @@ public class WeaponBank(GameServiceContainer gameServiceContainer)
 
                 ParseWeaponData(reader, weapon);
 
-                _weaponBank.Add(weapon.WeaponId, weapon);
+                _weaponLibrary.Add(weapon.WeaponId, weapon);
             }
 
-            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "WeaponBank" })
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "WeaponLibrary" })
             {
                 return;
             }

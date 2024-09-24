@@ -59,13 +59,13 @@ public class Level(Game game, Player player)
 
     private ActorStartValues _playerStartValues;
     
-    private readonly EnemyManager _enemyManager = new(game.Services.GetService<EnemyBank>());
+    private readonly EnemyManager _enemyManager = new(game.Services.GetService<EnemyLibrary>());
 
     private Fonts Fonts => game.Services.GetService<Fonts>();
     private Settings Settings => game.Services.GetService<Settings>();
     private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
     private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
-    private WeaponBank WeaponBank => game.Services.GetService<WeaponBank>();
+    private WeaponLibrary WeaponLibrary => game.Services.GetService<WeaponLibrary>();
     private PickupTemplateLibrary ModifierTemplateLibrary => game.Services.GetService<PickupTemplateLibrary>();
     
     public void Update(GameTime gameTime)
@@ -321,7 +321,7 @@ public class Level(Game game, Player player)
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Weapon" })
             {
                 int key = int.Parse(reader.GetAttribute("key") ?? throw new ResourceLoadException());
-                Weapon weapon = WeaponBank.GetWeapon(key);
+                Weapon weapon = WeaponLibrary.GetWeapon(key);
 
                 var weaponPickup = new WeaponPickup(this, weapon);
                 var pickupCont = new PickupContainer(weaponPickup);

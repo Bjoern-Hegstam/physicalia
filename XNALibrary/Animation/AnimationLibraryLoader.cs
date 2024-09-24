@@ -8,7 +8,7 @@ namespace XNALibrary.Animation;
 
 public static class AnimationLibraryLoader
 {
-    public static AnimationLibrary LoadXml(string path, ContentManager contentManager)
+    public static AnimationLibrary Load(string path, ContentManager contentManager)
     {
         using var reader = XmlReader.Create(path);
         return LoadXml(reader, contentManager);

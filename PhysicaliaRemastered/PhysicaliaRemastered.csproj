@@ -100,10 +100,10 @@
         <None Update="Content\GameData\Graphics\weaponSheet.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Content\GameData\Libraries\AnimationBank.xml">
+        <None Update="Content\GameData\Libraries\AnimationLibrary.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Content\GameData\Libraries\EnemyBank.xml">
+        <None Update="Content\GameData\Libraries\EnemyLibrary.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Content\GameData\Libraries\ParticleDefinitions.xml">
@@ -118,10 +118,10 @@
         <None Update="Content\GameData\Libraries\TileLibrary.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Content\GameData\Libraries\WeaponBank.xml">
+        <None Update="Content\GameData\Libraries\WeaponLibrary.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Content\GameData\Schemas\schema_animationBank.xsd">
+        <None Update="Content\GameData\Schemas\schema_animationLibrary.xsd">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Content\GameData\Schemas\schema_dataTypes.xsd">

@@ -7,14 +7,14 @@ using XNALibrary.Animation;
 
 namespace PhysicaliaRemastered.Actors.EnemyManagement;
 
-public class EnemyBank(GameServiceContainer gameServiceContainer)
+public class EnemyLibrary(GameServiceContainer gameServiceContainer)
 {
     /// <summary>
     /// Dictionary mapping the Id's of the enemy types to the base enemies.
     /// The animation keys kept by the enemies are those going to the
     /// base animations.
     /// </summary>
-    private readonly Dictionary<int, Enemy> _enemyBank = new();
+    private readonly Dictionary<int, Enemy> _enemyLibrary = new();
     
     private AnimationRunner AnimationRunner => gameServiceContainer.GetService<AnimationRunner>();
     
@@ -49,10 +49,10 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
                 SetupEnemy(reader, enemy);
                 LoadAnimations(reader, enemy);
 
-                _enemyBank.Add(typeId, enemy);
+                _enemyLibrary.Add(typeId, enemy);
             }
 
-            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "EnemyBank" })
+            if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "EnemyLibrary" })
             {
                 return;
             }
@@ -65,7 +65,7 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
     public Enemy CreateEnemy(int typeId, ActorStartValues startValues)
     {
         // Make sure the type has been defined
-        _enemyBank.TryGetValue(typeId, out Enemy? value);
+        _enemyLibrary.TryGetValue(typeId, out Enemy? value);
         Enemy enemy = value?.Copy(startValues) ??
                       throw new InvalidGameStateException($"Unknown enemy type id {typeId}");
 
@@ -80,7 +80,7 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
     /// </summary>
     public void SetupEnemy(Enemy enemy)
     {
-        if (_enemyBank.TryGetValue(enemy.TypeId, out Enemy? value))
+        if (_enemyLibrary.TryGetValue(enemy.TypeId, out Enemy? value))
         {
             value.Copy(enemy);
         }
@@ -122,14 +122,6 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
         }
     }
 
-    /// <summary>
-    /// Loads the base animations for a type and stores them in the AnimationManagers
-    /// bank of animations. The keys to the stored animations are saved in
-    /// the passed in Enemy's collection of animation keys, mapping them to
-    /// the correct action.
-    /// </summary>
-    /// <param name="reader">XmlReader to read from.</param>
-    /// <param name="enemy">Enemy to give the keys to.</param>
     private void LoadAnimations(XmlReader reader, Enemy enemy)
     {
         while (reader.Read())
@@ -175,7 +167,7 @@ public class EnemyBank(GameServiceContainer gameServiceContainer)
     /// <returns></returns>
     private void SetPlaybackKeys(int typeId, Enemy enemy)
     {
-        foreach ((ActorAnimationType actorAnimationType, Animation animation) in _enemyBank[typeId].Animations)
+        foreach ((ActorAnimationType actorAnimationType, Animation animation) in _enemyLibrary[typeId].Animations)
         {
             Animation newAnimation = AnimationRunner.AddPlaybackAnimation(animation.AnimationDefinition.Id);
             enemy.Animations.Add(actorAnimationType, newAnimation);

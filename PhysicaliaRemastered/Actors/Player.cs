@@ -405,7 +405,7 @@ public class Player : Actor
         }
     }
 
-    public void LoadGame(SaveGame saveGame, WeaponBank weaponBank)
+    public void LoadGame(SaveGame saveGame, WeaponLibrary weaponLibrary)
     {
         CurrentAnimationType = 0;
 
@@ -435,7 +435,7 @@ public class Player : Actor
             WeaponSave weaponSave = saveGame.WeaponSaves[weaponId];
 
             // Get the saved weapon
-            Weapon weapon = weaponBank.GetWeapon(weaponId).Copy();
+            Weapon weapon = weaponLibrary.GetWeapon(weaponId).Copy();
 
             // Set the ammo
             weapon.AmmoCount = weaponSave.AmmoCount;
