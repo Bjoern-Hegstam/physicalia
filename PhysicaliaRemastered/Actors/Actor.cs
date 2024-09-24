@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PhysicaliaRemastered.GameManagement;
 using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.Collision;

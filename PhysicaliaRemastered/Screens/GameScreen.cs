@@ -30,6 +30,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
 
     private readonly PauseMenuOption[] _pauseMenuOptions = (PauseMenuOption[])Enum.GetValues(typeof(PauseMenuOption));
 
+    private Fonts Fonts => game.Services.GetService<Fonts>();
     private Settings Settings => game.Services.GetService<Settings>();
 
     public override void Initialize()
@@ -48,7 +49,6 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
 
     public override void LoadContent(ContentManager contentManager)
     {
-        Settings.LoadContent(contentManager);
         gameManager.LoadXml("Content/GameData/Game.xml", contentManager);
     }
 
@@ -167,7 +167,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
         // TODO: Mirror top graphics for bottom?
 
         // Draw pause menu text
-        SpriteFont pauseFont = Settings.PauseMenuFont!;
+        SpriteFont pauseFont = Fonts.PauseMenu;
         var textPos = new Vector2(PauseMenuX, PauseMenuY);
 
         float pauseTextHeight = pauseFont.MeasureString("42").Y;

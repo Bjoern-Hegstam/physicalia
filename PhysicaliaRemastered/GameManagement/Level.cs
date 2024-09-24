@@ -61,6 +61,7 @@ public class Level(Game game, Player player)
     
     private readonly EnemyManager _enemyManager = new(game.Services.GetService<EnemyBank>());
 
+    private Fonts Fonts => game.Services.GetService<Fonts>();
     private Settings Settings => game.Services.GetService<Settings>();
     private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
     private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
@@ -465,14 +466,14 @@ public class Level(Game game, Player player)
         {
             case LevelState.Start:
                 string indexString = WorldIndex + " - " + LevelIndex;
-                Vector2 indexStringSize = Settings.LevelIndexFont.MeasureString(indexString);
+                Vector2 indexStringSize = Fonts.LevelIndex.MeasureString(indexString);
                 var indexPosition = new Vector2
                 {
                     X = (Viewport.Width - indexStringSize.X) / 2,
                     Y = (Viewport.Height - indexStringSize.Y) / 2
                 };
 
-                spriteBatch.DrawString(Settings.LevelIndexFont, indexString, indexPosition, Color.White);
+                spriteBatch.DrawString(Fonts.LevelIndex, indexString, indexPosition, Color.White);
                 break;
             case LevelState.Playing:
                 DrawLevel(spriteBatch);
@@ -481,25 +482,25 @@ public class Level(Game game, Player player)
                 DrawLevel(spriteBatch);
 
                 var deadString = "You Have Died!";
-                Vector2 deadStringSize = Settings.PlayerDeadFont.MeasureString(deadString);
+                Vector2 deadStringSize = Fonts.PlayerDead.MeasureString(deadString);
                 Vector2 deadPos;
                 deadPos.X = (Viewport.Width - deadStringSize.X) / 2;
                 deadPos.Y = (Viewport.Width - deadStringSize.X) / 2;
 
-                spriteBatch.DrawString(Settings.PlayerDeadFont, deadString, deadPos, Color.White);
+                spriteBatch.DrawString(Fonts.PlayerDead, deadString, deadPos, Color.White);
                 break;
             case LevelState.Finished:
                 DrawLevel(spriteBatch);
 
                 const string finishString = "Level Finished!";
-                Vector2 finishStringSize = Settings.PlayerDeadFont.MeasureString(finishString);
+                Vector2 finishStringSize = Fonts.PlayerDead.MeasureString(finishString);
                 var finishPos = new Vector2
                 {
                     X = (game.GraphicsDevice.Viewport.Width - finishStringSize.X) / 2,
                     Y = (game.GraphicsDevice.Viewport.Height - finishStringSize.Y) / 2
                 };
 
-                spriteBatch.DrawString(Settings.PlayerDeadFont, finishString, finishPos, Color.White);
+                spriteBatch.DrawString(Fonts.PlayerDead, finishString, finishPos, Color.White);
                 break;
         }
     }
@@ -819,14 +820,14 @@ public class Level(Game game, Player player)
 
         // WORLD AND LEVEL NUMBERS
         string indexString = WorldIndex + " - " + LevelIndex;
-        Vector2 indexSize = Settings.LevelIndexFont.MeasureString(indexString);
+        Vector2 indexSize = Fonts.LevelIndex.MeasureString(indexString);
         var indexPos = new Vector2
         {
             X = (Viewport.Width - indexSize.X) / 2,
             Y = UiIndexPosY
         };
 
-        spriteBatch.DrawString(Settings.LevelIndexFont, indexString, indexPos, Color.White);
+        spriteBatch.DrawString(Fonts.LevelIndex, indexString, indexPos, Color.White);
 
         // CURRENT WEAPON AND AMMUNITION COUNT
         Weapon? playerWeapon = Player.CurrentWeapon;
@@ -846,11 +847,11 @@ public class Level(Game game, Player player)
                 ammoString = playerWeapon.AmmoCount + " / " + playerWeapon.MaxAmmo;
             }
 
-            Vector2 ammoStringSize = Settings.LevelIndexFont.MeasureString(ammoString);
+            Vector2 ammoStringSize = Fonts.LevelIndex.MeasureString(ammoString);
             ammoPos.X -= ammoStringSize.X;
 
             // Draw ammo
-            spriteBatch.DrawString(Settings.LevelIndexFont, ammoString, ammoPos, Color.White);
+            spriteBatch.DrawString(Fonts.LevelIndex, ammoString, ammoPos, Color.White);
 
             var weaponPos = new Vector2(470, 5);
             if (playerWeapon.WeaponSprite != null)
@@ -869,7 +870,7 @@ public class Level(Game game, Player player)
         var modifierPos = new Vector2(5, (float)Settings.FullHealthUi?.SourceRectangle.Height + 5);
         foreach (ModifierPickup modifier in _modifiers)
         {
-            modifier.DrawTimer(spriteBatch, modifierPos, Settings.LevelIndexFont);
+            modifier.DrawTimer(spriteBatch, modifierPos, Fonts.LevelIndex);
             modifierPos.Y += modifier.Icon.SourceRectangle.Height + UiModifierSpacing;
         }
     }

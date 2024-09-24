@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Collision;
-using XNALibrary.Graphics;
 using XNALibrary.Sprites;
 
 namespace XNALibrary.TileEngine;

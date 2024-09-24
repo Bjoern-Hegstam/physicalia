@@ -37,6 +37,7 @@ public class World(Game game, Player player)
     private Color _worldQuoteColor = Color.White;
     private Sprite? _worldSprite;
 
+    private Fonts Fonts => game.Services.GetService<Fonts>();
     private Settings Settings => game.Services.GetService<Settings>();
     
     public int WorldIndex { get; set; } = -1;
@@ -229,18 +230,18 @@ public class World(Game game, Player player)
             case WorldState.Start:
                 // Write draw world index
                 string indexString = "World " + WorldIndex;
-                Vector2 indexStringSize = Settings.WorldIndexFont!.MeasureString(indexString);
+                Vector2 indexStringSize = Fonts.WorldIndex.MeasureString(indexString);
                 var indexPosition = new Vector2
                 {
                     X = (_levels[0].Viewport.Width - indexStringSize.X) / 2,
                     Y = _levels[0].Viewport.Height / 4f - indexStringSize.Y / 2
                 };
-                spriteBatch.DrawString(Settings.WorldIndexFont, indexString, indexPosition, _worldIndexColor);
+                spriteBatch.DrawString(Fonts.WorldIndex, indexString, indexPosition, _worldIndexColor);
 
                 // Draw quote
                 if (_worldQuoteLines.Length > 0)
                 {
-                    float quoteHeight = Settings.WorldQuoteFont!.MeasureString("W").Y;
+                    float quoteHeight = Fonts.WorldQuote.MeasureString("W").Y;
                     var quoteStartPos = new Vector2
                     {
                         Y = _levels[0].Viewport.Height * 3f / 4 -
@@ -249,11 +250,11 @@ public class World(Game game, Player player)
 
                     foreach (string line in _worldQuoteLines)
                     {
-                        Vector2 quoteSize = Settings.WorldQuoteFont.MeasureString(line);
+                        Vector2 quoteSize = Fonts.WorldQuote.MeasureString(line);
                         quoteStartPos.X = (_levels[0].Viewport.Width - quoteSize.X) / 2;
 
                         spriteBatch.DrawString(
-                            Settings.WorldQuoteFont,
+                            Fonts.WorldQuote,
                             line,
                             quoteStartPos,
                             _worldQuoteColor
@@ -282,14 +283,14 @@ public class World(Game game, Player player)
                 break;
             case WorldState.Finished:
                 const string finishString = "World Finished!";
-                Vector2 finishStringSize = Settings.PlayerDeadFont.MeasureString(finishString);
+                Vector2 finishStringSize = Fonts.PlayerDead.MeasureString(finishString);
                 Vector2 finishPos = new Vector2
                 {
                     X = (game.GraphicsDevice.Viewport.Width - finishStringSize.X) / 2,
                     Y = (game.GraphicsDevice.Viewport.Height - finishStringSize.Y) / 2
                 };
 
-                spriteBatch.DrawString(Settings.WorldQuoteFont, finishString, finishPos, Color.White);
+                spriteBatch.DrawString(Fonts.WorldQuote, finishString, finishPos, Color.White);
                 break;
         }
     }

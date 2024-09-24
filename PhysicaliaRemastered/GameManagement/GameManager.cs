@@ -26,7 +26,7 @@ public enum GameState
 
 public class GameManager(Game game)
 {
-    private readonly Player _player = new(game.Services.GetService<Settings>());
+    private Player? _player;
     
     private readonly List<World> _worlds = [];
     private int _worldIndex = -1;
@@ -36,6 +36,7 @@ public class GameManager(Game game)
     public GameState State { get; set; } = GameState.Start;
     public GameState NextState { get; set; } = GameState.Start;
 
+    private Fonts Fonts => game.Services.GetService<Fonts>();
     private Settings Settings => game.Services.GetService<Settings>();
     private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
     private TileLibrary TileLibrary => game.Services.GetService<TileLibrary>();
@@ -86,7 +87,7 @@ public class GameManager(Game game)
             NextState = GameState.Playing;
             _pausePressedCount = 0;
 
-            _player.Health = Settings.PlayerStartHealth;
+            _player!.Health = Settings.PlayerStartHealth;
             _player.Flickering = false;
         }
     }
@@ -99,9 +100,8 @@ public class GameManager(Game game)
         _worldIndex = 0;
         _worlds[_worldIndex].NewGame();
 
-        _player.Health = Settings.PlayerStartHealth;
         // Give the player his default weapon
-        _player.ClearWeapons();
+        _player!.ClearWeapons();
         _player.AddWeapon(WeaponBank.GetWeapon(-1).Copy());
 
         State = NextState = GameState.Start;
@@ -110,7 +110,7 @@ public class GameManager(Game game)
     public void LoadGame(SaveGame saveGame)
     {
         _worldIndex = saveGame.WorldIndex;
-        _player.Health = Settings.PlayerStartHealth;
+        _player!.Health = Settings.PlayerStartHealth;
 
         _player.LoadGame(saveGame, WeaponBank);
 
@@ -130,7 +130,7 @@ public class GameManager(Game game)
             WorldIndex = _worldIndex
         };
 
-        _player.SaveGame(saveGame);
+        _player!.SaveGame(saveGame);
         _worlds[_worldIndex].SaveGame(saveGame);
 
         return saveGame;
@@ -155,7 +155,8 @@ public class GameManager(Game game)
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Settings" })
             {
-                Settings.LoadXml(Environment.GameDataPath + reader.ReadString(), SpriteLibrary);
+                var settings = SettingsLoader.Load(Environment.GameDataPath + reader.ReadString(), game);
+                game.Services.AddService(settings);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "SpriteLibrary" })
@@ -171,7 +172,7 @@ public class GameManager(Game game)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileLibrary" })
             {
-                var tileLibrary = TileLibraryLoader.LoadXml(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
+                var tileLibrary = TileLibraryLoader.Load(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
                 game.Services.AddService(tileLibrary);
             }
 
@@ -200,7 +201,7 @@ public class GameManager(Game game)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Player" })
             {
-                SetupPlayer(reader);
+                LoadPlayer(reader);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Worlds" })
@@ -235,8 +236,10 @@ public class GameManager(Game game)
         }
     }
 
-    private void SetupPlayer(XmlReader reader)
+    private void LoadPlayer(XmlReader reader)
     {
+        _player = new Player(game.Services.GetService<Settings>());
+            
         while (reader.Read())
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "CollisionBox" })
@@ -352,7 +355,7 @@ public class GameManager(Game game)
         switch (State)
         {
             case GameState.Start:
-                spriteBatch.DrawString(Settings.WorldQuoteFont, "And so it begins", new Vector2(130, 200), Color.White);
+                spriteBatch.DrawString(Fonts.WorldQuote, "And so it begins", new Vector2(130, 200), Color.White);
                 break;
             case GameState.Playing:
                 _worlds[_worldIndex].Draw(spriteBatch);
@@ -361,7 +364,7 @@ public class GameManager(Game game)
                 _worlds[_worldIndex].Draw(spriteBatch);
                 break;
             case GameState.End:
-                spriteBatch.DrawString(Settings.PlayerDeadFont, "Great Success!", new Vector2(150, 250), Color.White);
+                spriteBatch.DrawString(Fonts.PlayerDead, "Great Success!", new Vector2(150, 250), Color.White);
                 break;
         }
     }

@@ -9,8 +9,6 @@ using XNALibrary.Animation;
 using XNALibrary.Input;
 using XNALibrary.ParticleEngine;
 using XNALibrary.ScreenManagement;
-using XNALibrary.Sprites;
-using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered;
 
@@ -41,7 +39,6 @@ public class PhysicaliaGame : Game
     protected override void Initialize()
     {
         Services.AddService(new InputHandler(this));
-        Services.AddService(new Settings(this));
         Services.AddService(new AnimationManager(this));
         Services.AddService(new ParticleEngine());
         Services.AddService(new EnemyBank(Services));
@@ -62,6 +59,13 @@ public class PhysicaliaGame : Game
         screenManager.Screens.Add(new GameScreen(this, gameManager, screenManager));
 
         base.Initialize();
+    }
+
+    protected override void LoadContent()
+    {
+        Services.AddService(new Fonts(Content));
+        
+        base.LoadContent();
     }
 
     /// <summary>
