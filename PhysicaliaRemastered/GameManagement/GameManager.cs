@@ -160,7 +160,8 @@ public class GameManager(Game game)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "SpriteLibrary" })
             {
-                SpriteLibrary.LoadXml(Environment.LibraryPath + reader.ReadString(), contentManager);
+                SpriteLibrary spriteLibrary = SpriteLibraryLoader.Load(Environment.LibraryPath + reader.ReadString(), contentManager);
+                game.Services.AddService(spriteLibrary);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "AnimationBank" })
