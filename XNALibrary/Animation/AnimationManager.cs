@@ -11,14 +11,9 @@ public class AnimationManager(Game game) : GameComponent(game)
     private readonly Dictionary<AnimationDefinitionId, AnimationDefinition> _animationDefinitions = new();
     private readonly List<Animation> _playbackAnimations = [];
 
-    public void AddPlaybackAnimation(Animation animation)
-    {
-        _playbackAnimations.Add(animation);
-    }
-
     public Animation AddPlaybackAnimation(AnimationDefinitionId animationDefinitionId)
     {
-        Animation animation = new Animation(_animationDefinitions[animationDefinitionId]);
+        var animation = new Animation(_animationDefinitions[animationDefinitionId]);
         _playbackAnimations.Add(animation);
         return animation;
     }
@@ -52,7 +47,7 @@ public class AnimationManager(Game game) : GameComponent(game)
     private AnimationDefinition LoadAnimationDefinition(XmlReader reader, ContentManager contentManager)
     {
         var id = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
-        
+
         reader.ReadToFollowing("TextureId");
         var textureId = new TextureId(reader.ReadElementContentAsString());
 
