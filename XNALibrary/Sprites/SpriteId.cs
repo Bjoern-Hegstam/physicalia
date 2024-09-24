@@ -1,3 +1,3 @@
 namespace XNALibrary.Sprites;
 
-public record struct SpriteId(string Id);
+public record SpriteId(string Id);

@@ -1,3 +1,3 @@
 namespace PhysicaliaRemastered.Pickups;
 
-public record struct PickupTemplateId(int Id);
+public record PickupTemplateId(int Id);

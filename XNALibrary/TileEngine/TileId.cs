@@ -1,3 +1,3 @@
 namespace XNALibrary.TileEngine;
 
-public record struct TileId(string Id);
+public record TileId(string Id);
