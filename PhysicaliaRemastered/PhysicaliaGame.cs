@@ -43,7 +43,6 @@ public class PhysicaliaGame : Game
         Services.AddService(new InputHandler(this));
         Services.AddService(new Settings(this));
         Services.AddService(new AnimationManager(this));
-        Services.AddService(new TileLibrary());
         Services.AddService(new ParticleEngine());
         Services.AddService(new EnemyBank(Services));
         Services.AddService(new WeaponBank(Services));

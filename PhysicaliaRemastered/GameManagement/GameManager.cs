@@ -171,7 +171,8 @@ public class GameManager(Game game)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "TileLibrary" })
             {
-                TileLibrary.LoadXml(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
+                var tileLibrary = TileLibraryLoader.LoadXml(Environment.LibraryPath + reader.ReadString(), SpriteLibrary, AnimationManager);
+                game.Services.AddService(tileLibrary);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "ParticleDefinitions" })
