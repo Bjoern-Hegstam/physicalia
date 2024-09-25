@@ -7,8 +7,6 @@ namespace XNALibrary.ParticleEngine.Particles;
 
 public class Projectile(Sprite sprite) : SpriteParticle(sprite)
 {
-    public ObjectType DamageObjects { get; set; } = 0;
-
     public float DamageAmount { get; set; }
 
     /// <summary>
@@ -23,14 +21,9 @@ public class Projectile(Sprite sprite) : SpriteParticle(sprite)
     /// </summary>
     public int CollisionProjectileId { get; set; } = -1;
 
-    public override void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
+    public override void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
         Vector2 velocity)
     {
-        if ((collidedObject.Type & DamageObjects) == 0)
-        {
-            return;
-        }
-
         if (collidedObject.CanTakeDamage)
         {
             collidedObject.TakeDamage(DamageAmount);

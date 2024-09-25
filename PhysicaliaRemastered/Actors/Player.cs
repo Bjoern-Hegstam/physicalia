@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Weapons;
-using XNALibrary;
 using XNALibrary.Collision;
 using XNALibrary.TileEngine;
 using Weapon = PhysicaliaRemastered.Weapons.NewWeapons.Weapon;
@@ -341,8 +340,6 @@ public class Player : Actor
         }
     }
 
-    public override ObjectType Type => ObjectType.Player;
-
     public override void TakeDamage(float damageLevel)
     {
         // Invincible?
@@ -365,16 +362,18 @@ public class Player : Actor
         }
     }
 
-    public override void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
+    public override void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
         Vector2 velocity)
     {
-        if (collidedObject.Type == ObjectType.Tile)
+        if (collidedObject is not Tile)
         {
-            Position = position;
-            Velocity = velocity;
-
-            // TODO: Fix so that player can't shoot through walls
+            return;
         }
+
+        Position = position;
+        Velocity = velocity;
+
+        // TODO: Fix so that player can't shoot through walls
     }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)

@@ -9,12 +9,6 @@ public class AnimationParticle(Animation.Animation animation) : Particle
 {
     public Animation.Animation Animation { get; set; } = animation;
 
-    /// <summary>
-    /// Gets or sets a bitflagged enum denoting which objects the particle
-    /// can damage.
-    /// </summary>
-    public ObjectType DamageObjects { get; set; } = 0;
-
     public float DamageAmount { get; set; } = 0F;
 
     public override Vector2 Origin => new(Animation.Frame.Width / 2f, Animation.Frame.Height / 2f);
@@ -25,16 +19,12 @@ public class AnimationParticle(Animation.Animation animation) : Particle
 
     public override Rectangle CollisionBox => new(0, 0, Width, Height);
 
-    public override void OnCollision(ICollidable collidable, BoxSide collisionSides, Vector2 position,
+    public override void OnCollision(ICollidable collidable, BoxSide collidedSides, Vector2 position,
         Vector2 velocity)
     {
-        // Damage the object if possible
-        if ((DamageObjects & collidable.Type) != 0)
+        if (collidable.CanTakeDamage)
         {
-            if (collidable.CanTakeDamage)
-            {
-                collidable.TakeDamage(DamageAmount);
-            }
+            collidable.TakeDamage(DamageAmount);
         }
     }
 

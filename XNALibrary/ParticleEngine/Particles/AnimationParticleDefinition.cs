@@ -8,8 +8,6 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
 {
     private readonly List<Animation.Animation> _createdAnimations = [];
 
-    public ObjectType DamageObjects { get; set; }
-
     public float DamageAmount { get; set; }
 
     public override Particle Create(float angle)
@@ -36,7 +34,6 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
 
         var animParticle = (AnimationParticle)particle;
         animParticle.DamageAmount = DamageAmount;
-        animParticle.DamageObjects = DamageObjects;
         animParticle.CanCollide = true;
         animParticle.IsActive = true;
         animParticle.Animation.Play();
@@ -47,24 +44,6 @@ public class AnimationParticleDefinition(int id, Animation.Animation animation, 
         if (reader is { NodeType: XmlNodeType.Element, LocalName: "Damage" })
         {
             DamageAmount = int.Parse(reader.GetAttribute("amount") ?? throw new ResourceLoadException());
-        }
-
-        if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "DamageObjects")
-        {
-            return;
-        }
-
-        string[] objects = reader.ReadElementContentAsString().Split(' ');
-
-        if (objects.Length <= 0 || objects[0] == "")
-        {
-            return;
-        }
-
-        foreach (string obj in objects)
-        {
-            var objectType = Enum.Parse<ObjectType>(obj);
-            DamageObjects |= objectType;
         }
     }
 }

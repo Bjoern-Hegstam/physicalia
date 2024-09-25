@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary;
 using XNALibrary.Collision;
 using XNALibrary.TileEngine;
 
@@ -31,8 +30,6 @@ public abstract class ActiveObject : ICollidable
     public bool Visible { get; set; }
 
     public List<ActiveObject> Children { get; }
-
-    public virtual ObjectType Type => ObjectType.ActiveObject;
 
     public Rectangle CollisionBox
     {
@@ -64,7 +61,7 @@ public abstract class ActiveObject : ICollidable
     {
     }
 
-    public virtual void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
         Vector2 velocity)
     {
     }

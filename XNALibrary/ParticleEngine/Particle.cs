@@ -80,13 +80,11 @@ public abstract class Particle(Vector2 position) : ICollidable
 
     public abstract Rectangle CollisionBox { get; }
 
-    public ObjectType Type => ObjectType.Particle;
-
     public bool CanTakeDamage { get; set; }
 
     public bool CanCollide { get; set; }
 
-    public virtual void OnCollision(ICollidable collidable, BoxSide collisionSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidable, BoxSide collidedSides, Vector2 position,
         Vector2 velocity)
     {
         if (!CanCollide)

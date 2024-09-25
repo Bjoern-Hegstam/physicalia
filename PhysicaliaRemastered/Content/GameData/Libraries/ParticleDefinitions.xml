@@ -22,7 +22,6 @@
         </Movement>
         <Collision mode="Rectangle" />
         <Damage amount="10" />
-        <DamageObjects>Enemy</DamageObjects>
     </ParticleDefinition>
 
     <!-- Explosion -->
@@ -35,6 +34,5 @@
         </Movement>
         <Collision mode="Rectangle" />
         <Damage amount="10" />
-        <DamageObjects>Enemy</DamageObjects>
     </ParticleDefinition>
 </ParticleDefinitions>

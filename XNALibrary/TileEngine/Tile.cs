@@ -7,7 +7,6 @@ namespace XNALibrary.TileEngine;
 
 public class Tile(Sprite sprite, Rectangle collisionBox, BoxSide collisionSides) : ICollidable
 {
-    public ObjectType Type => ObjectType.Tile;
     public Rectangle CollisionBox => collisionBox;
     public BoxSide CollisionSides => collisionSides;
 
@@ -22,7 +21,7 @@ public class Tile(Sprite sprite, Rectangle collisionBox, BoxSide collisionSides)
 
     public bool CanTakeDamage => false;
 
-    public virtual void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
         Vector2 velocity)
     {
     }

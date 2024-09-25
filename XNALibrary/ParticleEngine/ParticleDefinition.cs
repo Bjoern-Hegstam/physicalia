@@ -9,7 +9,7 @@ public enum CollisionMode
     Circle
 }
 
-public abstract class ParticleDefinition
+public abstract class ParticleDefinition(int id)
 {
     private const float DefaultLifeTime = 5F;
     private const float DefaultVelocityScale = 1F;
@@ -18,13 +18,13 @@ public abstract class ParticleDefinition
     /// <summary>
     /// Scale of the Particle's initial velocity.
     /// </summary>
-    public float VelocityScale { get; set; }
+    public float VelocityScale { get; set; } = DefaultVelocityScale;
 
-    public Vector2 Acceleration { get; set; }
+    public Vector2 Acceleration { get; set; } = Vector2.Zero;
 
-    public CollisionMode CollisionMode { get; set; }
+    public CollisionMode CollisionMode { get; set; } = CollisionMode.Circle;
 
-    public float Radius { get; set; }
+    public float Radius { get; set; } = DefaultRadius;
 
     /// <summary>
     /// The angle at which the Particle is ejected, measured in radians.
@@ -34,34 +34,13 @@ public abstract class ParticleDefinition
     /// <summary>
     /// Total length of the particle's life, measured in seconds.
     /// </summary>
-    public float LifeTime { get; set; }
+    public float LifeTime { get; set; } = DefaultLifeTime;
 
-    public ParticleLifeMode LifeMode { get; set; }
+    public ParticleLifeMode LifeMode { get; set; } = ParticleLifeMode.Time;
 
-    public int Id { get; }
+    public int Id { get; } = id;
 
-    public ParticleDefinition(int id)
-    {
-        Id = id;
-        VelocityScale = DefaultVelocityScale;
-        Acceleration = Vector2.Zero;
-        LifeTime = DefaultLifeTime;
-        LifeMode = ParticleLifeMode.Time;
-
-        // By default a particle acts as a circle
-        CollisionMode = CollisionMode.Circle;
-        Radius = DefaultRadius;
-    }
-
-    /// <summary>
-    /// Creates a new Particle according to the definition.
-    /// </summary>
-    /// <returns>A Particle with its basic values set to those in
-    /// the definition.</returns>
-    public Particle Create()
-    {
-        return Create(StartAngle);
-    }
+    // By default a particle acts as a circle
 
     /// <summary>
     /// Creates a new Particle according to the definition.
@@ -112,8 +91,8 @@ public abstract class ParticleDefinition
                 reader.ReadToFollowing("VelocityScale");
                 VelocityScale = int.Parse(reader.ReadElementContentAsString());
 
-                int x = int.Parse(reader.GetAttribute("x"));
-                int y = int.Parse(reader.GetAttribute("y"));
+                int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
+                int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 Acceleration = new Vector2(x, y);
             }
 

@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary;
 using XNALibrary.Collision;
 using XNALibrary.TileEngine;
 
@@ -154,8 +153,6 @@ public class Enemy : Actor
         enemy.CurrentState = CurrentState;
     }
 
-    public override ObjectType Type => ObjectType.Enemy;
-
     public override void TakeDamage(float damageLevel)
     {
         Health -= damageLevel;
@@ -170,16 +167,16 @@ public class Enemy : Actor
         CanTakeDamage = false;
     }
 
-    public override void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
+    public override void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
         Vector2 velocity)
     {
-        switch (collidedObject.Type)
+        switch (collidedObject)
         {
-            case ObjectType.Tile:
+            case Tile:
             {
                 Position = position;
 
-                if ((collisionSides & BoxSide.Left) != 0 || (collisionSides & BoxSide.Right) != 0)
+                if ((collidedSides & BoxSide.Left) != 0 || (collidedSides & BoxSide.Right) != 0)
                 {
                     // Jump
                     velocity.Y = 200 * Math.Sign(Acceleration.Y) * -1;
@@ -191,7 +188,7 @@ public class Enemy : Actor
                 Velocity = velocity;
                 break;
             }
-            case ObjectType.Player:
+            case Player:
                 collidedObject.TakeDamage(Damage);
                 break;
         }

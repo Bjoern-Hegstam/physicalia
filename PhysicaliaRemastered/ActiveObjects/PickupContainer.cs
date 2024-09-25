@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PhysicaliaRemastered.Actors;
 using PhysicaliaRemastered.Pickups;
-using XNALibrary;
 using XNALibrary.Collision;
 
 namespace PhysicaliaRemastered.ActiveObjects;
@@ -13,8 +13,6 @@ namespace PhysicaliaRemastered.ActiveObjects;
 /// </summary>
 public class PickupContainer(Pickup pickup) : ActiveObject
 {
-    public override ObjectType Type => ObjectType.Pickup;
-
     public Pickup PickupObject { get; set; } = pickup;
 
     private void Pickup()
@@ -37,7 +35,7 @@ public class PickupContainer(Pickup pickup) : ActiveObject
         }
 
         // Can only be picked up by player
-        if (collObject.Type != ObjectType.Player)
+        if (collObject is not Player)
         {
             return;
         }

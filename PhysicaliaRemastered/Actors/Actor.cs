@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.Collision;
 using XNALibrary.Graphics;
@@ -54,8 +53,6 @@ public abstract class Actor : ICollidable
     private ActorState _currentState = ActorState.Standing;
 
     private Rectangle _collisionBox;
-
-    public abstract ObjectType Type { get; }
 
     public Rectangle CollisionBox
     {
@@ -128,14 +125,16 @@ public abstract class Actor : ICollidable
 
     public abstract void TakeDamage(float damageLevel);
 
-    public virtual void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
         Vector2 velocity)
     {
-        if (collidedObject.Type == ObjectType.Tile)
+        if (collidedObject is not Tile)
         {
-            Position = position;
-            _velocity = velocity;
+            return;
         }
+
+        Position = position;
+        _velocity = velocity;
     }
 
     private readonly Dictionary<ActorState, Animation> _animations = new();

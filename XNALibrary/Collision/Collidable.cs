@@ -5,8 +5,6 @@ namespace XNALibrary.Collision;
 
 public interface ICollidable
 {
-    ObjectType Type { get; }
-
     Vector2 Position { get; }
     Vector2 Origin { get; }
     Vector2 Velocity { get; }
@@ -19,10 +17,10 @@ public interface ICollidable
     /// Called when a collision occured.
     /// </summary>
     /// <param name="collidedObject">Denotes what kind of object the ICollisionObject collided with.</param>
-    /// <param name="collisionSides">Flagged enum containing which of its sides the object collided with.</param>
+    /// <param name="collidedSides">Flagged enum containing which of its sides the object collided with.</param>
     /// <param name="position">Suggested new position of the object.</param>
     /// <param name="velocity">Suggested new velocity of the object.</param>
-    void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position, Vector2 velocity);
+    void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position, Vector2 velocity);
 
     /// <summary>
     /// Called when the object takes damage.
