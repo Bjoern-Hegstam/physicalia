@@ -69,6 +69,7 @@ public abstract class Actor : ICollidable
 
     public virtual Vector2 Origin
     {
+        // TODO: The origin should not be dependent on the collision box.
         get
         {
             var origin = new Vector2(_collisionBox.X, _collisionBox.Y);
@@ -252,6 +253,25 @@ public abstract class Actor : ICollidable
         );
 
 #if DEBUG
+        // Collision box
+        spriteBatch.DrawRectangle(
+            Position - viewportPosition + _collisionBox.Location.ToVector2(),
+            _collisionBox,
+            Color.Red,
+            Origin,
+            SpriteFlip
+        );
+
+        // Position
+        var solidColorTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+        solidColorTexture.SetData([Color.Green]);
+        spriteBatch.Draw(
+            solidColorTexture,
+            Position - viewportPosition - Origin,
+            new Rectangle(-4, -4, 9, 9),
+            Color.White
+        );
+        
         // Origin
         spriteBatch.DrawRectangle(
             Position - viewportPosition + Origin - new Vector2 { X = 2 },
@@ -265,15 +285,6 @@ public abstract class Actor : ICollidable
             Position - viewportPosition + Origin - new Vector2 { Y = 2 },
             new Rectangle(0, 0, 1, 5),
             Color.Purple,
-            Origin,
-            SpriteFlip
-        );
-
-        // Collision box
-        spriteBatch.DrawRectangle(
-            Position - viewportPosition + _collisionBox.Location.ToVector2(),
-            _collisionBox,
-            Color.Red,
             Origin,
             SpriteFlip
         );

@@ -56,22 +56,15 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
     public void CheckCollision(ICollidable collObject)
     {
         // Get the positions of the Tiles to check
-        var xMin = Math.Max(
-            (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X) / TileWidthPx),
-            0
+        int xMin = Math.Max((int)((collObject.Position.X + collObject.CollisionBox.X) / TileWidthPx), 0);
+        int xMax = Math.Min(
+            (int)((collObject.Position.X + collObject.CollisionBox.X + collObject.CollisionBox.Width) / TileWidthPx),
+            Width - 1
         );
-        var xMax = Math.Min(
-            (int)((collObject.Position.X - collObject.Origin.X + collObject.CollisionBox.X +
-                   collObject.CollisionBox.Width) / TileWidthPx),
-            Width - 1);
 
-        var yMin = Math.Max(
-            (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y) / TileHeightPx),
-            0
-        );
-        var yMax = Math.Min(
-            (int)((collObject.Position.Y - collObject.Origin.Y + collObject.CollisionBox.Y +
-                   collObject.CollisionBox.Height) / TileHeightPx),
+        int yMin = Math.Max((int)((collObject.Position.Y + collObject.CollisionBox.Y) / TileHeightPx), 0);
+        int yMax = Math.Min(
+            (int)((collObject.Position.Y + collObject.CollisionBox.Y + collObject.CollisionBox.Height) / TileHeightPx),
             Height - 1
         );
 
@@ -79,7 +72,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         {
             for (int y = yMin; y <= yMax; y++)
             {
-                if (!_tileMap.TryGetValue(new Vector2(x, y), out TileId tileId))
+                if (!_tileMap.TryGetValue(new Vector2(x, y), out TileId? tileId))
                 {
                     continue;
                 }
@@ -92,7 +85,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 }
 
                 // Check the tiles' collision sides for collisions
-                Vector2 position = collObject.Position - collObject.Origin;
+                Vector2 position = collObject.Position;
                 Vector2 velocity = collObject.Velocity;
                 Rectangle collBox = collObject.CollisionBox;
 
@@ -229,7 +222,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
 
                     if (collObject.CanCollide)
                     {
-                        collObject.OnCollision(tile, objectSides, position + collObject.Origin, velocity);
+                        collObject.OnCollision(tile, objectSides, position, velocity);
                     }
                 }
             }

@@ -118,27 +118,29 @@ public class ParticleEngine
 
         for (int i = _particleBuffer.Count - 1; i >= 0 && count > 0; i--)
         {
-            if (_particleBuffer[i].Definition.Id == typeId)
+            if (_particleBuffer[i].Definition.Id != typeId)
             {
-                // Get particle from the reserve
-                particle = _particleBuffer[i];
-                _particleBuffer.RemoveAt(i);
-
-                // Setup the particle
-                _definitions[typeId].SetupParticle(particle, angle);
-
-                particle.Position = position;
-                particle.IsActive = true;
-
-                // Add engine reference
-                particle.ParticleEngine = this;
-
-                // Add the particle to the active particles
-                _activeParticles.Add(particle);
-
-                // Decrease the count
-                count--;
+                continue;
             }
+
+            // Get particle from the reserve
+            particle = _particleBuffer[i];
+            _particleBuffer.RemoveAt(i);
+
+            // Setup the particle
+            _definitions[typeId].SetupParticle(particle, angle);
+
+            particle.Position = position;
+            particle.IsActive = true;
+
+            // Add engine reference
+            particle.ParticleEngine = this;
+
+            // Add the particle to the active particles
+            _activeParticles.Add(particle);
+
+            // Decrease the count
+            count--;
         }
 
         // Add more particles if needed
@@ -173,31 +175,21 @@ public class ParticleEngine
     /// <param name="collObject">Object to check for collisions against.</param>
     public void CheckCollisions(ICollidable collObject)
     {
-        Rectangle particleRect, collObjRect = collObject.CollisionBox;
-        Vector2 boxPos = collObject.Position - collObject.Origin;
-        collObjRect.X += (int)boxPos.X;
-        collObjRect.Y += (int)boxPos.Y;
+        Rectangle objectCollisionBox = collObject.AbsoluteCollisionBox;
 
-        for (var i = 0; i < _activeParticles.Count; i++)
+        IEnumerable<Particle> collidingParticles = from particle in _activeParticles
+            where particle.CanCollide
+            where objectCollisionBox.Intersects((particle as ICollidable).AbsoluteCollisionBox)
+            select particle;
+        
+        foreach (Particle particle in collidingParticles)
         {
-            Particle particle = _activeParticles[i];
-
-            // Don't bother if the particle can't collide with anything
-            if (!particle.CanCollide)
-            {
-                continue;
-            }
-
-            particleRect = particle.CollisionBox;
-            boxPos = particle.Position - particle.Origin;
-            particleRect.X += (int)boxPos.X;
-            particleRect.Y += (int)boxPos.Y;
-
-            if (collObjRect.Intersects(particleRect))
-            {
-                particle.OnCollision(collObject, BoxSide.Bottom | BoxSide.Left | BoxSide.Right | BoxSide.Top,
-                    Vector2.Zero, Vector2.Zero);
-            }
+            particle.OnCollision(
+                collObject,
+                BoxSide.Bottom | BoxSide.Left | BoxSide.Right | BoxSide.Top,
+                Vector2.Zero,
+                Vector2.Zero
+            );
         }
     }
 
