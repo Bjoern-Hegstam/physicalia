@@ -79,7 +79,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
 
         Vector2 safePosition = collidable.Position;
         Vector2 safeVelocity = collidable.Velocity;
-        
+
         for (int x = xMin; x <= xMax; x++)
         {
             for (int y = yMin; y <= yMax; y++)
@@ -95,10 +95,6 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 }
 
                 Rectangle tileAbsoluteCollisionBox = (tile as ICollidable).AbsoluteCollisionBox;
-                if (!tileAbsoluteCollisionBox.Intersects(collidableAbsoluteCollisionBox))
-                {
-                    continue;
-                }
 
                 // Check the tiles' collision sides for collisions
                 List<BoxSide> collidingCollidableSide = [];
@@ -109,7 +105,8 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     collidableAbsoluteCollisionBox.Right <= tileAbsoluteCollisionBox.Left + CollisionThresholdPx)
                 {
                     collidingCollidableSide.Add(BoxSide.Right);
-                    safePosition.X = tileAbsoluteCollisionBox.Left - collidableAbsoluteCollisionBox.Width - collidable.CollisionBox.Left;
+                    safePosition.X = tileAbsoluteCollisionBox.Left - collidableAbsoluteCollisionBox.Width -
+                                     collidable.CollisionBox.Left;
                     safeVelocity.X = 0;
                 }
 
@@ -129,7 +126,8 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     collidableAbsoluteCollisionBox.Bottom <= tileAbsoluteCollisionBox.Top + CollisionThresholdPx)
                 {
                     collidingCollidableSide.Add(BoxSide.Bottom);
-                    safePosition.Y = tileAbsoluteCollisionBox.Top - collidableAbsoluteCollisionBox.Height - collidable.CollisionBox.Top;
+                    safePosition.Y = tileAbsoluteCollisionBox.Top - collidableAbsoluteCollisionBox.Height -
+                                     collidable.CollisionBox.Top;
                     safeVelocity.Y = 0;
                 }
 
