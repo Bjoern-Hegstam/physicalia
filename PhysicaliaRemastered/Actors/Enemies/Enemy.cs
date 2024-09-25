@@ -55,7 +55,7 @@ public class Enemy : Actor
         {
             base.Update(gameTime);
 
-            if (!WithinArea(this, _patrolArea))
+            if (!IsWithinArea(this, _patrolArea))
             {
                 MoveToArea();
             }
@@ -108,24 +108,24 @@ public class Enemy : Actor
     /// <summary>
     /// Checks whether the Actor's collision box is contained within the patrol area.
     /// </summary>
-    /// <param name="actor">The Actor who's collision box should be to checked.</param>
+    /// <param name="actor">The Actor whose collision box should be to checked.</param>
     /// <param name="area">Area to use.</param>
-    /// <returns>True if the Actor's collision box is completly contained
+    /// <returns>True if the Actor's collision box is completely contained
     /// within the patrol area; false otherwise.</returns>
-    public static bool WithinArea(Actor actor, Rectangle area)
+    public static bool IsWithinArea(Actor actor, Rectangle area)
     {
-        return WithinArea(actor, area, actor.Position);
+        return IsWithinArea(actor, area, actor.Position);
     }
 
     /// <summary>
     /// Checks whether the Actor's collision box is contained within the patrol area.
     /// </summary>
-    /// <param name="actor">The Actor who's collision box should be checked.</param>
+    /// <param name="actor">The Actor whose collision box should be checked.</param>
     /// <param name="area">Area to use.</param>
-    /// <param name="position">Position to use insted of the Actor's own position.</param>
-    /// <returns>True if the Actor's collision box is completly contained
+    /// <param name="position">Position to use instead of the Actor's own position.</param>
+    /// <returns>True if the Actor's collision box is completely contained
     /// within the patrol area; false otherwise.</returns>
-    public static bool WithinArea(Actor actor, Rectangle area, Vector2 position)
+    public static bool IsWithinArea(Actor actor, Rectangle area, Vector2 position)
     {
         Rectangle collBox = actor.CollisionBox;
         collBox.X += (int)(actor.Position.X - actor.Origin.X);
@@ -189,37 +189,40 @@ public class Enemy : Actor
     {
         Health -= damageLevel;
 
-        if (Health <= 0)
+        if (Health > 0)
         {
-            Velocity *= Vector2.Zero;
-            CanCollide = false;
-            CanTakeDamage = false;
+            return;
         }
+
+        Velocity = Vector2.Zero;
+        CanCollide = false;
+        CanTakeDamage = false;
     }
 
     public override void OnCollision(ICollidable collidedObject, BoxSide collisionSides, Vector2 position,
         Vector2 velocity)
     {
-        //base.OnCollision(collidedObject, collisionSides, position, velocity);
-
-        if (collidedObject.Type == ObjectType.Tile)
+        switch (collidedObject.Type)
         {
-            Position = position;
-
-            if ((collisionSides & BoxSide.Left) != 0 || (collisionSides & BoxSide.Right) != 0)
+            case ObjectType.Tile:
             {
-                // Jump
-                velocity.Y = 200 * Math.Sign(Acceleration.Y) * -1;
+                Position = position;
 
-                // Reverse velocity in X
-                velocity.X = Velocity.X; // *-1;
+                if ((collisionSides & BoxSide.Left) != 0 || (collisionSides & BoxSide.Right) != 0)
+                {
+                    // Jump
+                    velocity.Y = 200 * Math.Sign(Acceleration.Y) * -1;
+
+                    // Reverse velocity in X
+                    velocity.X = Velocity.X; // *-1;
+                }
+
+                Velocity = velocity;
+                break;
             }
-
-            Velocity = velocity;
-        }
-        else if (collidedObject.Type == ObjectType.Player)
-        {
-            collidedObject.TakeDamage(Damage);
+            case ObjectType.Player:
+                collidedObject.TakeDamage(Damage);
+                break;
         }
     }
 }

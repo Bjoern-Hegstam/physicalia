@@ -45,8 +45,9 @@ public class EnemyLibrary(GameServiceContainer gameServiceContainer)
             {
                 int typeId = int.Parse(reader.GetAttribute("typeID") ?? throw new ResourceLoadException());
 
-                Enemy enemy = new Enemy(new ActorStartValues());
-
+                var enemy = new Enemy(new ActorStartValues());
+                enemy.ApplyStartValues();
+                
                 SetupEnemy(reader, enemy);
                 LoadAnimations(reader, enemy);
 
