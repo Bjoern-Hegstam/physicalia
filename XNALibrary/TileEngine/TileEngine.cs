@@ -67,9 +67,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         {
             return;
         }
-        
-        Vector2 position = collidable.Position;
-        Vector2 velocity = collidable.Velocity;
+
         Rectangle collidableAbsoluteCollisionBox = collidable.AbsoluteCollisionBox;
 
         // Get the positions of the Tiles to check
@@ -79,8 +77,8 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         int yMin = Math.Max(collidableAbsoluteCollisionBox.Y / TileHeightPx, 0);
         int yMax = Math.Min(collidableAbsoluteCollisionBox.Bottom / TileHeightPx, Height - 1);
 
-        Vector2 safePosition = position;
-        Vector2 safeVelocity = velocity;
+        Vector2 safePosition = collidable.Position;
+        Vector2 safeVelocity = collidable.Velocity;
         
         for (int x = xMin; x <= xMax; x++)
         {
@@ -106,7 +104,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 List<BoxSide> collidingCollidableSide = [];
 
                 if (tile.CollisionSides.Contains(BoxSide.Left) &&
-                    velocity.X > 0 &&
+                    collidable.Velocity.X > 0 &&
                     tileAbsoluteCollisionBox.Left <= collidableAbsoluteCollisionBox.Right &&
                     collidableAbsoluteCollisionBox.Right <= tileAbsoluteCollisionBox.Left + CollisionThresholdPx)
                 {
@@ -116,7 +114,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 }
 
                 if (tile.CollisionSides.Contains(BoxSide.Right) &&
-                    velocity.X < 0 &&
+                    collidable.Velocity.X < 0 &&
                     collidableAbsoluteCollisionBox.Left <= tileAbsoluteCollisionBox.Right &&
                     tileAbsoluteCollisionBox.Right - CollisionThresholdPx <= collidableAbsoluteCollisionBox.X)
                 {
@@ -126,7 +124,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 }
 
                 if (tile.CollisionSides.Contains(BoxSide.Top) &&
-                    velocity.Y > 0 &&
+                    collidable.Velocity.Y > 0 &&
                     tileAbsoluteCollisionBox.Top <= collidableAbsoluteCollisionBox.Bottom &&
                     collidableAbsoluteCollisionBox.Bottom <= tileAbsoluteCollisionBox.Top + CollisionThresholdPx)
                 {
@@ -136,7 +134,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 }
 
                 if (tile.CollisionSides.Contains(BoxSide.Bottom) &&
-                    velocity.Y < 0 &&
+                    collidable.Velocity.Y < 0 &&
                     collidableAbsoluteCollisionBox.Top <= tileAbsoluteCollisionBox.Bottom &&
                     tileAbsoluteCollisionBox.Bottom - CollisionThresholdPx <= collidableAbsoluteCollisionBox.Top)
                 {
