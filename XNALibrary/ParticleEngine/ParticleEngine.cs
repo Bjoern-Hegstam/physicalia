@@ -181,12 +181,12 @@ public class ParticleEngine
             where particle.CanCollide
             where objectCollisionBox.Intersects((particle as ICollidable).AbsoluteCollisionBox)
             select particle;
-        
+
         foreach (Particle particle in collidingParticles)
         {
             particle.OnCollision(
                 collObject,
-                BoxSide.Bottom | BoxSide.Left | BoxSide.Right | BoxSide.Top,
+                [BoxSide.Bottom, BoxSide.Left, BoxSide.Right, BoxSide.Top],
                 Vector2.Zero,
                 Vector2.Zero
             );

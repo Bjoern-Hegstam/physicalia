@@ -2,15 +2,15 @@ namespace XNALibrary.TileEngine;
 
 public class TileLibrary
 {
-    private readonly Dictionary<TileId, Tile> _tileLibrary = new();
+    private readonly Dictionary<TileDefinitionId, TileDefinition> _tileLibrary = new();
 
-    public void AddTile(TileId tileId, Tile tile)
+    public void AddTileDefinition(TileDefinitionId tileDefinitionId, TileDefinition tile)
     {
-        _tileLibrary.Add(tileId, tile);
+        _tileLibrary.Add(tileDefinitionId, tile);
     }
 
-    public Tile GetTile(TileId id)
+    public TileDefinition GetTileDefinition(TileDefinitionId definitionId)
     {
-        return _tileLibrary[id];
+        return _tileLibrary[definitionId];
     }
 }

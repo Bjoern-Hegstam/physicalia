@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Collision;
@@ -167,7 +168,7 @@ public class Enemy : Actor
         CanTakeDamage = false;
     }
 
-    public override void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
+    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 position,
         Vector2 velocity)
     {
         switch (collidedObject)
@@ -176,7 +177,7 @@ public class Enemy : Actor
             {
                 Position = position;
 
-                if ((collidedSides & BoxSide.Left) != 0 || (collidedSides & BoxSide.Right) != 0)
+                if (collidedSides.Contains(BoxSide.Left) || collidedSides.Contains(BoxSide.Right))
                 {
                     // Jump
                     velocity.Y = 200 * Math.Sign(Acceleration.Y) * -1;

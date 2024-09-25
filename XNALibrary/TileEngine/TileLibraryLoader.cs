@@ -29,7 +29,7 @@ public static class TileLibraryLoader
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
             {
-                var tileId = new TileId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
+                var tileId = new TileDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
                 var spriteId = new SpriteId(reader.GetAttribute("spriteId") ?? throw new ResourceLoadException());
 
                 reader.ReadToFollowing("CollisionBox");
@@ -43,15 +43,19 @@ public static class TileLibraryLoader
                 reader.ReadToFollowing("CollisionSides");
                 string sides = reader.ReadElementContentAsString();
 
-                BoxSide collisionSides = sides
+                List<BoxSide> collisionSides = sides
                     .Split(' ')
                     .Where(side => !string.IsNullOrWhiteSpace(side))
                     .Select(Enum.Parse<BoxSide>)
-                    .Aggregate(BoxSide.None, (current, side) => current | side);
+                    .ToList();
 
-                Sprite sprite = spriteLibrary.GetSprite(spriteId);
-                var tile = new Tile(sprite, collisionBox, collisionSides);
-                tileLibrary.AddTile(tileId, tile);
+                var tileDefinition = new TileDefinition
+                {
+                    Sprite = spriteLibrary.GetSprite(spriteId),
+                    CollisionBox = collisionBox,
+                    CollisionSides = collisionSides
+                };
+                tileLibrary.AddTileDefinition(tileId, tileDefinition);
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TileLibrary" })

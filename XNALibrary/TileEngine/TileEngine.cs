@@ -2,6 +2,7 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Collision;
+using XNALibrary.Sprites;
 
 namespace XNALibrary.TileEngine;
 
@@ -13,7 +14,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
     private const int TileWidthPx = DefaultTileSidePx;
     private const int TileHeightPx = DefaultTileSidePx;
 
-    private readonly Dictionary<Vector2, TileId> _tileMap = new();
+    private readonly Dictionary<Vector2, Tile> _tileMap = new();
     private int Width { get; set; } = width;
     private int Height { get; set; } = height;
 
@@ -33,9 +34,16 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
             {
                 int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
                 int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
-                TileId tileId = new TileId(reader.GetAttribute("tileId") ?? throw new ResourceLoadException());
+                var tileDefinitionId =
+                    new TileDefinitionId(reader.GetAttribute("tileId") ?? throw new ResourceLoadException());
 
-                _tileMap[new Vector2(x, y)] = tileId;
+                var tile = new Tile
+                {
+                    TileDefinition = tileLibrary.GetTileDefinition(tileDefinitionId),
+                    Position = new Vector2(x * TileWidthPx, y * TileHeightPx),
+                };
+
+                _tileMap[new Vector2(x, y)] = tile;
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "TileEngine" })
@@ -53,177 +61,93 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         }
     }
 
-    public void CheckCollision(ICollidable collObject)
+    public void CheckCollision(ICollidable collidable)
     {
+        if (!collidable.CanCollide)
+        {
+            return;
+        }
+        
+        Vector2 position = collidable.Position;
+        Vector2 velocity = collidable.Velocity;
+        Rectangle collidableAbsoluteCollisionBox = collidable.AbsoluteCollisionBox;
+
         // Get the positions of the Tiles to check
-        int xMin = Math.Max((int)((collObject.Position.X + collObject.CollisionBox.X) / TileWidthPx), 0);
-        int xMax = Math.Min(
-            (int)((collObject.Position.X + collObject.CollisionBox.X + collObject.CollisionBox.Width) / TileWidthPx),
-            Width - 1
-        );
+        int xMin = Math.Max(collidableAbsoluteCollisionBox.X / TileWidthPx, 0);
+        int xMax = Math.Min(collidableAbsoluteCollisionBox.Right / TileWidthPx, Width - 1);
 
-        int yMin = Math.Max((int)((collObject.Position.Y + collObject.CollisionBox.Y) / TileHeightPx), 0);
-        int yMax = Math.Min(
-            (int)((collObject.Position.Y + collObject.CollisionBox.Y + collObject.CollisionBox.Height) / TileHeightPx),
-            Height - 1
-        );
+        int yMin = Math.Max(collidableAbsoluteCollisionBox.Y / TileHeightPx, 0);
+        int yMax = Math.Min(collidableAbsoluteCollisionBox.Bottom / TileHeightPx, Height - 1);
 
+        Vector2 safePosition = position;
+        Vector2 safeVelocity = velocity;
+        
         for (int x = xMin; x <= xMax; x++)
         {
             for (int y = yMin; y <= yMax; y++)
             {
-                if (!_tileMap.TryGetValue(new Vector2(x, y), out TileId? tileId))
+                if (!_tileMap.TryGetValue(new Vector2(x, y), out Tile? tile))
                 {
                     continue;
                 }
-
-                Tile tile = tileLibrary.GetTile(tileId);
 
                 if (!tile.CanCollide)
                 {
                     continue;
                 }
 
+                Rectangle tileAbsoluteCollisionBox = (tile as ICollidable).AbsoluteCollisionBox;
+                if (!tileAbsoluteCollisionBox.Intersects(collidableAbsoluteCollisionBox))
+                {
+                    continue;
+                }
+
                 // Check the tiles' collision sides for collisions
-                Vector2 position = collObject.Position;
-                Vector2 velocity = collObject.Velocity;
-                Rectangle collBox = collObject.CollisionBox;
+                List<BoxSide> collidingCollidableSide = [];
 
-                // Collide sides
-                BoxSide collisions = 0;
-
-                if (velocity.X > 0 &&
-                    position.X + collBox.X + collBox.Width >= x * TileWidthPx + tile.CollisionBox.X &&
-                    position.X + collBox.X + collBox.Width <=
-                    x * TileWidthPx + tile.CollisionBox.X + CollisionThresholdPx)
+                if (tile.CollisionSides.Contains(BoxSide.Left) &&
+                    velocity.X > 0 &&
+                    tileAbsoluteCollisionBox.Left <= collidableAbsoluteCollisionBox.Right &&
+                    collidableAbsoluteCollisionBox.Right <= tileAbsoluteCollisionBox.Left + CollisionThresholdPx)
                 {
-                    collisions |= BoxSide.Left;
+                    collidingCollidableSide.Add(BoxSide.Right);
+                    safePosition.X = tileAbsoluteCollisionBox.Left - collidableAbsoluteCollisionBox.Width - collidable.CollisionBox.Left;
+                    safeVelocity.X = 0;
                 }
 
-                if (velocity.Y > 0 &&
-                    position.Y + collBox.Y + collBox.Height >= y * TileHeightPx + tile.CollisionBox.Y &&
-                    position.Y + collBox.Y + collBox.Height <=
-                    y * TileHeightPx + tile.CollisionBox.Y + CollisionThresholdPx)
+                if (tile.CollisionSides.Contains(BoxSide.Right) &&
+                    velocity.X < 0 &&
+                    collidableAbsoluteCollisionBox.Left <= tileAbsoluteCollisionBox.Right &&
+                    tileAbsoluteCollisionBox.Right - CollisionThresholdPx <= collidableAbsoluteCollisionBox.X)
                 {
-                    collisions |= BoxSide.Top;
+                    collidingCollidableSide.Add(BoxSide.Left);
+                    safePosition.X = tileAbsoluteCollisionBox.Right - collidable.CollisionBox.Left;
+                    safeVelocity.X = 0;
                 }
 
-                if (velocity.X < 0 &&
-                    position.X + collBox.X <= x * TileWidthPx + tile.CollisionBox.X + tile.CollisionBox.Width &&
-                    position.X + collBox.X >= x * TileWidthPx + tile.CollisionBox.X + tile.CollisionBox.Width -
-                    CollisionThresholdPx)
+                if (tile.CollisionSides.Contains(BoxSide.Top) &&
+                    velocity.Y > 0 &&
+                    tileAbsoluteCollisionBox.Top <= collidableAbsoluteCollisionBox.Bottom &&
+                    collidableAbsoluteCollisionBox.Bottom <= tileAbsoluteCollisionBox.Top + CollisionThresholdPx)
                 {
-                    collisions |= BoxSide.Right;
+                    collidingCollidableSide.Add(BoxSide.Bottom);
+                    safePosition.Y = tileAbsoluteCollisionBox.Top - collidableAbsoluteCollisionBox.Height - collidable.CollisionBox.Top;
+                    safeVelocity.Y = 0;
                 }
 
-                if (velocity.Y < 0 &&
-                    position.Y + collBox.Y <= y * TileHeightPx + tile.CollisionBox.Y + tile.CollisionBox.Height &&
-                    position.Y + collBox.Y >= y * TileHeightPx + tile.CollisionBox.Y + tile.CollisionBox.Height -
-                    CollisionThresholdPx)
+                if (tile.CollisionSides.Contains(BoxSide.Bottom) &&
+                    velocity.Y < 0 &&
+                    collidableAbsoluteCollisionBox.Top <= tileAbsoluteCollisionBox.Bottom &&
+                    tileAbsoluteCollisionBox.Bottom - CollisionThresholdPx <= collidableAbsoluteCollisionBox.Top)
                 {
-                    collisions |= BoxSide.Bottom;
+                    collidingCollidableSide.Add(BoxSide.Top);
+                    safePosition.Y = tileAbsoluteCollisionBox.Bottom - collidable.CollisionBox.Top;
+                    safeVelocity.Y = 0;
                 }
 
-                // Check that the object is within the area where
-                // it can collide with the side
-
-                // Left
-                if ((collisions & BoxSide.Left) != 0)
+                if (collidingCollidableSide.Count > 0)
                 {
-                    // Is the object within the collision area
-                    // Object top less than tile bottom and
-                    // object bottom greater than tile top
-                    if ((tile.CollisionSides & BoxSide.Left) != 0 &&
-                        position.Y + collBox.Y < y * TileHeightPx + tile.CollisionBox.Y + tile.CollisionBox.Height &&
-                        position.Y + collBox.Y + collBox.Height > y * TileHeightPx + tile.CollisionBox.Y)
-                    {
-                        position.X = x * TileWidthPx + tile.CollisionBox.X - collBox.X - collBox.Width;
-                        velocity.X = 0;
-                    }
-                    else
-                    {
-                        collisions -= BoxSide.Left;
-                    }
-                }
-
-                // Top
-                if ((collisions & BoxSide.Top) != 0)
-                {
-                    // Is the object within the collision threshold
-                    if ((tile.CollisionSides & BoxSide.Top) != 0 &&
-                        position.X + collBox.X < x * TileWidthPx + tile.CollisionBox.X + tile.CollisionBox.Width &&
-                        position.X + collBox.X + collBox.Width > x * TileWidthPx + tile.CollisionBox.X)
-                    {
-                        position.Y = y * TileWidthPx + tile.CollisionBox.Y - collBox.Y - collBox.Height;
-                        velocity.Y = 0;
-                    }
-                    else
-                    {
-                        collisions -= BoxSide.Top;
-                    }
-                }
-
-                // Right
-                if ((collisions & BoxSide.Right) != 0)
-                {
-                    // Is the object within the collision threshold
-                    if ((tile.CollisionSides & BoxSide.Right) != 0 &&
-                        position.Y + collBox.Y < y * TileHeightPx + tile.CollisionBox.Y + tile.CollisionBox.Height &&
-                        position.Y + collBox.Y + collBox.Height > y * TileHeightPx + tile.CollisionBox.Y)
-                    {
-                        position.X = x * TileWidthPx + tile.CollisionBox.X + tile.CollisionBox.Width - collBox.X;
-                        velocity.X = 0;
-                    }
-                    else
-                    {
-                        collisions -= BoxSide.Right;
-                    }
-                }
-
-                // Bottom
-                if ((collisions & BoxSide.Bottom) != 0)
-                {
-                    // Is the object within the collision threshold
-                    if ((tile.CollisionSides & BoxSide.Bottom) != 0 &&
-                        position.X + collBox.X < x * TileWidthPx + tile.CollisionBox.X + tile.CollisionBox.Width &&
-                        position.X + collBox.X + collBox.Width > x * TileWidthPx + tile.CollisionBox.X)
-                    {
-                        position.Y = y * TileWidthPx + tile.CollisionBox.Y + tile.CollisionBox.Height - collBox.Y;
-                        velocity.Y = 0;
-                    }
-                    else
-                    {
-                        collisions -= BoxSide.Bottom;
-                    }
-                }
-
-                if (collisions != 0)
-                {
-                    BoxSide objectSides = 0;
-                    if ((collisions & BoxSide.Left) != 0)
-                    {
-                        objectSides |= BoxSide.Right;
-                    }
-
-                    if ((collisions & BoxSide.Right) != 0)
-                    {
-                        objectSides |= BoxSide.Left;
-                    }
-
-                    if ((collisions & BoxSide.Top) != 0)
-                    {
-                        objectSides |= BoxSide.Bottom;
-                    }
-
-                    if ((collisions & BoxSide.Bottom) != 0)
-                    {
-                        objectSides |= BoxSide.Top;
-                    }
-
-                    if (collObject.CanCollide)
-                    {
-                        collObject.OnCollision(tile, objectSides, position, velocity);
-                    }
+                    collidable.OnCollision(tile, collidingCollidableSide, safePosition, safeVelocity);
                 }
             }
         }
@@ -238,21 +162,21 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
         {
             for (int y = topLeftY; y < Height; y++)
             {
-                if (!_tileMap.TryGetValue(new Vector2(x, y), out TileId tileId))
+                if (!_tileMap.TryGetValue(new Vector2(x, y), out Tile? tile))
                 {
                     continue;
                 }
 
-                Tile tile = tileLibrary.GetTile(tileId);
                 var tilePosition = new Vector2(
                     x * TileWidthPx - (int)viewportPosition.X,
                     y * TileHeightPx - (int)viewportPosition.Y
                 );
 
+                Sprite sprite = tile.TileDefinition.Sprite;
                 spriteBatch.Draw(
-                    tile.Texture,
+                    sprite.Texture,
                     tilePosition,
-                    tile.SourceRectangle,
+                    sprite.SourceRectangle,
                     Color.White
                 );
             }

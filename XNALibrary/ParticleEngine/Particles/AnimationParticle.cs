@@ -19,7 +19,7 @@ public class AnimationParticle(Animation.Animation animation) : Particle
 
     public override Rectangle CollisionBox => new(0, 0, Width, Height);
 
-    public override void OnCollision(ICollidable collidable, BoxSide collidedSides, Vector2 position,
+    public override void OnCollision(ICollidable collidable, List<BoxSide> collidedSides, Vector2 position,
         Vector2 velocity)
     {
         if (collidable.CanTakeDamage)

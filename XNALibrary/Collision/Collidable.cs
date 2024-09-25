@@ -21,7 +21,7 @@ public interface ICollidable
     /// <param name="collidedSides">Flagged enum containing which of its sides the object collided with.</param>
     /// <param name="position">Suggested new position of the object.</param>
     /// <param name="velocity">Suggested new velocity of the object.</param>
-    public void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position, Vector2 velocity);
+    public void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 position, Vector2 velocity);
 
     /// <summary>
     /// Called when the object takes damage.

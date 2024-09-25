@@ -147,8 +147,12 @@ public class EnemyManager
 
             if (playerBox.Intersects(enemyBox))
             {
-                enemy.OnCollision(player, BoxSide.Bottom | BoxSide.Left | BoxSide.Right | BoxSide.Top, Vector2.Zero,
-                    Vector2.Zero);
+                enemy.OnCollision(
+                    player,
+                    [BoxSide.Bottom, BoxSide.Left, BoxSide.Right, BoxSide.Top],
+                    Vector2.Zero,
+                    Vector2.Zero
+                );
             }
 
             // Check to see whether the player's weapon is damaging the enemy

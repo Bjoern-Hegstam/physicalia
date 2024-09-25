@@ -362,7 +362,7 @@ public class Player : Actor
         }
     }
 
-    public override void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
+    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 position,
         Vector2 velocity)
     {
         if (collidedObject is not Tile)

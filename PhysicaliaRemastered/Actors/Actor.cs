@@ -126,7 +126,7 @@ public abstract class Actor : ICollidable
 
     public abstract void TakeDamage(float damageLevel);
 
-    public virtual void OnCollision(ICollidable collidedObject, BoxSide collidedSides, Vector2 position,
+    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 position,
         Vector2 velocity)
     {
         if (collidedObject is not Tile)
