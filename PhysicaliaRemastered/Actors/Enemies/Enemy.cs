@@ -26,15 +26,7 @@ public class Enemy : Actor
     public bool IsActive
     {
         get => Enabled || Visible;
-        set
-        {
-            Enabled = Visible = value;
-
-            if (value)
-            {
-                CurrentState = CurrentState;
-            }
-        }
+        set => Enabled = Visible = value;
     }
 
     public bool Enabled { get; set; }
