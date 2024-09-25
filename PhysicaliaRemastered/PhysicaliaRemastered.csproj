@@ -214,7 +214,7 @@
         <None Update="Content\GameData\KeyboardMap.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Content\GameData\Settings.xml">
+        <None Update="Content\GameData\InputSettings.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

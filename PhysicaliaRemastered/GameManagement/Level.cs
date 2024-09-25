@@ -62,17 +62,20 @@ public class Level(Game game, Player player)
     private readonly EnemyManager _enemyManager = new(game.Services.GetService<EnemyLibrary>());
 
     private Fonts Fonts => game.Services.GetService<Fonts>();
-    private Settings Settings => game.Services.GetService<Settings>();
+    private InputSettings InputSettings => game.Services.GetService<InputSettings>();
     private SpriteLibrary SpriteLibrary => game.Services.GetService<SpriteLibrary>();
     private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
     private WeaponLibrary WeaponLibrary => game.Services.GetService<WeaponLibrary>();
     private PickupTemplateLibrary ModifierTemplateLibrary => game.Services.GetService<PickupTemplateLibrary>();
     
+    private Sprite FullHealthUi => SpriteLibrary.GetSprite(new SpriteId("health-bar--full"));
+    private Sprite EmptyHealthUi => SpriteLibrary.GetSprite(new SpriteId("health-bar--empty"));
+    
     public void Update(GameTime gameTime)
     {
         if (State == LevelState.Start)
         {
-            if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+            if (InputSettings.InputMap.IsPressed(InputAction.MenuStart))
             {
                 NextState = LevelState.Playing;
             }
@@ -394,7 +397,7 @@ public class Level(Game game, Player player)
         Player.ApplyStartValues();
         Player.CanCollide = true;
         Player.CanTakeDamage = true;
-        Player.Health = Settings.PlayerStartHealth;
+        Player.Health = Player.DefaultMaxHealth;
         Player.ApplyStoredWeaponAmmoCount();
 
         Viewport.Position = Vector2.Zero;
@@ -800,20 +803,20 @@ public class Level(Game game, Player player)
     private void DrawUi(SpriteBatch spriteBatch)
     {
         // HEALTH BAR
-        float playerHealthPercentage = Player.Health / Settings.PlayerStartHealth;
-        Rectangle fullHealthSource = (Rectangle)Settings.FullHealthUi?.SourceRectangle;
+        float playerHealthPercentage = Player.Health / Player.DefaultMaxHealth;
+        Rectangle fullHealthSource = FullHealthUi.SourceRectangle;
         // 48 is the start of the health indicator in x
         // 115 is the width of the health indicator
         fullHealthSource.Width = 48 + (int)(115 * playerHealthPercentage);
 
         // Draw empty health bar first
-        spriteBatch.Draw(Settings.EmptyHealthUi?.Texture,
+        spriteBatch.Draw(EmptyHealthUi.Texture,
             Vector2.Zero,
-            Settings.EmptyHealthUi?.SourceRectangle,
+            EmptyHealthUi.SourceRectangle,
             Color.White);
 
         // Draw the visible part of the full health bar
-        spriteBatch.Draw(Settings.FullHealthUi?.Texture,
+        spriteBatch.Draw(FullHealthUi.Texture,
             Vector2.Zero,
             fullHealthSource,
             Color.White);
@@ -867,7 +870,7 @@ public class Level(Game game, Player player)
 
         // MODIFIERS
         // A little extra spacing is added (5 px)
-        var modifierPos = new Vector2(5, (float)Settings.FullHealthUi?.SourceRectangle.Height + 5);
+        var modifierPos = new Vector2(5, (float)FullHealthUi.SourceRectangle.Height + 5);
         foreach (ModifierPickup modifier in _modifiers)
         {
             modifier.DrawTimer(spriteBatch, modifierPos, Fonts.LevelIndex);

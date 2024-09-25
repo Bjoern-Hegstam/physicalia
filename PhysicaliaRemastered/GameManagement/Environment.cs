@@ -1,8 +1,10 @@
+using System.IO;
+
 namespace PhysicaliaRemastered.GameManagement;
 
-public class Environment
+public static class Environment
 {
-    public const string GameDataPath = "Content/GameData/";
-    public const string LibraryPath = GameDataPath + "Libraries/";
-    public const string WorldPath = GameDataPath + "Worlds/";
+    public static readonly string GameDataPath = Path.Combine("Content", "GameData");
+    public static readonly string LibraryPath = Path.Combine(GameDataPath, "Libraries");
+    public static readonly string WorldPath = Path.Combine(GameDataPath, "Worlds");
 }

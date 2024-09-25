@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Settings>
-    <PlayerHealth>100</PlayerHealth>
-    <!--	<InputType>Gamepad</InputType>-->
     <InputType>Keyboard</InputType>
     <ButtonMaps>
         <KeyboardMap>Content/GameData/KeyboardMap.xml</KeyboardMap>
         <GamepadMap>Content/GameData/GamepadMap.xml</GamepadMap>
     </ButtonMaps>
-    <UI>
-        <FullHealthBar spriteId="health-bar-full" />
-        <EmptyHealthBar spriteId="health-bar-empty" />
-    </UI>
 </Settings>

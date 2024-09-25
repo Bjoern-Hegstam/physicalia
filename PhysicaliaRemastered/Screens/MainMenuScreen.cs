@@ -30,17 +30,17 @@ public class MainMenuScreen(Game game, GameManager gameManager, ScreenManager sc
     private Texture2D TitleTexture => game.Content.Load<Texture2D>("Images/ScreenGraphics/screen_MenuTitle");
     private Texture2D BackLevelTexture => game.Content.Load<Texture2D>("Images/ScreenGraphics/screen_MenuBackLevel");
 
-    private Settings Settings => game.Services.GetService<Settings>();
+    private InputSettings InputSettings => game.Services.GetService<InputSettings>();
 
     protected override void OnHandleInput()
     {
-        if (Settings.InputMap.IsPressed(InputAction.MenuDown))
+        if (InputSettings.InputMap.IsPressed(InputAction.MenuDown))
         {
             SelectNextMenuItem();
-        } else if (Settings.InputMap.IsPressed(InputAction.MenuUp))
+        } else if (InputSettings.InputMap.IsPressed(InputAction.MenuUp))
         {
             SelectPreviousMenuItem();
-        } else if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+        } else if (InputSettings.InputMap.IsPressed(InputAction.MenuStart))
         {
             InvokeSelectedMenuItem();
         }

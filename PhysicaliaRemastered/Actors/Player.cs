@@ -14,6 +14,7 @@ namespace PhysicaliaRemastered.Actors;
 
 public class Player : Actor
 {
+    public const float DefaultMaxHealth = 100;
     public const float DefaultJumpMagnitude = -300F;
     public const float DefaultWalkSpeed = 100F;
     public const float DefaultFallMovementSpeed = 80F;
@@ -24,7 +25,7 @@ public class Player : Actor
     // Life management
     private float _invincibleTime;
     private float _flickerInterval;
-    private bool _visible;
+    private bool _visible = true;
 
     public float JumpMagnitude { get; set; }
 
@@ -49,25 +50,22 @@ public class Player : Actor
         }
     }
     
-    public Settings Settings { get; }
+    public InputSettings InputSettings { get; }
 
-    private readonly Dictionary<int, Weapon> _weapons;
+    private readonly Dictionary<int, Weapon> _weapons = new();
     private int _currentWeapon;
 
     public Weapon? CurrentWeapon => _weapons.GetValueOrDefault(_currentWeapon);
 
-    public Player(Settings settings)
+    public Player(InputSettings inputSettings)
     {
-        Settings = settings;
+        InputSettings = inputSettings;
 
         JumpMagnitude = DefaultJumpMagnitude;
         WalkSpeed = DefaultWalkSpeed;
         FallMovementSpeed = DefaultFallMovementSpeed;
 
-        Health = settings.PlayerStartHealth;
-        _visible = true;
-
-        _weapons = new Dictionary<int, Weapon>();
+        Health = 100;
     }
 
     /// <summary>
@@ -85,18 +83,18 @@ public class Player : Actor
         }
 
         // Walk
-        if (Settings.InputMap.IsHolding(InputAction.WalkLeft))
+        if (InputSettings.InputMap.IsHolding(InputAction.WalkLeft))
         {
             velocity.X = -moveSpeed;
         }
 
-        if (Settings.InputMap.IsHolding(InputAction.WalkRight))
+        if (InputSettings.InputMap.IsHolding(InputAction.WalkRight))
         {
             velocity.X = moveSpeed;
         }
 
         // Jump
-        if (Settings.InputMap.IsPressed(InputAction.Jump) &&
+        if (InputSettings.InputMap.IsPressed(InputAction.Jump) &&
             CurrentState != ActorState.Jumping &&
             CurrentState != ActorState.Falling)
         {
@@ -113,7 +111,7 @@ public class Player : Actor
         }
 
         // Should the weapons be switched?
-        if (Settings.InputMap.IsPressed(InputAction.NextWeapon))
+        if (InputSettings.InputMap.IsPressed(InputAction.NextWeapon))
         {
             int prevWeapon = _currentWeapon;
 
@@ -153,7 +151,7 @@ public class Player : Actor
             }
         }
 
-        if (Settings.InputMap.IsPressed(InputAction.PreviousWeapon))
+        if (InputSettings.InputMap.IsPressed(InputAction.PreviousWeapon))
         {
             // Get the weapon before the current one
             int nextWeapon = _currentWeapon;
@@ -194,13 +192,13 @@ public class Player : Actor
         }
 
         // Should the weapon be firing or stopped firing
-        if (Settings.InputMap.IsPressed(InputAction.Shoot) &&
+        if (InputSettings.InputMap.IsPressed(InputAction.Shoot) &&
             !_weapons[_currentWeapon].IsFiring)
         {
             _weapons[_currentWeapon].Start();
         }
 
-        if (Settings.InputMap.IsReleased(InputAction.Shoot) &&
+        if (InputSettings.InputMap.IsReleased(InputAction.Shoot) &&
             _weapons[_currentWeapon].IsFiring)
         {
             _weapons[_currentWeapon].Stop();

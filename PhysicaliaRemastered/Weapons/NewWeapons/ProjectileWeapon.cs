@@ -170,7 +170,7 @@ public class ProjectileWeapon : Weapon
         muzzle = playerTopLeft - PlayerOffset + muzzle;
 
         // Randomly offset muzzle's position in Y within the given max deviation
-        muzzle.Y += _maxDeviation * (float)Math.Sin(MathHelper.TwoPi * Settings.Random.NextDouble());
+        muzzle.Y += _maxDeviation * (float)Math.Sin(MathHelper.TwoPi * Random.Shared.NextDouble());
 
         return muzzle;
     }

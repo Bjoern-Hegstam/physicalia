@@ -7,8 +7,8 @@
         <Sprite id="end-level-trigger" textureId="pickupSheet" x="0" y="0" width="48" height="48" />
 
         <!-- UI -->
-        <Sprite id="health-bar-full" textureId="ui_healthBars" x="0" y="0" width="172" height="48" />
-        <Sprite id="health-bar-empty" textureId="ui_healthBars" x="0" y="48" width="172" height="48" />
+        <Sprite id="health-bar--full" textureId="ui_healthBars" x="0" y="0" width="172" height="48" />
+        <Sprite id="health-bar--empty" textureId="ui_healthBars" x="0" y="48" width="172" height="48" />
 
         <!-- Tiles Grass -->
         <Sprite id="0" textureId="tiles_Grass_Earth" x="0" y="0" width="32" height="32" />

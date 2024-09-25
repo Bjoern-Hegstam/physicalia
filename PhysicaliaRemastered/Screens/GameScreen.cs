@@ -31,7 +31,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
     private readonly PauseMenuOption[] _pauseMenuOptions = (PauseMenuOption[])Enum.GetValues(typeof(PauseMenuOption));
 
     private Fonts Fonts => game.Services.GetService<Fonts>();
-    private Settings Settings => game.Services.GetService<Settings>();
+    private InputSettings InputSettings => game.Services.GetService<InputSettings>();
 
     public override void Initialize()
     {
@@ -81,7 +81,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
         // Read input for moving between menu options
         // Because of the way the options are drawn the index goes in the
         // reverse direction of what the player presses
-        if (Settings.InputMap.IsPressed(InputAction.MenuUp))
+        if (InputSettings.InputMap.IsPressed(InputAction.MenuUp))
         {
             _pauseMenuIndex--;
 
@@ -91,7 +91,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
             }
         }
 
-        if (Settings.InputMap.IsPressed(InputAction.MenuDown))
+        if (InputSettings.InputMap.IsPressed(InputAction.MenuDown))
         {
             _pauseMenuIndex++;
 
@@ -102,7 +102,7 @@ public class GameScreen(Game game, GameManager gameManager, ScreenManager screen
         }
 
         // Check if MenuStart is pressed and take appropriate action
-        if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+        if (InputSettings.InputMap.IsPressed(InputAction.MenuStart))
         {
             PauseMenuOption selectedOption = _pauseMenuOptions[_pauseMenuIndex];
 

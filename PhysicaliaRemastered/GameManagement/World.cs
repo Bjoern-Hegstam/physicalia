@@ -38,7 +38,7 @@ public class World(Game game, Player player)
     private Sprite? _worldSprite;
 
     private Fonts Fonts => game.Services.GetService<Fonts>();
-    private Settings Settings => game.Services.GetService<Settings>();
+    private InputSettings InputSettings => game.Services.GetService<InputSettings>();
     
     public int WorldIndex { get; set; } = -1;
 
@@ -169,7 +169,7 @@ public class World(Game game, Player player)
         switch (State)
         {
             case WorldState.Start:
-                if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+                if (InputSettings.InputMap.IsPressed(InputAction.MenuStart))
                 {
                     _nextState = WorldState.PlayingLevel;
                 }
@@ -180,7 +180,7 @@ public class World(Game game, Player player)
                 {
                     _levels[_levelIndex].Update(gameTime);
 
-                    if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+                    if (InputSettings.InputMap.IsPressed(InputAction.MenuStart))
                     {
                         // Go to next level
                         _levelIndex++;
@@ -201,7 +201,7 @@ public class World(Game game, Player player)
                 {
                     _levels[_levelIndex].Update(gameTime);
 
-                    if (Settings.InputMap.IsPressed(InputAction.MenuStart))
+                    if (InputSettings.InputMap.IsPressed(InputAction.MenuStart))
                     {
                         _levels[_levelIndex].Reset();
                     }
