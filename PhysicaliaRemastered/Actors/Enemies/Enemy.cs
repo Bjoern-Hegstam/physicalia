@@ -55,7 +55,7 @@ public class Enemy : Actor
         {
             base.Update(gameTime);
 
-            if (!IsWithinArea(this, _patrolArea))
+            if (!IsWithin(_patrolArea))
             {
                 MoveToArea();
             }
@@ -103,35 +103,6 @@ public class Enemy : Actor
         {
             base.Draw(spriteBatch, viewportPosition);
         }
-    }
-
-    /// <summary>
-    /// Checks whether the Actor's collision box is contained within the patrol area.
-    /// </summary>
-    /// <param name="actor">The Actor whose collision box should be to checked.</param>
-    /// <param name="area">Area to use.</param>
-    /// <returns>True if the Actor's collision box is completely contained
-    /// within the patrol area; false otherwise.</returns>
-    public static bool IsWithinArea(Actor actor, Rectangle area)
-    {
-        return IsWithinArea(actor, area, actor.Position);
-    }
-
-    /// <summary>
-    /// Checks whether the Actor's collision box is contained within the patrol area.
-    /// </summary>
-    /// <param name="actor">The Actor whose collision box should be checked.</param>
-    /// <param name="area">Area to use.</param>
-    /// <param name="position">Position to use instead of the Actor's own position.</param>
-    /// <returns>True if the Actor's collision box is completely contained
-    /// within the patrol area; false otherwise.</returns>
-    public static bool IsWithinArea(Actor actor, Rectangle area, Vector2 position)
-    {
-        Rectangle collBox = actor.CollisionBox;
-        collBox.X += (int)(actor.Position.X - actor.Origin.X);
-        collBox.Y += (int)(actor.Position.Y - actor.Origin.Y);
-
-        return area.Contains(collBox);
     }
 
     /// <summary>

@@ -206,6 +206,15 @@ public abstract class Actor : ICollidable
         Acceleration = _startValues.Acceleration;
     }
 
+    public bool IsWithin(Rectangle rectangle)
+    {
+        var actorCollisionBox = new Rectangle(
+            (Position - Origin).ToPoint(),
+            CollisionBox.Size
+        );
+        return rectangle.Contains(actorCollisionBox);
+    }
+
     public virtual void Update(GameTime gameTime)
     {
         if (_currentState is not ActorState.Dying)
