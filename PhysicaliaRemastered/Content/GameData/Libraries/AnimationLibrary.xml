@@ -1,48 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<AnimationLibrary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="../Schemas/schema_animationLibrary.xsd">
+<AnimationLibrary>
     <Animations>
         <!-- Player -->
         <Animation id="0">
             <TextureId>player_spritesheet</TextureId>
-            <StartFrame x="0" y="0" width="32" height="48" />
-            <Dimensions columns="1" rows="1" />
-            <FrameRate>0</FrameRate>
+            <Frames>
+                <Frame x="0" y="0" width="32" height="48"/>
+                <Frame x="32" y="0" width="32" height="48"/>
+            </Frames>
+            <FrameRate>5</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="1">
             <TextureId>player_spritesheet</TextureId>
-            <StartFrame x="0" y="48" width="32" height="48" />
-            <Dimensions columns="4" rows="1" />
+            <Frames>
+                <Frame x="0" y="48" width="32" height="48"/>
+                <Frame x="32" y="48" width="32" height="48"/>
+                <Frame x="64" y="48" width="32" height="48"/>
+                <Frame x="96" y="48" width="32" height="48"/>
+            </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="2">
             <TextureId>player_spritesheet</TextureId>
-            <StartFrame x="0" y="96" width="32" height="48" />
-            <Dimensions columns="2" rows="1" />
+            <Frames>
+                <Frame x="0" y="96" width="32" height="48"/>
+                <Frame x="32" y="96" width="32" height="48"/>
+            </Frames>
             <FrameRate>4</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="3">
             <TextureId>player_spritesheet</TextureId>
-            <StartFrame x="0" y="144" width="32" height="48" />
-            <Dimensions columns="2" rows="1" />
+            <Frames>
+                <Frame x="0" y="144" width="32" height="48"/>
+                <Frame x="32" y="144" width="32" height="48"/>
+            </Frames>
             <FrameRate>4</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="4">
             <TextureId>player_spritesheet</TextureId>
-            <StartFrame x="0" y="192" width="32" height="48" />
-            <Dimensions columns="2" rows="1" />
+            <Frames>
+                <Frame x="0" y="192" width="32" height="48"/>
+                <Frame x="32" y="192" width="32" height="48"/>
+            </Frames>
             <FrameRate>4</FrameRate>
             <Loop>false</Loop>
         </Animation>
         <Animation id="5">
             <TextureId>player_spritesheet</TextureId>
-            <StartFrame x="0" y="240" width="32" height="48" />
-            <Dimensions columns="2" rows="1" />
+            <Frames>
+                <Frame x="0" y="240" width="32" height="48"/>
+                <Frame x="32" y="240" width="32" height="48"/>
+            </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>
         </Animation>
@@ -50,8 +63,9 @@
         <!-- Weapon Arms-->
         <Animation id="21">
             <TextureId>weaponSheet</TextureId>
-            <StartFrame x="0" y="0" width="64" height="48" />
-            <Dimensions columns="1" rows="1" />
+            <Frames>
+                <Frame x="0" y="0" width="64" height="48"/>
+            </Frames>
             <FrameRate>1</FrameRate>
             <Loop>true</Loop>
         </Animation>
@@ -59,15 +73,23 @@
         <!-- Weapon Minigun -->
         <Animation id="7">
             <TextureId>Weapon_minigun</TextureId>
-            <StartFrame x="0" y="48" width="64" height="48" />
-            <Dimensions columns="4" rows="1" />
+            <Frames>z
+                <StartFrame x="0" y="48" width="64" height="48"/>
+                <StartFrame x="64" y="48" width="64" height="48"/>
+                <StartFrame x="128" y="48" width="64" height="48"/>
+                <StartFrame x="196" y="48" width="64" height="48"/>
+            </Frames>
             <FrameRate>15</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="9">
             <TextureId>Weapon_minigun</TextureId>
-            <StartFrame x="0" y="0" width="64" height="48" />
-            <Dimensions columns="4" rows="1" />
+            <Frames>
+                <StartFrame x="0" y="0" width="64" height="48"/>
+                <StartFrame x="64" y="0" width="64" height="48"/>
+                <StartFrame x="128" y="0" width="64" height="48"/>
+                <StartFrame x="196" y="0" width="64" height="48"/>
+            </Frames>
             <FrameRate>25</FrameRate>
             <Loop>true</Loop>
         </Animation>
@@ -75,8 +97,10 @@
         <!-- Weapon Chainsaw -->
         <Animation id="8">
             <TextureId>Weapon_chainsaw</TextureId>
-            <StartFrame x="0" y="0" width="64" height="48" />
-            <Dimensions columns="2" rows="1" />
+            <Frames>
+                <StartFrame x="0" y="0" width="64" height="48"/>
+                <StartFrame x="64" y="0" width="64" height="48"/>
+            </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>
         </Animation>
@@ -84,36 +108,56 @@
         <!-- Enemy Passare-->
         <Animation id="10">
             <TextureId>enemy_passare</TextureId>
-            <StartFrame x="0" y="0" width="48" height="91" />
-            <Dimensions columns="8" rows="1" />
+            <Frames>
+                <StartFrame x="0" y="0" width="48" height="91"/>
+                <StartFrame x="48" y="0" width="48" height="91"/>
+                <StartFrame x="96" y="0" width="48" height="91"/>
+                <StartFrame x="144" y="0" width="48" height="91"/>
+                <StartFrame x="192" y="0" width="48" height="91"/>
+                <StartFrame x="240" y="0" width="48" height="91"/>
+                <StartFrame x="288" y="0" width="48" height="91"/>
+                <StartFrame x="336" y="0" width="48" height="91"/>
+            </Frames>
             <FrameRate>7</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="11">
             <TextureId>enemy_passare</TextureId>
-            <StartFrame x="0" y="91" width="48" height="91" />
-            <Dimensions columns="4" rows="1" />
+            <Frames>
+                <StartFrame x="0" y="91" width="48" height="91"/>
+                <StartFrame x="48" y="91" width="48" height="91"/>
+                <StartFrame x="96" y="91" width="48" height="91"/>
+                <StartFrame x="144" y="91" width="48" height="91"/>
+            </Frames>
             <FrameRate>10</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="12">
             <TextureId>enemy_passare</TextureId>
-            <StartFrame x="0" y="182" width="48" height="91" />
-            <Dimensions columns="2" rows="1" />
+            <Frames>
+                <StartFrame x="0" y="182" width="48" height="91"/>
+                <StartFrame x="48" y="182" width="48" height="91"/>
+            </Frames>
             <FrameRate>7</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="13">
             <TextureId>enemy_passare</TextureId>
-            <StartFrame x="0" y="273" width="48" height="91" />
-            <Dimensions columns="5" rows="1" />
+            <Frames>
+                <StartFrame x="0" y="273" width="48" height="91"/>
+                <StartFrame x="48" y="273" width="48" height="91"/>
+                <StartFrame x="96" y="273" width="48" height="91"/>
+                <StartFrame x="144" y="273" width="48" height="91"/>
+                <StartFrame x="192" y="273" width="48" height="91"/>
+            </Frames>
             <FrameRate>7</FrameRate>
             <Loop>false</Loop>
         </Animation>
         <Animation id="14">
             <TextureId>enemy_passare</TextureId>
-            <StartFrame x="192" y="273" width="48" height="91" />
-            <Dimensions columns="1" rows="1" />
+            <Frames>
+                <StartFrame x="192" y="273" width="48" height="91"/>
+            </Frames>
             <FrameRate>1</FrameRate>
             <Loop>false</Loop>
         </Animation>
@@ -121,8 +165,27 @@
         <!-- Explosions -->
         <Animation id="42">
             <TextureId>explode_1</TextureId>
-            <StartFrame x="0" y="0" width="64" height="64" />
-            <Dimensions columns="4" rows="4" />
+            <Frames>
+                <StartFrame x="0" y="0" width="64" height="64"/>
+                <StartFrame x="64" y="0" width="64" height="64"/>
+                <StartFrame x="128" y="0" width="64" height="64"/>
+                <StartFrame x="192" y="0" width="64" height="64"/>
+
+                <StartFrame x="0" y="64" width="64" height="64"/>
+                <StartFrame x="64" y="64" width="64" height="64"/>
+                <StartFrame x="128" y="64" width="64" height="64"/>
+                <StartFrame x="192" y="64" width="64" height="64"/>
+
+                <StartFrame x="0" y="128" width="64" height="64"/>
+                <StartFrame x="64" y="128" width="64" height="64"/>
+                <StartFrame x="128" y="128" width="64" height="64"/>
+                <StartFrame x="192" y="128" width="64" height="64"/>
+
+                <StartFrame x="0" y="192" width="64" height="64"/>
+                <StartFrame x="64" y="192" width="64" height="64"/>
+                <StartFrame x="128" y="192" width="64" height="64"/>
+                <StartFrame x="192" y="192" width="64" height="64"/>
+            </Frames>
             <FrameRate>15</FrameRate>
             <Loop>false</Loop>
         </Animation>

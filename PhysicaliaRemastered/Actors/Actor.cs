@@ -67,17 +67,9 @@ public abstract class Actor : ICollidable
     public int Width => CurrentAnimation.Frame.Width;
     public int Height => CurrentAnimation.Frame.Height;
 
-    public virtual Vector2 Origin
-    {
         // TODO: The origin should not be dependent on the collision box.
-        get
-        {
-            var origin = new Vector2(_collisionBox.X, _collisionBox.Y);
-            origin += new Vector2(_collisionBox.Width / 2f, _collisionBox.Height / 2f);
-
-            return origin;
-        }
-    }
+    public virtual Vector2 Origin =>
+        _collisionBox.Location.ToVector2() + new Vector2(_collisionBox.Width / 2f, _collisionBox.Height / 2f);
 
     public Vector2 Position { get; set; } = Vector2.Zero;
 
@@ -86,23 +78,14 @@ public abstract class Actor : ICollidable
         get => _velocity;
         set
         {
-            // Do checks if the actor will be moving somewhere
-            if (value.X != 0)
+            _velocity = value;
+            if (_velocity.X == 0)
             {
-                SpriteEffects flip = value.X < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-
-                if (flip != _horizontalFlip)
-                {
-                    // Same calculation no mather how we flip
-                    _collisionBox.X = Width - _collisionBox.Width - _collisionBox.X;
-
-                    // Only update flip if a change of direction has been made
-                    _horizontalFlip = flip;
-                }
+                return;
             }
 
-            // Update velocity
-            _velocity = value;
+            SpriteEffects flip = _velocity.X < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            _horizontalFlip = flip;
         }
     }
 
@@ -111,16 +94,8 @@ public abstract class Actor : ICollidable
         get => _acceleration;
         set
         {
-            _verticalFlip = value.Y < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
-
-            if ((_acceleration.Y < 0 && value.Y > 0) ||
-                (_acceleration.Y > 0 && value.Y < 0))
-            {
-                // Same calculation no mather how we flip
-                _collisionBox.Y = Height - _collisionBox.Height - _collisionBox.Y;
-            }
-
             _acceleration = value;
+            _verticalFlip = _acceleration.Y < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
         }
     }
 
@@ -240,54 +215,34 @@ public abstract class Actor : ICollidable
             return;
         }
 
+#if DEBUG
+        // Collision box
+        var collisionBoxTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+        collisionBoxTexture.SetData([Color.Red]);
+
+        spriteBatch.Draw(
+            collisionBoxTexture,
+            (this as ICollidable).AbsoluteCollisionBox.Location.ToVector2(),
+            new Rectangle(Point.Zero, _collisionBox.Size),
+            Color.White
+        );
+#endif
+        
+        var frameCenter = new Vector2(
+            14,
+            24
+        );
         spriteBatch.Draw(
             CurrentAnimation.AnimationDefinition.Texture,
             Position - viewportPosition,
             CurrentAnimation.Frame,
             Color.White,
             0F,
-            Origin,
+            frameCenter, // TODO: Origin should be derived from the current animation frame
             1.0F,
             SpriteFlip,
             0.8F
         );
-
-#if DEBUG
-        // Collision box
-        spriteBatch.DrawRectangle(
-            Position - viewportPosition + _collisionBox.Location.ToVector2(),
-            _collisionBox,
-            Color.Red,
-            Origin,
-            SpriteFlip
-        );
-
-        // Position
-        var solidColorTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-        solidColorTexture.SetData([Color.Green]);
-        spriteBatch.Draw(
-            solidColorTexture,
-            Position - viewportPosition - Origin,
-            new Rectangle(-4, -4, 9, 9),
-            Color.White
-        );
         
-        // Origin
-        spriteBatch.DrawRectangle(
-            Position - viewportPosition + Origin - new Vector2 { X = 2 },
-            new Rectangle(0, 0, 5, 1),
-            Color.Purple,
-            Origin,
-            SpriteFlip
-        );
-
-        spriteBatch.DrawRectangle(
-            Position - viewportPosition + Origin - new Vector2 { Y = 2 },
-            new Rectangle(0, 0, 1, 5),
-            Color.Purple,
-            Origin,
-            SpriteFlip
-        );
-#endif
     }
 }

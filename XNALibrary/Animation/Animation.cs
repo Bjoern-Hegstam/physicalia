@@ -7,7 +7,7 @@ public class Animation(AnimationDefinition animationDefinition)
     public AnimationDefinition AnimationDefinition => animationDefinition;
 
     public int FrameCount => animationDefinition.ColumnCount * animationDefinition.RowCount;
-    public float Framerate { get; } = animationDefinition.FrameRate;
+    public float Framerate { get; } = animationDefinition.FramesPerSecond;
 
     private Rectangle _frame = animationDefinition.StartFrame;
     private int _frameIndex;
@@ -34,7 +34,7 @@ public class Animation(AnimationDefinition animationDefinition)
 
     public bool IsLoop => animationDefinition.IsLoop;
 
-    public float TimeTillNextFrame { get; private set; } = 1 / animationDefinition.FrameRate;
+    public float TimeTillNextFrame { get; private set; } = 1 / animationDefinition.FramesPerSecond;
 
     public Rectangle Frame => _frame;
 
