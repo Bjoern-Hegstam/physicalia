@@ -18,7 +18,7 @@ namespace PhysicaliaRemastered.Weapons.NewWeapons;
 /// </summary>
 public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 {
-    private float _timeTillWeaponStart = 5F;
+    private float _timeTillWeaponStart;
     private float _timeTillShot;
     private int _ammoCount;
 
@@ -217,7 +217,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 #endif
 
         spriteBatch.Draw(
-            weaponAnim!.CurrentFrame.Texture,
+            weaponAnim.CurrentFrame.Texture,
             weaponPosition - viewportPosition,
             weaponAnim.CurrentFrame.SourceRectangle,
             Color.White,
