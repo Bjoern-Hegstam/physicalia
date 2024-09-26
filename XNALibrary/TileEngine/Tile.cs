@@ -16,8 +16,8 @@ public class Tile : ICollidable
     public bool CanCollide => CollisionSides.Count > 0;
     public bool CanTakeDamage => false;
 
-    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 position,
-        Vector2 velocity)
+    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
+        Vector2 suggestedNewVelocity)
     {
     }
 

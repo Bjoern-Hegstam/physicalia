@@ -168,25 +168,25 @@ public class Enemy : Actor
         CanTakeDamage = false;
     }
 
-    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 position,
-        Vector2 velocity)
+    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
+        Vector2 suggestedNewVelocity)
     {
         switch (collidedObject)
         {
             case Tile:
             {
-                Position = position;
+                Position = suggestedNewPosition;
 
                 if (collidedSides.Contains(BoxSide.Left) || collidedSides.Contains(BoxSide.Right))
                 {
                     // Jump
-                    velocity.Y = 200 * Math.Sign(Acceleration.Y) * -1;
+                    suggestedNewVelocity.Y = 200 * Math.Sign(Acceleration.Y) * -1;
 
                     // Reverse velocity in X
-                    velocity.X = Velocity.X; // *-1;
+                    suggestedNewVelocity.X = Velocity.X; // *-1;
                 }
 
-                Velocity = velocity;
+                Velocity = suggestedNewVelocity;
                 break;
             }
             case Player:

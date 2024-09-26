@@ -362,16 +362,16 @@ public class Player : Actor
         }
     }
 
-    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 position,
-        Vector2 velocity)
+    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
+        Vector2 suggestedNewVelocity)
     {
         if (collidedObject is not Tile)
         {
             return;
         }
 
-        Position = position;
-        Velocity = velocity;
+        Position = suggestedNewPosition;
+        Velocity = suggestedNewVelocity;
     }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)

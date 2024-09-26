@@ -84,16 +84,16 @@ public abstract class Particle(Vector2 position) : ICollidable
 
     public bool CanCollide { get; set; }
 
-    public virtual void OnCollision(ICollidable collidable, List<BoxSide> collidedSides, Vector2 position,
-        Vector2 velocity)
+    public virtual void OnCollision(ICollidable collidable, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
+        Vector2 suggestedNewVelocity)
     {
         if (!CanCollide)
         {
             return;
         }
 
-        Position = position;
-        Velocity = velocity;
+        Position = suggestedNewPosition;
+        Velocity = suggestedNewVelocity;
     }
 
     public void TakeDamage(float damage)

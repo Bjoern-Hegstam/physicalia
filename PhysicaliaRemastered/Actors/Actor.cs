@@ -101,16 +101,16 @@ public abstract class Actor : ICollidable
 
     public abstract void TakeDamage(float damageLevel);
 
-    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 position,
-        Vector2 velocity)
+    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
+        Vector2 suggestedNewVelocity)
     {
         if (collidedObject is not Tile)
         {
             return;
         }
 
-        Position = position;
-        _velocity = velocity;
+        Position = suggestedNewPosition;
+        _velocity = suggestedNewVelocity;
     }
 
     private readonly Dictionary<ActorState, Animation> _animations = new();

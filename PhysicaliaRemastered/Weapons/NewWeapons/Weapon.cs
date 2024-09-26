@@ -54,7 +54,9 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
     public Rectangle CollisionBox { get; set; } = Rectangle.Empty;
     public bool CanCollide { get; set; } = false;
     public float CollisionDamage { get; set; } = 0F;
-
+    
+    // TODO: Add property for fetching the absolute collision box (corrected for flipping)
+    
     /// <summary>
     /// Called when the weapon is fired. Deriving classes can here decide how
     /// for example ammunition should be handled.
@@ -227,7 +229,16 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
             Player.SpriteFlip,
             1.0F
         );
-        
-        // TODO: Draw collision box if can collide
+#if DEBUG
+        if (CanCollide)
+        {
+            var absoluteCollisionBox = new Rectangle(
+                (weaponPosition + CollisionBox.Location.ToVector2() - viewportPosition).ToPoint(),
+                CollisionBox.Size
+            );
+            
+            spriteBatch.DrawRectangle(absoluteCollisionBox, Color.Red);
+        }
+#endif
     }
 }
