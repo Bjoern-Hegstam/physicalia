@@ -6,8 +6,8 @@
         <Animation id="0">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="0" width="32" height="48"/>
-                <Frame x="32" y="0" width="32" height="48"/>
+                <Frame x="0" y="0" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="32" y="0" width="32" height="48" originX="11" originY="24"/>
             </Frames>
             <FrameRate>1</FrameRate>
             <Loop>true</Loop>
@@ -15,10 +15,10 @@
         <Animation id="1">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="48" width="32" height="48"/>
-                <Frame x="32" y="48" width="32" height="48"/>
-                <Frame x="64" y="48" width="32" height="48"/>
-                <Frame x="96" y="48" width="32" height="48"/>
+                <Frame x="0" y="48" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="32" y="48" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="64" y="48" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="96" y="48" width="32" height="48" originX="11" originY="24"/>
             </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>
@@ -26,8 +26,8 @@
         <Animation id="2">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="96" width="32" height="48"/>
-                <Frame x="32" y="96" width="32" height="48"/>
+                <Frame x="0" y="96" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="32" y="96" width="32" height="48" originX="11" originY="24"/>
             </Frames>
             <FrameRate>4</FrameRate>
             <Loop>true</Loop>
@@ -35,8 +35,8 @@
         <Animation id="3">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="144" width="32" height="48"/>
-                <Frame x="32" y="144" width="32" height="48"/>
+                <Frame x="0" y="144" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="32" y="144" width="32" height="48" originX="11" originY="24"/>
             </Frames>
             <FrameRate>4</FrameRate>
             <Loop>true</Loop>
@@ -44,8 +44,8 @@
         <Animation id="4">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="192" width="32" height="48"/>
-                <Frame x="32" y="192" width="32" height="48"/>
+                <Frame x="0" y="192" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="32" y="192" width="32" height="48" originX="11" originY="24"/>
             </Frames>
             <FrameRate>4</FrameRate>
             <Loop>false</Loop>
@@ -53,8 +53,8 @@
         <Animation id="5">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="240" width="32" height="48"/>
-                <Frame x="32" y="240" width="32" height="48"/>
+                <Frame x="0" y="240" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="32" y="240" width="32" height="48" originX="11" originY="24"/>
             </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>

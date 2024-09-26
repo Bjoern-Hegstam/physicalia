@@ -50,11 +50,18 @@ public static class AnimationLibraryLoader
                 var y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 var width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
                 var height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
-
+                
+                var originXString = reader.GetAttribute("originX");
+                var originYString = reader.GetAttribute("originY");
+                var origin = new Point(
+                    originXString != null ? int.Parse(originXString) : width / 2,
+                    originYString != null ? int.Parse(originYString) : height / 2
+                );
+                
                 var frame = new Frame(
                     texture,
                     new Rectangle(x, y, width, height),
-                    new Point(width / 2, height / 2) // TODO: Read from file
+                    origin
                 );
                 frames.Add(frame);
             }

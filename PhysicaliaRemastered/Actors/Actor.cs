@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Animation;
 using XNALibrary.Collision;
-using XNALibrary.Graphics;
 using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors;
@@ -37,10 +36,11 @@ public abstract class Actor : ICollidable
     private Vector2 _velocity = Vector2.Zero;
     private Vector2 _acceleration = Vector2.Zero;
 
-    private SpriteEffects _verticalFlip;
-    private SpriteEffects _horizontalFlip;
+    private bool _flipVertically;
+    private bool _flipHorizontally;
 
-    public SpriteEffects SpriteFlip => _horizontalFlip | _verticalFlip;
+    public SpriteEffects SpriteFlip => (_flipVertically ? SpriteEffects.FlipVertically : SpriteEffects.None)
+                                       | (_flipHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
     private float _health;
 
@@ -67,7 +67,7 @@ public abstract class Actor : ICollidable
     public int Width => CurrentAnimation.CurrentFrame.SourceRectangle.Width;
     public int Height => CurrentAnimation.CurrentFrame.SourceRectangle.Height;
 
-        // TODO: The origin should not be dependent on the collision box.
+    // TODO: The origin should not be dependent on the collision box.
     public virtual Vector2 Origin =>
         _collisionBox.Location.ToVector2() + new Vector2(_collisionBox.Width / 2f, _collisionBox.Height / 2f);
 
@@ -84,8 +84,7 @@ public abstract class Actor : ICollidable
                 return;
             }
 
-            SpriteEffects flip = _velocity.X < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            _horizontalFlip = flip;
+            _flipHorizontally = _velocity.X < 0;
         }
     }
 
@@ -95,7 +94,7 @@ public abstract class Actor : ICollidable
         set
         {
             _acceleration = value;
-            _verticalFlip = _acceleration.Y < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            _flipVertically = _acceleration.Y < 0;
         }
     }
 
@@ -183,11 +182,7 @@ public abstract class Actor : ICollidable
 
     public bool IsWithin(Rectangle rectangle)
     {
-        var actorCollisionBox = new Rectangle(
-            (Position - Origin).ToPoint(),
-            CollisionBox.Size
-        );
-        return rectangle.Contains(actorCollisionBox);
+        return rectangle.Contains(this.GetAbsoluteCollisionBox());
     }
 
     public virtual void Update(GameTime gameTime)
@@ -222,27 +217,34 @@ public abstract class Actor : ICollidable
 
         spriteBatch.Draw(
             collisionBoxTexture,
-            this.GetAbsoluteCollisionBox().Location.ToVector2(),
+            this.GetAbsoluteCollisionBox().Location.ToVector2() - viewportPosition,
             new Rectangle(Point.Zero, _collisionBox.Size),
             Color.White
         );
 #endif
-        
-        var frameCenter = new Vector2(
-            14,
-            24
-        );
+
+
+        var frameOrigin = CurrentAnimation.CurrentFrame.Origin.ToVector2();
+        if (_flipHorizontally)
+        {
+            frameOrigin.X = CurrentAnimation.CurrentFrame.SourceRectangle.Width - frameOrigin.X;
+        }
+
+        if (_flipVertically)
+        {
+            frameOrigin.Y = CurrentAnimation.CurrentFrame.SourceRectangle.Height - frameOrigin.Y;
+        }
+
         spriteBatch.Draw(
             CurrentAnimation.CurrentFrame.Texture,
             Position - viewportPosition,
             CurrentAnimation.CurrentFrame.SourceRectangle,
             Color.White,
             0F,
-            frameCenter, // TODO: Origin should be derived from the current animation frame
+            frameOrigin,
             1.0F,
             SpriteFlip,
             0.8F
         );
-        
     }
 }

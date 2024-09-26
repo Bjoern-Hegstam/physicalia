@@ -596,57 +596,45 @@ public class Level(Game game, Player player)
 
     private void UpdateLevel(GameTime gameTime)
     {
-        // TODO: Add variable for modifying the gameTime, so that it can be controlled by a modifier.
-        // Create a new GameTime variable with modified time
-
-        // Player
         Player.Update(gameTime);
 
-        // Make sure the player's right and left edges are within the screen
+        EnsurePlayerIsWithinLevelBounds();
 
-        // Right edge
-        if (Player.Position.X < Player.Origin.X)
-        {
-            Player.Position *= Vector2.UnitY;
-            Player.Position += new Vector2(Player.Origin.X, 0);
-        }
-
-        // Left edge
-        if (Player.Position.X - Player.Origin.X + Player.Width > Viewport.MaxWidth)
-        {
-            Player.Position *= Vector2.UnitY;
-            Player.Position += new Vector2(Viewport.MaxWidth - Player.Width + Player.Origin.X, 0);
-        }
-
-        // EnemyManager
         _enemyManager.Update(gameTime, Player, Viewport);
-
-        // ParticleEngine
         ParticleEngine.Update(gameTime);
 
-        // Modifiers
         for (int i = _modifiers.Count - 1; i >= 0; i--)
         {
-            // Update modifier
             _modifiers[i].Update(gameTime);
 
-            // Remove modifier if it's gone inactive
             if (!_modifiers[i].IsActive)
             {
                 _modifiers.RemoveAt(i);
             }
         }
 
-        // Active ActiveObjects that are close to the screen.
         ActivateObjects();
 
-        // Update all active ActiveObjects
         foreach (ActiveObject activeObject in _activeObjects)
         {
             activeObject.Update(gameTime);
         }
 
         UpdateScreenSampler();
+    }
+
+    private void EnsurePlayerIsWithinLevelBounds()
+    {
+        if (Player.GetAbsoluteCollisionBox().Left < 0)
+        {
+            Player.Position *= Vector2.UnitY;
+        }
+
+        if (Player.GetAbsoluteCollisionBox().Right > Viewport.MaxWidth)
+        {
+            Player.Position *= Vector2.UnitY;
+            Player.Position += new Vector2(Viewport.MaxWidth - Player.CollisionBox.Width, 0);
+        }
     }
 
     private void UpdateScreenSampler()
