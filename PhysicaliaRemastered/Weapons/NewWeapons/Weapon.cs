@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PhysicaliaRemastered.Actors;
 using XNALibrary.Animation;
+using XNALibrary.Graphics;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 
@@ -206,18 +207,13 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
             PlayerOffset.Y
         );
 
-
 #if DEBUG
-        // Collision box
-        var collisionBoxTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-        collisionBoxTexture.SetData([Color.Red]);
-
-        spriteBatch.Draw(
-            collisionBoxTexture,
-            weaponPosition - viewportPosition,
-            new Rectangle(Point.Zero, weaponAnim!.CurrentFrame.SourceRectangle.Size),
-            Color.White
+        var boundingBox = new Rectangle(
+            (weaponPosition - viewportPosition).ToPoint(),
+            weaponAnim!.CurrentFrame.SourceRectangle.Size
         );
+
+        spriteBatch.DrawRectangle(boundingBox, Color.Red);
 #endif
 
         spriteBatch.Draw(

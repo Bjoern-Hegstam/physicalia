@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Animation;
 using XNALibrary.Collision;
+using XNALibrary.Graphics;
 using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors;
@@ -38,7 +39,7 @@ public abstract class Actor : ICollidable
 
     public bool IsFlippedVertically { get; protected set; }
     public bool IsFlippedHorizontally { get; protected set; }
-    
+
     public SpriteEffects SpriteFlip => (IsFlippedVertically ? SpriteEffects.FlipVertically : SpriteEffects.None)
                                        | (IsFlippedHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
@@ -211,18 +212,8 @@ public abstract class Actor : ICollidable
         }
 
 #if DEBUG
-        // Collision box
-        var collisionBoxTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-        collisionBoxTexture.SetData([Color.Red]);
-
-        spriteBatch.Draw(
-            collisionBoxTexture,
-            this.GetAbsoluteCollisionBox().Location.ToVector2() - viewportPosition,
-            new Rectangle(Point.Zero, _collisionBox.Size),
-            Color.White
-        );
+        spriteBatch.DrawRectangle(this.GetAbsoluteCollisionBox(), Color.Red);
 #endif
-
 
         var frameOrigin = CurrentAnimation.CurrentFrame.Origin.ToVector2();
         if (IsFlippedHorizontally)

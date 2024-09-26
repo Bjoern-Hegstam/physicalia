@@ -32,15 +32,5 @@ public class SpriteParticle(Sprite sprite) : Particle
             SpriteEffects.None,
             1.0F
         );
-
-#if DEBUG
-        spriteBatch.DrawRectangle(
-            Position - offsetPosition,
-            new Rectangle(Point.Zero, Sprite.SourceRectangle.Size),
-            Color.Red,
-            Origin,
-            SpriteEffects.None
-        );
-#endif
     }
 }
