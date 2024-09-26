@@ -372,8 +372,6 @@ public class Player : Actor
 
         Position = position;
         Velocity = velocity;
-
-        // TODO: Fix so that player can't shoot through walls
     }
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
