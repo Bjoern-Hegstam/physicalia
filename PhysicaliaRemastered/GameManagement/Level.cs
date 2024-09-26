@@ -816,7 +816,7 @@ public class Level(Game game, Player player)
             var ammoPos = new Vector2(Viewport.Width - 20, 0);
 
             string ammoString;
-            if (playerWeapon.InfiniteAmmo)
+            if (playerWeapon.HasInfiniteAmmo)
             {
                 ammoString = "Inf";
             }

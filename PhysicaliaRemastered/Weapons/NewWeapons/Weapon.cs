@@ -18,86 +18,41 @@ namespace PhysicaliaRemastered.Weapons.NewWeapons;
 public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 {
     private float _timeTillWeaponStart = 5F;
-
     private float _timeTillShot;
-
     private int _ammoCount;
-
-    // Collision fields
 
     public int WeaponId { get; set; } = weaponId;
 
     public Player? Player { get; set; } = null;
-
-    public ParticleEngine ParticleEngine { get; set; } = particleEngine;
-
-    /// <summary>
-    /// Gets or sets the position of the player's origin relative to the weapon's origin.
-    /// </summary>
     public Vector2 PlayerOffset { get; set; } = Vector2.Zero;
 
-    /// <summary>
-    /// Gets or sets the id of the particle that the weapon can fire types of.
-    /// </summary>
+    public ParticleEngine ParticleEngine { get; set; } = particleEngine;
     public int? ParticleId { get; set; }
 
-    /// <summary>
-    /// Gets or sets the Sprite that should be used for drawing the weapon when it's not used by the player.
-    /// </summary>
     public Sprite? WeaponSprite { get; set; } = null;
 
     public Animation? WarmupAnimation { get; set; }
-
-    /// <summary>
-    /// Gets or sets the animation used by the weapon when it gets to draw itself.
-    /// </summary>
     public Animation? WeaponFireAnimation { get; set; } = null;
 
-    /// <summary>
-    /// Gets a value denoting whether the weapon is currently firing. The property can also be set by inheriting classes.
-    /// </summary>
+    public float WeaponWarmUpSeconds { get; set; } = 5F;
+    public float ShotsPerSecond { get; set; } = 0F;
+
     public bool IsFiring { get; protected set; }
+    public bool WeaponFiredDuringLastUpdate { get; protected set; }
 
-    /// <summary>
-    /// Gets a value indicating whether the weapon was fired during the last
-    /// call to its Update method. Can be set by inheriting classes.
-    /// </summary>
-    public bool WeaponFired { get; protected set; }
-
-    /// <summary>
-    /// Gets or sets the weapon's current amount of ammunition.
-    /// </summary>
     public int AmmoCount
     {
         get => _ammoCount;
         set => _ammoCount = Math.Min(value, MaxAmmo);
     }
 
-    /// <summary>
-    /// Gets or sets the maximum amount of ammunition that the weapons can have.
-    /// </summary>
     public int MaxAmmo { get; set; } = 0;
-
-    /// <summary>
-    /// Gets or sets a value denoting whether the weapon has an infinite supply
-    /// of ammunition.
-    /// </summary>
-    public bool InfiniteAmmo { get; set; } = false;
-
-    /// <summary>
-    /// Gets or sets the ammunition count previously stored in the weapon.
-    /// </summary>
+    public bool HasInfiniteAmmo { get; set; } = false;
     public int AmmoMemory { get; set; }
 
     public Rectangle CollisionBox { get; set; } = Rectangle.Empty;
-
     public bool CanCollide { get; set; } = false;
-
     public float CollisionDamage { get; set; } = 0F;
-
-    public float WeaponWarmUp { get; set; } = 5F;
-
-    public float ShotsPerSecond { get; set; } = 0F;
 
     /// <summary>
     /// Called when the weapon is fired. Deriving classes can here decide how
@@ -114,17 +69,17 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 
     public virtual void Start()
     {
-        if (_ammoCount > 0 || InfiniteAmmo)
+        if (_ammoCount > 0 || HasInfiniteAmmo)
         {
             // Prepare weapon
-            _timeTillWeaponStart = WeaponWarmUp;
+            _timeTillWeaponStart = WeaponWarmUpSeconds;
             _timeTillShot = 0;
 
             // Start animation and set the weapon's status to firing
             IsFiring = true;
 
             // Start playing warmup animation if needed otherwise start 
-            if (WeaponWarmUp > 0)
+            if (WeaponWarmUpSeconds > 0)
             {
                 WarmupAnimation.Play();
             }
@@ -141,7 +96,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
         if (IsFiring)
         {
             // Leave the weapon in the same state as when we started
-            _timeTillWeaponStart = WeaponWarmUp;
+            _timeTillWeaponStart = WeaponWarmUpSeconds;
             _timeTillShot = 0;
 
             // Stop any vibration
@@ -189,7 +144,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
     public void Update(GameTime gameTime)
     {
         // Start by assuming that the weapon hasn't been fired
-        WeaponFired = false;
+        WeaponFiredDuringLastUpdate = false;
 
         // See if the weapon is firing
         if (IsFiring)
@@ -218,11 +173,11 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
                 FireWeapon();
 
                 // Let others know that the weapon was fired
-                WeaponFired = true;
+                WeaponFiredDuringLastUpdate = true;
 
                 // Prepare for the next round if we're still firing
                 // and have the ammunition needed
-                if (IsFiring && (_ammoCount > 0 || InfiniteAmmo))
+                if (IsFiring && (_ammoCount > 0 || HasInfiniteAmmo))
                 {
                     // Prepare weapon
                     _timeTillShot += 1 / ShotsPerSecond;
@@ -236,59 +191,44 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
         }
     }
 
-    /// <summary>
-    /// Draws the weapon with its origin at the player's origin, but offset as
-    /// specified by the Weapon.PlayerOffset property.
-    /// </summary>
-    /// <param name="spriteBatch">SpriteBatch to use for drawing.</param>
-    /// <param name="viewportPosition">The position of the screen.</param>
-    /// <param name="spriteEffects">Effects to apply to the weapon in order
-    /// for it to correspond with the player.</param>
-    public void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition, SpriteEffects spriteEffects)
+    public void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        // TODO: Methods only works for animations with width 64px
-
-        // Weapon origin is at the same position as the player's origin.
-        // This makes it much easier to accurately position the weapon
-        // when using SpriteEffects.
-        Vector2 origin = Player.Origin + new Vector2(Player.CollisionBox.X, Player.CollisionBox.Y);
-
-        // World position of the weapon
-        Vector2 position = Player.Position;
-
-        // If the player is flipped horizontally then we need to
-        // subtract the width of its collision box to properly
-        // place the weapon
-        if ((spriteEffects & SpriteEffects.FlipHorizontally) != 0)
+        if (Player is null)
         {
-            position.X -= Player.CollisionBox.Width;
-            origin.X -= PlayerOffset.X;
-        }
-        else
-        {
-            origin.X += PlayerOffset.X;
-        }
-
-        if ((spriteEffects & SpriteEffects.FlipVertically) != 0)
-        {
-            origin.Y -= PlayerOffset.Y;
-        }
-        else
-        {
-            origin.Y += PlayerOffset.Y;
+            return;
         }
 
         Animation? weaponAnim = _timeTillWeaponStart > 0 ? WarmupAnimation : WeaponFireAnimation;
+        Vector2 weaponPosition = Player.Position + new Vector2(
+            Player.IsFlippedHorizontally
+                ? -weaponAnim!.CurrentFrame.SourceRectangle.Width - PlayerOffset.X
+                : PlayerOffset.X,
+            PlayerOffset.Y
+        );
+
+
+#if DEBUG
+        // Collision box
+        var collisionBoxTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+        collisionBoxTexture.SetData([Color.Red]);
 
         spriteBatch.Draw(
-            weaponAnim.CurrentFrame.Texture,
-            position - viewportPosition,
+            collisionBoxTexture,
+            weaponPosition - viewportPosition,
+            new Rectangle(Point.Zero, weaponAnim!.CurrentFrame.SourceRectangle.Size),
+            Color.White
+        );
+#endif
+
+        spriteBatch.Draw(
+            weaponAnim!.CurrentFrame.Texture,
+            weaponPosition - viewportPosition,
             weaponAnim.CurrentFrame.SourceRectangle,
             Color.White,
             0.0F,
-            origin,
+            Vector2.Zero,
             1.0F,
-            spriteEffects,
+            Player.SpriteFlip,
             1.0F
         );
     }

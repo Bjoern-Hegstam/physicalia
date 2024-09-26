@@ -64,7 +64,7 @@
         <Animation id="21">
             <TextureId>weaponSheet</TextureId>
             <Frames>
-                <Frame x="0" y="0" width="64" height="48"/>
+                <Frame x="0" y="13" width="24" height="13"/>
             </Frames>
             <FrameRate>1</FrameRate>
             <Loop>true</Loop>

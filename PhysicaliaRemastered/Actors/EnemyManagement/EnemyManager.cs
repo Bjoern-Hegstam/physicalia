@@ -156,7 +156,7 @@ public class EnemyManager
             }
 
             // Check to see whether the player's weapon is damaging the enemy
-            if (weapon is { WeaponFired: true } &&
+            if (weapon is { WeaponFiredDuringLastUpdate: true } &&
                 enemyBox.Intersects(weaponBox))
             {
                 enemy.TakeDamage(weapon.CollisionDamage);

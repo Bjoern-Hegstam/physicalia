@@ -36,11 +36,11 @@ public abstract class Actor : ICollidable
     private Vector2 _velocity = Vector2.Zero;
     private Vector2 _acceleration = Vector2.Zero;
 
-    private bool _flipVertically;
-    private bool _flipHorizontally;
-
-    public SpriteEffects SpriteFlip => (_flipVertically ? SpriteEffects.FlipVertically : SpriteEffects.None)
-                                       | (_flipHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+    public bool IsFlippedVertically { get; protected set; }
+    public bool IsFlippedHorizontally { get; protected set; }
+    
+    public SpriteEffects SpriteFlip => (IsFlippedVertically ? SpriteEffects.FlipVertically : SpriteEffects.None)
+                                       | (IsFlippedHorizontally ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
     private float _health;
 
@@ -84,7 +84,7 @@ public abstract class Actor : ICollidable
                 return;
             }
 
-            _flipHorizontally = _velocity.X < 0;
+            IsFlippedHorizontally = _velocity.X < 0;
         }
     }
 
@@ -94,7 +94,7 @@ public abstract class Actor : ICollidable
         set
         {
             _acceleration = value;
-            _flipVertically = _acceleration.Y < 0;
+            IsFlippedVertically = _acceleration.Y < 0;
         }
     }
 
@@ -225,12 +225,12 @@ public abstract class Actor : ICollidable
 
 
         var frameOrigin = CurrentAnimation.CurrentFrame.Origin.ToVector2();
-        if (_flipHorizontally)
+        if (IsFlippedHorizontally)
         {
             frameOrigin.X = CurrentAnimation.CurrentFrame.SourceRectangle.Width - frameOrigin.X;
         }
 
-        if (_flipVertically)
+        if (IsFlippedVertically)
         {
             frameOrigin.Y = CurrentAnimation.CurrentFrame.SourceRectangle.Height - frameOrigin.Y;
         }

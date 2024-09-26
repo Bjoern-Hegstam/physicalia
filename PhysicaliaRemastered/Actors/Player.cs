@@ -255,7 +255,7 @@ public class Player : Actor
         // and therefor removed when the player dies on the same level
         if (_weapons.ContainsKey(weaponId) &&
             (_weapons[weaponId].AmmoMemory == 0 ||
-             _weapons[weaponId].InfiniteAmmo))
+             _weapons[weaponId].HasInfiniteAmmo))
         {
             _weapons.Remove(weaponId);
 
@@ -392,7 +392,7 @@ public class Player : Actor
             CurrentState != ActorState.Dying &&
             CurrentState != ActorState.Celebrating)
         {
-            _weapons[_currentWeapon].Draw(spriteBatch, viewportPosition, SpriteFlip);
+            _weapons[_currentWeapon].Draw(spriteBatch, viewportPosition);
         }
     }
 

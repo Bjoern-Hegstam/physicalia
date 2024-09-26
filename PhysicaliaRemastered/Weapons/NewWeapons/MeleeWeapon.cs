@@ -16,7 +16,7 @@ public class MeleeWeapon : Weapon
     {
         _warmupVibration = _fireVibration = Vector2.Zero;
 
-        InfiniteAmmo = true;
+        HasInfiniteAmmo = true;
 
         // Make sure all ammunition fields are set no -1, indicating inifinite ammo
         MaxAmmo = AmmoCount = -1;

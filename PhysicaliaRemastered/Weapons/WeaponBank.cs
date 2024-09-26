@@ -99,7 +99,7 @@ public class WeaponLibrary(GameServiceContainer gameServiceContainer)
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "FireData" })
             {
                 // Parse fire data
-                weapon.WeaponWarmUp = int.Parse(reader.GetAttribute("warmupTime") ?? throw new ResourceLoadException());
+                weapon.WeaponWarmUpSeconds = int.Parse(reader.GetAttribute("warmupTime") ?? throw new ResourceLoadException());
                 weapon.ShotsPerSecond =
                     int.Parse(reader.GetAttribute("shotsPerSecond") ?? throw new ResourceLoadException());
 
