@@ -560,7 +560,7 @@ public class Level(Game game, Player player)
 
     private bool PlayerOffScreen()
     {
-        return !Viewport.IsOnScreen(Player.GetAbsoluteCollisionBox());
+        return !Viewport.IsOnScreen(Player.AbsoluteCollisionBox);
     }
 
     private bool IsPlayerOutsideLevel()
@@ -571,7 +571,7 @@ public class Level(Game game, Player player)
             Height = Viewport.MaxHeight
         };
 
-        Rectangle playerRect = Player.GetAbsoluteCollisionBox();
+        Rectangle playerRect = Player.AbsoluteCollisionBox;
 
         if (levelRect.Intersects(playerRect))
         {
@@ -625,12 +625,12 @@ public class Level(Game game, Player player)
 
     private void EnsurePlayerIsWithinLevelBounds()
     {
-        if (Player.GetAbsoluteCollisionBox().Left < 0)
+        if (Player.AbsoluteCollisionBox.Left < 0)
         {
             Player.Position *= Vector2.UnitY;
         }
 
-        if (Player.GetAbsoluteCollisionBox().Right > Viewport.MaxWidth)
+        if (Player.AbsoluteCollisionBox.Right > Viewport.MaxWidth)
         {
             Player.Position *= Vector2.UnitY;
             Player.Position += new Vector2(Viewport.MaxWidth - Player.CollisionBox.Width, 0);

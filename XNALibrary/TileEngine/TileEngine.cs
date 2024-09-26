@@ -68,7 +68,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
             return;
         }
 
-        Rectangle collidableAbsoluteCollisionBox = collidable.GetAbsoluteCollisionBox();
+        Rectangle collidableAbsoluteCollisionBox = collidable.AbsoluteCollisionBox;
 
         // Get the positions of the Tiles to check
         int xMin = Math.Max(collidableAbsoluteCollisionBox.X / TileWidthPx, 0);
@@ -94,7 +94,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     continue;
                 }
 
-                Rectangle tileAbsoluteCollisionBox = tile.GetAbsoluteCollisionBox();
+                Rectangle tileAbsoluteCollisionBox = tile.AbsoluteCollisionBox;
 
                 // Check the tiles' collision sides for collisions
                 List<BoxSide> collidingCollidableSide = [];

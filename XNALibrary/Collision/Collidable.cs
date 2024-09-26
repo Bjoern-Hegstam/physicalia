@@ -16,10 +16,16 @@ public interface ICollidable
      */
     public Rectangle CollisionBox { get; }
 
+    /*
+    * The object's collision box in world coordinates
+    */
+    public Rectangle AbsoluteCollisionBox { get; }
+
     public bool CanCollide { get; }
     public bool CanTakeDamage { get; }
 
-    public void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition, Vector2 suggestedNewVelocity);
+    public void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
+        Vector2 suggestedNewVelocity);
 
     /// <param name="damageLevel">The level of damage taken. Can range from 0.0 to 1.0</param>
     public void TakeDamage(float damageLevel);
@@ -31,17 +37,7 @@ public interface ICollidable
 
         r1.Location += c1.Position.ToPoint();
         r2.Location += c2.Position.ToPoint();
-        
-        return r1.Intersects(r2);
-    }
-}
 
-public static class CollidableExtensions
-{
-    public static Rectangle GetAbsoluteCollisionBox(this ICollidable collidable) {
-        return new Rectangle(
-            collidable.Position.ToPoint() + collidable.CollisionBox.Location,
-            collidable.CollisionBox.Size
-        );
+        return r1.Intersects(r2);
     }
 }

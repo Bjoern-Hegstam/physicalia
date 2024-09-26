@@ -61,6 +61,17 @@ public abstract class Actor : ICollidable
         set => _collisionBox = value;
     }
 
+    /*
+     * The actor's collision box in world coordinates and adjusted for horizontal and/or vertical flipping
+     */
+    public Rectangle AbsoluteCollisionBox =>
+        new(
+            (int)Position.X + (IsFlippedHorizontally ? -CollisionBox.Width - CollisionBox.X : CollisionBox.X),
+            (int)Position.Y + (IsFlippedHorizontally ? -CollisionBox.Height - CollisionBox.Y : CollisionBox.Y),
+            CollisionBox.Width,
+            CollisionBox.Height
+        );
+
     public bool CanCollide { get; set; } = true;
 
     public bool CanTakeDamage { get; set; } = true;
@@ -101,7 +112,8 @@ public abstract class Actor : ICollidable
 
     public abstract void TakeDamage(float damageLevel);
 
-    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
+    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides,
+        Vector2 suggestedNewPosition,
         Vector2 suggestedNewVelocity)
     {
         if (collidedObject is not Tile)
@@ -183,7 +195,7 @@ public abstract class Actor : ICollidable
 
     public bool IsWithin(Rectangle rectangle)
     {
-        return rectangle.Contains(this.GetAbsoluteCollisionBox());
+        return rectangle.Contains(AbsoluteCollisionBox);
     }
 
     public virtual void Update(GameTime gameTime)
@@ -212,7 +224,7 @@ public abstract class Actor : ICollidable
         }
 
 #if DEBUG
-        spriteBatch.DrawRectangle(this.GetAbsoluteCollisionBox(), Color.Red);
+        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
 #endif
 
         var frameOrigin = CurrentAnimation.CurrentFrame.Origin.ToVector2();

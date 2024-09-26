@@ -35,6 +35,8 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
     public Animation? WarmupAnimation { get; set; }
     public Animation? WeaponFireAnimation { get; set; } = null;
 
+    public Animation? CurrentAnimation => _timeTillWeaponStart > 0 ? WarmupAnimation : WeaponFireAnimation;
+
     public float WeaponWarmUpSeconds { get; set; } = 5F;
     public float ShotsPerSecond { get; set; } = 0F;
 
@@ -52,11 +54,24 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
     public int AmmoMemory { get; set; }
 
     public Rectangle CollisionBox { get; set; } = Rectangle.Empty;
+
+    public Rectangle AbsoluteCollisionBox => new(
+        (int)(Player!.Position.X + (Player!.IsFlippedHorizontally
+            ? -CollisionBox.Width - PlayerOffset.X - CollisionBox.X
+            : (PlayerOffset.X + CollisionBox.X))),
+        (int)(Player!.Position.Y + (Player!.IsFlippedVertically
+            ? -CollisionBox.Height - PlayerOffset.X - CollisionBox.Y
+            : (PlayerOffset.Y + CollisionBox.Y))),
+        CollisionBox.Width,
+        CollisionBox.Height
+    );
+
+
     public bool CanCollide { get; set; } = false;
     public float CollisionDamage { get; set; } = 0F;
-    
+
     // TODO: Add property for fetching the absolute collision box (corrected for flipping)
-    
+
     /// <summary>
     /// Called when the weapon is fired. Deriving classes can here decide how
     /// for example ammunition should be handled.
@@ -201,10 +216,9 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
             return;
         }
 
-        Animation? weaponAnim = _timeTillWeaponStart > 0 ? WarmupAnimation : WeaponFireAnimation;
         Vector2 weaponPosition = Player.Position + new Vector2(
             Player.IsFlippedHorizontally
-                ? -weaponAnim!.CurrentFrame.SourceRectangle.Width - PlayerOffset.X
+                ? -CurrentAnimation!.CurrentFrame.SourceRectangle.Width - PlayerOffset.X
                 : PlayerOffset.X,
             PlayerOffset.Y
         );
@@ -212,16 +226,16 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 #if DEBUG
         var boundingBox = new Rectangle(
             (weaponPosition - viewportPosition).ToPoint(),
-            weaponAnim!.CurrentFrame.SourceRectangle.Size
+            CurrentAnimation!.CurrentFrame.SourceRectangle.Size
         );
 
         spriteBatch.DrawRectangle(boundingBox, Color.Red);
 #endif
 
         spriteBatch.Draw(
-            weaponAnim.CurrentFrame.Texture,
+            CurrentAnimation.CurrentFrame.Texture,
             weaponPosition - viewportPosition,
-            weaponAnim.CurrentFrame.SourceRectangle,
+            CurrentAnimation.CurrentFrame.SourceRectangle,
             Color.White,
             0.0F,
             Vector2.Zero,
@@ -236,8 +250,8 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
                 (weaponPosition + CollisionBox.Location.ToVector2() - viewportPosition).ToPoint(),
                 CollisionBox.Size
             );
-            
-            spriteBatch.DrawRectangle(absoluteCollisionBox, Color.Red);
+
+            spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
         }
 #endif
     }

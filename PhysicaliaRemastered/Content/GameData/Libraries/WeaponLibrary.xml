@@ -34,7 +34,7 @@
             <Particle id="-1" />
         </FireData>
         <Collision canCollide="true" collisionDamage="10">
-            <CollisionBox x="49" y="22" width="12" height="6" />
+            <CollisionBox x="30" y="10" width="12" height="6" />
         </Collision>
         <WeaponData>
             <Vibration>

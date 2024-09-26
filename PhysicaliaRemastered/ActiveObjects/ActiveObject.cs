@@ -37,6 +37,11 @@ public abstract class ActiveObject : ICollidable
         set => _collisionBox = value;
     }
 
+    public Rectangle AbsoluteCollisionBox => new(
+        Position.ToPoint() + CollisionBox.Location,
+        CollisionBox.Size
+    );
+    
     public bool CanCollide { get; set; }
 
     public bool CanTakeDamage { get; set; }

@@ -80,6 +80,11 @@ public abstract class Particle(Vector2 position) : ICollidable
 
     public abstract Rectangle CollisionBox { get; }
 
+    public Rectangle AbsoluteCollisionBox => new(
+        Position.ToPoint() + CollisionBox.Location,
+        CollisionBox.Size
+    );
+
     public bool CanTakeDamage { get; set; }
 
     public bool CanCollide { get; set; }
