@@ -9,7 +9,7 @@
                 <Warmup animationDefinitionId="21" />
                 <Fire animationDefinitionId="21" />
             </Animations>
-            <PlayerOffset x="-6" y="-6" />
+            <PlayerOffset x="-5" y="-6" />
         </Graphics>
         <FireData warmupTime="0" shotsPerSecond="0">
             <Particle id="-1" />
@@ -28,7 +28,7 @@
                 <Warmup animationDefinitionId="8" />
                 <Fire animationDefinitionId="8" />
             </Animations>
-            <PlayerOffset x="16" y="0" />
+            <PlayerOffset x="-9" y="-10" />
         </Graphics>
         <FireData warmupTime="0" shotsPerSecond="10">
             <Particle id="-1" />

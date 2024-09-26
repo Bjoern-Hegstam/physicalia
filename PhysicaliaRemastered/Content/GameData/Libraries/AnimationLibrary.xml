@@ -98,8 +98,8 @@
         <Animation id="8">
             <TextureId>Weapon_chainsaw</TextureId>
             <Frames>
-                <Frame x="0" y="0" width="64" height="48"/>
-                <Frame x="64" y="0" width="64" height="48"/>
+                <Frame x="20" y="12" width="44" height="20"/>
+                <Frame x="84" y="12" width="44" height="20"/>
             </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>

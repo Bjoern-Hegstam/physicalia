@@ -227,5 +227,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
             Player.SpriteFlip,
             1.0F
         );
+        
+        // TODO: Draw collision box if can collide
     }
 }
