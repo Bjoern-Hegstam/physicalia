@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNALibrary.Sprites;
 
 namespace XNALibrary.Animation;
 
@@ -11,4 +10,4 @@ public record AnimationDefinition(
     bool IsLoop
 );
 
-public record Frame(Texture2D Texture2D, Rectangle SourceRectangle, Point Origin);
+public record Frame(Texture2D Texture, Rectangle SourceRectangle, Point Origin);

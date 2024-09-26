@@ -12,6 +12,7 @@ using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
 using PhysicaliaRemastered.Weapons.NewWeapons;
 using XNALibrary;
+using XNALibrary.Collision;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 using XNALibrary.TileEngine;
@@ -31,26 +32,26 @@ public class Level(Game game, Player player)
 {
     public int WorldIndex { get; set; }
     public int LevelIndex { get; set; }
-    
+
     public LevelState State { get; private set; } = LevelState.Start;
     public LevelState NextState { get; set; } = LevelState.Start;
 
     public Player Player { get; } = player;
-    
+
     public Viewport Viewport { get; } = new(
         0,
         0,
         game.GraphicsDevice.Viewport.Width,
         game.GraphicsDevice.Viewport.Height
     );
-    
+
     private const float UiIndexPosY = 10F;
     private const float UiModifierSpacing = 5F;
 
     private const int ScreenActivationDistance = 20;
 
     private const float PlayerFinishSlowdown = 0.95F;
-    
+
     private readonly List<BackgroundLayer> _backgrounds = [];
     private readonly List<ModifierPickup> _modifiers = [];
     private readonly List<TileEngine> _tileEngines = [];
@@ -58,7 +59,7 @@ public class Level(Game game, Player player)
     private readonly List<ActiveObject> _inactiveObjects = [];
 
     private ActorStartValues _playerStartValues;
-    
+
     private readonly EnemyManager _enemyManager = new(game.Services.GetService<EnemyLibrary>());
 
     private Fonts Fonts => game.Services.GetService<Fonts>();
@@ -67,10 +68,10 @@ public class Level(Game game, Player player)
     private ParticleEngine ParticleEngine => game.Services.GetService<ParticleEngine>();
     private WeaponLibrary WeaponLibrary => game.Services.GetService<WeaponLibrary>();
     private PickupTemplateLibrary ModifierTemplateLibrary => game.Services.GetService<PickupTemplateLibrary>();
-    
+
     private Sprite FullHealthUi => SpriteLibrary.GetSprite(new SpriteId("health-bar--full"));
     private Sprite EmptyHealthUi => SpriteLibrary.GetSprite(new SpriteId("health-bar--empty"));
-    
+
     public void Update(GameTime gameTime)
     {
         if (State == LevelState.Start)
@@ -87,7 +88,7 @@ public class Level(Game game, Player player)
             Player.HandleInput();
             UpdateActorState();
 
-            if (PlayerOutsideLevel())
+            if (IsPlayerOutsideLevel())
             {
                 Player.Kill();
 
@@ -559,52 +560,38 @@ public class Level(Game game, Player player)
 
     private bool PlayerOffScreen()
     {
-        Rectangle playerRect = Player.CurrentAnimation.Frame;
-        playerRect.X = (int)(Player.Position.X - Player.Origin.X);
-        playerRect.Y = (int)(Player.Position.Y - Player.Origin.Y);
-
-        return !Viewport.IsOnScreen(playerRect);
+        return !Viewport.IsOnScreen(Player.GetAbsoluteCollisionBox());
     }
 
-    /// <summary>
-    /// Checks whether the player is outside of the Level area.
-    /// </summary>
-    /// <returns>True if the player is outside of the Level; false otherwise.</returns>
-    private bool PlayerOutsideLevel()
+    private bool IsPlayerOutsideLevel()
     {
-        var result = false;
-
         var levelRect = new Rectangle
         {
             Width = Viewport.MaxWidth,
             Height = Viewport.MaxHeight
         };
 
-        Rectangle playerRect = Player.CurrentAnimation.Frame;
-        playerRect.X = (int)(Player.Position.X - Player.Origin.X);
-        playerRect.Y = (int)(Player.Position.Y - Player.Origin.Y);
+        Rectangle playerRect = Player.GetAbsoluteCollisionBox();
 
-        if (!levelRect.Intersects(playerRect))
+        if (levelRect.Intersects(playerRect))
         {
-            // The player can only fall outside the level in Y
-            if (playerRect.Bottom <= levelRect.Top &&
-                Player.Acceleration.Y > 0)
-            {
-                result = false;
-            }
-            else if (playerRect.Top >= levelRect.Bottom &&
-                     Player.Acceleration.Y < 0)
-            {
-                result = false;
-            }
-            else
-            {
-                result = true;
-            }
+            return false;
         }
 
+        // The player can only fall outside the level in Y
+        if (playerRect.Bottom <= levelRect.Top &&
+            Player.Acceleration.Y > 0)
+        {
+            return false;
+        }
 
-        return result;
+        if (playerRect.Top >= levelRect.Bottom &&
+            Player.Acceleration.Y < 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void UpdateLevel(GameTime gameTime)

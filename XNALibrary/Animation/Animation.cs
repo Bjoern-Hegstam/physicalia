@@ -6,28 +6,17 @@ public class Animation(AnimationDefinition animationDefinition)
 {
     public AnimationDefinition AnimationDefinition => animationDefinition;
 
-    public int FrameCount => animationDefinition.ColumnCount * animationDefinition.RowCount;
+    public int FrameCount => animationDefinition.Frames.Count;
     public float Framerate { get; } = animationDefinition.FramesPerSecond;
 
-    private Rectangle _frame = animationDefinition.StartFrame;
     private int _frameIndex;
-    private int _frameRow;
-    private int _frameColumn;
 
     private int FrameIndex
     {
         get => _frameIndex;
-        set
-        {
-            _frameIndex = IsLoop && value >= FrameCount
-                ? value % FrameCount
-                : MathHelper.Clamp(value, 0, FrameCount);
-
-            _frameRow = _frameIndex / animationDefinition.ColumnCount;
-            _frameColumn = _frameIndex % animationDefinition.ColumnCount;
-            
-            UpdateFrameLocation();
-        }
+        set => _frameIndex = value >= FrameCount && IsLoop
+            ? value % FrameCount
+            : MathHelper.Clamp(value, 0, FrameCount - 1);
     }
 
     public bool IsActive { get; private set; }
@@ -36,7 +25,7 @@ public class Animation(AnimationDefinition animationDefinition)
 
     public float TimeTillNextFrame { get; private set; } = 1 / animationDefinition.FramesPerSecond;
 
-    public Rectangle Frame => _frame;
+    public Frame CurrentFrame => animationDefinition.Frames[_frameIndex];
 
     public void Play()
     {
@@ -70,11 +59,5 @@ public class Animation(AnimationDefinition animationDefinition)
         {
             IsActive = false;
         }
-    }
-
-    private void UpdateFrameLocation()
-    {
-        _frame.Location = animationDefinition.StartFrame.Location +
-                          new Point(_frameColumn, _frameRow) * animationDefinition.StartFrame.Size;
     }
 }

@@ -156,12 +156,12 @@ public class ProjectileWeapon : Weapon
         // to the player.
         if ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
         {
-            muzzle.X = WeaponFireAnimation.Frame.Width - _muzzlePosition.X - Player.CollisionBox.Width;
+            muzzle.X = WeaponFireAnimation.CurrentFrame.SourceRectangle.Width - _muzzlePosition.X - Player.CollisionBox.Width;
         }
 
         if ((Player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
         {
-            muzzle.Y = WeaponFireAnimation.Frame.Height - _muzzlePosition.Y;
+            muzzle.Y = WeaponFireAnimation.CurrentFrame.SourceRectangle.Height - _muzzlePosition.Y;
         }
 
         // Adjust to world coordinates

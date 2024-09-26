@@ -54,14 +54,14 @@ public static class AnimationLibraryLoader
                 var frame = new Frame(
                     texture,
                     new Rectangle(x, y, width, height),
-                    new Point(width / 2, height / 2)
+                    new Point(width / 2, height / 2) // TODO: Read from file
                 );
                 frames.Add(frame);
             }
         }
         
         reader.ReadToFollowing("FrameRate");
-        var frameRate = int.Parse(reader.ReadElementContentAsString());
+        var frameRate = float.Parse(reader.ReadElementContentAsString());
 
         reader.ReadToFollowing("Loop");
         var loop = bool.Parse(reader.ReadElementContentAsString());

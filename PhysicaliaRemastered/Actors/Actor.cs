@@ -64,8 +64,8 @@ public abstract class Actor : ICollidable
 
     public bool CanTakeDamage { get; set; } = true;
 
-    public int Width => CurrentAnimation.Frame.Width;
-    public int Height => CurrentAnimation.Frame.Height;
+    public int Width => CurrentAnimation.CurrentFrame.SourceRectangle.Width;
+    public int Height => CurrentAnimation.CurrentFrame.SourceRectangle.Height;
 
         // TODO: The origin should not be dependent on the collision box.
     public virtual Vector2 Origin =>
@@ -222,7 +222,7 @@ public abstract class Actor : ICollidable
 
         spriteBatch.Draw(
             collisionBoxTexture,
-            (this as ICollidable).AbsoluteCollisionBox.Location.ToVector2(),
+            this.GetAbsoluteCollisionBox().Location.ToVector2(),
             new Rectangle(Point.Zero, _collisionBox.Size),
             Color.White
         );
@@ -233,9 +233,9 @@ public abstract class Actor : ICollidable
             24
         );
         spriteBatch.Draw(
-            CurrentAnimation.AnimationDefinition.Texture,
+            CurrentAnimation.CurrentFrame.Texture,
             Position - viewportPosition,
-            CurrentAnimation.Frame,
+            CurrentAnimation.CurrentFrame.SourceRectangle,
             Color.White,
             0F,
             frameCenter, // TODO: Origin should be derived from the current animation frame

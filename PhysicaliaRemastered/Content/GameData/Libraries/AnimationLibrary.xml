@@ -9,7 +9,7 @@
                 <Frame x="0" y="0" width="32" height="48"/>
                 <Frame x="32" y="0" width="32" height="48"/>
             </Frames>
-            <FrameRate>5</FrameRate>
+            <FrameRate>1</FrameRate>
             <Loop>true</Loop>
         </Animation>
         <Animation id="1">

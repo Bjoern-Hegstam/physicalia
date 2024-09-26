@@ -9,7 +9,6 @@ public interface ICollidable
     public Vector2 Velocity { get; }
 
     public Rectangle CollisionBox { get; }
-    public Rectangle AbsoluteCollisionBox => new(Position.ToPoint() + CollisionBox.Location, CollisionBox.Size);
 
     public bool CanCollide { get; }
     public bool CanTakeDamage { get; }
@@ -38,5 +37,15 @@ public interface ICollidable
         r2.Location += c2.Position.ToPoint();
         
         return r1.Intersects(r2);
+    }
+}
+
+public static class CollidableExtensions
+{
+    public static Rectangle GetAbsoluteCollisionBox(this ICollidable collidable) {
+        return new Rectangle(
+            collidable.Position.ToPoint() + collidable.CollisionBox.Location,
+            collidable.CollisionBox.Size
+        );
     }
 }
