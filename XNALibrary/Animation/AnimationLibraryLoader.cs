@@ -33,14 +33,14 @@ public static class AnimationLibraryLoader
     private static AnimationDefinition LoadAnimationDefinition(XmlReader reader, ContentManager contentManager)
     {
         var id = new AnimationDefinitionId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
-        
+
         reader.ReadToFollowing("TextureId");
         var textureId = new TextureId(reader.ReadElementContentAsString());
         var texture = contentManager.Load<Texture2D>(textureId.AssetName);
 
         List<Frame> frames = [];
         reader.ReadToFollowing("Frames");
-        while (reader is not {NodeType: XmlNodeType.EndElement, LocalName: "Frames"})
+        while (reader is not { NodeType: XmlNodeType.EndElement, LocalName: "Frames" })
         {
             reader.Read();
 
@@ -50,14 +50,14 @@ public static class AnimationLibraryLoader
                 var y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 var width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
                 var height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
-                
+
                 var originXString = reader.GetAttribute("originX");
                 var originYString = reader.GetAttribute("originY");
                 var origin = new Point(
                     originXString != null ? int.Parse(originXString) : width / 2,
                     originYString != null ? int.Parse(originYString) : height / 2
                 );
-                
+
                 var frame = new Frame(
                     texture,
                     new Rectangle(x, y, width, height),
@@ -66,7 +66,7 @@ public static class AnimationLibraryLoader
                 frames.Add(frame);
             }
         }
-        
+
         reader.ReadToFollowing("FrameRate");
         var frameRate = float.Parse(reader.ReadElementContentAsString());
 

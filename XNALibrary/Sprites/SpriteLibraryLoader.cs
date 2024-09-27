@@ -30,12 +30,12 @@ public static class SpriteLibraryLoader
     private static SpriteLibrary Load(XmlReader reader, ContentManager contentManager)
     {
         var spriteLibrary = new SpriteLibrary();
-        
+
         while (reader.Read())
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Sprite" })
             {
-                var id = new SpriteId(reader.GetAttribute("id" ) ?? throw new ResourceLoadException());
+                var id = new SpriteId(reader.GetAttribute("id") ?? throw new ResourceLoadException());
                 var textureId = new TextureId(reader.GetAttribute("textureId") ?? throw new ResourceLoadException());
                 int x = int.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
                 int y = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());

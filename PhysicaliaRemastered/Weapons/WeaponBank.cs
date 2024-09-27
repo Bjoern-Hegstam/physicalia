@@ -82,11 +82,13 @@ public class WeaponLibrary(GameServiceContainer gameServiceContainer)
 
                 // Get animations
                 reader.ReadToFollowing("Warmup");
-                var warmUpKey = new AnimationDefinitionId(reader.GetAttribute("animationDefinitionId") ?? throw new ResourceLoadException());
+                var warmUpKey = new AnimationDefinitionId(reader.GetAttribute("animationDefinitionId") ??
+                                                          throw new ResourceLoadException());
                 weapon.WarmupAnimation = AnimationRunner.AddPlaybackAnimation(warmUpKey);
 
                 reader.ReadToFollowing("Fire");
-                var fireKey = new AnimationDefinitionId(reader.GetAttribute("animationDefinitionId") ?? throw new ResourceLoadException());
+                var fireKey = new AnimationDefinitionId(reader.GetAttribute("animationDefinitionId") ??
+                                                        throw new ResourceLoadException());
                 weapon.WeaponFireAnimation = AnimationRunner.AddPlaybackAnimation(fireKey);
 
                 reader.ReadToFollowing("PlayerOffset");
@@ -98,7 +100,8 @@ public class WeaponLibrary(GameServiceContainer gameServiceContainer)
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "FireData" })
             {
                 // Parse fire data
-                weapon.WeaponWarmUpSeconds = int.Parse(reader.GetAttribute("warmupTime") ?? throw new ResourceLoadException());
+                weapon.WeaponWarmUpSeconds =
+                    int.Parse(reader.GetAttribute("warmupTime") ?? throw new ResourceLoadException());
                 weapon.ShotsPerSecond =
                     int.Parse(reader.GetAttribute("shotsPerSecond") ?? throw new ResourceLoadException());
 

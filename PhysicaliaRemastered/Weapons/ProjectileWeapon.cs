@@ -1,7 +1,6 @@
 using System;
 using System.Xml;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using XNALibrary;
 using XNALibrary.ParticleEngine;

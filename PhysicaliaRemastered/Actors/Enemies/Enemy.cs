@@ -168,8 +168,8 @@ public class Enemy : Actor
         CanTakeDamage = false;
     }
 
-    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
-        Vector2 suggestedNewVelocity)
+    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides,
+        Vector2 suggestedNewPosition, Vector2 suggestedNewVelocity)
     {
         switch (collidedObject)
         {

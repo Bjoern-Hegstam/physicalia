@@ -47,7 +47,7 @@ public class Player : Actor
             }
         }
     }
-    
+
     public InputSettings InputSettings { get; }
 
     private readonly Dictionary<int, Weapon> _weapons = new();
@@ -361,8 +361,8 @@ public class Player : Actor
         }
     }
 
-    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
-        Vector2 suggestedNewVelocity)
+    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides,
+        Vector2 suggestedNewPosition, Vector2 suggestedNewVelocity)
     {
         if (collidedObject is not Tile)
         {

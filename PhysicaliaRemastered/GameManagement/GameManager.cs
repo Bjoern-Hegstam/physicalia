@@ -156,7 +156,7 @@ public class GameManager(Game game)
     {
         string spriteLibraryPath = Path.Combine(Environment.LibraryPath, "SpriteLibrary.xml");
         game.Services.AddService(SpriteLibraryLoader.Load(spriteLibraryPath, contentManager));
-        
+
         string inputSettingsPath = Path.Combine(Environment.GameDataPath, "InputSettings.xml");
         game.Services.AddService(InputSettingsLoader.Load(inputSettingsPath, game));
 
@@ -164,7 +164,7 @@ public class GameManager(Game game)
         game.Services.AddService(AnimationLibraryLoader.Load(animationLibraryPath, contentManager));
 
         string tileLibraryPath = Path.Combine(Environment.LibraryPath, "TileLibrary.xml");
-        game.Services.AddService(TileLibraryLoader.Load( tileLibraryPath, SpriteLibrary, AnimationRunner));
+        game.Services.AddService(TileLibraryLoader.Load(tileLibraryPath, SpriteLibrary, AnimationRunner));
 
         string particleDefinitionsPath = Path.Combine(Environment.LibraryPath, "ParticleDefinitions.xml");
         ParticleEngine.LoadXml(particleDefinitionsPath, SpriteLibrary, AnimationRunner);
@@ -175,7 +175,7 @@ public class GameManager(Game game)
         EnemyLibrary.LoadXml(Path.Combine(Environment.LibraryPath, "EnemyLibrary.xml"));
 
         PickupTemplateLibrary.LoadXml(Path.Combine(Environment.LibraryPath, "PickupLibrary.xml"), SpriteLibrary);
-        
+
         while (reader.Read())
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Player" })

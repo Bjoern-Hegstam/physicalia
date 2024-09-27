@@ -49,10 +49,11 @@ public class ScreenManager(Game game) : DrawableGameComponent(game)
     /// transitioning between two Screens.
     /// </summary>
     public bool Transitioning => _transitionState != ScreenTransitionState.None;
-    
+
     public IScreenTransitionEffect? TransitionEffect { get; set; }
 
     private readonly SpriteBatch _spriteBatch = new(game.GraphicsDevice);
+
     private readonly RenderTarget2D _renderTarget = new(
         game.GraphicsDevice,
         game.GraphicsDevice.PresentationParameters.BackBufferWidth,

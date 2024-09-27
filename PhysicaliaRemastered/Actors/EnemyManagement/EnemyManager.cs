@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors.Enemies;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Weapons;
-using XNALibrary.TileEngine;
 using Viewport = XNALibrary.Graphics.Viewport;
 
 namespace PhysicaliaRemastered.Actors.EnemyManagement;
@@ -94,7 +93,7 @@ public class EnemyManager
         }
 
         Rectangle enemyWorldCollisionBox = enemy.WorldCollisionBox;
-        if (player is { CanCollide: true, CanTakeDamage: true } && 
+        if (player is { CanCollide: true, CanTakeDamage: true } &&
             player.WorldCollisionBox.Intersects(enemyWorldCollisionBox))
         {
             player.TakeDamage(enemy.Damage);
@@ -106,7 +105,7 @@ public class EnemyManager
         {
             return;
         }
-            
+
         if (playerWeapon.CanCollide &&
             playerWeapon is { WeaponFiredDuringLastUpdate: true } &&
             enemyWorldCollisionBox.Intersects(playerWeapon.WorldCollisionBox))

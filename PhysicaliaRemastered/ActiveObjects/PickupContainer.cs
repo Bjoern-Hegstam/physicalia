@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors;
 using PhysicaliaRemastered.Pickups;
 using XNALibrary.Collision;
-using XNALibrary.Graphics;
 
 namespace PhysicaliaRemastered.ActiveObjects;
 

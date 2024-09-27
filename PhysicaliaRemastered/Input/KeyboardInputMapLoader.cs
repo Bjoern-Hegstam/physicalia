@@ -11,7 +11,7 @@ public static class KeyboardInputMapLoader
     public static KeyboardInputMap Load(string path, InputHandler inputHandler)
     {
         var inputMap = new KeyboardInputMap(inputHandler);
-        
+
         var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,

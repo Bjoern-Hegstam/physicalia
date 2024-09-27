@@ -35,7 +35,7 @@ public abstract class ActiveObject : ICollidable
         Position.ToPoint() + CollisionBoxDefinition.Location,
         CollisionBoxDefinition.Size
     );
-    
+
     public bool CanCollide { get; set; }
 
     public bool CanTakeDamage { get; set; }
@@ -52,8 +52,8 @@ public abstract class ActiveObject : ICollidable
     {
     }
 
-    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
-        Vector2 suggestedNewVelocity)
+    public virtual void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides,
+        Vector2 suggestedNewPosition, Vector2 suggestedNewVelocity)
     {
     }
 

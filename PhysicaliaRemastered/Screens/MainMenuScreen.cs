@@ -37,10 +37,12 @@ public class MainMenuScreen(Game game, GameManager gameManager, ScreenManager sc
         if (InputSettings.InputMap.IsPressed(InputAction.MenuDown))
         {
             SelectNextMenuItem();
-        } else if (InputSettings.InputMap.IsPressed(InputAction.MenuUp))
+        }
+        else if (InputSettings.InputMap.IsPressed(InputAction.MenuUp))
         {
             SelectPreviousMenuItem();
-        } else if (InputSettings.InputMap.IsPressed(InputAction.MenuStart))
+        }
+        else if (InputSettings.InputMap.IsPressed(InputAction.MenuStart))
         {
             InvokeSelectedMenuItem();
         }
@@ -88,10 +90,10 @@ public class MainMenuScreen(Game game, GameManager gameManager, ScreenManager sc
     public override void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Begin();
-        
+
         DrawBackground(spriteBatch);
         DrawMenu(spriteBatch);
-        
+
         spriteBatch.End();
     }
 

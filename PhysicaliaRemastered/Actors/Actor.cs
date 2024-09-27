@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Animation;
 using XNALibrary.Collision;
-using XNALibrary.Graphics;
 using XNALibrary.TileEngine;
 
 namespace PhysicaliaRemastered.Actors;
@@ -60,8 +59,12 @@ public abstract class Actor : ICollidable
      */
     public Rectangle WorldCollisionBox =>
         new(
-            (int)Position.X + (IsFlippedHorizontally ? -CollisionBoxDefinition.Width - CollisionBoxDefinition.X : CollisionBoxDefinition.X),
-            (int)Position.Y + (IsFlippedVertically ? -CollisionBoxDefinition.Height - CollisionBoxDefinition.Y : CollisionBoxDefinition.Y),
+            (int)Position.X + (IsFlippedHorizontally
+                ? -CollisionBoxDefinition.Width - CollisionBoxDefinition.X
+                : CollisionBoxDefinition.X),
+            (int)Position.Y + (IsFlippedVertically
+                ? -CollisionBoxDefinition.Height - CollisionBoxDefinition.Y
+                : CollisionBoxDefinition.Y),
             CollisionBoxDefinition.Width,
             CollisionBoxDefinition.Height
         );

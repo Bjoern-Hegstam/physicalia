@@ -9,6 +9,7 @@ public class InputSettings
     public required GamePadInputMap GamePadMap { get; init; }
 
     public required InputType InputType { get; init; }
+
     public InputMap InputMap => InputType switch
     {
         InputType.Gamepad => GamePadMap,

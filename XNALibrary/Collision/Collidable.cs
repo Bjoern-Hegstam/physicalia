@@ -17,8 +17,8 @@ public interface ICollidable
     public Rectangle CollisionBoxDefinition { get; }
 
     /*
-    * The object's collision box in world coordinates
-    */
+     * The object's collision box in world coordinates
+     */
     public Rectangle WorldCollisionBox { get; }
 
     public bool CanCollide { get; }

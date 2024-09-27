@@ -27,7 +27,7 @@ public enum WorldState
 public class World(Game game, Player player)
 {
     private const string LevelPath = "Content/GameData/Worlds/Levels/";
-    
+
     private readonly List<Level> _levels = [];
     private int _levelIndex = -1;
 
@@ -39,7 +39,7 @@ public class World(Game game, Player player)
 
     private Fonts Fonts => game.Services.GetService<Fonts>();
     private InputSettings InputSettings => game.Services.GetService<InputSettings>();
-    
+
     public int WorldIndex { get; set; } = -1;
 
     public WorldState State { get; private set; } = WorldState.Start;

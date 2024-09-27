@@ -13,7 +13,7 @@ public static class InputSettingsLoader
         InputType? inputType = null;
         KeyboardInputMap? keyboardInputMap = null;
         GamePadInputMap? gamePadInputMap = null;
-        
+
         var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,
@@ -31,12 +31,18 @@ public static class InputSettingsLoader
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "KeyboardMap" })
             {
-                keyboardInputMap = KeyboardInputMapLoader.Load(reader.ReadString(), game.Services.GetService<InputHandler>());
+                keyboardInputMap = KeyboardInputMapLoader.Load(
+                    reader.ReadString(),
+                    game.Services.GetService<InputHandler>()
+                );
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "GamepadMap" })
             {
-                gamePadInputMap = GamePadInputMapLoader.Load(reader.ReadString(), game.Services.GetService<InputHandler>());
+                gamePadInputMap = GamePadInputMapLoader.Load(
+                    reader.ReadString(),
+                    game.Services.GetService<InputHandler>()
+                );
             }
 
             if (reader is { NodeType: XmlNodeType.EndElement, LocalName: "Settings" })

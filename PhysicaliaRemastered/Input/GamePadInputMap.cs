@@ -8,7 +8,7 @@ namespace PhysicaliaRemastered.Input;
 public class GamePadInputMap(InputHandler inputHandler) : InputMap
 {
     private readonly Dictionary<InputAction, Buttons> _buttons = new();
-    
+
     public override bool IsPressed(InputAction action)
     {
         return inputHandler.IsPressed(PlayerIndex.One, _buttons[action]);

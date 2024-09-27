@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PhysicaliaRemastered.Actors;
 using XNALibrary.Animation;
-using XNALibrary.Graphics;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 
@@ -65,7 +64,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
         CollisionBox.Width,
         CollisionBox.Height
     );
-    
+
     protected Vector2 WorldWeaponPosition =>
         Player!.Position + new Vector2(
             Player.IsFlippedHorizontally
@@ -156,7 +155,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
         if (_timeTillWeaponStart > 0)
         {
             _timeTillWeaponStart -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
+
             if (_timeTillWeaponStart > 0)
             {
                 return;

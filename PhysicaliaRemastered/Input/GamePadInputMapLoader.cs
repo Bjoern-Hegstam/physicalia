@@ -11,7 +11,7 @@ public static class GamePadInputMapLoader
     public static GamePadInputMap Load(string path, InputHandler inputHandler)
     {
         var inputMap = new GamePadInputMap(inputHandler);
-        
+
         var readerSettings = new XmlReaderSettings
         {
             IgnoreComments = true,

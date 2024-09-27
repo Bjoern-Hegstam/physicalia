@@ -6,8 +6,8 @@
         <Animation id="0">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="0" width="32" height="48" originX="11" originY="24"/>
-                <Frame x="32" y="0" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="0" y="0" width="32" height="48" originX="11" originY="24" />
+                <Frame x="32" y="0" width="32" height="48" originX="11" originY="24" />
             </Frames>
             <FrameRate>1</FrameRate>
             <Loop>true</Loop>
@@ -15,10 +15,10 @@
         <Animation id="1">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="48" width="32" height="48" originX="11" originY="24"/>
-                <Frame x="32" y="48" width="32" height="48" originX="11" originY="24"/>
-                <Frame x="64" y="48" width="32" height="48" originX="11" originY="24"/>
-                <Frame x="96" y="48" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="0" y="48" width="32" height="48" originX="11" originY="24" />
+                <Frame x="32" y="48" width="32" height="48" originX="11" originY="24" />
+                <Frame x="64" y="48" width="32" height="48" originX="11" originY="24" />
+                <Frame x="96" y="48" width="32" height="48" originX="11" originY="24" />
             </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>
@@ -26,8 +26,8 @@
         <Animation id="2">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="96" width="32" height="48" originX="11" originY="24"/>
-                <Frame x="32" y="96" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="0" y="96" width="32" height="48" originX="11" originY="24" />
+                <Frame x="32" y="96" width="32" height="48" originX="11" originY="24" />
             </Frames>
             <FrameRate>4</FrameRate>
             <Loop>true</Loop>
@@ -35,8 +35,8 @@
         <Animation id="3">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="144" width="32" height="48" originX="11" originY="24"/>
-                <Frame x="32" y="144" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="0" y="144" width="32" height="48" originX="11" originY="24" />
+                <Frame x="32" y="144" width="32" height="48" originX="11" originY="24" />
             </Frames>
             <FrameRate>4</FrameRate>
             <Loop>true</Loop>
@@ -44,8 +44,8 @@
         <Animation id="4">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="192" width="32" height="48" originX="11" originY="24"/>
-                <Frame x="32" y="192" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="0" y="192" width="32" height="48" originX="11" originY="24" />
+                <Frame x="32" y="192" width="32" height="48" originX="11" originY="24" />
             </Frames>
             <FrameRate>4</FrameRate>
             <Loop>false</Loop>
@@ -53,8 +53,8 @@
         <Animation id="5">
             <TextureId>player_spritesheet</TextureId>
             <Frames>
-                <Frame x="0" y="240" width="32" height="48" originX="11" originY="24"/>
-                <Frame x="32" y="240" width="32" height="48" originX="11" originY="24"/>
+                <Frame x="0" y="240" width="32" height="48" originX="11" originY="24" />
+                <Frame x="32" y="240" width="32" height="48" originX="11" originY="24" />
             </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>
@@ -64,7 +64,7 @@
         <Animation id="21">
             <TextureId>weaponSheet</TextureId>
             <Frames>
-                <Frame x="0" y="13" width="24" height="13"/>
+                <Frame x="0" y="13" width="24" height="13" />
             </Frames>
             <FrameRate>1</FrameRate>
             <Loop>true</Loop>
@@ -74,10 +74,10 @@
         <Animation id="7">
             <TextureId>Weapon_minigun</TextureId>
             <Frames>
-                <Frame x="0" y="62" width="48" height="34"/>
-                <Frame x="64" y="62" width="48" height="34"/>
-                <Frame x="128" y="62" width="48" height="34"/>
-                <Frame x="192" y="62" width="48" height="34"/>
+                <Frame x="0" y="62" width="48" height="34" />
+                <Frame x="64" y="62" width="48" height="34" />
+                <Frame x="128" y="62" width="48" height="34" />
+                <Frame x="192" y="62" width="48" height="34" />
             </Frames>
             <FrameRate>15</FrameRate>
             <Loop>true</Loop>
@@ -85,10 +85,10 @@
         <Animation id="9">
             <TextureId>Weapon_minigun</TextureId>
             <Frames>
-                <Frame x="0" y="14" width="64" height="34"/>
-                <Frame x="64" y="14" width="64" height="34"/>
-                <Frame x="128" y="14" width="64" height="34"/>
-                <Frame x="192" y="14" width="64" height="34"/>
+                <Frame x="0" y="14" width="64" height="34" />
+                <Frame x="64" y="14" width="64" height="34" />
+                <Frame x="128" y="14" width="64" height="34" />
+                <Frame x="192" y="14" width="64" height="34" />
             </Frames>
             <FrameRate>25</FrameRate>
             <Loop>true</Loop>
@@ -98,8 +98,8 @@
         <Animation id="8">
             <TextureId>Weapon_chainsaw</TextureId>
             <Frames>
-                <Frame x="20" y="12" width="44" height="20"/>
-                <Frame x="84" y="12" width="44" height="20"/>
+                <Frame x="20" y="12" width="44" height="20" />
+                <Frame x="84" y="12" width="44" height="20" />
             </Frames>
             <FrameRate>5</FrameRate>
             <Loop>true</Loop>
@@ -109,14 +109,14 @@
         <Animation id="10">
             <TextureId>enemy_passare</TextureId>
             <Frames>
-                <Frame x="0" y="0" width="48" height="91"/>
-                <Frame x="48" y="0" width="48" height="91"/>
-                <Frame x="96" y="0" width="48" height="91"/>
-                <Frame x="144" y="0" width="48" height="91"/>
-                <Frame x="192" y="0" width="48" height="91"/>
-                <Frame x="240" y="0" width="48" height="91"/>
-                <Frame x="288" y="0" width="48" height="91"/>
-                <Frame x="336" y="0" width="48" height="91"/>
+                <Frame x="0" y="0" width="48" height="91" />
+                <Frame x="48" y="0" width="48" height="91" />
+                <Frame x="96" y="0" width="48" height="91" />
+                <Frame x="144" y="0" width="48" height="91" />
+                <Frame x="192" y="0" width="48" height="91" />
+                <Frame x="240" y="0" width="48" height="91" />
+                <Frame x="288" y="0" width="48" height="91" />
+                <Frame x="336" y="0" width="48" height="91" />
             </Frames>
             <FrameRate>7</FrameRate>
             <Loop>true</Loop>
@@ -124,10 +124,10 @@
         <Animation id="11">
             <TextureId>enemy_passare</TextureId>
             <Frames>
-                <Frame x="0" y="91" width="48" height="91"/>
-                <Frame x="48" y="91" width="48" height="91"/>
-                <Frame x="96" y="91" width="48" height="91"/>
-                <Frame x="144" y="91" width="48" height="91"/>
+                <Frame x="0" y="91" width="48" height="91" />
+                <Frame x="48" y="91" width="48" height="91" />
+                <Frame x="96" y="91" width="48" height="91" />
+                <Frame x="144" y="91" width="48" height="91" />
             </Frames>
             <FrameRate>10</FrameRate>
             <Loop>true</Loop>
@@ -135,8 +135,8 @@
         <Animation id="12">
             <TextureId>enemy_passare</TextureId>
             <Frames>
-                <Frame x="0" y="182" width="48" height="91"/>
-                <Frame x="48" y="182" width="48" height="91"/>
+                <Frame x="0" y="182" width="48" height="91" />
+                <Frame x="48" y="182" width="48" height="91" />
             </Frames>
             <FrameRate>7</FrameRate>
             <Loop>true</Loop>
@@ -144,11 +144,11 @@
         <Animation id="13">
             <TextureId>enemy_passare</TextureId>
             <Frames>
-                <Frame x="0" y="273" width="48" height="91"/>
-                <Frame x="48" y="273" width="48" height="91"/>
-                <Frame x="96" y="273" width="48" height="91"/>
-                <Frame x="144" y="273" width="48" height="91"/>
-                <Frame x="192" y="273" width="48" height="91"/>
+                <Frame x="0" y="273" width="48" height="91" />
+                <Frame x="48" y="273" width="48" height="91" />
+                <Frame x="96" y="273" width="48" height="91" />
+                <Frame x="144" y="273" width="48" height="91" />
+                <Frame x="192" y="273" width="48" height="91" />
             </Frames>
             <FrameRate>7</FrameRate>
             <Loop>false</Loop>
@@ -156,7 +156,7 @@
         <Animation id="14">
             <TextureId>enemy_passare</TextureId>
             <Frames>
-                <Frame x="192" y="273" width="48" height="91"/>
+                <Frame x="192" y="273" width="48" height="91" />
             </Frames>
             <FrameRate>1</FrameRate>
             <Loop>false</Loop>
@@ -166,25 +166,25 @@
         <Animation id="42">
             <TextureId>explode_1</TextureId>
             <Frames>
-                <Frame x="0" y="0" width="64" height="64"/>
-                <Frame x="64" y="0" width="64" height="64"/>
-                <Frame x="128" y="0" width="64" height="64"/>
-                <Frame x="192" y="0" width="64" height="64"/>
+                <Frame x="0" y="0" width="64" height="64" />
+                <Frame x="64" y="0" width="64" height="64" />
+                <Frame x="128" y="0" width="64" height="64" />
+                <Frame x="192" y="0" width="64" height="64" />
 
-                <Frame x="0" y="64" width="64" height="64"/>
-                <Frame x="64" y="64" width="64" height="64"/>
-                <Frame x="128" y="64" width="64" height="64"/>
-                <Frame x="192" y="64" width="64" height="64"/>
+                <Frame x="0" y="64" width="64" height="64" />
+                <Frame x="64" y="64" width="64" height="64" />
+                <Frame x="128" y="64" width="64" height="64" />
+                <Frame x="192" y="64" width="64" height="64" />
 
-                <Frame x="0" y="128" width="64" height="64"/>
-                <Frame x="64" y="128" width="64" height="64"/>
-                <Frame x="128" y="128" width="64" height="64"/>
-                <Frame x="192" y="128" width="64" height="64"/>
+                <Frame x="0" y="128" width="64" height="64" />
+                <Frame x="64" y="128" width="64" height="64" />
+                <Frame x="128" y="128" width="64" height="64" />
+                <Frame x="192" y="128" width="64" height="64" />
 
-                <Frame x="0" y="192" width="64" height="64"/>
-                <Frame x="64" y="192" width="64" height="64"/>
-                <Frame x="128" y="192" width="64" height="64"/>
-                <Frame x="192" y="192" width="64" height="64"/>
+                <Frame x="0" y="192" width="64" height="64" />
+                <Frame x="64" y="192" width="64" height="64" />
+                <Frame x="128" y="192" width="64" height="64" />
+                <Frame x="192" y="192" width="64" height="64" />
             </Frames>
             <FrameRate>15</FrameRate>
             <Loop>false</Loop>

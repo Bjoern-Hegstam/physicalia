@@ -2,8 +2,8 @@
 
 <Level width="640" height="480">
     <PlayerStart>
-        <Position x="50" y="240"/>
-        <Acceleration x="0" y="600"/>
+        <Position x="50" y="240" />
+        <Acceleration x="0" y="600" />
     </PlayerStart>
     <ActiveObjects>
         <Weapons>
@@ -25,22 +25,22 @@
     <TileEngines count="1">
         <TileEngine>
             <TileMap width="75" height="30">
-                <Tile x="0" y="9" tileId="1"/>
-                <Tile x="1" y="9" tileId="1"/>
-                <Tile x="2" y="9" tileId="1"/>
-                <Tile x="3" y="9" tileId="1"/>
-                <Tile x="4" y="9" tileId="1"/>
-                <Tile x="5" y="9" tileId="1"/>
-                <Tile x="6" y="9" tileId="1"/>
-                <Tile x="7" y="9" tileId="1"/>
-                <Tile x="8" y="9" tileId="1"/>
-                <Tile x="9" y="9" tileId="1"/>
-                <Tile x="10" y="9" tileId="1"/>
-                <Tile x="11" y="9" tileId="1"/>
-                <Tile x="12" y="9" tileId="1"/>
-                <Tile x="13" y="9" tileId="1"/>
-                <Tile x="14" y="9" tileId="1"/>
-                <Tile x="15" y="9" tileId="1"/>
+                <Tile x="0" y="9" tileId="1" />
+                <Tile x="1" y="9" tileId="1" />
+                <Tile x="2" y="9" tileId="1" />
+                <Tile x="3" y="9" tileId="1" />
+                <Tile x="4" y="9" tileId="1" />
+                <Tile x="5" y="9" tileId="1" />
+                <Tile x="6" y="9" tileId="1" />
+                <Tile x="7" y="9" tileId="1" />
+                <Tile x="8" y="9" tileId="1" />
+                <Tile x="9" y="9" tileId="1" />
+                <Tile x="10" y="9" tileId="1" />
+                <Tile x="11" y="9" tileId="1" />
+                <Tile x="12" y="9" tileId="1" />
+                <Tile x="13" y="9" tileId="1" />
+                <Tile x="14" y="9" tileId="1" />
+                <Tile x="15" y="9" tileId="1" />
             </TileMap>
         </TileEngine>
     </TileEngines>

@@ -7,7 +7,7 @@ namespace PhysicaliaRemastered.Input;
 public class KeyboardInputMap(InputHandler inputHandler) : InputMap
 {
     private readonly Dictionary<InputAction, Keys> _keys = new();
-    
+
     public override bool IsPressed(InputAction action)
     {
         return inputHandler.IsPressed(_keys[action]);

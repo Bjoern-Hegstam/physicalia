@@ -47,7 +47,7 @@ public class EnemyLibrary(GameServiceContainer gameServiceContainer)
 
                 var enemy = new Enemy(new ActorStartValues());
                 enemy.ApplyStartValues();
-                
+
                 SetupEnemy(reader, enemy);
                 LoadAnimations(reader, enemy);
 

@@ -21,8 +21,8 @@ public class Projectile(Sprite sprite) : SpriteParticle(sprite)
     /// </summary>
     public int CollisionProjectileId { get; set; } = -1;
 
-    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
-        Vector2 suggestedNewVelocity)
+    public override void OnCollision(ICollidable collidedObject, List<BoxSide> collidedSides,
+        Vector2 suggestedNewPosition, Vector2 suggestedNewVelocity)
     {
         if (collidedObject.CanTakeDamage)
         {

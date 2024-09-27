@@ -24,7 +24,7 @@ public static class TileLibraryLoader
     public static TileLibrary Load(XmlReader reader, SpriteLibrary spriteLibrary, AnimationRunner animationRunner)
     {
         var tileLibrary = new TileLibrary();
-        
+
         while (reader.Read())
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Tile" })
