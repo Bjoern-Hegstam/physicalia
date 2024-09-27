@@ -34,28 +34,19 @@ public enum FireMode
     Continuous
 }
 
-public class ProjectileWeapon : Weapon
+public class ProjectileWeapon(int weaponId, ParticleEngine particleEngine) : Weapon(weaponId, particleEngine)
 {
     private FireMode _fireMode;
-    private Vector2 _warmupVibration;
-    private Vector2 _fireVibration;
+    private Vector2 _warmupVibration = Vector2.Zero;
+    private Vector2 _fireVibration = Vector2.Zero;
 
     private Vector2 _muzzlePosition;
     private float _maxDeviation;
 
-    private int _projectilesPerShot;
+    private int _projectilesPerShot = 1;
     private float _spread;
 
     private int _shotsFired;
-
-    public ProjectileWeapon(int weaponId, ParticleEngine particleEngine)
-        : base(weaponId, particleEngine)
-    {
-        _warmupVibration = _fireVibration = Vector2.Zero;
-        _maxDeviation = 0F;
-        _projectilesPerShot = 1;
-        _spread = 0;
-    }
 
     public override void Start()
     {
@@ -155,7 +146,8 @@ public class ProjectileWeapon : Weapon
         // to the player.
         if ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
         {
-            muzzle.X = WeaponFireAnimation.CurrentFrame.SourceRectangle.Width - _muzzlePosition.X - Player.CollisionBoxDefinition.Width;
+            muzzle.X = WeaponFireAnimation.CurrentFrame.SourceRectangle.Width - _muzzlePosition.X -
+                       Player.CollisionBoxDefinition.Width;
         }
 
         if ((Player.SpriteFlip & SpriteEffects.FlipVertically) != 0)

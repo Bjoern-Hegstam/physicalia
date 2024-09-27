@@ -70,82 +70,63 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
     public bool CanCollide { get; set; } = false;
     public float CollisionDamage { get; set; } = 0F;
 
-    /// <summary>
-    /// Called when the weapon is fired. Deriving classes can here decide how
-    /// for example ammunition should be handled.
-    /// </summary>
     protected abstract void FireWeapon();
 
-    /// <summary>
-    /// Called when the weapon starts firing.
-    /// </summary>
     protected abstract void OnStartFire();
 
     public abstract void LoadXml(XmlReader reader);
 
     public virtual void Start()
     {
-        if (_ammoCount > 0 || HasInfiniteAmmo)
+        if (_ammoCount <= 0 && !HasInfiniteAmmo)
         {
-            // Prepare weapon
-            _timeTillWeaponStart = WeaponWarmUpSeconds;
-            _timeTillShot = 0;
+            return;
+        }
 
-            // Start animation and set the weapon's status to firing
-            IsFiring = true;
+        _timeTillWeaponStart = WeaponWarmUpSeconds;
+        _timeTillShot = 0;
 
-            // Start playing warmup animation if needed otherwise start 
-            if (WeaponWarmUpSeconds > 0)
-            {
-                WarmupAnimation.Play();
-            }
-            else
-            {
-                WeaponFireAnimation?.Play();
-                OnStartFire();
-            }
+        IsFiring = true;
+
+        if (WeaponWarmUpSeconds > 0)
+        {
+            WarmupAnimation.Play();
+        }
+        else
+        {
+            WeaponFireAnimation?.Play();
+            OnStartFire();
         }
     }
 
     public virtual void Stop()
     {
-        if (IsFiring)
+        if (!IsFiring)
         {
-            // Leave the weapon in the same state as when we started
-            _timeTillWeaponStart = WeaponWarmUpSeconds;
-            _timeTillShot = 0;
-
-            // Stop any vibration
-            GamePad.SetVibration(PlayerIndex.One, 0, 0);
-
-            // Stop the warm up animation ot be on the safe side
-            WarmupAnimation?.Stop();
-
-            IsFiring = false;
-            WeaponFireAnimation?.Stop();
+            return;
         }
+
+        _timeTillWeaponStart = WeaponWarmUpSeconds;
+        _timeTillShot = 0;
+
+        GamePad.SetVibration(PlayerIndex.One, 0, 0);
+
+        WarmupAnimation?.Stop();
+
+        IsFiring = false;
+        WeaponFireAnimation?.Stop();
     }
 
-    /// <summary>
-    /// Stores the current amount of ammunition.
-    /// </summary>
     public void StoreAmmoCount()
     {
         AmmoMemory = _ammoCount;
     }
 
-    /// <summary>
-    /// Restores the ammunition amount to the previous stored one.
-    /// </summary>
     public void ApplyStoredAmmoCount()
     {
         _ammoCount = AmmoMemory;
     }
 
-    /// <summary>
-    /// Creates a copy of the current Weapon.
-    /// </summary>
-    /// <returns>A copy of the current Weapon.</returns>
     public Weapon Copy()
     {
         var weapon = (Weapon)MemberwiseClone();
@@ -153,56 +134,46 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
         return weapon;
     }
 
-    /// <summary>
-    /// Updates the weapon.
-    /// </summary>
-    /// <param name="gameTime"></param>
     public void Update(GameTime gameTime)
     {
-        // Start by assuming that the weapon hasn't been fired
         WeaponFiredDuringLastUpdate = false;
 
-        // See if the weapon is firing
-        if (IsFiring)
+        if (!IsFiring)
         {
-            // See if the weapon is warming up
+            return;
+        }
+
+        if (_timeTillWeaponStart > 0)
+        {
+            _timeTillWeaponStart -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
             if (_timeTillWeaponStart > 0)
             {
-                _timeTillWeaponStart -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                // Go from warm up to firing if it's time
-                if (_timeTillWeaponStart <= 0)
-                {
-                    WarmupAnimation?.Stop();
-                    WeaponFireAnimation?.Play();
-
-                    OnStartFire();
-                }
+                return;
             }
-            else if (_timeTillShot > 0)
+
+            WarmupAnimation?.Stop();
+            WeaponFireAnimation?.Play();
+
+            OnStartFire();
+        }
+        else if (_timeTillShot > 0)
+        {
+            _timeTillShot -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+        else
+        {
+            FireWeapon();
+
+            WeaponFiredDuringLastUpdate = true;
+
+            if (IsFiring && (_ammoCount > 0 || HasInfiniteAmmo))
             {
-                _timeTillShot -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _timeTillShot += 1 / ShotsPerSecond;
             }
             else
             {
-                // Fire the weapon
-                FireWeapon();
-
-                // Let others know that the weapon was fired
-                WeaponFiredDuringLastUpdate = true;
-
-                // Prepare for the next round if we're still firing
-                // and have the ammunition needed
-                if (IsFiring && (_ammoCount > 0 || HasInfiniteAmmo))
-                {
-                    // Prepare weapon
-                    _timeTillShot += 1 / ShotsPerSecond;
-                }
-                else
-                {
-                    // Weapon can no longer be fired and must therefore be stopped
-                    Stop();
-                }
+                Stop();
             }
         }
     }

@@ -8,8 +8,12 @@
     <ActiveObjects>
         <Weapons>
             <Weapon key="0">
-                <Position x="320" y="150" />
+                <Position x="350" y="150" />
                 <CollisionBox x="0" y="0" width="25" height="13" />
+            </Weapon>
+            <Weapon key="1">
+                <Position x="290" y="150" />
+                <CollisionBox x="0" y="0" width="48" height="32" />
             </Weapon>
         </Weapons>
     </ActiveObjects>
