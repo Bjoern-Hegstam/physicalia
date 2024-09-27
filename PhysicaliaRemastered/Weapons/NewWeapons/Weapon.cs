@@ -225,11 +225,11 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 
 #if DEBUG
         var boundingBox = new Rectangle(
-            (weaponPosition - viewportPosition).ToPoint(),
+            weaponPosition.ToPoint(),
             CurrentAnimation!.CurrentFrame.SourceRectangle.Size
         );
 
-        spriteBatch.DrawRectangle(boundingBox, Color.Red);
+        spriteBatch.DrawRectangle(boundingBox, Color.Gray, viewportPosition);
 #endif
 
         spriteBatch.Draw(
@@ -246,7 +246,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 #if DEBUG
         if (CanCollide)
         {
-            spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
+            spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red, viewportPosition);
         }
 #endif
     }

@@ -34,18 +34,21 @@ public class Tile : ICollidable
     public virtual void TakeDamage(float damageLevel)
     {
     }
-    
+
     public void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
+        // Explicit, consistent conversion to int to prevent flickering
+        var drawPosition = (Position - viewportPosition).ToPoint().ToVector2();
+
         spriteBatch.Draw(
             TileDefinition.Sprite.Texture,
-            Position - viewportPosition,
+            drawPosition,
             TileDefinition.Sprite.SourceRectangle,
             Color.White
         );
 
 #if DEBUG
-        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
+        spriteBatch.DrawRectangle(AbsoluteCollisionBox, CanCollide ? Color.Red : Color.Gray, viewportPosition);
 #endif
     }
 }

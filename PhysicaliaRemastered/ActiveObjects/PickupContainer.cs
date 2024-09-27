@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors;
 using PhysicaliaRemastered.Pickups;
 using XNALibrary.Collision;
+using XNALibrary.Graphics;
 
 namespace PhysicaliaRemastered.ActiveObjects;
 
@@ -60,12 +61,17 @@ public class PickupContainer(Pickup pickup) : ActiveObject
         }
     }
 
-    public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public override void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
-        if (Visible)
+        if (!Visible)
         {
-            // The pickup is drawn in the upper-left corner of the container
-            PickupObject.Draw(spriteBatch, Position - Origin - offsetPosition);
+            return;
         }
+
+        PickupObject.Draw(spriteBatch, Position - viewportPosition);
+
+#if DEBUG
+        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red, viewportPosition);
+#endif
     }
 }

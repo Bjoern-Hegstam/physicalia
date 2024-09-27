@@ -108,7 +108,7 @@ public abstract class ActiveObject : ICollidable
 
     public abstract void Update(GameTime gameTime);
 
-    public virtual void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
+    public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
     {
     }
 }

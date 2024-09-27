@@ -247,7 +247,7 @@ public abstract class Actor : ICollidable
         );
 
 #if DEBUG
-        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
+        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red, viewportPosition);
 #endif
     }
 }
