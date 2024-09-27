@@ -5,11 +5,16 @@ namespace XNALibrary.Graphics;
 
 public static class SpriteBatchExtensions
 {
+    private static readonly Dictionary<Color, Texture2D> ColorTextureCache = [];
+    
     public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
     {
-        var solidColorTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-        solidColorTexture.SetData([color]);
-
+        if (!ColorTextureCache.TryGetValue(color, out Texture2D? solidColorTexture))
+        {
+            solidColorTexture = CreateColorTexture(spriteBatch.GraphicsDevice, color);
+            ColorTextureCache.Add(color, solidColorTexture);
+        }
+        
         const int outlineThickness = 1;
 
         spriteBatch.Draw(
@@ -40,4 +45,12 @@ public static class SpriteBatchExtensions
             Color.White
         );
     }
+    
+    private static Texture2D CreateColorTexture(GraphicsDevice graphicsDevice, Color color)
+    {
+        var texture = new Texture2D(graphicsDevice, 1, 1);
+        texture.SetData([color]);
+        return texture;
+    }
+
 }

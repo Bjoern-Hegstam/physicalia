@@ -217,6 +217,12 @@
         <None Update="Content\GameData\InputSettings.xml">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Content\GameData\Worlds\Levels\player-tile-collision-test.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Content\GameData\Worlds\Levels\level_2-1--player-only.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     
     <ItemGroup>

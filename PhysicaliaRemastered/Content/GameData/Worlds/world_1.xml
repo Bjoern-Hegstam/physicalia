@@ -7,6 +7,8 @@
         <Quote color="255 255 255 255">Cake or Pi?</Quote>
     </Presentation>
     <Levels>
+        <Level>level_2-1--player-only.xml</Level>
+        <Level>player-tile-collision-test.xml</Level>
         <Level>level_2-1.xml</Level>
         <Level>level_2.xml</Level>
         <Level>level_1.xml</Level>

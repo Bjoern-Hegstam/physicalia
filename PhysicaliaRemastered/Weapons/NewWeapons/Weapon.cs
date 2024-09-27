@@ -58,10 +58,10 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
     public Rectangle AbsoluteCollisionBox => new(
         (int)(Player!.Position.X + (Player!.IsFlippedHorizontally
             ? -CollisionBox.Width - PlayerOffset.X - CollisionBox.X
-            : (PlayerOffset.X + CollisionBox.X))),
+            : PlayerOffset.X + CollisionBox.X)),
         (int)(Player!.Position.Y + (Player!.IsFlippedVertically
             ? -CollisionBox.Height - PlayerOffset.X - CollisionBox.Y
-            : (PlayerOffset.Y + CollisionBox.Y))),
+            : PlayerOffset.Y + CollisionBox.Y)),
         CollisionBox.Width,
         CollisionBox.Height
     );
@@ -69,8 +69,6 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 
     public bool CanCollide { get; set; } = false;
     public float CollisionDamage { get; set; } = 0F;
-
-    // TODO: Add property for fetching the absolute collision box (corrected for flipping)
 
     /// <summary>
     /// Called when the weapon is fired. Deriving classes can here decide how
@@ -220,7 +218,9 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
             Player.IsFlippedHorizontally
                 ? -CurrentAnimation!.CurrentFrame.SourceRectangle.Width - PlayerOffset.X
                 : PlayerOffset.X,
-            PlayerOffset.Y
+            Player.IsFlippedVertically
+                ? -CurrentAnimation!.CurrentFrame.SourceRectangle.Height - PlayerOffset.Y
+                : PlayerOffset.Y
         );
 
 #if DEBUG
@@ -246,11 +246,6 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 #if DEBUG
         if (CanCollide)
         {
-            var absoluteCollisionBox = new Rectangle(
-                (weaponPosition + CollisionBox.Location.ToVector2() - viewportPosition).ToPoint(),
-                CollisionBox.Size
-            );
-
             spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
         }
 #endif

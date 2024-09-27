@@ -2,7 +2,6 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Collision;
-using XNALibrary.Sprites;
 
 namespace XNALibrary.TileEngine;
 
@@ -163,18 +162,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     continue;
                 }
 
-                var tilePosition = new Vector2(
-                    x * TileWidthPx - (int)viewportPosition.X,
-                    y * TileHeightPx - (int)viewportPosition.Y
-                );
-
-                Sprite sprite = tile.TileDefinition.Sprite;
-                spriteBatch.Draw(
-                    sprite.Texture,
-                    tilePosition,
-                    sprite.SourceRectangle,
-                    Color.White
-                );
+                tile.Draw(spriteBatch, viewportPosition);
             }
         }
     }

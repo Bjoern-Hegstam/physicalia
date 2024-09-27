@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Level width="640" height="480">
+    <PlayerStart>
+        <Position x="320" y="240"/>
+        <Acceleration x="0" y="600"/>
+    </PlayerStart>
+    <ActiveObjects>
+        <Weapons>
+            <Weapon key="0">
+                <Position x="320" y="150" />
+                <CollisionBox x="0" y="0" width="25" height="13" />
+            </Weapon>
+        </Weapons>
+    </ActiveObjects>
+    <TileEngines count="1">
+        <TileEngine>
+            <TileMap width="75" height="30">
+                <Tile x="0" y="10" tileId="1"/>
+                <Tile x="10" y="7" tileId="1"/>
+                <Tile x="10" y="8" tileId="1"/>
+                <Tile x="10" y="9" tileId="1"/>
+                <Tile x="10" y="10" tileId="1"/>
+                <Tile x="10" y="11" tileId="1"/>
+                <Tile x="10" y="12" tileId="1"/>
+            </TileMap>
+        </TileEngine>
+    </TileEngines>
+</Level>

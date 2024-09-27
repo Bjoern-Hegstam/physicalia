@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using XNALibrary.Collision;
+using XNALibrary.Graphics;
 
 namespace XNALibrary.TileEngine;
 
@@ -31,5 +33,19 @@ public class Tile : ICollidable
 
     public virtual void TakeDamage(float damageLevel)
     {
+    }
+    
+    public void Draw(SpriteBatch spriteBatch, Vector2 viewportPosition)
+    {
+        spriteBatch.Draw(
+            TileDefinition.Sprite.Texture,
+            Position - viewportPosition,
+            TileDefinition.Sprite.SourceRectangle,
+            Color.White
+        );
+
+#if DEBUG
+        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
+#endif
     }
 }

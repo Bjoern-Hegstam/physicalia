@@ -12,7 +12,6 @@ using PhysicaliaRemastered.Pickups;
 using PhysicaliaRemastered.Weapons;
 using PhysicaliaRemastered.Weapons.NewWeapons;
 using XNALibrary;
-using XNALibrary.Collision;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 using XNALibrary.TileEngine;

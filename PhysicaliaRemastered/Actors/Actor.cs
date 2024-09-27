@@ -67,7 +67,7 @@ public abstract class Actor : ICollidable
     public Rectangle AbsoluteCollisionBox =>
         new(
             (int)Position.X + (IsFlippedHorizontally ? -CollisionBox.Width - CollisionBox.X : CollisionBox.X),
-            (int)Position.Y + (IsFlippedHorizontally ? -CollisionBox.Height - CollisionBox.Y : CollisionBox.Y),
+            (int)Position.Y + (IsFlippedVertically ? -CollisionBox.Height - CollisionBox.Y : CollisionBox.Y),
             CollisionBox.Width,
             CollisionBox.Height
         );
@@ -223,10 +223,6 @@ public abstract class Actor : ICollidable
             return;
         }
 
-#if DEBUG
-        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
-#endif
-
         var frameOrigin = CurrentAnimation.CurrentFrame.Origin.ToVector2();
         if (IsFlippedHorizontally)
         {
@@ -247,7 +243,11 @@ public abstract class Actor : ICollidable
             frameOrigin,
             1.0F,
             SpriteFlip,
-            0.8F
+            1F
         );
+
+#if DEBUG
+        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red);
+#endif
     }
 }

@@ -3,7 +3,6 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using PhysicaliaRemastered.GameManagement;
 using XNALibrary;
 using XNALibrary.ParticleEngine;
 
