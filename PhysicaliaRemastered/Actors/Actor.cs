@@ -76,9 +76,6 @@ public abstract class Actor : ICollidable
 
     public bool CanTakeDamage { get; set; } = true;
 
-    public int Width => CurrentAnimation.CurrentFrame.SourceRectangle.Width;
-    public int Height => CurrentAnimation.CurrentFrame.SourceRectangle.Height;
-
     // TODO: The origin should not be dependent on the collision box.
     public virtual Vector2 Origin =>
         _collisionBox.Location.ToVector2() + new Vector2(_collisionBox.Width / 2f, _collisionBox.Height / 2f);

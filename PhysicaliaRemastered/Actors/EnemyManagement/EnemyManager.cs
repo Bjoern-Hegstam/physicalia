@@ -84,83 +84,40 @@ public class EnemyManager
         }
     }
 
-    /// <summary>
-    /// Checks for collisions between the active enemies and the player.
-    /// </summary>
-    /// <param name="player">Player to check for collisions with.</param>
     public void CheckCollisions(Player player)
     {
-        // Only do checks if the player can collide and take damage
-        if (!player.CanCollide || !player.CanTakeDamage)
+        foreach (Enemy enemy in _activatedEnemies)
+        {
+            CheckCollisions(player, enemy);
+        }
+    }
+
+    private void CheckCollisions(Player player, Enemy enemy)
+    {
+        if (!enemy.CanCollide)
         {
             return;
         }
 
-        // Calculate the position of the collision box
-        Rectangle playerBox = player.CollisionBox;
-        Vector2 boxPos = player.Position - player.Origin;
-        playerBox.X += (int)boxPos.X;
-        playerBox.Y += (int)boxPos.Y;
-
-        Weapon weapon = player.CurrentWeapon;
-        var weaponBox = new Rectangle();
-
-        if (weapon is { CanCollide: true })
+        Rectangle enemyAbsoluteCollisionBox = enemy.AbsoluteCollisionBox;
+        if (player is { CanCollide: true, CanTakeDamage: true } && 
+            player.AbsoluteCollisionBox.Intersects(enemyAbsoluteCollisionBox))
         {
-            weaponBox = weapon.CollisionBox;
-
-            // Get the right position of the weapons collision box
-            if ((player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
-            {
-                weaponBox.X = playerBox.X - player.CollisionBox.X + player.Width - weaponBox.X - weaponBox.Width;
-                weaponBox.X += (int)weapon.PlayerOffset.X;
-            }
-            else
-            {
-                weaponBox.X += playerBox.X - player.CollisionBox.X;
-                weaponBox.X -= (int)weapon.PlayerOffset.X;
-            }
-
-            if ((player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
-                // TODO: Fix box position in Y
-            {
-                weaponBox.Y += (int)weapon.PlayerOffset.Y;
-            }
-            else
-            {
-                weaponBox.Y -= (int)weapon.PlayerOffset.Y;
-                weaponBox.Y += playerBox.Y - player.CollisionBox.Y;
-            }
+            player.TakeDamage(enemy.Damage);
         }
 
-        foreach (Enemy enemy in _activatedEnemies)
+        // Check to see whether the player's weapon is damaging the enemy
+        Weapon? playerWeapon = player.CurrentWeapon;
+        if (playerWeapon is null)
         {
-            if (!enemy.CanCollide)
-            {
-                continue;
-            }
-
-            Rectangle enemyBox = enemy.CollisionBox;
-            Vector2 enemyPos = enemy.Position - enemy.Origin;
-            enemyBox.X += (int)enemyPos.X;
-            enemyBox.Y += (int)enemyPos.Y;
-
-            if (playerBox.Intersects(enemyBox))
-            {
-                enemy.OnCollision(
-                    player,
-                    [BoxSide.Bottom, BoxSide.Left, BoxSide.Right, BoxSide.Top],
-                    Vector2.Zero,
-                    Vector2.Zero
-                );
-            }
-
-            // Check to see whether the player's weapon is damaging the enemy
-            if (weapon is { WeaponFiredDuringLastUpdate: true } &&
-                enemyBox.Intersects(weaponBox))
-            {
-                enemy.TakeDamage(weapon.CollisionDamage);
-            }
+            return;
+        }
+            
+        if (playerWeapon.CanCollide &&
+            playerWeapon is { WeaponFiredDuringLastUpdate: true } &&
+            enemyAbsoluteCollisionBox.Intersects(playerWeapon.AbsoluteCollisionBox))
+        {
+            enemy.TakeDamage(playerWeapon.CollisionDamage);
         }
     }
 
