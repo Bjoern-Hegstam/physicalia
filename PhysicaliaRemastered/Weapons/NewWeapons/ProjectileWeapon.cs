@@ -164,8 +164,7 @@ public class ProjectileWeapon : Weapon
         }
 
         // Adjust to world coordinates
-        Vector2 playerTopLeft =
-            Player.Position - Player.Origin - new Vector2(Player.CollisionBox.X, Player.CollisionBox.Y);
+        Vector2 playerTopLeft = Player.AbsoluteCollisionBox.Location.ToVector2();
         muzzle = playerTopLeft - PlayerOffset + muzzle;
 
         // Randomly offset muzzle's position in Y within the given max deviation

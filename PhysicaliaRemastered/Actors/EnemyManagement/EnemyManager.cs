@@ -46,15 +46,9 @@ public class EnemyManager
 
     private bool EnemyOnScreen(Enemy enemy, Viewport viewport)
     {
-        // Get the position of the enemies collision box
-        Rectangle enemyBox = enemy.CollisionBox;
-        Vector2 enemyPos = enemy.Position - enemy.Origin;
-        enemyBox.X += (int)enemyPos.X;
-        enemyBox.Y += (int)enemyPos.Y;
-
-        enemyBox.Inflate(ActivationDistance, ActivationDistance);
-
-        return viewport.IsOnScreen(enemyBox);
+        Rectangle enemyAbsoluteCollisionBox = enemy.AbsoluteCollisionBox;
+        enemyAbsoluteCollisionBox.Inflate(ActivationDistance, ActivationDistance);
+        return viewport.IsOnScreen(enemyAbsoluteCollisionBox);
     }
 
     public void ActivateVisibleEnemies(Viewport viewport)

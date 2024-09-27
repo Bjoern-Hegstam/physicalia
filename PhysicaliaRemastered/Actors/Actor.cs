@@ -48,18 +48,12 @@ public abstract class Actor : ICollidable
     public float Health
     {
         get => _health;
-        set => _health = Math.Max(value, 0);
+        set => _health = Math.Clamp(value, 0, 100);
     }
 
     private ActorState _currentState = ActorState.Standing;
 
-    private Rectangle _collisionBox;
-
-    public Rectangle CollisionBox
-    {
-        get => _collisionBox;
-        set => _collisionBox = value;
-    }
+    public Rectangle CollisionBox { get; set; }
 
     /*
      * The actor's collision box in world coordinates and adjusted for horizontal and/or vertical flipping
@@ -75,10 +69,6 @@ public abstract class Actor : ICollidable
     public bool CanCollide { get; set; } = true;
 
     public bool CanTakeDamage { get; set; } = true;
-
-    // TODO: The origin should not be dependent on the collision box.
-    public virtual Vector2 Origin =>
-        _collisionBox.Location.ToVector2() + new Vector2(_collisionBox.Width / 2f, _collisionBox.Height / 2f);
 
     public Vector2 Position { get; set; } = Vector2.Zero;
 
