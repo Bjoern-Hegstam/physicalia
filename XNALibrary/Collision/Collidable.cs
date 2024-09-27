@@ -12,14 +12,14 @@ public interface ICollidable
     public Vector2 Velocity { get; }
 
     /*
-     * The object's collision box relative to its position
+     * The object's collision box relative to its default position
      */
-    public Rectangle CollisionBox { get; }
+    public Rectangle CollisionBoxDefinition { get; }
 
     /*
     * The object's collision box in world coordinates
     */
-    public Rectangle AbsoluteCollisionBox { get; }
+    public Rectangle WorldCollisionBox { get; }
 
     public bool CanCollide { get; }
     public bool CanTakeDamage { get; }
@@ -29,15 +29,4 @@ public interface ICollidable
 
     /// <param name="damageLevel">The level of damage taken. Can range from 0.0 to 1.0</param>
     public void TakeDamage(float damageLevel);
-
-    public static bool AreColliding(ICollidable c1, ICollidable c2)
-    {
-        Rectangle r1 = c1.CollisionBox;
-        Rectangle r2 = c2.CollisionBox;
-
-        r1.Location += c1.Position.ToPoint();
-        r2.Location += c2.Position.ToPoint();
-
-        return r1.Intersects(r2);
-    }
 }

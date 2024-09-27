@@ -141,7 +141,7 @@ public class Enemy : Actor
     {
         enemy.CanCollide = CanCollide;
         enemy.CanTakeDamage = CanTakeDamage;
-        enemy.CollisionBox = CollisionBox;
+        enemy.CollisionBoxDefinition = CollisionBoxDefinition;
         enemy.Damage = Damage;
         enemy.Enabled = Enabled;
         enemy.Health = Health;

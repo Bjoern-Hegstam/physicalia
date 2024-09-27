@@ -10,11 +10,11 @@ public class Tile : ICollidable
     public required TileDefinition TileDefinition { get; init; }
     public required Vector2 Position { get; init; }
 
-    public Rectangle CollisionBox => TileDefinition.CollisionBox;
+    public Rectangle CollisionBoxDefinition => TileDefinition.CollisionBox;
 
-    public Rectangle AbsoluteCollisionBox => new(
-        Position.ToPoint() + CollisionBox.Location,
-        CollisionBox.Size
+    public Rectangle WorldCollisionBox => new(
+        Position.ToPoint() + CollisionBoxDefinition.Location,
+        CollisionBoxDefinition.Size
     );
 
     public List<BoxSide> CollisionSides => TileDefinition.CollisionSides;
@@ -48,7 +48,7 @@ public class Tile : ICollidable
         );
 
 #if DEBUG
-        spriteBatch.DrawRectangle(AbsoluteCollisionBox, CanCollide ? Color.Red : Color.Gray, viewportPosition);
+        spriteBatch.DrawRectangle(WorldCollisionBox, CanCollide ? Color.Red : Color.Gray, viewportPosition);
 #endif
     }
 }

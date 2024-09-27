@@ -67,7 +67,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
             return;
         }
 
-        Rectangle collidableAbsoluteCollisionBox = collidable.AbsoluteCollisionBox;
+        Rectangle collidableAbsoluteCollisionBox = collidable.WorldCollisionBox;
 
         // Get the positions of the Tiles to check
         int xMin = Math.Max(collidableAbsoluteCollisionBox.Left / TileWidthPx, 0);
@@ -93,7 +93,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     continue;
                 }
 
-                Rectangle tileAbsoluteCollisionBox = tile.AbsoluteCollisionBox;
+                Rectangle tileAbsoluteCollisionBox = tile.WorldCollisionBox;
 
                 // Check the tiles' collision sides for collisions
                 List<BoxSide> collidingCollidableSide = [];
@@ -107,7 +107,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 {
                     collidingCollidableSide.Add(BoxSide.Right);
                     safePosition.X = tileAbsoluteCollisionBox.Left - collidableAbsoluteCollisionBox.Width -
-                                     collidable.CollisionBox.Left;
+                                     collidable.CollisionBoxDefinition.Left;
                     safeVelocity.X = 0;
                 }
 
@@ -119,7 +119,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     collidableAbsoluteCollisionBox.Top <= tileAbsoluteCollisionBox.Bottom)
                 {
                     collidingCollidableSide.Add(BoxSide.Left);
-                    safePosition.X = tileAbsoluteCollisionBox.Right - collidable.CollisionBox.Left;
+                    safePosition.X = tileAbsoluteCollisionBox.Right - collidable.CollisionBoxDefinition.Left;
                     safeVelocity.X = 0;
                 }
 
@@ -132,7 +132,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                 {
                     collidingCollidableSide.Add(BoxSide.Bottom);
                     safePosition.Y = tileAbsoluteCollisionBox.Top - collidableAbsoluteCollisionBox.Height -
-                                     collidable.CollisionBox.Top;
+                                     collidable.CollisionBoxDefinition.Top;
                     safeVelocity.Y = 0;
                 }
 
@@ -144,7 +144,7 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     collidableAbsoluteCollisionBox.Left <= tileAbsoluteCollisionBox.Right)
                 {
                     collidingCollidableSide.Add(BoxSide.Top);
-                    safePosition.Y = tileAbsoluteCollisionBox.Bottom - collidable.CollisionBox.Top;
+                    safePosition.Y = tileAbsoluteCollisionBox.Bottom - collidable.CollisionBoxDefinition.Top;
                     safeVelocity.Y = 0;
                 }
 

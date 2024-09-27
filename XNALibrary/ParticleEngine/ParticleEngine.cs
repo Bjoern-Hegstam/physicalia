@@ -175,11 +175,11 @@ public class ParticleEngine
     /// <param name="collObject">Object to check for collisions against.</param>
     public void CheckCollisions(ICollidable collObject)
     {
-        Rectangle objectCollisionBox = collObject.AbsoluteCollisionBox;
+        Rectangle objectCollisionBox = collObject.WorldCollisionBox;
 
         IEnumerable<Particle> collidingParticles = from particle in _activeParticles
             where particle.CanCollide
-            where objectCollisionBox.Intersects(particle.AbsoluteCollisionBox)
+            where objectCollisionBox.Intersects(particle.WorldCollisionBox)
             select particle;
 
         foreach (Particle particle in collidingParticles)

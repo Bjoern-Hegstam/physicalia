@@ -29,20 +29,17 @@ public class PickupContainer(Pickup pickup) : ActiveObject
 
     public override void CheckCollision(ICollidable collObject)
     {
-        // Only check for collision if we're still active
         if (!IsActive)
         {
             return;
         }
 
-        // Can only be picked up by player
         if (collObject is not Player)
         {
             return;
         }
 
-        // Check to see if the Container is colliding with the Player
-        if (ICollidable.AreColliding(this, collObject))
+        if (WorldCollisionBox.Intersects(collObject.WorldCollisionBox))
         {
             Pickup();
         }
@@ -71,7 +68,7 @@ public class PickupContainer(Pickup pickup) : ActiveObject
         PickupObject.Draw(spriteBatch, Position - viewportPosition);
 
 #if DEBUG
-        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red, viewportPosition);
+        spriteBatch.DrawRectangle(WorldCollisionBox, Color.Red, viewportPosition);
 #endif
     }
 }

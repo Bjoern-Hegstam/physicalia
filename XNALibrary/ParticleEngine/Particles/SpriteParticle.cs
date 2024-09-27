@@ -10,13 +10,13 @@ public class SpriteParticle(Sprite sprite) : Particle
 
     public float Rotation { get; set; }
 
-    public override Vector2 Origin => new(Sprite.SourceRectangle.Width / 2f, Sprite.SourceRectangle.Height / 2f);
+    public virtual Vector2 Origin => new(Sprite.SourceRectangle.Width / 2f, Sprite.SourceRectangle.Height / 2f);
 
-    public override int Width => Sprite.SourceRectangle.Width;
+    public virtual int Width => Sprite.SourceRectangle.Width;
 
-    public override int Height => Sprite.SourceRectangle.Height;
+    public virtual int Height => Sprite.SourceRectangle.Height;
 
-    public override Rectangle CollisionBox => new(0, 0, Sprite.SourceRectangle.Width, Sprite.SourceRectangle.Height);
+    public override Rectangle CollisionBoxDefinition => new(0, 0, Sprite.SourceRectangle.Width, Sprite.SourceRectangle.Height);
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
     {

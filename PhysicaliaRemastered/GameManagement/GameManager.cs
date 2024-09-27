@@ -223,7 +223,7 @@ public class GameManager(Game game)
         {
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "CollisionBox" })
             {
-                _player.CollisionBox = ReadRectangle(reader);
+                _player.CollisionBoxDefinition = ReadRectangle(reader);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "Animation" })

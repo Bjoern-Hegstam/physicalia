@@ -301,7 +301,7 @@ public class Level(Game game, Player player)
                 var cont = new PickupContainer(trigger)
                 {
                     Position = new Vector2(x, y),
-                    CollisionBox = new Rectangle(0, 0, triggerSprite.SourceRectangle.Width,
+                    CollisionBoxDefinition = new Rectangle(0, 0, triggerSprite.SourceRectangle.Width,
                         triggerSprite.SourceRectangle.Height),
                     CanCollide = true,
                     IsActive = false
@@ -339,7 +339,7 @@ public class Level(Game game, Player player)
                 int yBox = int.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
                 int width = int.Parse(reader.GetAttribute("width") ?? throw new ResourceLoadException());
                 int height = int.Parse(reader.GetAttribute("height") ?? throw new ResourceLoadException());
-                pickupCont.CollisionBox = new Rectangle(xBox, yBox, width, height);
+                pickupCont.CollisionBoxDefinition = new Rectangle(xBox, yBox, width, height);
 
                 EnqueueActiveObject(pickupCont);
             }
@@ -368,7 +368,7 @@ public class Level(Game game, Player player)
                 var cont = new PickupContainer(pickup)
                 {
                     Position = new Vector2(x, y),
-                    CollisionBox = new Rectangle(0, 0, pickup.Sprite.SourceRectangle.Width,
+                    CollisionBoxDefinition = new Rectangle(0, 0, pickup.Sprite.SourceRectangle.Width,
                         pickup.Sprite.SourceRectangle.Height)
                 };
                 EnqueueActiveObject(cont);
@@ -559,7 +559,7 @@ public class Level(Game game, Player player)
 
     private bool PlayerOffScreen()
     {
-        return !Viewport.IsOnScreen(Player.AbsoluteCollisionBox);
+        return !Viewport.IsOnScreen(Player.WorldCollisionBox);
     }
 
     private bool IsPlayerOutsideLevel()
@@ -570,7 +570,7 @@ public class Level(Game game, Player player)
             Height = Viewport.MaxHeight
         };
 
-        Rectangle playerRect = Player.AbsoluteCollisionBox;
+        Rectangle playerRect = Player.WorldCollisionBox;
 
         if (levelRect.Intersects(playerRect))
         {
@@ -624,15 +624,15 @@ public class Level(Game game, Player player)
 
     private void EnsurePlayerIsWithinLevelBounds()
     {
-        if (Player.AbsoluteCollisionBox.Left < 0)
+        if (Player.WorldCollisionBox.Left < 0)
         {
             Player.Position *= Vector2.UnitY;
         }
 
-        if (Player.AbsoluteCollisionBox.Right > Viewport.MaxWidth)
+        if (Player.WorldCollisionBox.Right > Viewport.MaxWidth)
         {
             Player.Position *= Vector2.UnitY;
-            Player.Position += new Vector2(Viewport.MaxWidth - Player.CollisionBox.Width, 0);
+            Player.Position += new Vector2(Viewport.MaxWidth - Player.CollisionBoxDefinition.Width, 0);
         }
     }
 
@@ -670,7 +670,7 @@ public class Level(Game game, Player player)
         {
             ActiveObject obj = _inactiveObjects[i];
 
-            Rectangle collBox = obj.CollisionBox;
+            Rectangle collBox = obj.CollisionBoxDefinition;
 
             // Set the position to be in level coordinates
             collBox.X += (int)obj.Position.X;

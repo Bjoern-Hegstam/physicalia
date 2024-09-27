@@ -73,16 +73,11 @@ public abstract class Particle(Vector2 position) : ICollidable
     {
     }
 
-    public abstract Vector2 Origin { get; }
+    public abstract Rectangle CollisionBoxDefinition { get; }
 
-    public abstract int Width { get; }
-    public abstract int Height { get; }
-
-    public abstract Rectangle CollisionBox { get; }
-
-    public Rectangle AbsoluteCollisionBox => new(
-        Position.ToPoint() + CollisionBox.Location,
-        CollisionBox.Size
+    public Rectangle WorldCollisionBox => new(
+        Position.ToPoint() + CollisionBoxDefinition.Location,
+        CollisionBoxDefinition.Size
     );
 
     public bool CanTakeDamage { get; set; }

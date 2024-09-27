@@ -109,7 +109,7 @@ public class EnemyLibrary(GameServiceContainer gameServiceContainer)
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "CollisionBox" })
             {
-                enemy.CollisionBox = ReadRectangle(reader);
+                enemy.CollisionBoxDefinition = ReadRectangle(reader);
             }
 
             if (reader is { NodeType: XmlNodeType.Element, LocalName: "PatrolArea" })

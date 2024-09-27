@@ -11,13 +11,13 @@ public class AnimationParticle(Animation.Animation animation) : Particle
 
     public float DamageAmount { get; set; } = 0F;
 
-    public override Vector2 Origin => new(Width / 2f, Height / 2f);
+    public virtual Vector2 Origin => new(Width / 2f, Height / 2f);
 
-    public override int Width => Animation.CurrentFrame.SourceRectangle.Width;
+    public virtual int Width => Animation.CurrentFrame.SourceRectangle.Width;
 
-    public override int Height => Animation.CurrentFrame.SourceRectangle.Height;
+    public virtual int Height => Animation.CurrentFrame.SourceRectangle.Height;
 
-    public override Rectangle CollisionBox => new(0, 0, Width, Height);
+    public override Rectangle CollisionBoxDefinition => new(0, 0, Width, Height);
 
     public override void OnCollision(ICollidable collidable, List<BoxSide> collidedSides, Vector2 suggestedNewPosition,
         Vector2 suggestedNewVelocity)

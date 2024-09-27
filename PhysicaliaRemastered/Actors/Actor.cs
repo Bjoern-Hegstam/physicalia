@@ -53,17 +53,17 @@ public abstract class Actor : ICollidable
 
     private ActorState _currentState = ActorState.Standing;
 
-    public Rectangle CollisionBox { get; set; }
+    public Rectangle CollisionBoxDefinition { get; set; }
 
     /*
      * The actor's collision box in world coordinates and adjusted for horizontal and/or vertical flipping
      */
-    public Rectangle AbsoluteCollisionBox =>
+    public Rectangle WorldCollisionBox =>
         new(
-            (int)Position.X + (IsFlippedHorizontally ? -CollisionBox.Width - CollisionBox.X : CollisionBox.X),
-            (int)Position.Y + (IsFlippedVertically ? -CollisionBox.Height - CollisionBox.Y : CollisionBox.Y),
-            CollisionBox.Width,
-            CollisionBox.Height
+            (int)Position.X + (IsFlippedHorizontally ? -CollisionBoxDefinition.Width - CollisionBoxDefinition.X : CollisionBoxDefinition.X),
+            (int)Position.Y + (IsFlippedVertically ? -CollisionBoxDefinition.Height - CollisionBoxDefinition.Y : CollisionBoxDefinition.Y),
+            CollisionBoxDefinition.Width,
+            CollisionBoxDefinition.Height
         );
 
     public bool CanCollide { get; set; } = true;
@@ -182,7 +182,7 @@ public abstract class Actor : ICollidable
 
     public bool IsWithin(Rectangle rectangle)
     {
-        return rectangle.Contains(AbsoluteCollisionBox);
+        return rectangle.Contains(WorldCollisionBox);
     }
 
     public virtual void Update(GameTime gameTime)
@@ -234,7 +234,7 @@ public abstract class Actor : ICollidable
         );
 
 #if DEBUG
-        spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red, viewportPosition);
+        spriteBatch.DrawRectangle(WorldCollisionBox, Color.Red, viewportPosition);
 #endif
     }
 }

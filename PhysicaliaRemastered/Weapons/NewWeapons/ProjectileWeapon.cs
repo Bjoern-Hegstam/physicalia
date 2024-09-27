@@ -155,7 +155,7 @@ public class ProjectileWeapon : Weapon
         // to the player.
         if ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
         {
-            muzzle.X = WeaponFireAnimation.CurrentFrame.SourceRectangle.Width - _muzzlePosition.X - Player.CollisionBox.Width;
+            muzzle.X = WeaponFireAnimation.CurrentFrame.SourceRectangle.Width - _muzzlePosition.X - Player.CollisionBoxDefinition.Width;
         }
 
         if ((Player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
@@ -164,7 +164,7 @@ public class ProjectileWeapon : Weapon
         }
 
         // Adjust to world coordinates
-        Vector2 playerTopLeft = Player.AbsoluteCollisionBox.Location.ToVector2();
+        Vector2 playerTopLeft = Player.WorldCollisionBox.Location.ToVector2();
         muzzle = playerTopLeft - PlayerOffset + muzzle;
 
         // Randomly offset muzzle's position in Y within the given max deviation

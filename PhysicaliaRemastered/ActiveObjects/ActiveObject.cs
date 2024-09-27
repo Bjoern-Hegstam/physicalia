@@ -15,8 +15,6 @@ public abstract class ActiveObject : ICollidable
 
     private Vector2 _position;
 
-    private Rectangle _collisionBox;
-
     public int UniqueId { get; }
 
     public bool IsActive
@@ -31,28 +29,16 @@ public abstract class ActiveObject : ICollidable
 
     public List<ActiveObject> Children { get; }
 
-    public Rectangle CollisionBox
-    {
-        get => _collisionBox;
-        set => _collisionBox = value;
-    }
+    public Rectangle CollisionBoxDefinition { get; set; }
 
-    public Rectangle AbsoluteCollisionBox => new(
-        Position.ToPoint() + CollisionBox.Location,
-        CollisionBox.Size
+    public Rectangle WorldCollisionBox => new(
+        Position.ToPoint() + CollisionBoxDefinition.Location,
+        CollisionBoxDefinition.Size
     );
     
     public bool CanCollide { get; set; }
 
     public bool CanTakeDamage { get; set; }
-
-    public int Width { get; set; }
-
-    public int Height { get; set; }
-
-    public Vector2 Origin =>
-        new(_collisionBox.Width / 2f,
-            _collisionBox.Height / 2f);
 
     public virtual Vector2 Position
     {
