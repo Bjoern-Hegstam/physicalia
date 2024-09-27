@@ -6,7 +6,7 @@ using PhysicaliaRemastered.Input;
 using PhysicaliaRemastered.Weapons;
 using XNALibrary.Collision;
 using XNALibrary.TileEngine;
-using Weapon = PhysicaliaRemastered.Weapons.NewWeapons.Weapon;
+using Weapon = PhysicaliaRemastered.Weapons.Weapon;
 
 namespace PhysicaliaRemastered.Actors;
 

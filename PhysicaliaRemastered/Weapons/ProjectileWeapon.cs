@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using XNALibrary;
 using XNALibrary.ParticleEngine;
 
-namespace PhysicaliaRemastered.Weapons.NewWeapons;
+namespace PhysicaliaRemastered.Weapons;
 
 /// <summary>
 /// Enum with values representing the different firing modes a weapon can use.
@@ -21,13 +21,13 @@ public enum FireMode
     SingleShot,
 
     /// <summary>
-    /// The weapon fires a shot once every 2 / ShotperSecond. The
-    /// controller vibrates for each shot and and then stops after 1 / shotPerSecond.
+    /// The weapon fires a shot once every 2 / ShotPerSecond. The
+    /// controller vibrates for each shot and then stops after 1 / shotPerSecond.
     /// </summary>
     MultiShot,
 
     /// <summary>
-    /// The weapon fires a continous stream of shots every 1 / ShotsPerSecond.
+    /// The weapon fires a continuous stream of shots every 1 / ShotsPerSecond.
     /// The controller stays vibrating until the weapon is either stopped
     /// or runs out of ammunition.
     /// </summary>

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.Actors.Enemies;
 using PhysicaliaRemastered.GameManagement;
-using PhysicaliaRemastered.Weapons.NewWeapons;
+using PhysicaliaRemastered.Weapons;
 using XNALibrary.TileEngine;
 using Viewport = XNALibrary.Graphics.Viewport;
 

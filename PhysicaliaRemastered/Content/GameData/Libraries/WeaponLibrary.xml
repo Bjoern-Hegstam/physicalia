@@ -52,12 +52,12 @@
                 <Warmup animationDefinitionId="7" />
                 <Fire animationDefinitionId="9" />
             </Animations>
-            <PlayerOffset x="-3" y="0" />
+            <PlayerOffset x="-11" y="-7" />
         </Graphics>
         <FireData warmupTime="1" shotsPerSecond="20">
             <Particle id="1" />
         </FireData>
-        <Collision canCollide="false" collisionDamage="10">
+        <Collision canCollide="false" collisionDamage="0">
             <CollisionBox x="0" y="0" width="0" height="0" />
         </Collision>
         <WeaponData>

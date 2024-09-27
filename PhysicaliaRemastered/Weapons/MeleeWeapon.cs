@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using XNALibrary;
 using XNALibrary.ParticleEngine;
 
-namespace PhysicaliaRemastered.Weapons.NewWeapons;
+namespace PhysicaliaRemastered.Weapons;
 
 public class MeleeWeapon : Weapon
 {

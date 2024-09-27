@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PhysicaliaRemastered.GameManagement;
 using PhysicaliaRemastered.Pickups;
-using PhysicaliaRemastered.Weapons.NewWeapons;
 
 namespace PhysicaliaRemastered.Weapons;
 

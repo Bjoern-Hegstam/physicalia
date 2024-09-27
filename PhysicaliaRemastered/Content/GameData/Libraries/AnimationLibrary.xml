@@ -73,11 +73,11 @@
         <!-- Weapon Minigun -->
         <Animation id="7">
             <TextureId>Weapon_minigun</TextureId>
-            <Frames>z
-                <Frame x="0" y="48" width="64" height="48"/>
-                <Frame x="64" y="48" width="64" height="48"/>
-                <Frame x="128" y="48" width="64" height="48"/>
-                <Frame x="196" y="48" width="64" height="48"/>
+            <Frames>
+                <Frame x="0" y="62" width="48" height="34"/>
+                <Frame x="64" y="62" width="48" height="34"/>
+                <Frame x="128" y="62" width="48" height="34"/>
+                <Frame x="192" y="62" width="48" height="34"/>
             </Frames>
             <FrameRate>15</FrameRate>
             <Loop>true</Loop>
@@ -85,10 +85,10 @@
         <Animation id="9">
             <TextureId>Weapon_minigun</TextureId>
             <Frames>
-                <Frame x="0" y="0" width="64" height="48"/>
-                <Frame x="64" y="0" width="64" height="48"/>
-                <Frame x="128" y="0" width="64" height="48"/>
-                <Frame x="196" y="0" width="64" height="48"/>
+                <Frame x="0" y="14" width="64" height="34"/>
+                <Frame x="64" y="14" width="64" height="34"/>
+                <Frame x="128" y="14" width="64" height="34"/>
+                <Frame x="192" y="14" width="64" height="34"/>
             </Frames>
             <FrameRate>25</FrameRate>
             <Loop>true</Loop>

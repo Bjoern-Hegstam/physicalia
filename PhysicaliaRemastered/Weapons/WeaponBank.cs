@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
-using PhysicaliaRemastered.Weapons.NewWeapons;
 using XNALibrary;
 using XNALibrary.Animation;
 using XNALibrary.ParticleEngine;

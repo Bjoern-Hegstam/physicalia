@@ -9,7 +9,7 @@ using XNALibrary.Graphics;
 using XNALibrary.ParticleEngine;
 using XNALibrary.Sprites;
 
-namespace PhysicaliaRemastered.Weapons.NewWeapons;
+namespace PhysicaliaRemastered.Weapons;
 
 /// <summary>
 /// Abstract class providing the basic characteristics of a weapon. The class
