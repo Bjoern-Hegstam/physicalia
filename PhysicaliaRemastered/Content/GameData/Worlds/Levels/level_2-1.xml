@@ -66,20 +66,20 @@
     <ActiveObjects>
         <Weapons>
             <Weapon key="1">
-                <Position x="2170" y="916" />
-                <CollisionBox x="0" y="0" width="64" height="48" />
+                <Position x="2166" y="899" />
+                <CollisionBox x="0" y="0" width="48" height="34" />
             </Weapon>
             <Weapon key="0">
-                <Position x="451" y="895" />
+                <Position x="439" y="883" />
                 <CollisionBox x="0" y="0" width="25" height="13" />
             </Weapon>
         </Weapons>
         <Pickups>
-            <Pickup key="1" x="1173" y="579" />
-            <Pickup key="1" x="1202" y="578" />
-            <Pickup key="0" x="2048" y="799" />
+            <Pickup key="1" x="1166" y="572" />
+            <Pickup key="1" x="1193" y="571" />
+            <Pickup key="0" x="2032" y="783" />
         </Pickups>
-        <LevelFinishTrigger x="2356" y="898" />
+        <LevelFinishTrigger x="2332" y="874" />
     </ActiveObjects>
     <Backgrounds>
         <Background spriteKey="304" depth="1" loop="x" />

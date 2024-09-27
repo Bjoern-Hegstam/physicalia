@@ -58,11 +58,11 @@
     <ActiveObjects>
         <Weapons />
         <Pickups>
-            <Pickup key="1" x="723" y="97" />
-            <Pickup key="1" x="1479" y="135" />
-            <Pickup key="1" x="64" y="296" />
+            <Pickup key="1" x="716" y="90" />
+            <Pickup key="1" x="1472" y="128" />
+            <Pickup key="1" x="57" y="292" />
         </Pickups>
-        <LevelFinishTrigger x="1562" y="133" />
+        <LevelFinishTrigger x="1538" y="109" />
     </ActiveObjects>
     <Backgrounds />
     <TileEngines count="1">

@@ -2,7 +2,7 @@
 
 <Level width="1184" height="480">
     <PlayerStart>
-        <Position x="0" y="0" />
+        <Position x="32" y="0" />
         <Acceleration x="0" y="600" />
     </PlayerStart>
     <Enemies>
@@ -42,7 +42,7 @@
     <ActiveObjects>
         <Weapons />
         <Pickups />
-        <LevelFinishTrigger x="1155" y="167" />
+        <LevelFinishTrigger x="1131" y="143" />
     </ActiveObjects>
     <Backgrounds />
     <TileEngines count="1">

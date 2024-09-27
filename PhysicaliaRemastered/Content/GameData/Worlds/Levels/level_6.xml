@@ -34,7 +34,7 @@
     <ActiveObjects>
         <Weapons />
         <Pickups />
-        <LevelFinishTrigger x="484" y="321" />
+        <LevelFinishTrigger x="460" y="297" />
     </ActiveObjects>
     <Backgrounds />
     <TileEngines count="1">

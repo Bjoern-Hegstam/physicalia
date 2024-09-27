@@ -34,12 +34,12 @@
     <ActiveObjects>
         <Weapons>
             <Weapon key="1">
-                <Position x="896" y="148" />
-                <CollisionBox x="0" y="0" width="64" height="48" />
+                <Position x="872" y="131" />
+                <CollisionBox x="0" y="0" width="48" height="34" />
             </Weapon>
         </Weapons>
         <Pickups />
-        <LevelFinishTrigger x="1361" y="130" />
+        <LevelFinishTrigger x="1337" y="106" />
     </ActiveObjects>
     <Backgrounds />
     <TileEngines count="1">

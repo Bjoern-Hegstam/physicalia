@@ -107,7 +107,7 @@
 
         <Weapons />
         <Pickups />
-        <LevelFinishTrigger x="24" y="262" />
+        <LevelFinishTrigger x="0" y="238" />
     </ActiveObjects>
     <Backgrounds />
     <TileEngines count="1">

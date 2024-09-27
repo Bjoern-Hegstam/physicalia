@@ -2,31 +2,45 @@
 
 <Level width="640" height="480">
     <PlayerStart>
-        <Position x="320" y="240"/>
+        <Position x="50" y="240"/>
         <Acceleration x="0" y="600"/>
     </PlayerStart>
     <ActiveObjects>
         <Weapons>
             <Weapon key="0">
-                <Position x="350" y="150" />
+                <Position x="200" y="260" />
                 <CollisionBox x="0" y="0" width="25" height="13" />
             </Weapon>
             <Weapon key="1">
-                <Position x="290" y="150" />
+                <Position x="100" y="255" />
                 <CollisionBox x="0" y="0" width="48" height="32" />
             </Weapon>
         </Weapons>
+        <Pickups>
+            <Pickup key="1" x="320" y="260" />
+            <Pickup key="0" x="384" y="250" />
+        </Pickups>
+        <LevelFinishTrigger x="500" y="240" />
     </ActiveObjects>
     <TileEngines count="1">
         <TileEngine>
             <TileMap width="75" height="30">
-                <Tile x="0" y="10" tileId="1"/>
-                <Tile x="10" y="7" tileId="1"/>
-                <Tile x="10" y="8" tileId="1"/>
+                <Tile x="0" y="9" tileId="1"/>
+                <Tile x="1" y="9" tileId="1"/>
+                <Tile x="2" y="9" tileId="1"/>
+                <Tile x="3" y="9" tileId="1"/>
+                <Tile x="4" y="9" tileId="1"/>
+                <Tile x="5" y="9" tileId="1"/>
+                <Tile x="6" y="9" tileId="1"/>
+                <Tile x="7" y="9" tileId="1"/>
+                <Tile x="8" y="9" tileId="1"/>
+                <Tile x="9" y="9" tileId="1"/>
                 <Tile x="10" y="9" tileId="1"/>
-                <Tile x="10" y="10" tileId="1"/>
-                <Tile x="10" y="11" tileId="1"/>
-                <Tile x="10" y="12" tileId="1"/>
+                <Tile x="11" y="9" tileId="1"/>
+                <Tile x="12" y="9" tileId="1"/>
+                <Tile x="13" y="9" tileId="1"/>
+                <Tile x="14" y="9" tileId="1"/>
+                <Tile x="15" y="9" tileId="1"/>
             </TileMap>
         </TileEngine>
     </TileEngines>
