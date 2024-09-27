@@ -10,12 +10,6 @@ public class SpriteParticle(Sprite sprite) : Particle
 
     public float Rotation { get; set; }
 
-    public virtual Vector2 Origin => new(Sprite.SourceRectangle.Width / 2f, Sprite.SourceRectangle.Height / 2f);
-
-    public virtual int Width => Sprite.SourceRectangle.Width;
-
-    public virtual int Height => Sprite.SourceRectangle.Height;
-
     public override Rectangle CollisionBoxDefinition => new(0, 0, Sprite.SourceRectangle.Width, Sprite.SourceRectangle.Height);
 
     public override void Draw(SpriteBatch spriteBatch, Vector2 offsetPosition)
@@ -26,7 +20,7 @@ public class SpriteParticle(Sprite sprite) : Particle
             Sprite.SourceRectangle,
             Color.White,
             -Rotation,
-            Origin,
+            Sprite.SourceRectangle.Center.ToVector2(),
             1.0F,
             SpriteEffects.None,
             1.0F
