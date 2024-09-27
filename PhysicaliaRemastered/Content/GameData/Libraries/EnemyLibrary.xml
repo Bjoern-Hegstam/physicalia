@@ -6,7 +6,7 @@
             <Intelligence>Savant</Intelligence>
             <Life>100</Life>
             <Damage>10</Damage>
-            <CollisionBox x="0" y="0" width="48" height="91" />
+            <CollisionBox x="-24" y="-45" width="48" height="91" />
         </Setup>
         <Animations>
             <Animation id="10" actorState="Standing" />
