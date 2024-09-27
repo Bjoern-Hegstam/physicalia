@@ -66,7 +66,7 @@
                 <Warmup low="0,2" high="0,1" />
                 <Fire low="0,1" high="0,4" />
             </Vibration>
-            <MuzzlePosition x="56" y="36" maxDeviation="2" />
+            <MuzzlePosition x="56" y="20" maxDeviation="2" />
             <Ammunition count="250" max="500" projectilesPerShot="1" spread="0,5" />
         </WeaponData>
     </Weapon>

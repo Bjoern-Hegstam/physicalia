@@ -46,9 +46,9 @@ public class EnemyManager
 
     private bool EnemyOnScreen(Enemy enemy, Viewport viewport)
     {
-        Rectangle enemyAbsoluteCollisionBox = enemy.WorldCollisionBox;
-        enemyAbsoluteCollisionBox.Inflate(ActivationDistance, ActivationDistance);
-        return viewport.IsOnScreen(enemyAbsoluteCollisionBox);
+        Rectangle enemyWorldCollisionBox = enemy.WorldCollisionBox;
+        enemyWorldCollisionBox.Inflate(ActivationDistance, ActivationDistance);
+        return viewport.IsOnScreen(enemyWorldCollisionBox);
     }
 
     public void ActivateVisibleEnemies(Viewport viewport)
@@ -93,9 +93,9 @@ public class EnemyManager
             return;
         }
 
-        Rectangle enemyAbsoluteCollisionBox = enemy.WorldCollisionBox;
+        Rectangle enemyWorldCollisionBox = enemy.WorldCollisionBox;
         if (player is { CanCollide: true, CanTakeDamage: true } && 
-            player.WorldCollisionBox.Intersects(enemyAbsoluteCollisionBox))
+            player.WorldCollisionBox.Intersects(enemyWorldCollisionBox))
         {
             player.TakeDamage(enemy.Damage);
         }
@@ -109,7 +109,7 @@ public class EnemyManager
             
         if (playerWeapon.CanCollide &&
             playerWeapon is { WeaponFiredDuringLastUpdate: true } &&
-            enemyAbsoluteCollisionBox.Intersects(playerWeapon.AbsoluteCollisionBox))
+            enemyWorldCollisionBox.Intersects(playerWeapon.WorldCollisionBox))
         {
             enemy.TakeDamage(playerWeapon.CollisionDamage);
         }

@@ -40,7 +40,17 @@ public class ProjectileWeapon(int weaponId, ParticleEngine particleEngine) : Wea
     private Vector2 _warmupVibration = Vector2.Zero;
     private Vector2 _fireVibration = Vector2.Zero;
 
-    private Vector2 _muzzlePosition;
+    private Vector2 _muzzlePositionDefinition;
+
+    private Vector2 WorldMuzzlePosition => new(
+        WorldWeaponPosition.X + (Player!.IsFlippedHorizontally
+            ? CurrentAnimation!.CurrentFrame.SourceRectangle.Width - _muzzlePositionDefinition.X
+            : _muzzlePositionDefinition.X),
+        WorldWeaponPosition.Y + (Player!.IsFlippedVertically
+            ? CurrentAnimation!.CurrentFrame.SourceRectangle.Height - _muzzlePositionDefinition.Y
+            : _muzzlePositionDefinition.Y)
+    );
+
     private float _maxDeviation;
 
     private int _projectilesPerShot = 1;
@@ -76,41 +86,35 @@ public class ProjectileWeapon(int weaponId, ParticleEngine particleEngine) : Wea
 
     protected override void FireWeapon()
     {
-        if (_fireMode == FireMode.SingleShot)
+        switch (_fireMode)
         {
-            // Start vibrating if this is the first shot
-            if (_shotsFired == 0)
-            {
+            case FireMode.SingleShot when _shotsFired == 0:
                 GamePad.SetVibration(PlayerIndex.One, _fireVibration.X, _fireVibration.Y);
                 FireShot();
                 _shotsFired++;
-            }
-            else
-            {
-                // Stop the weapon
+                break;
+            case FireMode.SingleShot:
                 Stop();
-            }
-        }
-        else if (_fireMode == FireMode.MultiShot)
-        {
-            // Switch between starting and stopping the vibration
-            if (_shotsFired % 2 == 0)
+                break;
+            case FireMode.MultiShot:
             {
-                GamePad.SetVibration(PlayerIndex.One, _fireVibration.X, _fireVibration.Y);
-                FireShot();
-            }
-            else
-                // Stop vibration and dont fire any shots
-            {
-                GamePad.SetVibration(PlayerIndex.One, 0F, 0F);
-            }
+                if (_shotsFired % 2 == 0)
+                {
+                    GamePad.SetVibration(PlayerIndex.One, _fireVibration.X, _fireVibration.Y);
+                    FireShot();
+                }
+                else
+                {
+                    GamePad.SetVibration(PlayerIndex.One, 0F, 0F);
+                }
 
-            // Increase so the other action will be taken next time
-            _shotsFired++;
-        }
-        else
-        {
-            FireShot();
+                // Increase so the other action will be taken next time
+                _shotsFired++;
+                break;
+            }
+            default:
+                FireShot();
+                break;
         }
     }
 
@@ -121,54 +125,24 @@ public class ProjectileWeapon(int weaponId, ParticleEngine particleEngine) : Wea
             return;
         }
 
-        // Get needed fire data
-        Vector2 muzzle = GetMuzzlePosition();
+        Vector2 muzzlePosition = WorldMuzzlePosition;
 
-        // Fire as many projectiles as specified.
+        // Shake the muzzle position a bit to randomize the projectiles
+        muzzlePosition.Y += _maxDeviation * (float)Math.Sin(MathHelper.TwoPi * Random.Shared.NextDouble());
+
         for (var i = 0; i < _projectilesPerShot; i++)
         {
             float angle = GetFireAngle(i);
 
-            // Fire the projectile
-            ParticleEngine.Add((int)ParticleId, 1, muzzle, angle);
+            ParticleEngine.Add((int)ParticleId, 1, muzzlePosition, angle);
         }
 
-        // Decrease ammunition and count the number of fired shots
         AmmoCount--;
-    }
-
-    private Vector2 GetMuzzlePosition()
-    {
-        // Get the world position of the muzzle
-        Vector2 muzzle = _muzzlePosition;
-
-        // Adjust muzzle position to accomodate for any SpriteEffects applied
-        // to the player.
-        if ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0)
-        {
-            muzzle.X = WeaponFireAnimation.CurrentFrame.SourceRectangle.Width - _muzzlePosition.X -
-                       Player.CollisionBoxDefinition.Width;
-        }
-
-        if ((Player.SpriteFlip & SpriteEffects.FlipVertically) != 0)
-        {
-            muzzle.Y = WeaponFireAnimation.CurrentFrame.SourceRectangle.Height - _muzzlePosition.Y;
-        }
-
-        // Adjust to world coordinates
-        Vector2 playerTopLeft = Player.WorldCollisionBox.Location.ToVector2();
-        muzzle = playerTopLeft - PlayerOffset + muzzle;
-
-        // Randomly offset muzzle's position in Y within the given max deviation
-        muzzle.Y += _maxDeviation * (float)Math.Sin(MathHelper.TwoPi * Random.Shared.NextDouble());
-
-        return muzzle;
     }
 
     private float GetFireAngle(int projNum)
     {
-        // Get the angle at which to fire the projectiles
-        float angleSide = MathHelper.Pi * ((Player.SpriteFlip & SpriteEffects.FlipHorizontally) != 0 ? 1 : 0);
+        float angleSide = MathHelper.Pi * (Player.IsFlippedHorizontally ? 1 : 0);
 
         if (_projectilesPerShot == 1)
         {
@@ -212,7 +186,7 @@ public class ProjectileWeapon(int weaponId, ParticleEngine particleEngine) : Wea
             {
                 float x = float.Parse(reader.GetAttribute("x") ?? throw new ResourceLoadException());
                 float y = float.Parse(reader.GetAttribute("y") ?? throw new ResourceLoadException());
-                _muzzlePosition = new Vector2(x, y);
+                _muzzlePositionDefinition = new Vector2(x, y);
 
                 _maxDeviation = float.Parse(reader.GetAttribute("maxDeviation") ?? throw new ResourceLoadException());
             }

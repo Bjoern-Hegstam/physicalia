@@ -55,7 +55,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 
     public Rectangle CollisionBox { get; set; } = Rectangle.Empty;
 
-    public Rectangle AbsoluteCollisionBox => new(
+    public Rectangle WorldCollisionBox => new(
         (int)(Player!.Position.X + (Player!.IsFlippedHorizontally
             ? -CollisionBox.Width - PlayerOffset.X - CollisionBox.X
             : PlayerOffset.X + CollisionBox.X)),
@@ -65,9 +65,19 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
         CollisionBox.Width,
         CollisionBox.Height
     );
-
+    
+    protected Vector2 WorldWeaponPosition =>
+        Player!.Position + new Vector2(
+            Player.IsFlippedHorizontally
+                ? -CurrentAnimation!.CurrentFrame.SourceRectangle.Width - PlayerOffset.X
+                : PlayerOffset.X,
+            Player.IsFlippedVertically
+                ? -CurrentAnimation!.CurrentFrame.SourceRectangle.Height - PlayerOffset.Y
+                : PlayerOffset.Y
+        );
 
     public bool CanCollide { get; set; } = false;
+
     public float CollisionDamage { get; set; } = 0F;
 
     protected abstract void FireWeapon();
@@ -185,14 +195,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
             return;
         }
 
-        Vector2 weaponPosition = Player.Position + new Vector2(
-            Player.IsFlippedHorizontally
-                ? -CurrentAnimation!.CurrentFrame.SourceRectangle.Width - PlayerOffset.X
-                : PlayerOffset.X,
-            Player.IsFlippedVertically
-                ? -CurrentAnimation!.CurrentFrame.SourceRectangle.Height - PlayerOffset.Y
-                : PlayerOffset.Y
-        );
+        Vector2 weaponPosition = WorldWeaponPosition;
 
 #if DEBUG
         var boundingBox = new Rectangle(
@@ -217,7 +220,7 @@ public abstract class Weapon(int weaponId, ParticleEngine particleEngine)
 #if DEBUG
         if (CanCollide)
         {
-            spriteBatch.DrawRectangle(AbsoluteCollisionBox, Color.Red, viewportPosition);
+            spriteBatch.DrawRectangle(WorldCollisionBox, Color.Red, viewportPosition);
         }
 #endif
     }

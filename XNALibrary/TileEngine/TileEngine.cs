@@ -67,14 +67,14 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
             return;
         }
 
-        Rectangle collidableAbsoluteCollisionBox = collidable.WorldCollisionBox;
+        Rectangle collidableWorldCollisionBox = collidable.WorldCollisionBox;
 
         // Get the positions of the Tiles to check
-        int xMin = Math.Max(collidableAbsoluteCollisionBox.Left / TileWidthPx, 0);
-        int xMax = Math.Min(collidableAbsoluteCollisionBox.Right / TileWidthPx, Width - 1);
+        int xMin = Math.Max(collidableWorldCollisionBox.Left / TileWidthPx, 0);
+        int xMax = Math.Min(collidableWorldCollisionBox.Right / TileWidthPx, Width - 1);
 
-        int yMin = Math.Max(collidableAbsoluteCollisionBox.Top / TileHeightPx, 0);
-        int yMax = Math.Min(collidableAbsoluteCollisionBox.Bottom / TileHeightPx, Height - 1);
+        int yMin = Math.Max(collidableWorldCollisionBox.Top / TileHeightPx, 0);
+        int yMax = Math.Min(collidableWorldCollisionBox.Bottom / TileHeightPx, Height - 1);
 
         Vector2 safePosition = collidable.Position;
         Vector2 safeVelocity = collidable.Velocity;
@@ -93,58 +93,58 @@ public class TileEngine(TileLibrary tileLibrary, int width, int height)
                     continue;
                 }
 
-                Rectangle tileAbsoluteCollisionBox = tile.WorldCollisionBox;
+                Rectangle tileWorldCollisionBox = tile.WorldCollisionBox;
 
                 // Check the tiles' collision sides for collisions
                 List<BoxSide> collidingCollidableSide = [];
 
                 if (tile.CollisionSides.Contains(BoxSide.Left) &&
                     collidable.Velocity.X > 0 &&
-                    tileAbsoluteCollisionBox.Left <= collidableAbsoluteCollisionBox.Right &&
-                    collidableAbsoluteCollisionBox.Right <= tileAbsoluteCollisionBox.Left + CollisionThresholdPx &&
-                    collidableAbsoluteCollisionBox.Bottom >= tileAbsoluteCollisionBox.Top &&
-                    collidableAbsoluteCollisionBox.Top <= tileAbsoluteCollisionBox.Bottom)
+                    tileWorldCollisionBox.Left <= collidableWorldCollisionBox.Right &&
+                    collidableWorldCollisionBox.Right <= tileWorldCollisionBox.Left + CollisionThresholdPx &&
+                    collidableWorldCollisionBox.Bottom >= tileWorldCollisionBox.Top &&
+                    collidableWorldCollisionBox.Top <= tileWorldCollisionBox.Bottom)
                 {
                     collidingCollidableSide.Add(BoxSide.Right);
-                    safePosition.X = tileAbsoluteCollisionBox.Left - collidableAbsoluteCollisionBox.Width -
+                    safePosition.X = tileWorldCollisionBox.Left - collidableWorldCollisionBox.Width -
                                      collidable.CollisionBoxDefinition.Left;
                     safeVelocity.X = 0;
                 }
 
                 if (tile.CollisionSides.Contains(BoxSide.Right) &&
                     collidable.Velocity.X < 0 &&
-                    collidableAbsoluteCollisionBox.Left <= tileAbsoluteCollisionBox.Right &&
-                    tileAbsoluteCollisionBox.Right - CollisionThresholdPx <= collidableAbsoluteCollisionBox.X &&
-                    collidableAbsoluteCollisionBox.Bottom >= tileAbsoluteCollisionBox.Top &&
-                    collidableAbsoluteCollisionBox.Top <= tileAbsoluteCollisionBox.Bottom)
+                    collidableWorldCollisionBox.Left <= tileWorldCollisionBox.Right &&
+                    tileWorldCollisionBox.Right - CollisionThresholdPx <= collidableWorldCollisionBox.X &&
+                    collidableWorldCollisionBox.Bottom >= tileWorldCollisionBox.Top &&
+                    collidableWorldCollisionBox.Top <= tileWorldCollisionBox.Bottom)
                 {
                     collidingCollidableSide.Add(BoxSide.Left);
-                    safePosition.X = tileAbsoluteCollisionBox.Right - collidable.CollisionBoxDefinition.Left;
+                    safePosition.X = tileWorldCollisionBox.Right - collidable.CollisionBoxDefinition.Left;
                     safeVelocity.X = 0;
                 }
 
                 if (tile.CollisionSides.Contains(BoxSide.Top) &&
                     collidable.Velocity.Y > 0 &&
-                    tileAbsoluteCollisionBox.Top <= collidableAbsoluteCollisionBox.Bottom &&
-                    collidableAbsoluteCollisionBox.Bottom <= tileAbsoluteCollisionBox.Top + CollisionThresholdPx &&
-                    collidableAbsoluteCollisionBox.Right >= tileAbsoluteCollisionBox.Left &&
-                    collidableAbsoluteCollisionBox.Left <= tileAbsoluteCollisionBox.Right)
+                    tileWorldCollisionBox.Top <= collidableWorldCollisionBox.Bottom &&
+                    collidableWorldCollisionBox.Bottom <= tileWorldCollisionBox.Top + CollisionThresholdPx &&
+                    collidableWorldCollisionBox.Right >= tileWorldCollisionBox.Left &&
+                    collidableWorldCollisionBox.Left <= tileWorldCollisionBox.Right)
                 {
                     collidingCollidableSide.Add(BoxSide.Bottom);
-                    safePosition.Y = tileAbsoluteCollisionBox.Top - collidableAbsoluteCollisionBox.Height -
+                    safePosition.Y = tileWorldCollisionBox.Top - collidableWorldCollisionBox.Height -
                                      collidable.CollisionBoxDefinition.Top;
                     safeVelocity.Y = 0;
                 }
 
                 if (tile.CollisionSides.Contains(BoxSide.Bottom) &&
                     collidable.Velocity.Y < 0 &&
-                    collidableAbsoluteCollisionBox.Top <= tileAbsoluteCollisionBox.Bottom &&
-                    tileAbsoluteCollisionBox.Bottom - CollisionThresholdPx <= collidableAbsoluteCollisionBox.Top &&
-                    collidableAbsoluteCollisionBox.Right >= tileAbsoluteCollisionBox.Left &&
-                    collidableAbsoluteCollisionBox.Left <= tileAbsoluteCollisionBox.Right)
+                    collidableWorldCollisionBox.Top <= tileWorldCollisionBox.Bottom &&
+                    tileWorldCollisionBox.Bottom - CollisionThresholdPx <= collidableWorldCollisionBox.Top &&
+                    collidableWorldCollisionBox.Right >= tileWorldCollisionBox.Left &&
+                    collidableWorldCollisionBox.Left <= tileWorldCollisionBox.Right)
                 {
                     collidingCollidableSide.Add(BoxSide.Top);
-                    safePosition.Y = tileAbsoluteCollisionBox.Bottom - collidable.CollisionBoxDefinition.Top;
+                    safePosition.Y = tileWorldCollisionBox.Bottom - collidable.CollisionBoxDefinition.Top;
                     safeVelocity.Y = 0;
                 }
 
